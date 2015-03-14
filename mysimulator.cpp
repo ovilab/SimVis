@@ -43,7 +43,6 @@ void MyWorker::synchronizeSimulator(Simulator *simulator)
 
 void MyWorker::synchronizeRenderer(Renderable *renderableObject)
 {
-    qDebug() << "Worker is synching";
     Billboards2D* billboards = qobject_cast<Billboards2D*>(renderableObject);
     if(billboards) {
         billboards->setPositions(m_positions);
