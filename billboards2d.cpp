@@ -255,7 +255,7 @@ void Billboards2DRenderer::render(QMatrix4x4 &modelViewMatrix, QMatrix4x4 &proje
     // Draw cube geometry using indices from VBO 1
     // glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_SHORT, 0);
     m_texture->bind();
-    glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
+    glFunctions()->glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
 
     m_program->disableAttributeArray(vertexLocation);
     m_program->disableAttributeArray(colorLocation);
