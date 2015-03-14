@@ -5,22 +5,32 @@ import QtQuick.Dialogs 1.2
 import MySimulator 1.0
 ApplicationWindow {
     title: qsTr("Hello World")
-    width: 640
-    height: 480
+    width: 800
+    height: 600
     visible: true
 
     MySimulator {
-
+        id: simulator
     }
 
     Visualizer {
-        width: 100
-        height: 100
+        id: visualizer
+        anchors.fill: parent
         Billboards2D {
             id: test
         }
         Component.onCompleted: {
             update()
+        }
+    }
+
+    Timer {
+        running: true
+        interval: 1000
+        repeat: true
+        onTriggered: {
+            simulator.step()
+            visualizer.test()
         }
     }
 }

@@ -4,6 +4,7 @@
 #include "simulator.h"
 
 #include <QDebug>
+#include <QOpenGLFramebufferObjectFormat>
 
 Visualizer::Visualizer() :
     m_simulator(0)
@@ -17,6 +18,12 @@ Visualizer::~Visualizer()
 
 void Visualizer::test()
 {
+    QList<Renderable*> renderables = findChildren<Renderable*>();
+    for(Renderable* renderable : renderables) {
+        if(m_simulator->m_worker) {
+            m_simulator->m_worker->synchronizeRenderer(renderable);
+        }
+    }
 }
 
 QQuickFramebufferObject::Renderer *Visualizer::createRenderer() const
@@ -41,7 +48,10 @@ void Visualizer::setSimulator(Simulator *arg)
 
 void VisualizerRenderer::render()
 {
-    qDebug() << "Render!";
+    QOpenGLFunctions funcs(QOpenGLContext::currentContext());
+    funcs.glClearColor(0.5f, 0.5f, 0.7f, 1.0f);
+    funcs.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    qDebug() << "Rendering!";
     for(Renderable* renderable : m_renderables) {
         qDebug() << "Rendering " << renderable;
         QMatrix4x4 a;
@@ -55,7 +65,14 @@ void VisualizerRenderer::synchronize(QQuickFramebufferObject *fbo)
     Visualizer* visualizer = static_cast<Visualizer*>(fbo);
     m_renderables = visualizer->findChildren<Renderable*>();
     for(Renderable* renderable : m_renderables) {
-        qDebug() << "Rendering " << renderable;
+        qDebug() << "Synchronizing " << renderable;
         renderable->requestSynchronize();
     }
+}
+
+QOpenGLFramebufferObject *VisualizerRenderer::createFramebufferObject(const QSize &size) {
+    QOpenGLFramebufferObjectFormat format;
+    format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
+    format.setSamples(4);
+    return new QOpenGLFramebufferObject(size, format);
 }

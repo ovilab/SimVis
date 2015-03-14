@@ -8,8 +8,8 @@ class Renderable;
 class Simulator;
 class VisualizerRenderer : public QQuickFramebufferObject::Renderer
 {
-public:
 protected:
+    QOpenGLFramebufferObject *createFramebufferObject(const QSize &size);
     void render();
     void synchronize(QQuickFramebufferObject *);
 private:
@@ -24,18 +24,20 @@ public:
     Visualizer();
     ~Visualizer();
 
-    void test();
-
     Renderer *createRenderer() const;
     Simulator* simulator() const;
 public slots:
     void setSimulator(Simulator* arg);
+
+    void test();
 signals:
     void simulatorChanged(Simulator* arg);
 private:
     Simulator* m_simulator;
 
     friend class VisualizerRenderer;
+
+    // QQuickItem interface
 };
 
 #endif // VISUALIZER_H

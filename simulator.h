@@ -5,14 +5,14 @@
 #include <QThread>
 #include <QTimer>
 #include <QDebug>
-class RenderableObject;
+class Renderable;
 class Simulator;
 
 class Worker : public QObject {
     Q_OBJECT
 public:
     virtual void synchronizeSimulator(Simulator *simulator) = 0;
-    virtual void synchronizeRenderer(RenderableObject *renderableObject) = 0;
+    virtual void synchronizeRenderer(Renderable *renderableObject) = 0;
 public slots:
     virtual void work() = 0;
 };
@@ -39,6 +39,8 @@ private:
     Worker *m_worker = 0;
     QThread m_workerThread;
     QTimer  m_timer;
+
+    friend class Visualizer;
 };
 
 #endif // SIMULATOR_H

@@ -70,6 +70,7 @@ RenderableRenderer *Billboards2D::createRenderer()
 
 void Billboards2DRenderer::synchronize(Renderable* renderer)
 {
+    qDebug() << "Synching billboard!";
     Billboards2D* billboards = static_cast<Billboards2D*>(renderer);
     if(!m_isInitialized) {
         int vboCount = 2;
@@ -94,6 +95,8 @@ void Billboards2DRenderer::uploadVBOs(Billboards2D* billboards)
     std::vector<GLuint>& indices = billboards->m_indices;
     QVector3D& color = billboards->m_color;
     std::vector<float>& rotations = billboards->m_rotations;
+
+    qDebug() << "Positions: " << positions.size();
 
     QVector2D right;
     right.setX(1.0);
@@ -217,7 +220,9 @@ void Billboards2DRenderer::createShaderProgram() {
 
 void Billboards2DRenderer::render(QMatrix4x4 &modelViewMatrix, QMatrix4x4 &projectionMatrix)
 {
-    qDebug() << QThread::currentThreadId() << " is billboard";
+    qDebug() << "Rendering billboards!";
+
+    qDebug() << m_vertexCount;
     if(m_vertexCount == 0) {
         return;
     }
