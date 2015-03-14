@@ -54,6 +54,7 @@ void Visualizer::synchronizeWorker(SimulatorWorker *worker)
             worker->synchronizeRenderer(renderable);
         }
     }
+    update();
 }
 
 void VisualizerRenderer::render()

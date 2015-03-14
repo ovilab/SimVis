@@ -185,6 +185,7 @@ void Billboards2D::copyDataFunction()
 
 void Billboards2D::setPositions(std::vector<QVector2D> &positions)
 {
+    qDebug() << "Setting positions!";
     m_positions = positions;
 }
 
