@@ -30,6 +30,7 @@ public:
     Simulator* simulator() const;
 public slots:
     void setSimulator(Simulator* arg);
+private slots:
     void synchronizeWorker(SimulatorWorker* worker);
 signals:
     void simulatorChanged(Simulator* arg);
