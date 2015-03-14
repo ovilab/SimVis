@@ -17,13 +17,12 @@ class Points2DRenderer : public RenderableRenderer
     Q_OBJECT
 public:
     Points2DRenderer();
-protected:
-
+private:
     virtual void synchronize(Renderable *renderable) override;
     virtual void render() override;
 
     void uploadVBO(Points2D* points);
-    void createShaderProgram() override;
+    void beforeLinkProgram() override;
     int m_vertexCount = 0;
     float m_pointSize = 1.0;
     QVector4D m_color = QVector4D(1.0, 0.0, 0.0, 0.0);

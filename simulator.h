@@ -13,7 +13,8 @@ class Simulator;
 
 class SimulatorWorker : public QObject {
     Q_OBJECT
-public:
+
+private:
     virtual void synchronizeSimulator(Simulator *simulator) = 0;
     virtual void synchronizeRenderer(Renderable *renderableObject) = 0;
     virtual void work() = 0;
@@ -21,6 +22,10 @@ public:
     Q_INVOKABLE void workAndUnlock(Simulator *simulator);
 signals:
     void workDone();
+
+private:
+    friend class Simulator;
+    friend class Visualizer;
 };
 
 class Simulator : public QObject

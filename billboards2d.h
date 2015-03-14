@@ -29,7 +29,7 @@ private:
 
     void uploadVBOs(Billboards2D* billboards);
 
-    virtual void createShaderProgram() override;
+    virtual void beforeLinkProgram() override;
     void uploadTexture(QString filename);
     QOpenGLTexture *m_texture = 0;
     bool m_isInitialized = false;

@@ -11,18 +11,20 @@ class RenderableRenderer : public QObject
 {
     Q_OBJECT
 protected:
-    virtual void synchronize(Renderable* renderable) = 0;
-    virtual void render() = 0;
-    virtual void createShaderProgram() = 0;
     void generateVBOs();
     unsigned int m_numberOfVBOs = 0;
     std::vector<GLuint> m_vboIds;
-
-    QOpenGLShaderProgram* m_program = 0;
+    QOpenGLShaderProgram& program();
     QOpenGLFunctions* glFunctions();
-    QOpenGLFunctions* m_funcs = 0;
 
 private:
+    void prepareAndRender();
+    virtual void beforeLinkProgram() = 0;
+    virtual void synchronize(Renderable* renderable) = 0;
+    virtual void render() = 0;
+
+    QOpenGLShaderProgram m_program;
+    QOpenGLFunctions* m_funcs = 0;
 
     friend class Renderable;
 };
@@ -51,14 +53,7 @@ signals:
 
 public slots:
 
-    void setVisible(bool arg)
-    {
-        if (m_visible == arg)
-            return;
-
-        m_visible = arg;
-        emit visibleChanged(arg);
-    }
+    void setVisible(bool arg);
 
 protected:
 

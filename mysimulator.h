@@ -9,11 +9,11 @@ class MyWorker : public SimulatorWorker
     Q_OBJECT
 public:
     MyWorker();
-    void synchronizeSimulator(Simulator *simulator);
-    void synchronizeRenderer(Renderable *renderableObject);
-    void work();
 
 private:
+    virtual void synchronizeSimulator(Simulator *simulator) override;
+    virtual void synchronizeRenderer(Renderable *renderableObject) override;
+    virtual void work() override;
     void reset();
     float m_springConstant = 1.0;
     float m_mass = 1.0;
