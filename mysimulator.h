@@ -19,8 +19,8 @@ private:
     float m_mass = 1.0;
     float m_dt = 0.01;
     int   m_numberOfBalls = 100;
-    std::vector<QVector2D> m_positions;
-    std::vector<QVector2D> m_velocities;
+    QVector<QVector2D> m_positions;
+    QVector<QVector2D> m_velocities;
 };
 
 class MySimulator : public Simulator

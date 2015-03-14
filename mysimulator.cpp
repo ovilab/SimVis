@@ -66,6 +66,8 @@ void MyWorker::reset()
 {
     m_positions.clear();
     m_velocities.clear();
+    m_positions.resize(m_numberOfBalls);
+    m_velocities.resize(m_numberOfBalls);
     for(unsigned int i = 0; i < m_numberOfBalls; i++) {
         float x =  2.0*(rand() / double(RAND_MAX)) - 1.0;
         float y =  2.0*(rand() / double(RAND_MAX)) - 1.0;

@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
-#include <vector>
 
 class Renderable;
 class RenderableRenderer : public QObject
@@ -13,7 +12,7 @@ class RenderableRenderer : public QObject
 protected:
     void generateVBOs();
     unsigned int m_numberOfVBOs = 0;
-    std::vector<GLuint> m_vboIds;
+    QVector<GLuint> m_vboIds;
     QOpenGLShaderProgram& program();
     QOpenGLFunctions* glFunctions();
 

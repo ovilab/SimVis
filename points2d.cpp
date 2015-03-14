@@ -10,12 +10,12 @@ Points2D::~Points2D()
 
 }
 
-void Points2D::setPositions(std::vector<QVector2D> &positions)
+void Points2D::setPositions(QVector<QVector2D> &positions)
 {
     m_vertices = positions;
 }
 
-std::vector<QVector2D> &Points2D::positions()
+QVector<QVector2D> &Points2D::positions()
 {
     return m_vertices;
 }

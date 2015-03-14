@@ -6,8 +6,6 @@
 #include <cmath>
 #include <QThread>
 
-using std::vector;
-
 Billboards2D::Billboards2D()
 {
     m_color = QVector3D(1.0, 1.0, 1.0);
@@ -37,12 +35,12 @@ QVector3D Billboards2D::vectorFromColor(const QColor &color)
     return QVector3D(color.redF(), color.greenF(), color.blueF());
 }
 
-std::vector<QVector2D> &Billboards2D::positions()
+QVector<QVector2D> &Billboards2D::positions()
 {
     return m_positions;
 }
 
-std::vector<float> &Billboards2D::rotations()
+QVector<float> &Billboards2D::rotations()
 {
     return m_rotations;
 }
@@ -94,11 +92,11 @@ void Billboards2DRenderer::synchronize(Renderable* renderer)
 void Billboards2DRenderer::uploadVBOs(Billboards2D* billboards)
 {
     double scale = billboards->scale();
-    std::vector<QVector2D>& positions = billboards->m_positions;
-    std::vector<Billboard2DVBOData>& vertices = billboards->m_vertices;
-    std::vector<GLuint>& indices = billboards->m_indices;
+    QVector<QVector2D>& positions = billboards->m_positions;
+    QVector<Billboard2DVBOData>& vertices = billboards->m_vertices;
+    QVector<GLuint>& indices = billboards->m_indices;
     QVector3D& color = billboards->m_color;
-    std::vector<float>& rotations = billboards->m_rotations;
+    QVector<float>& rotations = billboards->m_rotations;
 
     QVector2D right;
     right.setX(1.0);
@@ -176,7 +174,7 @@ void Billboards2DRenderer::uploadVBOs(Billboards2D* billboards)
     glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 }
 
-void Billboards2D::setPositions(std::vector<QVector2D> &positions)
+void Billboards2D::setPositions(QVector<QVector2D> &positions)
 {
     m_positions = positions;
 }

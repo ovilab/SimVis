@@ -6,9 +6,7 @@
 #include <QtGui/QOpenGLShaderProgram>
 #include <QOpenGLFunctions>
 #include <QOpenGLTexture>
-#include <vector>
 #include <QColor>
-using std::vector;
 class Simulator;
 
 class Points2D;
@@ -38,8 +36,8 @@ class Points2D : public Renderable
 public:
     Points2D();
     ~Points2D();
-    void setPositions(std::vector<QVector2D> &positions);
-    std::vector<QVector2D> &positions();
+    void setPositions(QVector<QVector2D> &positions);
+    QVector<QVector2D> &positions();
     virtual RenderableRenderer* createRenderer();
 
     float pointSize() const
@@ -79,7 +77,7 @@ signals:
     void colorChanged(QColor arg);
 
 private:
-    std::vector<QVector2D> m_vertices;
+    QVector<QVector2D> m_vertices;
     float m_pointSize = 1.0;
     QColor m_color = "red";
     friend class Points2DRenderer;
