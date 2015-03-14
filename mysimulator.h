@@ -3,10 +3,12 @@
 #define MYSIMULATOR_H
 #include "simulator.h"
 #include <QDebug>
+#include <QVector2D>
 
 class MyWorker : public SimulatorWorker {
+    Q_OBJECT
 public:
-    MyWorker();
+    MyWorker(QObject* parent = 0);
     void synchronizeSimulator(Simulator *simulator);
     void synchronizeRenderer(Renderable *renderableObject);
 
@@ -20,8 +22,9 @@ private:
 
 class MySimulator : public Simulator
 {
+    Q_OBJECT
 public:
-    MySimulator();
+    MySimulator(QObject* parent = 0);
     ~MySimulator();
 
 protected:

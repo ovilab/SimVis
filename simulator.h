@@ -12,6 +12,8 @@ class Simulator;
 class SimulatorWorker : public QObject {
     Q_OBJECT
 public:
+    SimulatorWorker(QObject* parent = 0);
+
     virtual void synchronizeSimulator(Simulator *simulator) = 0;
     virtual void synchronizeRenderer(Renderable *renderableObject) = 0;
 public slots:

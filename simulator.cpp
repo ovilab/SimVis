@@ -25,3 +25,8 @@ void Simulator::step()
     emit requestWork();
 }
 
+SimulatorWorker::SimulatorWorker(QObject *parent) :
+    QObject(parent)
+{
+
+}

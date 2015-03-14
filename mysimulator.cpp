@@ -1,8 +1,10 @@
 #include "mysimulator.h"
-
 #include "billboards2d.h"
 
-MySimulator::MySimulator()
+#include <QVector2D>
+
+MySimulator::MySimulator(QObject *parent) :
+    Simulator(parent)
 {
 
 }
@@ -17,7 +19,8 @@ SimulatorWorker *MySimulator::createWorker()
     return new MyWorker();
 }
 
-MyWorker::MyWorker()
+MyWorker::MyWorker(QObject *parent) :
+    SimulatorWorker(parent)
 {
     unsigned int numberOfBalls = 100;
     for(unsigned int i=0; i<numberOfBalls; i++) {
