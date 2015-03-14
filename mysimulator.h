@@ -1,3 +1,4 @@
+#pragma once
 #ifndef MYSIMULATOR_H
 #define MYSIMULATOR_H
 #include "simulator.h"

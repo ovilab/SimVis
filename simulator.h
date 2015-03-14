@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SIMULATOR_H
 #define SIMULATOR_H
 
