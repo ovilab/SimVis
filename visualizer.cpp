@@ -8,7 +8,6 @@
 
 Visualizer::Visualizer()
 {
-
 }
 
 Visualizer::~Visualizer()
@@ -53,7 +52,7 @@ void Visualizer::synchronizeWorker(SimulatorWorker *worker)
 void VisualizerRenderer::render()
 {
     QOpenGLFunctions funcs(QOpenGLContext::currentContext());
-    funcs.glClearColor(0.5f, 0.5f, 0.7f, 1.0f);
+    funcs.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     funcs.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for(Renderable* renderable : m_renderables) {
         if(renderable->visible()) renderable->requestRender();
