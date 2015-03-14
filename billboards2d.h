@@ -24,8 +24,8 @@ public:
     Billboards2DRenderer();
 
 private:
-    virtual void synchronize(Renderable *);
-    virtual void render();
+    virtual void synchronize(Renderable *) override;
+    virtual void render() override;
 
     void uploadVBOs(Billboards2D* billboards);
 
