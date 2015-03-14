@@ -22,7 +22,7 @@ ApplicationWindow {
 
     Visualizer {
         id: visualizer
-        width: applicationRoot.width - 300
+        width: applicationRoot.width - 350
         height: applicationRoot.height - row1.height
         simulator: simulator
         Billboards2D {
@@ -68,6 +68,23 @@ ApplicationWindow {
                 maximumValue: 10.0
                 value: 1.0
                 onValueChanged: simulator.mass = value
+            }
+        }
+
+        Row {
+            id: controlsRow2
+            anchors.top: controlsRow1.bottom
+
+            Label {
+                text: "Spring constant: "
+            }
+
+            Slider {
+                id: springSlider
+                minimumValue: 0.1
+                maximumValue: 10.0
+                value: 1.0
+                onValueChanged: simulator.springConstant = value
             }
         }
     }
