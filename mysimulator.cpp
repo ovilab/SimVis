@@ -72,6 +72,8 @@ void MyWorker::reset()
 {
     m_positions.clear();
     m_velocities.clear();
+    m_positions.resize(m_numberOfBalls);
+    m_velocities.resize(m_numberOfBalls);
     for(unsigned int i=0; i<m_numberOfBalls; i++) {
         float x =  2.0*(rand() / double(RAND_MAX)) - 1.0;
         float y =  2.0*(rand() / double(RAND_MAX)) - 1.0;
@@ -83,7 +85,7 @@ void MyWorker::reset()
         vx *= 0.3;
         vy *= 0.3;
 
-        m_positions.push_back(QVector2D(x,y));
-        m_velocities.push_back(QVector2D(vx,vy));
+        m_positions[i] = QVector2D(x,y);
+        m_velocities[i] = QVector2D(vx,vy);
     }
 }
