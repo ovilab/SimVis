@@ -26,7 +26,10 @@ void Billboards2DRenderer::uploadTexture(QString filename)
         qWarning() << "File " << filename << " does not exist. Aborting!";
         return;
     }
-    m_texture = new QOpenGLTexture(QImage(filename).mirrored());
+
+    QImage img = QImage(filename).mirrored();
+    m_texture = new QOpenGLTexture(img);
+
     m_isTextureUploaded = true;
 }
 
@@ -208,6 +211,7 @@ void Billboards2DRenderer::createShaderProgram() {
                                            "varying highp vec3 color;\n"
                                            "void main() {\n"
                                            "    gl_FragColor = texture2D(texture, coords.st)*vec4(color, 1.0);\n"
+                                           // "    if(gl_FragColor.w==0.0) { discard; }\n"
                                            "}");
 
 
@@ -253,9 +257,13 @@ void Billboards2DRenderer::render()
     glFunctions()->glVertexAttribPointer(texcoordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Billboard2DData), (const void *)offset);
 
     // Draw cube geometry using indices from VBO 1
-    // glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_SHORT, 0);
     m_texture->bind();
+    glFunctions()->glEnable(GL_DEPTH_TEST);
+    glFunctions()->glEnable(GL_BLEND);
+    glFunctions()->glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glFunctions()->glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
+    glFunctions()->glDisable(GL_DEPTH_TEST);
+    glFunctions()->glDisable(GL_BLEND);
 
     m_program->disableAttributeArray(vertexLocation);
     m_program->disableAttributeArray(colorLocation);
