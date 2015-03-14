@@ -9,7 +9,8 @@ SOURCES += main.cpp \
     mysimulator.cpp \
     visualizer.cpp \
     renderable.cpp \
-    billboards2d.cpp
+    billboards2d.cpp \
+    points2d.cpp
 
 RESOURCES += qml.qrc
 
@@ -24,4 +25,5 @@ HEADERS += \
     mysimulator.h \
     visualizer.h \
     renderable.h \
-    billboards2d.h
+    billboards2d.h \
+    points2d.h
