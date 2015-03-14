@@ -16,7 +16,7 @@ protected:
     QOpenGLFunctions* glFunctions();
 
 private:
-    QOpenGLFunctions* m_funcs;
+    QOpenGLFunctions* m_funcs = 0;
 
     friend class Renderable;
 };
