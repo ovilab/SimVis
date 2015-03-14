@@ -43,6 +43,7 @@ class Billboards2DRenderer : public RenderableRenderer
 class Billboards2D : public Renderable
 {
     Q_OBJECT
+    Q_PROPERTY(float scale READ scale WRITE setScale NOTIFY scaleChanged)
 public:
     Billboards2D();
     ~Billboards2D();
@@ -60,6 +61,9 @@ public:
     void setColor(const QColor &color);
 
     virtual RenderableRenderer* createRenderer();
+
+signals:
+    void scaleChanged(bool arg);
 
 private:
     std::vector<Billboard2DData> m_vertices;

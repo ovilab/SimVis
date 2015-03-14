@@ -18,7 +18,8 @@ ApplicationWindow {
         anchors.fill: parent
         simulator: simulator
         Billboards2D {
-            id: test
+            id: billboards
+            scale: 0.1
         }
         Component.onCompleted: {
             update()
