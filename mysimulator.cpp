@@ -12,7 +12,7 @@ MySimulator::~MySimulator()
 
 }
 
-Worker *MySimulator::createWorker()
+SimulatorWorker *MySimulator::createWorker()
 {
     return new MyWorker();
 }

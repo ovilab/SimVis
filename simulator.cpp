@@ -16,7 +16,7 @@ void Simulator::step()
     if(!m_worker) {
         m_worker = createWorker();
         m_worker->moveToThread(&m_workerThread);
-        connect(this, &Simulator::requestWork, m_worker, &Worker::work);
+        connect(this, &Simulator::requestWork, m_worker, &SimulatorWorker::work);
         m_workerThread.start();
     }
     m_worker->synchronizeSimulator(this);

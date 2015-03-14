@@ -7,6 +7,7 @@
 class Renderable;
 class RenderableRenderer : public QObject
 {
+    Q_OBJECT
 protected:
     virtual void synchronize(Renderable* renderable) = 0;
     virtual void render(QMatrix4x4 &modelViewMatrix, QMatrix4x4 &projectionMatrix) = 0;

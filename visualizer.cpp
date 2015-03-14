@@ -26,7 +26,7 @@ void Visualizer::test()
     }
 }
 
-QQuickFramebufferObject::Renderer *Visualizer::createRenderer() const
+VisualizerRenderer *Visualizer::createRenderer() const
 {
     qDebug() << "Renderer created";
     return new VisualizerRenderer();

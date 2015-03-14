@@ -8,7 +8,7 @@
 class Renderable;
 class Simulator;
 
-class Worker : public QObject {
+class SimulatorWorker : public QObject {
     Q_OBJECT
 public:
     virtual void synchronizeSimulator(Simulator *simulator) = 0;
@@ -26,17 +26,17 @@ public:
     explicit Simulator(QObject *parent = 0);
     ~Simulator();
 protected:
-    virtual Worker *createWorker() = 0;
+    virtual SimulatorWorker *createWorker() = 0;
 
 signals:
-    void requestRendererSync(Worker *worker);
+    void requestRendererSync(SimulatorWorker *worker);
     void requestWork();
 
 public slots:
     void step();
 
 private:
-    Worker *m_worker = 0;
+    SimulatorWorker *m_worker = 0;
     QThread m_workerThread;
     QTimer  m_timer;
 

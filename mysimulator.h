@@ -3,7 +3,7 @@
 #include "simulator.h"
 #include <QDebug>
 
-class MyWorker : public Worker {
+class MyWorker : public SimulatorWorker {
 public:
     MyWorker();
     void synchronizeSimulator(Simulator *simulator);
@@ -24,7 +24,7 @@ public:
     ~MySimulator();
 
 protected:
-    Worker *createWorker();
+    SimulatorWorker *createWorker();
 };
 
 #endif // MYSIMULATOR_H

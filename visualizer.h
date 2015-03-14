@@ -24,7 +24,7 @@ public:
     Visualizer();
     ~Visualizer();
 
-    Renderer *createRenderer() const;
+    virtual VisualizerRenderer *createRenderer() const override;
     Simulator* simulator() const;
 public slots:
     void setSimulator(Simulator* arg);
@@ -36,8 +36,6 @@ private:
     Simulator* m_simulator;
 
     friend class VisualizerRenderer;
-
-    // QQuickItem interface
 };
 
 #endif // VISUALIZER_H
