@@ -2,23 +2,27 @@ import QtQuick 2.4
 import QtQuick.Controls 1.3
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
-import MySimulator 1.0
+import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
+import MySimulator 1.0
 
 ApplicationWindow {
     id: applicationRoot
     title: qsTr("Footballs in a harmonic oscillator - SimVis example")
-    width: 800
-    height: 600
+    width: 1920
+    height: 1080
     visible: true
 
     MySimulator {
         id: simulator
+        mass: 1.0
+        springConstant: 1.0
+        dt: 0.01
     }
 
     Visualizer {
         id: visualizer
-        width: applicationRoot.width
+        width: applicationRoot.width - 300
         height: applicationRoot.height - row1.height
         simulator: simulator
         Billboards2D {
@@ -48,6 +52,23 @@ ApplicationWindow {
         }
         Label {
             text: qsTr("Blur radius: %1").arg(blurRadiusSlider.value.toFixed(2))
+        }
+    }
+
+    Item {
+        anchors.left: visualizer.right
+        Row {
+            id: controlsRow1
+            Label {
+                text: "Mass: "
+            }
+            Slider {
+                id: massSlider
+                minimumValue: 0.1
+                maximumValue: 10.0
+                value: 1.0
+                onValueChanged: simulator.mass = value
+            }
         }
     }
 }
