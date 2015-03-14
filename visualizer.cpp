@@ -6,8 +6,7 @@
 #include <QDebug>
 #include <QOpenGLFramebufferObjectFormat>
 
-Visualizer::Visualizer() :
-    m_simulator(0)
+Visualizer::Visualizer()
 {
 }
 
