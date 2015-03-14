@@ -55,10 +55,16 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
 
 void MyWorker::work()
 {
+    float oneOverMass = 1.0/m_mass;
     for(unsigned int i=0; i<m_positions.size(); i++) {
-        QVector2D force = -m_positions[i]*m_springConstant;
-        m_velocities[i] += force/m_mass*m_dt;
-        m_positions[i] += m_velocities[i]*m_dt;
+        QVector2D force;
+        force[0] = -m_positions[i][0]*m_springConstant;
+        force[1] = -m_positions[i][1]*m_springConstant;
+        m_velocities[i][0] += force[0]*oneOverMass*m_dt;
+        m_velocities[i][1] += force[1]*oneOverMass*m_dt;
+
+        m_positions[i][0] += m_velocities[i][0]*m_dt;
+        m_positions[i][1] += m_velocities[i][1]*m_dt;
     }
 }
 
