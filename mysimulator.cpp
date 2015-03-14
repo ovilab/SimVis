@@ -12,6 +12,11 @@ MySimulator::~MySimulator()
 
 }
 
+void MySimulator::reset()
+{
+    m_willReset = true;
+}
+
 SimulatorWorker *MySimulator::createWorker()
 {
     return new MyWorker();
@@ -19,21 +24,7 @@ SimulatorWorker *MySimulator::createWorker()
 
 MyWorker::MyWorker()
 {
-    unsigned int numberOfBalls = 100;
-    for(unsigned int i=0; i<numberOfBalls; i++) {
-        float x =  2.0*(rand() / double(RAND_MAX)) - 1.0;
-        float y =  2.0*(rand() / double(RAND_MAX)) - 1.0;
-        float vx = 2.0*(rand() / double(RAND_MAX)) - 1.0;
-        float vy = 2.0*(rand() / double(RAND_MAX)) - 1.0;
-
-        x *= 0.5;
-        y *= 0.5;
-        vx *= 0.3;
-        vy *= 0.3;
-
-        m_positions.push_back(QVector2D(x,y));
-        m_velocities.push_back(QVector2D(vx,vy));
-    }
+    reset();
 }
 
 void MyWorker::synchronizeSimulator(Simulator *simulator)
@@ -42,6 +33,11 @@ void MyWorker::synchronizeSimulator(Simulator *simulator)
     m_dt = sim->dt();
     m_springConstant = sim->springConstant();
     m_mass = sim->mass();
+    m_numberOfBalls = sim->numberOfBalls();
+    if(sim->m_willReset) {
+        reset();
+        sim->m_willReset = false;
+    }
 }
 
 void MyWorker::synchronizeRenderer(Renderable *renderableObject)
@@ -63,5 +59,25 @@ void MyWorker::work()
         QVector2D force = -m_positions[i]*m_springConstant;
         m_velocities[i] += force/m_mass*m_dt;
         m_positions[i] += m_velocities[i]*m_dt;
+    }
+}
+
+void MyWorker::reset()
+{
+    m_positions.clear();
+    m_velocities.clear();
+    for(unsigned int i=0; i<m_numberOfBalls; i++) {
+        float x =  2.0*(rand() / double(RAND_MAX)) - 1.0;
+        float y =  2.0*(rand() / double(RAND_MAX)) - 1.0;
+        float vx = 2.0*(rand() / double(RAND_MAX)) - 1.0;
+        float vy = 2.0*(rand() / double(RAND_MAX)) - 1.0;
+
+        x *= 0.5;
+        y *= 0.5;
+        vx *= 0.3;
+        vy *= 0.3;
+
+        m_positions.push_back(QVector2D(x,y));
+        m_velocities.push_back(QVector2D(vx,vy));
     }
 }

@@ -16,9 +16,11 @@ public slots:
     void work();
 
 private:
+    void reset();
     float m_springConstant = 1.0;
     float m_mass = 1.0;
     float m_dt = 0.01;
+    int   m_numberOfBalls = 100;
     std::vector<QVector2D> m_positions;
     std::vector<QVector2D> m_velocities;
 };
@@ -29,6 +31,7 @@ class MySimulator : public Simulator
     Q_PROPERTY(float springConstant READ springConstant WRITE setSpringConstant NOTIFY springConstantChanged)
     Q_PROPERTY(float mass READ mass WRITE setMass NOTIFY massChanged)
     Q_PROPERTY(float dt READ dt WRITE setDt NOTIFY dtChanged)
+    Q_PROPERTY(int numberOfBalls READ numberOfBalls WRITE setNumberOfBalls NOTIFY numberOfBallsChanged)
 public:
     explicit MySimulator();
     ~MySimulator();
@@ -46,6 +49,11 @@ public:
     float dt() const
     {
         return m_dt;
+    }
+
+    int numberOfBalls() const
+    {
+        return m_numberOfBalls;
     }
 
 public slots:
@@ -76,12 +84,22 @@ public slots:
         emit dtChanged(arg);
     }
 
+    void reset();
+
+    void setNumberOfBalls(int arg)
+    {
+        if (m_numberOfBalls == arg)
+            return;
+
+        m_numberOfBalls = arg;
+        emit numberOfBallsChanged(arg);
+    }
+
 signals:
     void springConstantChanged(float arg);
-
     void massChanged(float arg);
-
     void dtChanged(float arg);
+    void numberOfBallsChanged(int arg);
 
 protected:
     SimulatorWorker *createWorker();
@@ -89,6 +107,9 @@ private:
     float m_springConstant = 1.0;
     float m_mass = 1.0;
     float m_dt = 0.01;
+    int m_numberOfBalls = 100;
+    bool m_willReset = true;
+    friend class MyWorker;
 };
 
 #endif // MYSIMULATOR_H

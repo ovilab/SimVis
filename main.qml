@@ -111,5 +111,25 @@ ApplicationWindow {
                 checked: false
             }
         }
+
+        Row {
+            id: controlsRow4
+            anchors.top: controlsRow3.bottom
+
+            TextField {
+                text: simulator.numberOfBalls
+                inputMethodHints: Qt.ImhFormattedNumbersOnly
+                onTextChanged: {
+                    var value = Math.round(parseInt(text))
+                    simulator.setNumberOfBalls(text)
+                    simulator.reset()
+                }
+            }
+
+            Button {
+                text: "Reset"
+                onClicked: simulator.reset();
+            }
+        }
     }
 }
