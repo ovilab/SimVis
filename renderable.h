@@ -20,9 +20,9 @@ protected:
 
     QOpenGLShaderProgram* m_program = 0;
     QOpenGLFunctions* glFunctions();
+    QOpenGLFunctions* m_funcs = 0;
 
 private:
-    QOpenGLFunctions* m_funcs = 0;
 
     friend class Renderable;
 };

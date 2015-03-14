@@ -1,91 +1,90 @@
-//#pragma once
-//#ifndef POINTS2D_H
-//#define POINTS2D_H
+#pragma once
+#ifndef POINTS2D_H
+#define POINTS2D_H
 
-//#include "renderable.h"
-//#include <QtGui/QOpenGLShaderProgram>
-//#include <QOpenGLFunctions>
-//#include <QOpenGLTexture>
-//#include <vector>
-//using std::vector;
+#include "renderable.h"
+#include <QtGui/QOpenGLShaderProgram>
+#include <QOpenGLFunctions>
+#include <QOpenGLTexture>
+#include <vector>
+#include <QColor>
+using std::vector;
+class Simulator;
 
-//class Simulator;
+class Points2D;
+class Points2DRenderer : public RenderableRenderer
+{
+    Q_OBJECT
+public:
+    Points2DRenderer();
+protected:
 
-//class Points2D;
-//class Points2DRenderer : public RenderableRenderer
-//{
-//    virtual void synchronize(Renderable *);
-//    virtual void render();
+    virtual void synchronize(Renderable *renderable) override;
+    virtual void render() override;
 
-//    void uploadVBOs(Points2D* billboards);
-//    void createShaderProgram();
-//    bool m_isInitialized = false;
+    void uploadVBO(Points2D* points);
+    void createShaderProgram() override;
+    int m_vertexCount = 0;
+    float m_pointSize = 1.0;
+    QVector4D m_color = QVector4D(1.0, 0.0, 0.0, 0.0);
+    bool m_isInitialized = false;
+};
 
-//    vector<GLuint> m_vboIds;
-//    QOpenGLTexture *m_texture = 0;
-//    bool m_isTextureUploaded = false;
-//    QOpenGLShaderProgram* m_program;
-//    int m_vertexCount;
-//    int m_indexCount;
-//};
+class Points2D : public Renderable
+{
+    Q_OBJECT
+    Q_PROPERTY(float pointSize READ pointSize WRITE setPointSize NOTIFY pointSizeChanged)
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 
-//class Billboards2D : public Renderable
-//{
-//    Q_OBJECT
-//    Q_PROPERTY(float scale READ scale WRITE setScale NOTIFY scaleChanged)
-//    Q_PROPERTY(QString texture READ texture WRITE setTexture NOTIFY textureChanged)
-//public:
-//    Billboards2D();
-//    ~Billboards2D();
-//    virtual void initialize();
-//    virtual void copyDataFunction();
-//    void setPositions(std::vector<QVector2D> &positions);
-//    std::vector<QVector2D> &positions();
-//    std::vector<float> &rotations();
-//    std::function<void(Billboards2D *renderableObject)> myCopyData;
+public:
+    Points2D();
+    ~Points2D();
+    void setPositions(std::vector<QVector2D> &positions);
+    std::vector<QVector2D> &positions();
+    virtual RenderableRenderer* createRenderer();
 
-//    float scale() const;
-//    void setScale(float scale);
+    float pointSize() const
+    {
+        return m_pointSize;
+    }
 
-//    QVector3D color() const;
-//    void setColor(const QColor &color);
+    QColor color() const
+    {
+        return m_color;
+    }
 
-//    virtual RenderableRenderer* createRenderer();
+public slots:
 
-//    QString texture() const
-//    {
-//        return m_texture;
-//    }
+    void setPointSize(float arg)
+    {
+        if (m_pointSize == arg)
+            return;
 
-//public slots:
-//    void setTexture(QString arg)
-//    {
-//        if (m_texture == arg)
-//            return;
+        m_pointSize = arg;
+        emit pointSizeChanged(arg);
+    }
 
-//        m_texture = arg;
-//        emit textureChanged(arg);
-//    }
+    void setColor(QColor arg)
+    {
+        if (m_color == arg)
+            return;
 
-//signals:
-//    void scaleChanged(bool arg);
+        m_color = arg;
+        emit colorChanged(arg);
+    }
 
-//    void textureChanged(QString arg);
+signals:
 
-//private:
-//    std::vector<Billboard2DVBOData> m_vertices;
-//    std::vector<GLuint> m_indices;
-//    QVector3D m_color;
+    void pointSizeChanged(float arg);
 
-//    std::vector<QVector2D> m_positions;
-//    std::vector<float> m_rotations;
-//    float m_scale = 1.0;
+    void colorChanged(QColor arg);
 
-//    QVector3D vectorFromColor(const QColor &color);
-
-//    friend class Billboards2DRenderer;
-//    QString m_texture = "NO TEXTURE CHOSEN";
-//};
+private:
+    std::vector<QVector2D> m_vertices;
+    float m_pointSize = 1.0;
+    QColor m_color = "red";
+    friend class Points2DRenderer;
+};
 
 
-//#endif // POINTS2D_H
+#endif // POINTS2D_H

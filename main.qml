@@ -30,6 +30,11 @@ ApplicationWindow {
             texture: ":/football.png"
             scale: 0.1
         }
+
+//        Points2D {
+//            id: points
+//            pointSize: 10.0
+//        }
     }
 
     FastBlur {

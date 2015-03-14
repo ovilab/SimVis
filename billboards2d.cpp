@@ -81,6 +81,7 @@ void Billboards2DRenderer::synchronize(Renderable* renderer)
     if(!m_isInitialized) {
         generateVBOs();
         createShaderProgram();
+        m_isInitialized = true;
     }
     if(!m_isTextureUploaded) {
         uploadTexture(billboards->texture());

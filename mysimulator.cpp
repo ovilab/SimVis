@@ -1,7 +1,7 @@
 #include "mysimulator.h"
 
 #include "billboards2d.h"
-
+#include "points2d.h"
 MySimulator::MySimulator()
 {
 
@@ -49,6 +49,11 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
     Billboards2D* billboards = qobject_cast<Billboards2D*>(renderableObject);
     if(billboards) {
         billboards->setPositions(m_positions);
+    }
+
+    Points2D* points = qobject_cast<Points2D*>(renderableObject);
+    if(points) {
+        points->setPositions(m_positions);
     }
 }
 
