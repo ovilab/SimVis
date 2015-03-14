@@ -21,17 +21,5 @@ ApplicationWindow {
             id: billboards
             scale: 0.1
         }
-        Component.onCompleted: {
-            update()
-        }
-    }
-
-    Timer {
-        running: true
-        interval: 1000
-        repeat: true
-        onTriggered: {
-            simulator.step()
-        }
     }
 }
