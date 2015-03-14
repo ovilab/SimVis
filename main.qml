@@ -31,7 +31,6 @@ ApplicationWindow {
         repeat: true
         onTriggered: {
             simulator.step()
-            visualizer.test()
         }
     }
 }
