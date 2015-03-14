@@ -93,7 +93,7 @@ void Billboards2DRenderer::uploadVBOs(Billboards2D* billboards)
 {
     double scale = billboards->scale();
     std::vector<QVector2D>& positions = billboards->m_positions;
-    std::vector<Billboard2DData>& vertices = billboards->m_vertices;
+    std::vector<Billboard2DVBOData>& vertices = billboards->m_vertices;
     std::vector<GLuint>& indices = billboards->m_indices;
     QVector3D& color = billboards->m_color;
     std::vector<float>& rotations = billboards->m_rotations;
@@ -167,7 +167,7 @@ void Billboards2DRenderer::uploadVBOs(Billboards2D* billboards)
 
     // Transfer vertex data to VBO 0
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
-    glFunctions()->glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Billboard2DData), &vertices[0], GL_STATIC_DRAW);
+    glFunctions()->glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Billboard2DVBOData), &vertices[0], GL_STATIC_DRAW);
 
     // Transfer index data to VBO 1
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
@@ -238,7 +238,7 @@ void Billboards2DRenderer::render()
     // Tell OpenGL programmable pipeline how to locate vertex position data
     int vertexLocation = m_program->attributeLocation("a_position");
     m_program->enableAttributeArray(vertexLocation);
-    glFunctions()->glVertexAttribPointer(vertexLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Billboard2DData), (const void *)offset);
+    glFunctions()->glVertexAttribPointer(vertexLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Billboard2DVBOData), (const void *)offset);
 
     // Offset for texture coordinate
     offset += sizeof(QVector2D);
@@ -246,7 +246,7 @@ void Billboards2DRenderer::render()
     // Tell OpenGL programmable pipeline how to locate vertex color data
     int colorLocation = m_program->attributeLocation("a_color");
     m_program->enableAttributeArray(colorLocation);
-    glFunctions()->glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Billboard2DData), (const void *)offset);
+    glFunctions()->glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Billboard2DVBOData), (const void *)offset);
 
     // Offset for texture coordinate
     offset += sizeof(QVector3D);
@@ -254,7 +254,7 @@ void Billboards2DRenderer::render()
     // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
     int texcoordLocation = m_program->attributeLocation("a_texcoord");
     m_program->enableAttributeArray(texcoordLocation);
-    glFunctions()->glVertexAttribPointer(texcoordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Billboard2DData), (const void *)offset);
+    glFunctions()->glVertexAttribPointer(texcoordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Billboard2DVBOData), (const void *)offset);
 
     // Draw cube geometry using indices from VBO 1
     m_texture->bind();

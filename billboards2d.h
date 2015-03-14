@@ -11,7 +11,7 @@ using std::vector;
 
 class Simulator;
 
-struct Billboard2DData
+struct Billboard2DVBOData
 {
     QVector2D position;
     QVector3D color;
@@ -83,7 +83,7 @@ signals:
     void textureChanged(QString arg);
 
 private:
-    std::vector<Billboard2DData> m_vertices;
+    std::vector<Billboard2DVBOData> m_vertices;
     std::vector<GLuint> m_indices;
     QVector3D m_color;
 
