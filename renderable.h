@@ -12,6 +12,8 @@ class RenderableRenderer : public QObject
 protected:
     virtual void synchronize(Renderable* renderable) = 0;
     virtual void render() = 0;
+    unsigned int m_numberOfVBOs = 0;
+    QList<GLuint> m_vboIds;
 
     QOpenGLFunctions* glFunctions();
 
@@ -30,6 +32,7 @@ public:
 
     virtual void afterSynchronize();
     virtual RenderableRenderer* createRenderer() = 0;
+    // virtual void createShaderProgram() = 0;
 
     void requestRender();
     void requestSynchronize();

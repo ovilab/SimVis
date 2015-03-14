@@ -10,7 +10,6 @@ int main(int argc, char *argv[])
     qmlRegisterType<MySimulator>("MySimulator", 1, 0, "MySimulator");
     qmlRegisterType<Billboards2D>("MySimulator", 1, 0, "Billboards2D");
     qmlRegisterType<Visualizer>("MySimulator", 1, 0, "Visualizer");
-
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;

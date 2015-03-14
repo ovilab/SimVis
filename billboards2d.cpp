@@ -75,6 +75,7 @@ void Billboards2DRenderer::synchronize(Renderable* renderer)
 {
     Billboards2D* billboards = static_cast<Billboards2D*>(renderer);
     if(!m_isInitialized) {
+
         int vboCount = 2;
         m_vboIds.resize(vboCount);
         glFunctions()->glGenBuffers(vboCount, &m_vboIds.front());
