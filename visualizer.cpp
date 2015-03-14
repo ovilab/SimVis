@@ -15,10 +15,6 @@ Visualizer::~Visualizer()
 
 }
 
-void Visualizer::test()
-{
-}
-
 VisualizerRenderer *Visualizer::createRenderer() const
 {
     qDebug() << "Renderer created";

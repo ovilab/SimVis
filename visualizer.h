@@ -31,8 +31,6 @@ public:
 public slots:
     void setSimulator(Simulator* arg);
     void synchronizeWorker(SimulatorWorker* worker);
-
-    void test();
 signals:
     void simulatorChanged(Simulator* arg);
 private:
