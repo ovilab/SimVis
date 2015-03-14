@@ -18,12 +18,6 @@ Visualizer::~Visualizer()
 
 void Visualizer::test()
 {
-    QList<Renderable*> renderables = findChildren<Renderable*>();
-    for(Renderable* renderable : renderables) {
-        if(m_simulator->m_worker) {
-            m_simulator->m_worker->synchronizeRenderer(renderable);
-        }
-    }
 }
 
 VisualizerRenderer *Visualizer::createRenderer() const
@@ -39,11 +33,27 @@ Simulator *Visualizer::simulator() const
 
 void Visualizer::setSimulator(Simulator *arg)
 {
-    if (m_simulator == arg)
+    qDebug() << "Setting simulator!";
+    if (m_simulator == arg) {
         return;
-
+    }
+    if(m_simulator) {
+        disconnect(m_simulator, &Simulator::requestRendererSync, this, &Visualizer::synchronizeWorker);
+    }
     m_simulator = arg;
+    connect(m_simulator, &Simulator::requestRendererSync, this, &Visualizer::synchronizeWorker);
     emit simulatorChanged(arg);
+}
+
+void Visualizer::synchronizeWorker(SimulatorWorker *worker)
+{
+    qDebug() << "Synchronizing worker!";
+    QList<Renderable*> renderables = findChildren<Renderable*>();
+    for(Renderable* renderable : renderables) {
+        if(worker) {
+            worker->synchronizeRenderer(renderable);
+        }
+    }
 }
 
 void VisualizerRenderer::render()

@@ -6,6 +6,7 @@
 
 class Renderable;
 class Simulator;
+class SimulatorWorker;
 class VisualizerRenderer : public QQuickFramebufferObject::Renderer
 {
 protected:
@@ -28,6 +29,7 @@ public:
     Simulator* simulator() const;
 public slots:
     void setSimulator(Simulator* arg);
+    void synchronizeWorker(SimulatorWorker* worker);
 
     void test();
 signals:

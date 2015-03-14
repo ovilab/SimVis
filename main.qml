@@ -16,6 +16,7 @@ ApplicationWindow {
     Visualizer {
         id: visualizer
         anchors.fill: parent
+        simulator: simulator
         Billboards2D {
             id: test
         }
