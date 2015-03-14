@@ -46,11 +46,9 @@ class Billboards2D : public Renderable
 public:
     Billboards2D();
     ~Billboards2D();
-    void copyDataFunction();
     void setPositions(std::vector<QVector2D> &positions);
     std::vector<QVector2D> &positions();
     std::vector<float> &rotations();
-    std::function<void(Billboards2D *renderableObject)> myCopyData;
 
     float scale() const;
     void setScale(float scale);

@@ -176,11 +176,6 @@ void Billboards2DRenderer::uploadVBOs(Billboards2D* billboards)
     glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 }
 
-void Billboards2D::copyDataFunction()
-{
-    myCopyData(this);
-}
-
 void Billboards2D::setPositions(std::vector<QVector2D> &positions)
 {
     m_positions = positions;
