@@ -1,3 +1,4 @@
+#pragma once
 #ifndef VISUALIZER_H
 #define VISUALIZER_H
 
@@ -35,7 +36,7 @@ public slots:
 signals:
     void simulatorChanged(Simulator* arg);
 private:
-    Simulator* m_simulator;
+    Simulator* m_simulator = 0;
 
     friend class VisualizerRenderer;
 };

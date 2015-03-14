@@ -1,3 +1,4 @@
+#pragma once
 #ifndef BILLBOARDS2D_H
 #define BILLBOARDS2D_H
 
