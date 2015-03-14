@@ -52,5 +52,12 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
 
 void MyWorker::work()
 {
-
+    float springConstant = 1.0;
+    float mass = 1.0;
+    float dt = 0.01;
+    for(unsigned int i=0; i<m_positions.size(); i++) {
+        QVector2D force = -m_positions[i]*springConstant;
+        m_velocities[i] += force/mass*dt;
+        m_positions[i] += m_velocities[i]*dt;
+    }
 }

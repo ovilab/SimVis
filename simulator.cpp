@@ -3,12 +3,13 @@
 Simulator::Simulator(QObject *parent) : QObject(parent)
 {
     connect(&m_timer, &QTimer::timeout, this, &Simulator::step);
-    m_timer.start(1000);
+    m_timer.start(1);
 }
 
 Simulator::~Simulator()
 {
-
+    m_workerThread.quit();
+    m_workerThread.wait();
 }
 
 void Simulator::step()
