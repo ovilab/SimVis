@@ -15,8 +15,6 @@ Worker *MySimulator::createWorker()
     return new MyWorker();
 }
 
-
-
 void MyWorker::synchronizeSimulator(Simulator *simulator)
 {
 

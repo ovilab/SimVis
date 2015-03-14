@@ -12,4 +12,15 @@ ApplicationWindow {
     MySimulator {
 
     }
+
+    Visualizer {
+        width: 100
+        height: 100
+        Billboards2D {
+            id: test
+        }
+        Component.onCompleted: {
+            update()
+        }
+    }
 }

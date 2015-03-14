@@ -6,7 +6,10 @@ QT += qml quick widgets opengl openglextensions
 
 SOURCES += main.cpp \
     simulator.cpp \
-    mysimulator.cpp
+    mysimulator.cpp \
+    visualizer.cpp \
+    renderable.cpp \
+    billboards2d.cpp
 
 RESOURCES += qml.qrc
 
@@ -18,4 +21,7 @@ include(deployment.pri)
 
 HEADERS += \
     simulator.h \
-    mysimulator.h
+    mysimulator.h \
+    visualizer.h \
+    renderable.h \
+    billboards2d.h
