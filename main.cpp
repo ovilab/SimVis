@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[])
 {
-    qRegisterMetaType<MySimulator*>();
+    qmlRegisterInterface<Simulator>("Simulator");
     qmlRegisterType<MySimulator>("MySimulator", 1, 0, "MySimulator");
     qmlRegisterType<Billboards2D>("MySimulator", 1, 0, "Billboards2D");
     qmlRegisterType<Visualizer>("MySimulator", 1, 0, "Visualizer");
