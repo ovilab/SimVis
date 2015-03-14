@@ -11,7 +11,7 @@ class RenderableRenderer : public QObject
     Q_OBJECT
 protected:
     virtual void synchronize(Renderable* renderable) = 0;
-    virtual void render(QMatrix4x4 &modelViewMatrix, QMatrix4x4 &projectionMatrix) = 0;
+    virtual void render() = 0;
 
     QOpenGLFunctions* glFunctions();
 
@@ -31,7 +31,7 @@ public:
     virtual void afterSynchronize();
     virtual RenderableRenderer* createRenderer() = 0;
 
-    void requestRender(QMatrix4x4 &modelViewMatrix, QMatrix4x4 &projectionMatrix);
+    void requestRender();
     void requestSynchronize();
 
 signals:

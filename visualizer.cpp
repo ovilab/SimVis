@@ -55,8 +55,7 @@ void VisualizerRenderer::render()
     funcs.glClearColor(0.5f, 0.5f, 0.7f, 1.0f);
     funcs.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for(Renderable* renderable : m_renderables) {
-        QMatrix4x4 a;
-        renderable->requestRender(a, a);
+        renderable->requestRender();
     }
 }
 

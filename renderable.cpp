@@ -16,12 +16,12 @@ void Renderable::afterSynchronize() {
 
 }
 
-void Renderable::requestRender(QMatrix4x4 &modelViewMatrix, QMatrix4x4 &projectionMatrix)
+void Renderable::requestRender()
 {
     if(!m_renderer) {
         m_renderer = createRenderer();
     }
-    m_renderer->render(modelViewMatrix, projectionMatrix);
+    m_renderer->render();
 }
 
 void Renderable::requestSynchronize()

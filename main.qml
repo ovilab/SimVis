@@ -19,6 +19,7 @@ ApplicationWindow {
         simulator: simulator
         Billboards2D {
             id: billboards
+            texture: ":/football.png"
             scale: 0.1
         }
     }

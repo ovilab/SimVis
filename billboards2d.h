@@ -22,7 +22,7 @@ class Billboards2D;
 class Billboards2DRenderer : public RenderableRenderer
 {
     virtual void synchronize(Renderable *);
-    virtual void render(QMatrix4x4 &modelViewMatrix, QMatrix4x4 &projectionMatrix);
+    virtual void render();
 
     void uploadVBOs(Billboards2D* billboards);
 
@@ -34,7 +34,6 @@ class Billboards2DRenderer : public RenderableRenderer
     vector<GLuint> m_vboIds;
     QOpenGLTexture *m_texture = 0;
     bool m_isTextureUploaded = false;
-    QString m_textureFilename = "football.png";
     QOpenGLShaderProgram* m_program;
     int m_vertexCount;
     int m_indexCount;
@@ -44,6 +43,7 @@ class Billboards2D : public Renderable
 {
     Q_OBJECT
     Q_PROPERTY(float scale READ scale WRITE setScale NOTIFY scaleChanged)
+    Q_PROPERTY(QString texture READ texture WRITE setTexture NOTIFY textureChanged)
 public:
     Billboards2D();
     ~Billboards2D();
@@ -62,8 +62,25 @@ public:
 
     virtual RenderableRenderer* createRenderer();
 
+    QString texture() const
+    {
+        return m_texture;
+    }
+
+public slots:
+    void setTexture(QString arg)
+    {
+        if (m_texture == arg)
+            return;
+
+        m_texture = arg;
+        emit textureChanged(arg);
+    }
+
 signals:
     void scaleChanged(bool arg);
+
+    void textureChanged(QString arg);
 
 private:
     std::vector<Billboard2DData> m_vertices;
@@ -77,6 +94,7 @@ private:
     QVector3D vectorFromColor(const QColor &color);
 
     friend class Billboards2DRenderer;
+    QString m_texture = "NO TEXTURE CHOSEN";
 };
 
 

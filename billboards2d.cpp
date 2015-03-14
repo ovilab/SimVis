@@ -78,7 +78,7 @@ void Billboards2DRenderer::synchronize(Renderable* renderer)
         createShaderProgram();
     }
     if(!m_isTextureUploaded) {
-        uploadTexture(m_textureFilename);
+        uploadTexture(billboards->texture());
     }
     uploadVBOs(billboards);
 
@@ -215,7 +215,7 @@ void Billboards2DRenderer::createShaderProgram() {
     }
 }
 
-void Billboards2DRenderer::render(QMatrix4x4 &modelViewMatrix, QMatrix4x4 &projectionMatrix)
+void Billboards2DRenderer::render()
 {
     if(m_vertexCount == 0) {
         return;
