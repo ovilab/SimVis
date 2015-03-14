@@ -11,8 +11,6 @@ public:
     MyWorker();
     void synchronizeSimulator(Simulator *simulator);
     void synchronizeRenderer(Renderable *renderableObject);
-
-public slots:
     void work();
 
 private:

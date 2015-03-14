@@ -66,7 +66,7 @@ void MyWorker::reset()
 {
     m_positions.clear();
     m_velocities.clear();
-    for(unsigned int i=0; i<m_numberOfBalls; i++) {
+    for(unsigned int i = 0; i < m_numberOfBalls; i++) {
         float x =  2.0*(rand() / double(RAND_MAX)) - 1.0;
         float y =  2.0*(rand() / double(RAND_MAX)) - 1.0;
         float vx = 2.0*(rand() / double(RAND_MAX)) - 1.0;
@@ -80,4 +80,5 @@ void MyWorker::reset()
         m_positions.push_back(QVector2D(x,y));
         m_velocities.push_back(QVector2D(vx,vy));
     }
+    qDebug() << "Number of positions and velocities:" << m_positions.size() << " " << m_velocities.size();
 }

@@ -32,10 +32,10 @@ void Visualizer::setSimulator(Simulator *arg)
         return;
     }
     if(m_simulator) {
-        disconnect(m_simulator, &Simulator::requestRendererSync, this, &Visualizer::synchronizeWorker);
+        disconnect(m_simulator, &Simulator::requestVisualizerSync, this, &Visualizer::synchronizeWorker);
     }
     m_simulator = arg;
-    connect(m_simulator, &Simulator::requestRendererSync, this, &Visualizer::synchronizeWorker);
+    connect(m_simulator, &Simulator::requestVisualizerSync, this, &Visualizer::synchronizeWorker);
     emit simulatorChanged(arg);
 }
 
