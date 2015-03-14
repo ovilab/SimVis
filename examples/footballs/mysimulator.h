@@ -1,6 +1,6 @@
 #ifndef MYSIMULATOR_H
 #define MYSIMULATOR_H
-#include "simulator.h"
+#include <SimVis/Simulator>
 #include <QDebug>
 #include <QVector2D>
 
