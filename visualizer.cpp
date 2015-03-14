@@ -44,7 +44,7 @@ void Visualizer::synchronizeWorker(SimulatorWorker *worker)
     QList<Renderable*> renderables = findChildren<Renderable*>();
     for(Renderable* renderable : renderables) {
         if(worker) {
-            worker->synchronizeRenderer(renderable);
+            if(renderable->visible()) worker->synchronizeRenderer(renderable);
         }
     }
     update();
@@ -56,7 +56,7 @@ void VisualizerRenderer::render()
     funcs.glClearColor(0.5f, 0.5f, 0.7f, 1.0f);
     funcs.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for(Renderable* renderable : m_renderables) {
-        renderable->requestRender();
+        if(renderable->visible()) renderable->requestRender();
     }
 }
 
@@ -65,7 +65,7 @@ void VisualizerRenderer::synchronize(QQuickFramebufferObject *fbo)
     Visualizer* visualizer = static_cast<Visualizer*>(fbo);
     m_renderables = visualizer->findChildren<Renderable*>();
     for(Renderable* renderable : m_renderables) {
-        renderable->requestSynchronize();
+        if(renderable->visible()) renderable->requestSynchronize();
     }
 }
 

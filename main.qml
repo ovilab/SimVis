@@ -27,14 +27,16 @@ ApplicationWindow {
         simulator: simulator
         Billboards2D {
             id: billboards
+            visible: billboardsVisible.checked
             texture: ":/football.png"
             scale: 0.1
         }
 
-//        Points2D {
-//            id: points
-//            pointSize: 10.0
-//        }
+        Points2D {
+            id: points
+            visible: pointsVisible.checked
+            pointSize: 10.0
+        }
     }
 
     FastBlur {
@@ -90,6 +92,23 @@ ApplicationWindow {
                 maximumValue: 10.0
                 value: 1.0
                 onValueChanged: simulator.springConstant = value
+            }
+        }
+
+        Row {
+            id: controlsRow3
+            anchors.top: controlsRow2.bottom
+
+            CheckBox {
+                id: billboardsVisible
+                text: "Billboards"
+                checked: true
+            }
+
+            CheckBox {
+                id: pointsVisible
+                text: "Points"
+                checked: false
             }
         }
     }

@@ -30,6 +30,7 @@ private:
 class Renderable : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged)
 public:
     explicit Renderable(QObject *parent = 0);
     ~Renderable();
@@ -40,14 +41,31 @@ public:
     void requestRender();
     void requestSynchronize();
 
+    bool visible() const
+    {
+        return m_visible;
+    }
+
 signals:
 
+    void visibleChanged(bool arg);
+
 public slots:
+
+    void setVisible(bool arg)
+    {
+        if (m_visible == arg)
+            return;
+
+        m_visible = arg;
+        emit visibleChanged(arg);
+    }
 
 protected:
 
 private:
     RenderableRenderer* m_renderer;
+    bool m_visible = true;
 };
 
 #endif // RENDERABLE_H
