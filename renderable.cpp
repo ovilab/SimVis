@@ -12,10 +12,6 @@ Renderable::~Renderable()
 
 }
 
-void Renderable::afterSynchronize() {
-
-}
-
 void Renderable::requestRender()
 {
     if(!m_renderer) {

@@ -35,7 +35,6 @@ public:
     explicit Renderable(QObject *parent = 0);
     ~Renderable();
 
-    virtual void afterSynchronize();
     virtual RenderableRenderer* createRenderer() = 0;
 
     void requestRender();

@@ -22,7 +22,9 @@ void Simulator::step()
     if(m_workerMutex.tryLock()) {
         m_worker->synchronizeSimulator(this);
         emit requestVisualizerSync(m_worker);
-        QMetaObject::invokeMethod(m_worker, "workAndUnlock", Qt::QueuedConnection, Q_ARG(Simulator*, this));
+        QMetaObject::invokeMethod(m_worker, "workAndUnlock",
+                                  Qt::QueuedConnection,
+                                  Q_ARG(Simulator*, this)); // call happens on worker's thread
     }
 }
 
