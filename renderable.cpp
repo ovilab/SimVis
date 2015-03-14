@@ -32,6 +32,14 @@ void Renderable::requestSynchronize()
     m_renderer->synchronize(this);
 }
 
+void RenderableRenderer::generateVBOs()
+{
+    if(m_numberOfVBOs>0) {
+        m_vboIds.resize(m_numberOfVBOs);
+        glFunctions()->glGenBuffers(m_numberOfVBOs, &m_vboIds.front());
+    }
+}
+
 QOpenGLFunctions* RenderableRenderer::glFunctions() {
     if(!m_funcs) {
         m_funcs = new QOpenGLFunctions(QOpenGLContext::currentContext());

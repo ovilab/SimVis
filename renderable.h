@@ -1,9 +1,10 @@
-#pragma once
 #ifndef RENDERABLE_H
 #define RENDERABLE_H
 
 #include <QObject>
 #include <QOpenGLFunctions>
+#include <QOpenGLShaderProgram>
+#include <vector>
 
 class Renderable;
 class RenderableRenderer : public QObject
@@ -12,9 +13,12 @@ class RenderableRenderer : public QObject
 protected:
     virtual void synchronize(Renderable* renderable) = 0;
     virtual void render() = 0;
+    virtual void createShaderProgram() = 0;
+    void generateVBOs();
     unsigned int m_numberOfVBOs = 0;
-    QList<GLuint> m_vboIds;
+    std::vector<GLuint> m_vboIds;
 
+    QOpenGLShaderProgram* m_program = 0;
     QOpenGLFunctions* glFunctions();
 
 private:
@@ -32,7 +36,6 @@ public:
 
     virtual void afterSynchronize();
     virtual RenderableRenderer* createRenderer() = 0;
-    // virtual void createShaderProgram() = 0;
 
     void requestRender();
     void requestSynchronize();

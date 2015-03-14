@@ -1,6 +1,5 @@
 #include "billboards2d.h"
 
-#include <QOpenGLFunctions>
 #include <QFileInfo>
 #include <QColor>
 #include <QRgb>
@@ -71,14 +70,16 @@ RenderableRenderer *Billboards2D::createRenderer()
     return new Billboards2DRenderer();
 }
 
+Billboards2DRenderer::Billboards2DRenderer()
+{
+    m_numberOfVBOs = 2;
+}
+
 void Billboards2DRenderer::synchronize(Renderable* renderer)
 {
     Billboards2D* billboards = static_cast<Billboards2D*>(renderer);
     if(!m_isInitialized) {
-
-        int vboCount = 2;
-        m_vboIds.resize(vboCount);
-        glFunctions()->glGenBuffers(vboCount, &m_vboIds.front());
+        generateVBOs();
         createShaderProgram();
     }
     if(!m_isTextureUploaded) {
@@ -173,10 +174,6 @@ void Billboards2DRenderer::uploadVBOs(Billboards2D* billboards)
     // Transfer index data to VBO 1
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
     glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
-}
-
-void Billboards2D::initialize()
-{
 }
 
 void Billboards2D::copyDataFunction()

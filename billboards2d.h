@@ -3,7 +3,6 @@
 #define BILLBOARDS2D_H
 
 #include "renderable.h"
-#include <QtGui/QOpenGLShaderProgram>
 #include <QOpenGLFunctions>
 #include <QOpenGLTexture>
 #include <vector>
@@ -21,20 +20,20 @@ struct Billboard2DVBOData
 class Billboards2D;
 class Billboards2DRenderer : public RenderableRenderer
 {
+public:
+    Billboards2DRenderer();
+
+private:
     virtual void synchronize(Renderable *);
     virtual void render();
 
     void uploadVBOs(Billboards2D* billboards);
 
-    void createShaderProgram();
+    virtual void createShaderProgram() override;
     void uploadTexture(QString filename);
-
-    bool m_isInitialized = false;
-
-    vector<GLuint> m_vboIds;
     QOpenGLTexture *m_texture = 0;
+    bool m_isInitialized = false;
     bool m_isTextureUploaded = false;
-    QOpenGLShaderProgram* m_program;
     int m_vertexCount;
     int m_indexCount;
 };
@@ -47,8 +46,7 @@ class Billboards2D : public Renderable
 public:
     Billboards2D();
     ~Billboards2D();
-    virtual void initialize();
-    virtual void copyDataFunction();
+    void copyDataFunction();
     void setPositions(std::vector<QVector2D> &positions);
     std::vector<QVector2D> &positions();
     std::vector<float> &rotations();
@@ -79,7 +77,6 @@ public slots:
 
 signals:
     void scaleChanged(bool arg);
-
     void textureChanged(QString arg);
 
 private:
