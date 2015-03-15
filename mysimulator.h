@@ -35,22 +35,15 @@ public:
     ~MySimulator();
 
     float springConstant() const;
-
     float mass() const;
-
     float dt() const;
-
     int numberOfBalls() const;
 
 public slots:
     void setSpringConstant(float arg);
-
     void setMass(float arg);
-
     void setDt(float arg);
-
     void reset();
-
     void setNumberOfBalls(int arg);
 
 signals:

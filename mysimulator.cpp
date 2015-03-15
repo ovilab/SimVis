@@ -102,7 +102,6 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
     if(billboards) {
         billboards->setPositions(m_positions);
     }
-
     Points2D* points = qobject_cast<Points2D*>(renderableObject);
     if(points) {
         points->setPositions(m_positions);
