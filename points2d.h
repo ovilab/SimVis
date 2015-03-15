@@ -40,40 +40,17 @@ public:
     QVector<QVector2D> &positions();
     virtual RenderableRenderer* createRenderer();
 
-    float pointSize() const
-    {
-        return m_pointSize;
-    }
-
-    QColor color() const
-    {
-        return m_color;
-    }
+    float pointSize() const;
+    QColor color() const;
 
 public slots:
 
-    void setPointSize(float arg)
-    {
-        if (m_pointSize == arg)
-            return;
-
-        m_pointSize = arg;
-        emit pointSizeChanged(arg);
-    }
-
-    void setColor(QColor arg)
-    {
-        if (m_color == arg)
-            return;
-
-        m_color = arg;
-        emit colorChanged(arg);
-    }
+    void setPointSize(float arg);
+    void setColor(QColor arg);
 
 signals:
 
     void pointSizeChanged(float arg);
-
     void colorChanged(QColor arg);
 
 private:

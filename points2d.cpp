@@ -25,6 +25,34 @@ RenderableRenderer *Points2D::createRenderer()
     return new Points2DRenderer();
 }
 
+float Points2D::pointSize() const
+{
+    return m_pointSize;
+}
+
+QColor Points2D::color() const
+{
+    return m_color;
+}
+
+void Points2D::setPointSize(float arg)
+{
+    if (m_pointSize == arg)
+        return;
+
+    m_pointSize = arg;
+    emit pointSizeChanged(arg);
+}
+
+void Points2D::setColor(QColor arg)
+{
+    if (m_color == arg)
+        return;
+
+    m_color = arg;
+    emit colorChanged(arg);
+}
+
 Points2DRenderer::Points2DRenderer()
 {
     m_numberOfVBOs = 1;
