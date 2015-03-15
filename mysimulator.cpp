@@ -55,10 +55,16 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
 
 void MyWorker::work()
 {
+    float oneOverMass = 1.0/m_mass;
     for(unsigned int i=0; i<m_positions.size(); i++) {
-        QVector2D force = -m_positions[i]*m_springConstant;
-        m_velocities[i] += force/m_mass*m_dt;
-        m_positions[i] += m_velocities[i]*m_dt;
+        QVector2D force;
+        force[0] = -m_positions[i][0]*m_springConstant;
+        force[1] = -m_positions[i][1]*m_springConstant;
+        m_velocities[i][0] += force[0]*oneOverMass*m_dt;
+        m_velocities[i][1] += force[1]*oneOverMass*m_dt;
+
+        m_positions[i][0] += m_velocities[i][0]*m_dt;
+        m_positions[i][1] += m_velocities[i][1]*m_dt;
     }
 }
 
@@ -68,7 +74,7 @@ void MyWorker::reset()
     m_velocities.clear();
     m_positions.resize(m_numberOfBalls);
     m_velocities.resize(m_numberOfBalls);
-    for(unsigned int i = 0; i < m_numberOfBalls; i++) {
+    for(unsigned int i=0; i<m_numberOfBalls; i++) {
         float x =  2.0*(rand() / double(RAND_MAX)) - 1.0;
         float y =  2.0*(rand() / double(RAND_MAX)) - 1.0;
         float vx = 2.0*(rand() / double(RAND_MAX)) - 1.0;
@@ -79,8 +85,8 @@ void MyWorker::reset()
         vx *= 0.3;
         vy *= 0.3;
 
-        m_positions.push_back(QVector2D(x,y));
-        m_velocities.push_back(QVector2D(vx,vy));
+        m_positions[i] = QVector2D(x,y);
+        m_velocities[i] = QVector2D(vx,vy);
     }
     qDebug() << "Number of positions and velocities:" << m_positions.size() << " " << m_velocities.size();
 }
