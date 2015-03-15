@@ -144,5 +144,4 @@ void MyWorker::reset()
         m_positions[i] = QVector2D(x,y);
         m_velocities[i] = QVector2D(vx,vy);
     }
-    qDebug() << "Number of positions and velocities:" << m_positions.size() << " " << m_velocities.size();
 }
