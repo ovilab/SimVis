@@ -56,20 +56,10 @@ public:
 
     virtual RenderableRenderer* createRenderer();
 
-    QString texture() const
-    {
-        return m_texture;
-    }
+    QString texture() const;
 
 public slots:
-    void setTexture(QString arg)
-    {
-        if (m_texture == arg)
-            return;
-
-        m_texture = arg;
-        emit textureChanged(arg);
-    }
+    void setTexture(QString arg);
 
 signals:
     void scaleChanged(bool arg);

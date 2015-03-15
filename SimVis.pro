@@ -10,7 +10,8 @@ SOURCES += main.cpp \
     visualizer.cpp \
     renderable.cpp \
     billboards2d.cpp \
-    points2d.cpp
+    points2d.cpp \
+    camera.cpp
 
 RESOURCES += qml.qrc
 
@@ -26,4 +27,5 @@ HEADERS += \
     visualizer.h \
     renderable.h \
     billboards2d.h \
-    points2d.h
+    points2d.h \
+    camera.h

@@ -68,6 +68,20 @@ RenderableRenderer *Billboards2D::createRenderer()
     return new Billboards2DRenderer();
 }
 
+QString Billboards2D::texture() const
+{
+    return m_texture;
+}
+
+void Billboards2D::setTexture(QString arg)
+{
+    if (m_texture == arg)
+        return;
+
+    m_texture = arg;
+    emit textureChanged(arg);
+}
+
 Billboards2DRenderer::Billboards2DRenderer()
 {
     m_numberOfVBOs = 2;
@@ -116,7 +130,7 @@ void Billboards2DRenderer::uploadVBOs(Billboards2D* billboards)
 
     QVector3D normalColor = color;
 
-    for(unsigned int i=0; i<positions.size(); i++) {
+    for(auto i=0; i<positions.size(); i++) {
         QVector2D &position = positions[i];
         float rotation = 0;
         if(rotations.size() > 0) {

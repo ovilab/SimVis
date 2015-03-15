@@ -25,6 +25,11 @@ Simulator *Visualizer::simulator() const
     return m_simulator;
 }
 
+Camera *Visualizer::camera() const
+{
+    return m_camera;
+}
+
 void Visualizer::setSimulator(Simulator *arg)
 {
     if (m_simulator == arg) {
@@ -36,6 +41,15 @@ void Visualizer::setSimulator(Simulator *arg)
     m_simulator = arg;
     connect(m_simulator, &Simulator::requestVisualizerSync, this, &Visualizer::synchronizeWorker);
     emit simulatorChanged(arg);
+}
+
+void Visualizer::setCamera(Camera *arg)
+{
+    if (m_camera == arg)
+        return;
+
+    m_camera = arg;
+    emit cameraChanged(arg);
 }
 
 void Visualizer::synchronizeWorker(SimulatorWorker *worker)

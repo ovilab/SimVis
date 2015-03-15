@@ -34,64 +34,24 @@ public:
     explicit MySimulator();
     ~MySimulator();
 
-    float springConstant() const
-    {
-        return m_springConstant;
-    }
+    float springConstant() const;
 
-    float mass() const
-    {
-        return m_mass;
-    }
+    float mass() const;
 
-    float dt() const
-    {
-        return m_dt;
-    }
+    float dt() const;
 
-    int numberOfBalls() const
-    {
-        return m_numberOfBalls;
-    }
+    int numberOfBalls() const;
 
 public slots:
-    void setSpringConstant(float arg)
-    {
-        if (m_springConstant == arg)
-            return;
+    void setSpringConstant(float arg);
 
-        m_springConstant = arg;
-        emit springConstantChanged(arg);
-    }
+    void setMass(float arg);
 
-    void setMass(float arg)
-    {
-        if (m_mass == arg)
-            return;
-
-        m_mass = arg;
-        emit massChanged(arg);
-    }
-
-    void setDt(float arg)
-    {
-        if (m_dt == arg)
-            return;
-
-        m_dt = arg;
-        emit dtChanged(arg);
-    }
+    void setDt(float arg);
 
     void reset();
 
-    void setNumberOfBalls(int arg)
-    {
-        if (m_numberOfBalls == arg)
-            return;
-
-        m_numberOfBalls = arg;
-        emit numberOfBallsChanged(arg);
-    }
+    void setNumberOfBalls(int arg);
 
 signals:
     void springConstantChanged(float arg);
