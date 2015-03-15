@@ -6,15 +6,12 @@
 #include "points2d.h"
 #include "visualizer.h"
 #include "camera.h"
+#include "simvisplugin.h"
 
 int main(int argc, char *argv[])
 {
-    qmlRegisterInterface<Simulator>("Simulator");
     qmlRegisterType<MySimulator>("MySimulator", 1, 0, "MySimulator");
-    qmlRegisterType<Billboards2D>("MySimulator", 1, 0, "Billboards2D");
-    qmlRegisterType<Points2D>("MySimulator", 1, 0, "Points2D");
-    qmlRegisterType<Visualizer>("MySimulator", 1, 0, "Visualizer");
-    qmlRegisterType<Camera>("MySimulator", 1, 0, "Camera");
+
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;

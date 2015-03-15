@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
 import MySimulator 1.0
+import SimVis 1.0
 
 ApplicationWindow {
     id: applicationRoot
@@ -25,7 +26,7 @@ ApplicationWindow {
         width: applicationRoot.width - 350
         height: applicationRoot.height - row1.height
         simulator: simulator
-        camera: camera
+//        camera: camera
         Billboards2D {
             id: billboards
             visible: billboardsVisible.checked
@@ -39,9 +40,9 @@ ApplicationWindow {
         }
     }
 
-    Camera {
-        id: camera
-    }
+//    Camera {
+//        id: camera
+//    }
 
     FastBlur {
         id: blurEffect
