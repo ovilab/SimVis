@@ -20,16 +20,24 @@ HEADERS += \
     points2d.h \
     SimVis/Billboards2D \
     SimVis/Simulator \
-    simvismoduleplugin.h
-
-DISTFILES += \
     SimVis/Points2D \
     SimVis/Renderable \
     SimVis/Visualizer \
+    simvismoduleplugin.h
+
+DISTFILES += \
     qmldir
 
+unix {
+    LIBRARY_FILES = $$OUT_PWD/lib$${TARGET}.so*
+} macx {
+    LIBRARY_FILES = $$OUT_PWD/lib$${TARGET}.dylib*
+} win32 {
+    LIBRARY_FILES = $$OUT_PWD/$${TARGET}.dll*
+}
+
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
-    copyheaders.commands = $$QMAKE_MKDIR $$OUT_PWD/$$TARGET && $(COPY_DIR) $$_PRO_FILE_PWD_/qmldir $$OUT_PWD/lib$${TARGET}.so* $$OUT_PWD/$$TARGET
+    copyheaders.commands = $$QMAKE_MKDIR $$OUT_PWD/$$TARGET && $(COPY_DIR) $$_PRO_FILE_PWD_/qmldir $$LIBRARY_FILES $$OUT_PWD/$$TARGET
     first.depends = $(first) copyheaders
     export(first.depends)
     export(copyheaders.commands)
