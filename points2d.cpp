@@ -68,6 +68,9 @@ void Points2DRenderer::render()
 
 void Points2DRenderer::uploadVBO(Points2D *points)
 {
+    if(points->m_vertices.size() < 1) {
+        return;
+    }
     // Transfer vertex data to VBO 0
     m_vertexCount = points->m_vertices.size();
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
