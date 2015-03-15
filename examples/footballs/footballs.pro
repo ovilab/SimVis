@@ -1,7 +1,6 @@
 include(../../library.pri)
 
 TEMPLATE = app
-CONFIG -= app_bundle
 CONFIG += c++11
 
 QT += qml quick widgets opengl openglextensions

@@ -10,7 +10,7 @@
 void SimVisModulePlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("SimVis"));
-    qmlRegisterInterface<Simulator>("Simulator");
+    qmlRegisterUncreatableType<Simulator>(uri, 1, 0, "Simulator", "nope");
     qmlRegisterType<Billboards2D>(uri, 1, 0, "Billboards2D");
     qmlRegisterType<Points2D>(uri, 1, 0, "Points2D");
     qmlRegisterType<Visualizer>(uri, 1, 0, "Visualizer");

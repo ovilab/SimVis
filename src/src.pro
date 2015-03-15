@@ -30,16 +30,14 @@ DISTFILES += \
 
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
     unix {
-        copyheaders.commands = test -e $$OUT_PWD/$$TARGET && rm -r $$OUT_PWD/$$TARGET;
         LIBRARY_FILES = $$OUT_PWD/lib$${TARGET}.so*
     } macx {
-        copyheaders.commands = test -e $$OUT_PWD/$$TARGET && rm -r $$OUT_PWD/$$TARGET;
-        LIBRARY_FILES = $$OUT_PWD/lib$${TARGET}.dylib*
+        LIBRARY_FILES = $$OUT_PWD/lib$${TARGET}.1.0.0.dylib
     } win32 {
         copyheaders.commands =
         LIBRARY_FILES = $$OUT_PWD/$${TARGET}.dll*
     }
-    copyheaders.commands += $$QMAKE_MKDIR $$OUT_PWD/$$TARGET && $(COPY_DIR) $$_PRO_FILE_PWD_/qmldir $$LIBRARY_FILES $$OUT_PWD/$$TARGET
+    copyheaders.commands = $$QMAKE_MKDIR $$OUT_PWD/$$TARGET && $(COPY_DIR) $$_PRO_FILE_PWD_/qmldir $$LIBRARY_FILES $$OUT_PWD/$$TARGET
     first.depends = $(first) copyheaders
     export(first.depends)
     export(copyheaders.commands)
