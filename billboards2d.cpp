@@ -6,8 +6,6 @@
 #include <cmath>
 #include <QThread>
 
-using std::vector;
-
 Billboards2D::Billboards2D()
 {
     m_color = QVector3D(1.0, 1.0, 1.0);
@@ -37,12 +35,12 @@ QVector3D Billboards2D::vectorFromColor(const QColor &color)
     return QVector3D(color.redF(), color.greenF(), color.blueF());
 }
 
-std::vector<QVector2D> &Billboards2D::positions()
+QVector<QVector2D> &Billboards2D::positions()
 {
     return m_positions;
 }
 
-std::vector<float> &Billboards2D::rotations()
+QVector<float> &Billboards2D::rotations()
 {
     return m_rotations;
 }
@@ -80,7 +78,6 @@ void Billboards2DRenderer::synchronize(Renderable* renderer)
     Billboards2D* billboards = static_cast<Billboards2D*>(renderer);
     if(!m_isInitialized) {
         generateVBOs();
-        createShaderProgram();
         m_isInitialized = true;
     }
     if(!m_isTextureUploaded) {
@@ -95,11 +92,11 @@ void Billboards2DRenderer::synchronize(Renderable* renderer)
 void Billboards2DRenderer::uploadVBOs(Billboards2D* billboards)
 {
     double scale = billboards->scale();
-    std::vector<QVector2D>& positions = billboards->m_positions;
-    std::vector<Billboard2DVBOData>& vertices = billboards->m_vertices;
-    std::vector<GLuint>& indices = billboards->m_indices;
+    QVector<QVector2D>& positions = billboards->m_positions;
+    QVector<Billboard2DVBOData>& vertices = billboards->m_vertices;
+    QVector<GLuint>& indices = billboards->m_indices;
     QVector3D& color = billboards->m_color;
-    std::vector<float>& rotations = billboards->m_rotations;
+    QVector<float>& rotations = billboards->m_rotations;
 
     QVector2D right;
     right.setX(1.0);
@@ -177,40 +174,33 @@ void Billboards2DRenderer::uploadVBOs(Billboards2D* billboards)
     glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 }
 
-void Billboards2D::setPositions(std::vector<QVector2D> &positions)
+void Billboards2D::setPositions(QVector<QVector2D> &positions)
 {
     m_positions = positions;
 }
 
-void Billboards2DRenderer::createShaderProgram() {
-    if (!m_program) {
-        m_program = new QOpenGLShaderProgram();
+void Billboards2DRenderer::beforeLinkProgram() {
+    program().addShaderFromSourceCode(QOpenGLShader::Vertex,
+                                      "attribute highp vec2 a_position;\n"
+                                      "attribute highp vec3 a_color;\n"
+                                      "attribute highp vec2 a_texcoord;\n"
+                                      "varying highp vec2 coords;\n"
+                                      "varying highp float light;\n"
+                                      "varying highp vec3 color;\n"
+                                      "void main() {\n"
+                                      "    gl_Position = vec4(a_position, 0.0, 1.0);\n"
+                                      "    coords = a_texcoord;\n"
+                                      "    color = a_color;\n"
+                                      "}");
 
-        m_program->addShaderFromSourceCode(QOpenGLShader::Vertex,
-                                           "attribute highp vec2 a_position;\n"
-                                           "attribute highp vec3 a_color;\n"
-                                           "attribute highp vec2 a_texcoord;\n"
-                                           "varying highp vec2 coords;\n"
-                                           "varying highp float light;\n"
-                                           "varying highp vec3 color;\n"
-                                           "void main() {\n"
-                                           "    gl_Position = vec4(a_position, 0.0, 1.0);\n"
-                                           "    coords = a_texcoord;\n"
-                                           "    color = a_color;\n"
-                                           "}");
-
-        m_program->addShaderFromSourceCode(QOpenGLShader::Fragment,
-                                           "uniform sampler2D texture;\n"
-                                           "varying highp vec2 coords;\n"
-                                           "varying highp vec3 color;\n"
-                                           "void main() {\n"
-                                           "    gl_FragColor = texture2D(texture, coords.st)*vec4(color, 1.0);\n"
-                                           // "    if(gl_FragColor.w==0.0) { discard; }\n"
-                                           "}");
-
-
-        m_program->link();
-    }
+    program().addShaderFromSourceCode(QOpenGLShader::Fragment,
+                                      "uniform sampler2D texture;\n"
+                                      "varying highp vec2 coords;\n"
+                                      "varying highp vec3 color;\n"
+                                      "void main() {\n"
+                                      "    gl_FragColor = texture2D(texture, coords.st)*vec4(color, 1.0);\n"
+                                      // "    if(gl_FragColor.w==0.0) { discard; }\n"
+                                      "}");
 }
 
 void Billboards2DRenderer::render()
@@ -218,9 +208,6 @@ void Billboards2DRenderer::render()
     if(m_vertexCount == 0) {
         return;
     }
-    createShaderProgram();
-
-    m_program->bind();
 
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
@@ -230,24 +217,24 @@ void Billboards2DRenderer::render()
     quintptr offset = 0;
 
     // Tell OpenGL programmable pipeline how to locate vertex position data
-    int vertexLocation = m_program->attributeLocation("a_position");
-    m_program->enableAttributeArray(vertexLocation);
+    int vertexLocation = program().attributeLocation("a_position");
+    program().enableAttributeArray(vertexLocation);
     glFunctions()->glVertexAttribPointer(vertexLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Billboard2DVBOData), (const void *)offset);
 
     // Offset for texture coordinate
     offset += sizeof(QVector2D);
 
     // Tell OpenGL programmable pipeline how to locate vertex color data
-    int colorLocation = m_program->attributeLocation("a_color");
-    m_program->enableAttributeArray(colorLocation);
+    int colorLocation = program().attributeLocation("a_color");
+    program().enableAttributeArray(colorLocation);
     glFunctions()->glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Billboard2DVBOData), (const void *)offset);
 
     // Offset for texture coordinate
     offset += sizeof(QVector3D);
 
     // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
-    int texcoordLocation = m_program->attributeLocation("a_texcoord");
-    m_program->enableAttributeArray(texcoordLocation);
+    int texcoordLocation = program().attributeLocation("a_texcoord");
+    program().enableAttributeArray(texcoordLocation);
     glFunctions()->glVertexAttribPointer(texcoordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Billboard2DVBOData), (const void *)offset);
 
     // Draw cube geometry using indices from VBO 1
@@ -258,9 +245,7 @@ void Billboards2DRenderer::render()
     glFunctions()->glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
     glFunctions()->glDisable(GL_BLEND);
 
-    m_program->disableAttributeArray(vertexLocation);
-    m_program->disableAttributeArray(colorLocation);
-    m_program->disableAttributeArray(texcoordLocation);
-
-    m_program->release();
+    program().disableAttributeArray(vertexLocation);
+    program().disableAttributeArray(colorLocation);
+    program().disableAttributeArray(texcoordLocation);
 }

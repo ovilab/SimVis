@@ -5,8 +5,6 @@
 #include "renderable.h"
 #include <QOpenGLFunctions>
 #include <QOpenGLTexture>
-#include <vector>
-using std::vector;
 
 class Simulator;
 
@@ -24,12 +22,12 @@ public:
     Billboards2DRenderer();
 
 private:
-    virtual void synchronize(Renderable *);
-    virtual void render();
+    virtual void synchronize(Renderable *) override;
+    virtual void render() override;
 
     void uploadVBOs(Billboards2D* billboards);
 
-    virtual void createShaderProgram() override;
+    virtual void beforeLinkProgram() override;
     void uploadTexture(QString filename);
     QOpenGLTexture *m_texture = 0;
     bool m_isInitialized = false;
@@ -46,9 +44,9 @@ class Billboards2D : public Renderable
 public:
     Billboards2D();
     ~Billboards2D();
-    void setPositions(std::vector<QVector2D> &positions);
-    std::vector<QVector2D> &positions();
-    std::vector<float> &rotations();
+    void setPositions(QVector<QVector2D> &positions);
+    QVector<QVector2D> &positions();
+    QVector<float> &rotations();
 
     float scale() const;
     void setScale(float scale);
@@ -78,12 +76,12 @@ signals:
     void textureChanged(QString arg);
 
 private:
-    std::vector<Billboard2DVBOData> m_vertices;
-    std::vector<GLuint> m_indices;
+    QVector<Billboard2DVBOData> m_vertices;
+    QVector<GLuint> m_indices;
     QVector3D m_color;
 
-    std::vector<QVector2D> m_positions;
-    std::vector<float> m_rotations;
+    QVector<QVector2D> m_positions;
+    QVector<float> m_rotations;
     float m_scale = 1.0;
 
     QVector3D vectorFromColor(const QColor &color);

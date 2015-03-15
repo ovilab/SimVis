@@ -12,16 +12,12 @@ Renderable::~Renderable()
 
 }
 
-void Renderable::afterSynchronize() {
-
-}
-
 void Renderable::requestRender()
 {
     if(!m_renderer) {
         m_renderer = createRenderer();
     }
-    m_renderer->render();
+    m_renderer->prepareAndRender();
 }
 
 void Renderable::requestSynchronize()
@@ -32,6 +28,15 @@ void Renderable::requestSynchronize()
     m_renderer->synchronize(this);
 }
 
+void Renderable::setVisible(bool arg)
+{
+    if (m_visible == arg)
+        return;
+
+    m_visible = arg;
+    emit visibleChanged(arg);
+}
+
 void RenderableRenderer::generateVBOs()
 {
     if(m_numberOfVBOs>0) {
@@ -40,9 +45,25 @@ void RenderableRenderer::generateVBOs()
     }
 }
 
+void RenderableRenderer::prepareAndRender()
+{
+    if(!m_program.isLinked()) {
+        beforeLinkProgram();
+        m_program.link();
+    }
+    m_program.bind();
+    render();
+    m_program.release();
+}
+
 QOpenGLFunctions* RenderableRenderer::glFunctions() {
     if(!m_funcs) {
         m_funcs = new QOpenGLFunctions(QOpenGLContext::currentContext());
     }
     return m_funcs;
+}
+
+QOpenGLShaderProgram &RenderableRenderer::program()
+{
+    return m_program;
 }

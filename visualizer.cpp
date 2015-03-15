@@ -8,7 +8,6 @@
 
 Visualizer::Visualizer()
 {
-
 }
 
 Visualizer::~Visualizer()
@@ -32,10 +31,10 @@ void Visualizer::setSimulator(Simulator *arg)
         return;
     }
     if(m_simulator) {
-        disconnect(m_simulator, &Simulator::requestRendererSync, this, &Visualizer::synchronizeWorker);
+        disconnect(m_simulator, &Simulator::requestVisualizerSync, this, &Visualizer::synchronizeWorker);
     }
     m_simulator = arg;
-    connect(m_simulator, &Simulator::requestRendererSync, this, &Visualizer::synchronizeWorker);
+    connect(m_simulator, &Simulator::requestVisualizerSync, this, &Visualizer::synchronizeWorker);
     emit simulatorChanged(arg);
 }
 
@@ -44,7 +43,9 @@ void Visualizer::synchronizeWorker(SimulatorWorker *worker)
     QList<Renderable*> renderables = findChildren<Renderable*>();
     for(Renderable* renderable : renderables) {
         if(worker) {
-            if(renderable->visible()) worker->synchronizeRenderer(renderable);
+            if(renderable->visible()) {
+                worker->synchronizeRenderer(renderable);
+            }
         }
     }
     update();
@@ -53,10 +54,12 @@ void Visualizer::synchronizeWorker(SimulatorWorker *worker)
 void VisualizerRenderer::render()
 {
     QOpenGLFunctions funcs(QOpenGLContext::currentContext());
-    funcs.glClearColor(0.5f, 0.5f, 0.7f, 1.0f);
+    funcs.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     funcs.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for(Renderable* renderable : m_renderables) {
-        if(renderable->visible()) renderable->requestRender();
+        if(renderable->visible()) {
+            renderable->requestRender();
+        }
     }
 }
 
@@ -65,7 +68,9 @@ void VisualizerRenderer::synchronize(QQuickFramebufferObject *fbo)
     Visualizer* visualizer = static_cast<Visualizer*>(fbo);
     m_renderables = visualizer->findChildren<Renderable*>();
     for(Renderable* renderable : m_renderables) {
-        if(renderable->visible()) renderable->requestSynchronize();
+        if(renderable->visible()) {
+            renderable->requestSynchronize();
+        }
     }
 }
 

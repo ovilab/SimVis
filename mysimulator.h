@@ -9,20 +9,18 @@ class MyWorker : public SimulatorWorker
     Q_OBJECT
 public:
     MyWorker();
-    void synchronizeSimulator(Simulator *simulator);
-    void synchronizeRenderer(Renderable *renderableObject);
-
-public slots:
-    void work();
 
 private:
+    virtual void synchronizeSimulator(Simulator *simulator) override;
+    virtual void synchronizeRenderer(Renderable *renderableObject) override;
+    virtual void work() override;
     void reset();
     float m_springConstant = 1.0;
     float m_mass = 1.0;
     float m_dt = 0.01;
     int   m_numberOfBalls = 100;
-    std::vector<QVector2D> m_positions;
-    std::vector<QVector2D> m_velocities;
+    QVector<QVector2D> m_positions;
+    QVector<QVector2D> m_velocities;
 };
 
 class MySimulator : public Simulator

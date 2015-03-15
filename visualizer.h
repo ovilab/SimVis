@@ -26,15 +26,16 @@ public:
     Visualizer();
     ~Visualizer();
 
-    virtual VisualizerRenderer *createRenderer() const override;
     Simulator* simulator() const;
 public slots:
     void setSimulator(Simulator* arg);
+private slots:
     void synchronizeWorker(SimulatorWorker* worker);
 signals:
     void simulatorChanged(Simulator* arg);
 private:
     Simulator* m_simulator = 0;
+    virtual VisualizerRenderer *createRenderer() const override;
 
     friend class VisualizerRenderer;
 };

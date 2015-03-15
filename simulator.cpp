@@ -17,11 +17,19 @@ void Simulator::step()
     if(!m_worker) {
         m_worker = createWorker();
         m_worker->moveToThread(&m_workerThread);
-        connect(this, &Simulator::requestWork, m_worker, &SimulatorWorker::work);
         m_workerThread.start();
     }
-    m_worker->synchronizeSimulator(this);
-    emit requestRendererSync(m_worker);
-    emit requestWork();
+    if(m_workerMutex.tryLock()) {
+        m_worker->synchronizeSimulator(this);
+        emit requestVisualizerSync(m_worker);
+        QMetaObject::invokeMethod(m_worker, "workAndUnlock",
+                                  Qt::QueuedConnection,
+                                  Q_ARG(Simulator*, this)); // call happens on worker's thread
+    }
 }
 
+void SimulatorWorker::workAndUnlock(Simulator* simulator)
+{
+    work();
+    simulator->m_workerMutex.unlock();
+}
