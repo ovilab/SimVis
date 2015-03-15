@@ -1,5 +1,4 @@
 TEMPLATE = subdirs
-SUBDIRS = src examples \
-    ../../sandbox/untitled7
+SUBDIRS = src examples
 CONFIG += ordered
 examples.depends = src
