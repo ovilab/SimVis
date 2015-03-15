@@ -25,6 +25,7 @@ ApplicationWindow {
         width: applicationRoot.width - 350
         height: applicationRoot.height - row1.height
         simulator: simulator
+        camera: camera
         Billboards2D {
             id: billboards
             visible: billboardsVisible.checked
@@ -37,6 +38,10 @@ ApplicationWindow {
             visible: pointsVisible.checked
             pointSize: 10.0
         }
+    }
+
+    Camera {
+        id: camera
     }
 
     FastBlur {

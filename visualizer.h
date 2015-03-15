@@ -41,9 +41,19 @@ signals:
 private:
     Simulator* m_simulator = 0;
     Camera* m_camera = 0;
+    virtual void mouseMoveEvent(QMouseEvent *event) override;
     virtual VisualizerRenderer *createRenderer() const override;
 
     friend class VisualizerRenderer;
+    virtual void mousePressEvent(QMouseEvent *event) override;
+
+    // QQuickItem interface
+protected:
+    virtual void hoverEnterEvent(QHoverEvent *event) override;
+    virtual void hoverMoveEvent(QHoverEvent *event) override;
+    virtual void hoverLeaveEvent(QHoverEvent *event) override;
+
+    // QQuickFramebufferObject interface
 };
 
 #endif // VISUALIZER_H

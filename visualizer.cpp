@@ -2,12 +2,14 @@
 #include "renderable.h"
 #include "billboards2d.h"
 #include "simulator.h"
-
+#include "camera.h"
 #include <QDebug>
 #include <QOpenGLFramebufferObjectFormat>
 
 Visualizer::Visualizer()
 {
+    setAcceptedMouseButtons(Qt::AllButtons);
+    setAcceptHoverEvents(true);
 }
 
 Visualizer::~Visualizer()
@@ -63,6 +65,31 @@ void Visualizer::synchronizeWorker(SimulatorWorker *worker)
         }
     }
     update();
+}
+
+void Visualizer::mouseMoveEvent(QMouseEvent *event)
+{
+    qDebug() << "Mouse moved while click: " << event->pos().x() << ", " << event->pos().y();
+}
+
+void Visualizer::mousePressEvent(QMouseEvent *event)
+{
+    qDebug() << "Mouse click: " << event->button();
+}
+
+void Visualizer::hoverEnterEvent(QHoverEvent *event)
+{
+    qDebug() << "Mouse enter";
+}
+
+void Visualizer::hoverMoveEvent(QHoverEvent *event)
+{
+    // qDebug() << "Mouse pos: " << event->pos().x() << ", " << event->pos().y();
+}
+
+void Visualizer::hoverLeaveEvent(QHoverEvent *event)
+{
+    qDebug() << "Mouse Leave";
 }
 
 void VisualizerRenderer::render()
