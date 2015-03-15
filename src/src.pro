@@ -30,10 +30,10 @@ DISTFILES += \
 
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
     unix {
-        copyheaders.commands =
+        copyheaders.commands = test -e $$OUT_PWD/$$TARGET && rm -r $$OUT_PWD/$$TARGET;
         LIBRARY_FILES = $$OUT_PWD/lib$${TARGET}.so*
     } macx {
-        copyheaders.commands = rm -r $$OUT_PWD/$$TARGET &&
+        copyheaders.commands = test -e $$OUT_PWD/$$TARGET && rm -r $$OUT_PWD/$$TARGET;
         LIBRARY_FILES = $$OUT_PWD/lib$${TARGET}.dylib*
     } win32 {
         copyheaders.commands =
