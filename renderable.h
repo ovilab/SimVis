@@ -4,36 +4,20 @@
 #include <QObject>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
-
+#include <QMatrix4x4>
 class Renderable; class Camera;
 class RenderableRenderer : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Camera* camera READ camera WRITE setCamera NOTIFY cameraChanged)
 protected:
     void generateVBOs();
     unsigned int m_numberOfVBOs = 0;
+    QMatrix4x4 m_modelViewMatrix;
+    QMatrix4x4 m_projectionMatrix;
     QVector<GLuint> m_vboIds;
     QOpenGLShaderProgram& program();
     QOpenGLFunctions* glFunctions();
-public:
-    Camera* camera() const
-    {
-        return m_camera;
-    }
-
-public slots:
-    void setCamera(Camera* arg)
-    {
-        if (m_camera == arg)
-            return;
-
-        m_camera = arg;
-        emit cameraChanged(arg);
-    }
-
 signals:
-    void cameraChanged(Camera* arg);
 
 private:
     void prepareAndRender();
@@ -45,18 +29,13 @@ private:
     QOpenGLFunctions* m_funcs = 0;
 
     friend class Renderable;
-    Camera* m_camera;
 };
-
-
-
-
-
 
 class Renderable : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged)
+    Q_PROPERTY(Camera* camera READ camera WRITE setCamera NOTIFY cameraChanged)
 public:
     explicit Renderable(QObject *parent = 0);
     ~Renderable();
@@ -71,19 +50,24 @@ public:
         return m_visible;
     }
 
+    Camera* camera() const;
+
 signals:
 
     void visibleChanged(bool arg);
+    void cameraChanged(Camera* arg);
 
 public slots:
 
     void setVisible(bool arg);
+    void setCamera(Camera* arg);
 
 protected:
 
 private:
     RenderableRenderer* m_renderer;
     bool m_visible = true;
+    Camera* m_camera = 0;
 };
 
 #endif // RENDERABLE_H

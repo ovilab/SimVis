@@ -8,12 +8,17 @@ class Renderable; class Simulator; class SimulatorWorker; class Camera;
 
 class VisualizerRenderer : public QQuickFramebufferObject::Renderer
 {
+public:
+    Camera *camera() const;
+    void setCamera(Camera *camera);
+
 protected:
     QOpenGLFramebufferObject *createFramebufferObject(const QSize &size);
     void render();
     void synchronize(QQuickFramebufferObject *);
 private:
     QList<Renderable*> m_renderables;
+    Camera *m_camera = 0;
 };
 
 class Visualizer : public QQuickFramebufferObject
@@ -26,7 +31,7 @@ public:
     ~Visualizer();
 
     Simulator* simulator() const;
-    Camera* camera() const;
+    Camera* camera();
 
 public slots:
     void setSimulator(Simulator* arg);

@@ -27,8 +27,11 @@ Simulator *Visualizer::simulator() const
     return m_simulator;
 }
 
-Camera *Visualizer::camera() const
+Camera *Visualizer::camera()
 {
+    if(!m_camera) {
+        m_camera = new Camera(static_cast<QObject*>(this));
+    }
     return m_camera;
 }
 
@@ -108,12 +111,27 @@ void VisualizerRenderer::synchronize(QQuickFramebufferObject *fbo)
 {
     Visualizer* visualizer = static_cast<Visualizer*>(fbo);
     m_renderables = visualizer->findChildren<Renderable*>();
+    m_camera = visualizer->camera();
+
     for(Renderable* renderable : m_renderables) {
         if(renderable->visible()) {
+            if(!renderable->camera()) {
+                renderable->setCamera(camera());
+            }
             renderable->requestSynchronize();
         }
     }
 }
+Camera *VisualizerRenderer::camera() const
+{
+    return m_camera;
+}
+
+void VisualizerRenderer::setCamera(Camera *camera)
+{
+    m_camera = camera;
+}
+
 
 QOpenGLFramebufferObject *VisualizerRenderer::createFramebufferObject(const QSize &size) {
     QOpenGLFramebufferObjectFormat format;
