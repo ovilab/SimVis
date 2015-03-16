@@ -5,16 +5,35 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 
-class Renderable;
+class Renderable; class Camera;
 class RenderableRenderer : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Camera* camera READ camera WRITE setCamera NOTIFY cameraChanged)
 protected:
     void generateVBOs();
     unsigned int m_numberOfVBOs = 0;
     QVector<GLuint> m_vboIds;
     QOpenGLShaderProgram& program();
     QOpenGLFunctions* glFunctions();
+public:
+    Camera* camera() const
+    {
+        return m_camera;
+    }
+
+public slots:
+    void setCamera(Camera* arg)
+    {
+        if (m_camera == arg)
+            return;
+
+        m_camera = arg;
+        emit cameraChanged(arg);
+    }
+
+signals:
+    void cameraChanged(Camera* arg);
 
 private:
     void prepareAndRender();
@@ -26,7 +45,13 @@ private:
     QOpenGLFunctions* m_funcs = 0;
 
     friend class Renderable;
+    Camera* m_camera;
 };
+
+
+
+
+
 
 class Renderable : public QObject
 {
