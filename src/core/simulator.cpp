@@ -10,6 +10,9 @@ Simulator::~Simulator()
 {
     m_workerThread.quit();
     m_workerThread.wait();
+    if(m_worker) {
+        delete m_worker;
+    }
 }
 
 void Simulator::step()
