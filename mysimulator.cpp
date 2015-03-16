@@ -96,18 +96,18 @@ void MyWorker::synchronizeSimulator(Simulator *simulator)
     }
 }
 
-void MyWorker::synchronizeRenderer(Renderable *renderableObject)
-{
-    Billboards2D* billboards = qobject_cast<Billboards2D*>(renderableObject);
-    if(billboards) {
-        billboards->setPositions(m_positions);
-    }
+//void MyWorker::synchronizeRenderer(Renderable *renderableObject)
+//{
+//    Billboards2D* billboards = qobject_cast<Billboards2D*>(renderableObject);
+//    if(billboards) {
+//        billboards->setPositions(m_positions);
+//    }
 
-    Points2D* points = qobject_cast<Points2D*>(renderableObject);
-    if(points) {
-        points->setPositions(m_positions);
-    }
-}
+//    Points2D* points = qobject_cast<Points2D*>(renderableObject);
+//    if(points) {
+//        points->setPositions(m_positions);
+//    }
+//}
 
 void MyWorker::work()
 {
