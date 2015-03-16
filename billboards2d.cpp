@@ -105,6 +105,9 @@ void Billboards2DRenderer::synchronize(Renderable* renderer)
 
 void Billboards2DRenderer::uploadVBOs(Billboards2D* billboards)
 {
+    if(billboards->m_positions.size() < 1) {
+        return;
+    }
     double scale = billboards->scale();
     QVector<QVector2D>& positions = billboards->m_positions;
     QVector<Billboard2DVBOData>& vertices = billboards->m_vertices;
