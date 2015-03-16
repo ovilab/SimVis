@@ -1,6 +1,6 @@
 #pragma once
-#ifndef BILLBOARDS2D_H
-#define BILLBOARDS2D_H
+#ifndef BILLBOARDS_H
+#define BILLBOARDS_H
 
 #include "renderable.h"
 #include <QOpenGLFunctions>
@@ -8,24 +8,24 @@
 
 class Simulator;
 
-struct Billboard2DVBOData
+struct BillboardVBOData
 {
     QVector2D position;
     QVector3D color;
     QVector2D textureCoord;
 };
 
-class Billboards2D;
-class Billboards2DRenderer : public RenderableRenderer
+class Billboards;
+class BillboardsRenderer : public RenderableRenderer
 {
 public:
-    Billboards2DRenderer();
+    BillboardsRenderer();
 
 private:
     virtual void synchronize(Renderable *) override;
     virtual void render() override;
 
-    void uploadVBOs(Billboards2D* billboards);
+    void uploadVBOs(Billboards* billboards);
 
     virtual void beforeLinkProgram() override;
     void uploadTexture(QString filename);
@@ -36,14 +36,14 @@ private:
     int m_indexCount;
 };
 
-class Billboards2D : public Renderable
+class Billboards : public Renderable
 {
     Q_OBJECT
     Q_PROPERTY(float scale READ scale WRITE setScale NOTIFY scaleChanged)
     Q_PROPERTY(QString texture READ texture WRITE setTexture NOTIFY textureChanged)
 public:
-    Billboards2D();
-    ~Billboards2D();
+    Billboards();
+    ~Billboards();
     void setPositions(QVector<QVector2D> &positions);
     QVector<QVector2D> &positions();
     QVector<float> &rotations();
@@ -66,7 +66,7 @@ signals:
     void textureChanged(QString arg);
 
 private:
-    QVector<Billboard2DVBOData> m_vertices;
+    QVector<BillboardVBOData> m_vertices;
     QVector<GLuint> m_indices;
     QVector3D m_color;
 
@@ -76,9 +76,9 @@ private:
 
     QVector3D vectorFromColor(const QColor &color);
 
-    friend class Billboards2DRenderer;
+    friend class BillboardsRenderer;
     QString m_texture = "NO TEXTURE CHOSEN";
 };
 
 
-#endif // BILLBOARDS2D_H
+#endif // BILLBOARDS_H

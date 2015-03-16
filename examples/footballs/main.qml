@@ -28,7 +28,7 @@ ApplicationWindow {
         simulator: simulator
         camera: camera
         backgroundColor: "white"
-        Billboards2D {
+        Billboards {
             id: billboards
             visible: billboardsVisible.checked
             texture: ":/football.png"

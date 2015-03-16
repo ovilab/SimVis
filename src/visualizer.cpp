@@ -1,6 +1,6 @@
 #include "visualizer.h"
 #include "renderable.h"
-#include "billboards2d.h"
+#include "billboards.h"
 #include "simulator.h"
 #include "camera.h"
 #include <QDebug>

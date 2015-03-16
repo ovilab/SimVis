@@ -1,5 +1,5 @@
 #include "quickworker.h"
-#include "billboards2d.h"
+#include "billboards.h"
 #include "points2d.h"
 QuickWorker::QuickWorker()
 {
@@ -13,7 +13,7 @@ QuickWorker::~QuickWorker()
 
 void QuickWorker::synchronizeRenderer(Renderable *renderableObject)
 {
-    Billboards2D* billboards = qobject_cast<Billboards2D*>(renderableObject);
+    Billboards* billboards = qobject_cast<Billboards*>(renderableObject);
     if(billboards) {
         billboards->setPositions(m_positions);
         return;

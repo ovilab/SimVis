@@ -1,6 +1,6 @@
 #include "mysimulator.h"
 
-#include "billboards2d.h"
+#include "billboards.h"
 #include "points2d.h"
 MySimulator::MySimulator()
 {
