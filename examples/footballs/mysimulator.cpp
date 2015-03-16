@@ -128,7 +128,7 @@ void MyWorker::reset()
         float vy = 2.0*(rand() / double(RAND_MAX)) - 1.0;
         float vz = 2.0*(rand() / double(RAND_MAX)) - 1.0;
 
-        m_positions[i] = 0.5 * QVector3D(x, y, z);
-        m_velocities[i] = 0.3 * QVector3D(vx, vy, vz);
+        m_positions[i] = 0.7 * QVector3D(x, y, z);
+        m_velocities[i] = 0.4 * QVector3D(vx, vy, vz);
     }
 }

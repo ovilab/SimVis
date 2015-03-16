@@ -17,8 +17,8 @@ ApplicationWindow {
     MySimulator {
         id: simulator
         mass: 1.0
-        springConstant: 1.0
-        dt: 0.01
+        springConstant: 0.5
+        dt: 0.001
     }
 
     Visualizer {
@@ -52,10 +52,6 @@ ApplicationWindow {
 
     Camera {
         id: camera
-        nearPlane: 1
-        farPlane: 100
-        fieldOfView: 90
-        aspectRatio: visualizer.width / visualizer.height
     }
 
     FastBlur {

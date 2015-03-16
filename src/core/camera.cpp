@@ -34,9 +34,13 @@ Camera::Camera(QObject *parent) :
     QObject::connect(d_func()->m_lookAt, SIGNAL(viewCenterChanged()), this, SIGNAL(viewCenterChanged()));
 
     // Default values
-    setPosition(QVector3D(0, 10, 0));
+    setPosition(QVector3D(0, 2, 0));
     setViewCenter(QVector3D(0, 0, 0));
     setUpVector(QVector3D(0, 0, 1));
+    setProjectionType(CameraLens::PerspectiveProjection);
+    setFieldOfView(70);
+    setNearPlane(0.1);
+    setFarPlane(1000.0);
 //    QObject::connect(d_func()->m_transform, SIGNAL(matrixChanged()), this, SIGNAL(matrixChanged()));
 //    d_func()->m_transform->addTransform(d_func()->m_lookAt);
 //    addComponent(d_func()->m_lens);
