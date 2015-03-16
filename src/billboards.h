@@ -10,7 +10,7 @@ class Simulator;
 
 struct BillboardVBOData
 {
-    QVector2D position;
+    QVector3D position;
     QVector3D color;
     QVector2D textureCoord;
 };
@@ -44,8 +44,8 @@ class Billboards : public Renderable
 public:
     Billboards();
     ~Billboards();
-    void setPositions(QVector<QVector2D> &positions);
-    QVector<QVector2D> &positions();
+    void setPositions(QVector<QVector3D> &positions);
+    QVector<QVector3D> &positions();
     QVector<float> &rotations();
 
     float scale() const;
@@ -70,7 +70,7 @@ private:
     QVector<GLuint> m_indices;
     QVector3D m_color;
 
-    QVector<QVector2D> m_positions;
+    QVector<QVector3D> m_positions;
     QVector<float> m_rotations;
     float m_scale = 1.0;
 

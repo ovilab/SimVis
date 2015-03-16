@@ -36,8 +36,8 @@ class Points : public Renderable
 public:
     Points();
     ~Points();
-    void setPositions(QVector<QVector2D> &positions);
-    QVector<QVector2D> &positions();
+    void setPositions(QVector<QVector3D> &positions);
+    QVector<QVector3D> &positions();
     virtual RenderableRenderer* createRenderer();
 
     float pointSize() const;
@@ -54,7 +54,7 @@ signals:
     void colorChanged(QColor arg);
 
 private:
-    QVector<QVector2D> m_vertices;
+    QVector<QVector3D> m_vertices;
     float m_pointSize = 1.0;
     QColor m_color = "red";
     friend class PointsRenderer;

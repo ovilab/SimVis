@@ -35,7 +35,7 @@ QVector3D Billboards::vectorFromColor(const QColor &color)
     return QVector3D(color.redF(), color.greenF(), color.blueF());
 }
 
-QVector<QVector2D> &Billboards::positions()
+QVector<QVector3D> &Billboards::positions()
 {
     return m_positions;
 }
@@ -109,23 +109,23 @@ void BillboardsRenderer::uploadVBOs(Billboards* billboards)
         return;
     }
     double scale = billboards->scale();
-    QVector<QVector2D>& positions = billboards->m_positions;
+    QVector<QVector3D>& positions = billboards->m_positions;
     QVector<BillboardVBOData>& vertices = billboards->m_vertices;
     QVector<GLuint>& indices = billboards->m_indices;
     QVector3D& color = billboards->m_color;
     QVector<float>& rotations = billboards->m_rotations;
 
-    QVector2D right;
+    QVector3D right;
     right.setX(1.0);
     right.setY(0.0);
-    QVector2D up;
+    QVector3D up;
     up.setX(0.0);
     up.setY(1.0);
 
-    QVector2D ul = (0.5*up - 0.5*right)*scale;
-    QVector2D ur = (0.5*up + 0.5*right)*scale;
-    QVector2D dl = (-0.5*up - 0.5*right)*scale;
-    QVector2D dr = (-0.5*up + 0.5*right)*scale;
+    QVector3D ul = (0.5*up - 0.5*right)*scale;
+    QVector3D ur = (0.5*up + 0.5*right)*scale;
+    QVector3D dl = (-0.5*up - 0.5*right)*scale;
+    QVector3D dr = (-0.5*up + 0.5*right)*scale;
 
     int numberOfVertices = positions.size()*4;
     vertices.resize(numberOfVertices);
@@ -134,7 +134,7 @@ void BillboardsRenderer::uploadVBOs(Billboards* billboards)
     QVector3D normalColor = color;
 
     for(auto i=0; i<positions.size(); i++) {
-        QVector2D &position = positions[i];
+        QVector3D &position = positions[i];
         float rotation = 0;
         if(rotations.size() > 0) {
             if(rotations.size() == 1) {
@@ -191,21 +191,21 @@ void BillboardsRenderer::uploadVBOs(Billboards* billboards)
     glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 }
 
-void Billboards::setPositions(QVector<QVector2D> &positions)
+void Billboards::setPositions(QVector<QVector3D> &positions)
 {
     m_positions = positions;
 }
 
 void BillboardsRenderer::beforeLinkProgram() {
     program().addShaderFromSourceCode(QOpenGLShader::Vertex,
-                                      "attribute highp vec2 a_position;\n"
+                                      "attribute highp vec3 a_position;\n"
                                       "attribute highp vec3 a_color;\n"
                                       "attribute highp vec2 a_texcoord;\n"
                                       "varying highp vec2 coords;\n"
                                       "varying highp float light;\n"
                                       "varying highp vec3 color;\n"
                                       "void main() {\n"
-                                      "    gl_Position = vec4(a_position, 0.0, 1.0);\n"
+                                      "    gl_Position = vec4(a_position, 1.0);\n"
                                       "    coords = a_texcoord;\n"
                                       "    color = a_color;\n"
                                       "}");
@@ -236,10 +236,10 @@ void BillboardsRenderer::render()
     // Tell OpenGL programmable pipeline how to locate vertex position data
     int vertexLocation = program().attributeLocation("a_position");
     program().enableAttributeArray(vertexLocation);
-    glFunctions()->glVertexAttribPointer(vertexLocation, 2, GL_FLOAT, GL_FALSE, sizeof(BillboardVBOData), (const void *)offset);
+    glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(BillboardVBOData), (const void *)offset);
 
     // Offset for texture coordinate
-    offset += sizeof(QVector2D);
+    offset += sizeof(QVector3D);
 
     // Tell OpenGL programmable pipeline how to locate vertex color data
     int colorLocation = program().attributeLocation("a_color");
