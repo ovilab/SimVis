@@ -1,7 +1,7 @@
 #include "mysimulator.h"
 
-#include "billboards2d.h"
-#include "points2d.h"
+#include "billboards.h"
+#include "points.h"
 MySimulator::MySimulator()
 {
 

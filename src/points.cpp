@@ -1,41 +1,41 @@
-#include "points2d.h"
+#include "points.h"
 
-Points2D::Points2D()
+Points::Points()
 {
 
 }
 
-Points2D::~Points2D()
+Points::~Points()
 {
 
 }
 
-void Points2D::setPositions(QVector<QVector2D> &positions)
+void Points::setPositions(QVector<QVector2D> &positions)
 {
     m_vertices = positions;
 }
 
-QVector<QVector2D> &Points2D::positions()
+QVector<QVector2D> &Points::positions()
 {
     return m_vertices;
 }
 
-RenderableRenderer *Points2D::createRenderer()
+RenderableRenderer *Points::createRenderer()
 {
-    return new Points2DRenderer();
+    return new PointsRenderer();
 }
 
-float Points2D::pointSize() const
+float Points::pointSize() const
 {
     return m_pointSize;
 }
 
-QColor Points2D::color() const
+QColor Points::color() const
 {
     return m_color;
 }
 
-void Points2D::setPointSize(float arg)
+void Points::setPointSize(float arg)
 {
     if (m_pointSize == arg)
         return;
@@ -44,7 +44,7 @@ void Points2D::setPointSize(float arg)
     emit pointSizeChanged(arg);
 }
 
-void Points2D::setColor(QColor arg)
+void Points::setColor(QColor arg)
 {
     if (m_color == arg)
         return;
@@ -53,14 +53,14 @@ void Points2D::setColor(QColor arg)
     emit colorChanged(arg);
 }
 
-Points2DRenderer::Points2DRenderer()
+PointsRenderer::PointsRenderer()
 {
     m_numberOfVBOs = 1;
 }
 
-void Points2DRenderer::synchronize(Renderable *renderable)
+void PointsRenderer::synchronize(Renderable *renderable)
 {
-    Points2D* points = static_cast<Points2D*>(renderable);
+    Points* points = static_cast<Points*>(renderable);
     if(!m_isInitialized) {
         generateVBOs();
         m_isInitialized = true;
@@ -72,7 +72,7 @@ void Points2DRenderer::synchronize(Renderable *renderable)
     m_color = QVector4D(points->m_color.redF(), points->m_color.greenF(), points->m_color.blueF(), points->m_color.alphaF());
 }
 
-void Points2DRenderer::render()
+void PointsRenderer::render()
 {
     if(m_vertexCount == 0) {
         return;
@@ -94,7 +94,7 @@ void Points2DRenderer::render()
     program().disableAttributeArray(vertexLocation);
 }
 
-void Points2DRenderer::uploadVBO(Points2D *points)
+void PointsRenderer::uploadVBO(Points *points)
 {
     if(points->m_vertices.size() < 1) {
         return;
@@ -105,7 +105,7 @@ void Points2DRenderer::uploadVBO(Points2D *points)
     glFunctions()->glBufferData(GL_ARRAY_BUFFER, m_vertexCount * sizeof(QVector2D), &points->m_vertices.front(), GL_STATIC_DRAW);
 }
 
-void Points2DRenderer::beforeLinkProgram()
+void PointsRenderer::beforeLinkProgram()
 {
     program().addShaderFromSourceCode(QOpenGLShader::Vertex,
                                       "attribute highp vec4 a_position;\n"

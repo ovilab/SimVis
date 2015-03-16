@@ -28,13 +28,13 @@ ApplicationWindow {
         simulator: simulator
         camera: camera
         backgroundColor: "white"
-        Billboards2D {
+        Billboards {
             id: billboards
             visible: billboardsVisible.checked
             texture: ":/football.png"
             scale: 0.1
         }
-        Points2D {
+        Points {
             id: points
             visible: pointsVisible.checked
             pointSize: 10.0

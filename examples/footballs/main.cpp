@@ -2,8 +2,8 @@
 #include <QQmlApplicationEngine>
 #include <QtQml>
 #include "mysimulator.h"
-#include "billboards2d.h"
-#include "points2d.h"
+#include "billboards.h"
+#include "points.h"
 #include "visualizer.h"
 #include "camera.h"
 #include "simvisplugin.h"

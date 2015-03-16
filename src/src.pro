@@ -11,23 +11,25 @@ SOURCES += \
     simulator.cpp \
     visualizer.cpp \
     renderable.cpp \
-    billboards2d.cpp \
-    points2d.cpp \
     camera.cpp \
     quickworker.cpp \
     navigator.cpp \
-    simvisplugin.cpp
+    simvisplugin.cpp \
+    trackballnavigator.cpp \
+    billboards.cpp \
+    points.cpp
 
 HEADERS += \
     simulator.h \
     visualizer.h \
     renderable.h \
-    billboards2d.h \
-    points2d.h \
     camera.h \
     quickworker.h \
     navigator.h \
-    simvisplugin.h
+    simvisplugin.h \
+    trackballnavigator.h \
+    billboards.h \
+    points.h
 
 DISTFILES = qmldir
 

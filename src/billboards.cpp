@@ -1,4 +1,4 @@
-#include "billboards2d.h"
+#include "billboards.h"
 
 #include <QFileInfo>
 #include <QColor>
@@ -6,17 +6,17 @@
 #include <cmath>
 #include <QThread>
 
-Billboards2D::Billboards2D()
+Billboards::Billboards()
 {
     m_color = QVector3D(1.0, 1.0, 1.0);
 }
 
-Billboards2D::~Billboards2D()
+Billboards::~Billboards()
 {
 
 }
 
-void Billboards2DRenderer::uploadTexture(QString filename)
+void BillboardsRenderer::uploadTexture(QString filename)
 {
     QFileInfo info(filename);
     if(!info.exists()) {
@@ -30,50 +30,50 @@ void Billboards2DRenderer::uploadTexture(QString filename)
     m_isTextureUploaded = true;
 }
 
-QVector3D Billboards2D::vectorFromColor(const QColor &color)
+QVector3D Billboards::vectorFromColor(const QColor &color)
 {
     return QVector3D(color.redF(), color.greenF(), color.blueF());
 }
 
-QVector<QVector2D> &Billboards2D::positions()
+QVector<QVector2D> &Billboards::positions()
 {
     return m_positions;
 }
 
-QVector<float> &Billboards2D::rotations()
+QVector<float> &Billboards::rotations()
 {
     return m_rotations;
 }
-float Billboards2D::scale() const
+float Billboards::scale() const
 {
     return m_scale;
 }
 
-void Billboards2D::setScale(float scale)
+void Billboards::setScale(float scale)
 {
     m_scale = scale;
 }
-QVector3D Billboards2D::color() const
+QVector3D Billboards::color() const
 {
     return m_color;
 }
 
-void Billboards2D::setColor(const QColor &color)
+void Billboards::setColor(const QColor &color)
 {
     m_color = vectorFromColor(color);
 }
 
-RenderableRenderer *Billboards2D::createRenderer()
+RenderableRenderer *Billboards::createRenderer()
 {
-    return new Billboards2DRenderer();
+    return new BillboardsRenderer();
 }
 
-QString Billboards2D::texture() const
+QString Billboards::texture() const
 {
     return m_texture;
 }
 
-void Billboards2D::setTexture(QString arg)
+void Billboards::setTexture(QString arg)
 {
     if (m_texture == arg)
         return;
@@ -82,14 +82,14 @@ void Billboards2D::setTexture(QString arg)
     emit textureChanged(arg);
 }
 
-Billboards2DRenderer::Billboards2DRenderer()
+BillboardsRenderer::BillboardsRenderer()
 {
     m_numberOfVBOs = 2;
 }
 
-void Billboards2DRenderer::synchronize(Renderable* renderer)
+void BillboardsRenderer::synchronize(Renderable* renderer)
 {
-    Billboards2D* billboards = static_cast<Billboards2D*>(renderer);
+    Billboards* billboards = static_cast<Billboards*>(renderer);
     if(!m_isInitialized) {
         generateVBOs();
         m_isInitialized = true;
@@ -103,14 +103,14 @@ void Billboards2DRenderer::synchronize(Renderable* renderer)
     m_indexCount = billboards->m_indices.size();
 }
 
-void Billboards2DRenderer::uploadVBOs(Billboards2D* billboards)
+void BillboardsRenderer::uploadVBOs(Billboards* billboards)
 {
     if(billboards->m_positions.size() < 1) {
         return;
     }
     double scale = billboards->scale();
     QVector<QVector2D>& positions = billboards->m_positions;
-    QVector<Billboard2DVBOData>& vertices = billboards->m_vertices;
+    QVector<BillboardVBOData>& vertices = billboards->m_vertices;
     QVector<GLuint>& indices = billboards->m_indices;
     QVector3D& color = billboards->m_color;
     QVector<float>& rotations = billboards->m_rotations;
@@ -184,19 +184,19 @@ void Billboards2DRenderer::uploadVBOs(Billboards2D* billboards)
 
     // Transfer vertex data to VBO 0
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
-    glFunctions()->glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Billboard2DVBOData), &vertices[0], GL_STATIC_DRAW);
+    glFunctions()->glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(BillboardVBOData), &vertices[0], GL_STATIC_DRAW);
 
     // Transfer index data to VBO 1
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
     glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 }
 
-void Billboards2D::setPositions(QVector<QVector2D> &positions)
+void Billboards::setPositions(QVector<QVector2D> &positions)
 {
     m_positions = positions;
 }
 
-void Billboards2DRenderer::beforeLinkProgram() {
+void BillboardsRenderer::beforeLinkProgram() {
     program().addShaderFromSourceCode(QOpenGLShader::Vertex,
                                       "attribute highp vec2 a_position;\n"
                                       "attribute highp vec3 a_color;\n"
@@ -220,7 +220,7 @@ void Billboards2DRenderer::beforeLinkProgram() {
                                       "}");
 }
 
-void Billboards2DRenderer::render()
+void BillboardsRenderer::render()
 {
     if(m_vertexCount == 0) {
         return;
@@ -236,7 +236,7 @@ void Billboards2DRenderer::render()
     // Tell OpenGL programmable pipeline how to locate vertex position data
     int vertexLocation = program().attributeLocation("a_position");
     program().enableAttributeArray(vertexLocation);
-    glFunctions()->glVertexAttribPointer(vertexLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Billboard2DVBOData), (const void *)offset);
+    glFunctions()->glVertexAttribPointer(vertexLocation, 2, GL_FLOAT, GL_FALSE, sizeof(BillboardVBOData), (const void *)offset);
 
     // Offset for texture coordinate
     offset += sizeof(QVector2D);
@@ -244,7 +244,7 @@ void Billboards2DRenderer::render()
     // Tell OpenGL programmable pipeline how to locate vertex color data
     int colorLocation = program().attributeLocation("a_color");
     program().enableAttributeArray(colorLocation);
-    glFunctions()->glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Billboard2DVBOData), (const void *)offset);
+    glFunctions()->glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(BillboardVBOData), (const void *)offset);
 
     // Offset for texture coordinate
     offset += sizeof(QVector3D);
@@ -252,7 +252,7 @@ void Billboards2DRenderer::render()
     // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
     int texcoordLocation = program().attributeLocation("a_texcoord");
     program().enableAttributeArray(texcoordLocation);
-    glFunctions()->glVertexAttribPointer(texcoordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Billboard2DVBOData), (const void *)offset);
+    glFunctions()->glVertexAttribPointer(texcoordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(BillboardVBOData), (const void *)offset);
 
     // Draw cube geometry using indices from VBO 1
     m_texture->bind();

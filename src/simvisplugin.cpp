@@ -1,7 +1,7 @@
 #include "simvisplugin.h"
 #include "simulator.h"
-#include "billboards2d.h"
-#include "points2d.h"
+#include "billboards.h"
+#include "points.h"
 #include "renderable.h"
 #include "visualizer.h"
 #include "camera.h"
@@ -14,8 +14,8 @@ void SimVisPlugin::registerTypes(const char *uri)
     Q_ASSERT(uri == QLatin1String("SimVis"));
     qmlRegisterUncreatableType<Simulator>("SimVis", 1, 0, "Simulator",
                                           "Cannot create abstract type Simulator. This must be subclassed.");
-    qmlRegisterType<Billboards2D>("SimVis", 1, 0, "Billboards2D");
-    qmlRegisterType<Points2D>("SimVis", 1, 0, "Points2D");
+    qmlRegisterType<Billboards>("SimVis", 1, 0, "Billboards");
+    qmlRegisterType<Points>("SimVis", 1, 0, "Points");
     qmlRegisterType<Visualizer>("SimVis", 1, 0, "Visualizer");
     qmlRegisterType<Camera>("SimVis", 1, 0, "Camera");
 }
