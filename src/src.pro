@@ -8,28 +8,28 @@ uri = com.mycompany.qmlcomponents
 QT += qml quick widgets opengl openglextensions
 
 SOURCES += \
-    simulator.cpp \
-    visualizer.cpp \
-    renderable.cpp \
-    camera.cpp \
-    quickworker.cpp \
-    navigator.cpp \
-    simvisplugin.cpp \
-    trackballnavigator.cpp \
-    billboards.cpp \
-    points.cpp
+    renderables/billboards.cpp \
+    core/camera.cpp \
+    core/navigator.cpp \
+    renderables/points.cpp \
+    core/quickworker.cpp \
+    core/renderable.cpp \
+    core/simulator.cpp \
+    core/simvisplugin.cpp \
+    navigators/trackballnavigator.cpp \
+    core/visualizer.cpp
 
 HEADERS += \
-    simulator.h \
-    visualizer.h \
-    renderable.h \
-    camera.h \
-    quickworker.h \
-    navigator.h \
-    simvisplugin.h \
-    trackballnavigator.h \
-    billboards.h \
-    points.h
+    core/navigator.h \
+    core/quickworker.h \
+    core/renderable.h \
+    core/simulator.h \
+    core/camera.h \
+    renderables/billboards.h \
+    renderables/points.h \
+    core/simvisplugin.h \
+    navigators/trackballnavigator.h \
+    core/visualizer.h
 
 DISTFILES = qmldir
 

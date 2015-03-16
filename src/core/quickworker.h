@@ -1,7 +1,9 @@
 #ifndef QUICKWORKER_H
 #define QUICKWORKER_H
-#include <QVector>
+
 #include "simulator.h"
+
+#include <QVector>
 
 class QuickWorker : public SimulatorWorker
 {

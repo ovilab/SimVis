@@ -1,6 +1,6 @@
 #ifndef TRACKBALLNAVIGATOR_H
 #define TRACKBALLNAVIGATOR_H
-#include "navigator.h"
+#include "../core/navigator.h"
 
 class TrackballNavigator : public Navigator
 {

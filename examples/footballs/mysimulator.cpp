@@ -1,7 +1,7 @@
 #include "mysimulator.h"
 
-#include "billboards.h"
-#include "points.h"
+#include <QVector3D>
+
 MySimulator::MySimulator()
 {
 

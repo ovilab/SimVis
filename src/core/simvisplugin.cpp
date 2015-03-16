@@ -1,8 +1,7 @@
 #include "simvisplugin.h"
 #include "simulator.h"
-#include "billboards.h"
-#include "points.h"
-#include "renderable.h"
+#include "../renderables/billboards.h"
+#include "../renderables/points.h"
 #include "visualizer.h"
 #include "camera.h"
 

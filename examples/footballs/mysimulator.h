@@ -1,7 +1,7 @@
 #ifndef MYSIMULATOR_H
 #define MYSIMULATOR_H
-#include "simulator.h"
-#include "quickworker.h"
+#include <SimVis/Simulator>
+#include <SimVis/QuickWorker>
 #include <QDebug>
 #include <QVector2D>
 

@@ -1,6 +1,7 @@
 #include "quickworker.h"
-#include "billboards.h"
-#include "points.h"
+#include "../renderables/billboards.h"
+#include "../renderables/points.h"
+
 QuickWorker::QuickWorker()
 {
 
