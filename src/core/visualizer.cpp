@@ -116,13 +116,28 @@ void Visualizer::resetAspectRatio()
 void VisualizerRenderer::render()
 {
     QOpenGLFunctions funcs(QOpenGLContext::currentContext());
+
     glClearColor(m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF(), m_backgroundColor.alphaF());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+    glFrontFace(GL_CW);
+    glCullFace(GL_FRONT);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
+
     for(Renderable* renderable : m_renderables) {
         if(renderable->visible()) {
             renderable->requestRender();
         }
     }
+
+    glDepthMask(GL_TRUE);
+
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
 }
 
 void VisualizerRenderer::synchronize(QQuickFramebufferObject *fbo)
@@ -155,6 +170,7 @@ void VisualizerRenderer::setCamera(Camera *camera)
 QOpenGLFramebufferObject *VisualizerRenderer::createFramebufferObject(const QSize &size) {
     QOpenGLFramebufferObjectFormat format;
     format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
-    format.setSamples(4);
-    return new QOpenGLFramebufferObject(size, format);
+//    format.setSamples(4);
+    QOpenGLFramebufferObject* fbo = new QOpenGLFramebufferObject(size, format);
+    return fbo;
 }
