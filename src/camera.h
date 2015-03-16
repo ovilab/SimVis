@@ -45,12 +45,7 @@ public:
     float fieldOfView() const;
     float farPlane() const;
     float nearPlane() const;
-
-
-    float aspectRatio() const
-    {
-        return m_aspectRatio;
-    }
+    float aspectRatio() const;
 
 public slots:
     void setPosition(QVector3D arg);
@@ -88,6 +83,7 @@ private:
     float m_aspectRatio = 1.0;
     QMatrix4x4 m_projectionMatrix;
     QMatrix4x4 m_modelViewMatrix;
+
 };
 
 #endif // CAMERA_H

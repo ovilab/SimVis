@@ -56,6 +56,11 @@ float Camera::nearPlane() const
     return m_nearPlane;
 }
 
+float Camera::aspectRatio() const
+{
+    return m_aspectRatio;
+}
+
 void Camera::setPosition(QVector3D arg)
 {
     if (m_position == arg)
