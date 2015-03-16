@@ -1,7 +1,7 @@
 #include "navigator.h"
 #include "camera.h"
 
-Navigator::Navigator()
+Navigator::Navigator(Camera *camera)
 {
 
 }

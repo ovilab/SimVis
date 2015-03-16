@@ -16,7 +16,8 @@ SOURCES += \
     camera.cpp \
     quickworker.cpp \
     navigator.cpp \
-    simvisplugin.cpp
+    simvisplugin.cpp \
+    trackballnavigator.cpp
 
 HEADERS += \
     simulator.h \
@@ -27,7 +28,8 @@ HEADERS += \
     camera.h \
     quickworker.h \
     navigator.h \
-    simvisplugin.h
+    simvisplugin.h \
+    trackballnavigator.h
 
 DISTFILES = qmldir
 
