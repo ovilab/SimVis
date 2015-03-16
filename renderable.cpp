@@ -1,5 +1,5 @@
 #include "renderable.h"
-
+#include "camera.h"
 Renderable::Renderable(QObject *parent) :
     QObject(parent),
     m_renderer(0)
@@ -25,7 +25,14 @@ void Renderable::requestSynchronize()
     if(!m_renderer) {
         m_renderer = createRenderer();
     }
+    m_renderer->m_modelViewMatrix = m_camera->modelViewMatrix();
+    m_renderer->m_projectionMatrix = m_camera->projectionMatrix();
     m_renderer->synchronize(this);
+}
+
+Camera *Renderable::camera() const
+{
+    return m_camera;
 }
 
 void Renderable::setVisible(bool arg)
@@ -35,6 +42,15 @@ void Renderable::setVisible(bool arg)
 
     m_visible = arg;
     emit visibleChanged(arg);
+}
+
+void Renderable::setCamera(Camera *arg)
+{
+    if (m_camera == arg)
+        return;
+
+    m_camera = arg;
+    emit cameraChanged(arg);
 }
 
 void RenderableRenderer::generateVBOs()

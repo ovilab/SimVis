@@ -12,7 +12,8 @@ SOURCES += main.cpp \
     billboards2d.cpp \
     points2d.cpp \
     camera.cpp \
-    quickworker.cpp
+    quickworker.cpp \
+    navigator.cpp
 
 RESOURCES += qml.qrc
 
@@ -30,4 +31,5 @@ HEADERS += \
     points2d.h \
     camera.h \
     quickworker.h \
-    billboards2d.h
+    billboards2d.h \
+    navigator.h

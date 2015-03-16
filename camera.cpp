@@ -3,14 +3,11 @@
 
 QMatrix4x4 Camera::projectionMatrix()
 {
-    // Calculate aspect ratio
-    qreal aspect = qreal(m_viewportSize.width()) / qreal(m_viewportSize.height() ? m_viewportSize.height() : 1);
-
     // Reset projection
     m_projectionMatrix.setToIdentity();
 
     // Set perspective projection
-    m_projectionMatrix.perspective(m_fieldOfView, aspect, m_nearPlane, m_farPlane);
+    m_projectionMatrix.perspective(m_fieldOfView, m_aspectRatio, m_nearPlane, m_farPlane);
 
     return m_projectionMatrix;
 }
@@ -45,11 +42,6 @@ void Camera::setModelViewMatrix(const QMatrix4x4 &modelViewMatrix)
 bool Camera::fixedPosition() const
 {
     return m_fixedPosition;
-}
-
-QSize Camera::viewportSize() const
-{
-    return m_viewportSize;
 }
 
 float Camera::fieldOfView() const
@@ -112,15 +104,6 @@ void Camera::setFixedPosition(bool arg)
     emit fixedPositionChanged(arg);
 }
 
-void Camera::setViewportSize(QSize arg)
-{
-    if (m_viewportSize == arg)
-        return;
-
-    m_viewportSize = arg;
-    emit viewportSizeChanged(arg);
-}
-
 void Camera::setFieldOfView(float arg)
 {
     if (m_fieldOfView == arg)
@@ -148,18 +131,17 @@ void Camera::setNearPlane(float arg)
     emit nearPlaneChanged(arg);
 }
 
+void Camera::setAspectRatio(float arg)
+{
+    if (m_aspectRatio == arg)
+        return;
+
+    m_aspectRatio = arg;
+    emit aspectRatioChanged(arg);
+}
+
 Camera::Camera(QObject *parent) :
-    QObject(parent),
-    m_position(QVector3D(0,0,5)),
-    m_tilt(0),
-    m_pan(0),
-    m_roll(0),
-    m_fixedPosition(false),
-    m_fieldOfView(65.0),
-    m_farPlane(2000.0),
-    m_nearPlane(0.1),
-    m_forwardVector(QVector3D(1.0, 0.0, 0.0)),
-    m_upVector(QVector3D(0.0, 0.0, 1.0))
+    QObject(parent)
 {
 
 }
