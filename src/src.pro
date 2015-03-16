@@ -17,7 +17,9 @@ SOURCES += \
     simvisplugin.cpp \
     trackballnavigator.cpp \
     billboards.cpp \
-    points.cpp
+    points.cpp \
+    cameralens.cpp \
+    lookattransform.cpp
 
 HEADERS += \
     simulator.h \
@@ -29,7 +31,12 @@ HEADERS += \
     simvisplugin.h \
     trackballnavigator.h \
     billboards.h \
-    points.h
+    points.h \
+    cameralens.h \
+    cameralens_p.h \
+    lookattransform.h \
+    lookattransform_p.h \
+    camera_p.h
 
 DISTFILES = qmldir
 

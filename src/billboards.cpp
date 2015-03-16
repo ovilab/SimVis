@@ -228,6 +228,9 @@ void BillboardsRenderer::render()
         return;
     }
 
+    qDebug() << m_projectionMatrix;
+    qDebug() << m_modelViewMatrix;
+
     QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
     program().setUniformValue("modelViewProjectionMatrix", modelViewProjectionMatrix);
 

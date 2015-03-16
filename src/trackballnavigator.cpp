@@ -46,17 +46,17 @@ void TrackballNavigator::mouseMoveEvent(QMouseEvent *event)
 
     float deltaPan = -delta.x();
     float deltaTilt = -delta.y();
-    float pan = m_camera->pan();
-    float tilt = m_camera->tilt();
+//    float pan = m_camera->pan();
+//    float tilt = m_camera->tilt();
 
-    pan += deltaPan;
-    tilt += deltaTilt;
-    tilt = std::max(-90.0f, std::min(90.0f, tilt));
+//    pan += deltaPan;
+//    tilt += deltaTilt;
+//    tilt = std::max(-90.0f, std::min(90.0f, tilt));
 
-    m_camera->setPan(pan);
-    m_camera->setTilt(tilt);
+//    m_camera->setPan(pan);
+//    m_camera->setTilt(tilt);
 
-    qDebug() << "Moved mouse in navigator. Pan: " << pan << " and tilt: " << tilt;
+//    qDebug() << "Moved mouse in navigator. Pan: " << pan << " and tilt: " << tilt;
 }
 
 void TrackballNavigator::wheelEvent(QWheelEvent *event)
