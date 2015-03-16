@@ -44,6 +44,7 @@ public slots:
 
 private slots:
     void synchronizeWorker(SimulatorWorker* worker);
+
 signals:
     void simulatorChanged(Simulator* arg);
     void cameraChanged(Camera* arg);
@@ -53,15 +54,10 @@ private:
     Simulator* m_simulator = 0;
     Camera* m_camera = 0;
     QColor m_backgroundColor = QColor(0,0,0,0);
-    virtual void mouseMoveEvent(QMouseEvent *event) override;
-    virtual VisualizerRenderer *createRenderer() const override;
-    virtual void mousePressEvent(QMouseEvent *event) override;
 
     friend class VisualizerRenderer;
 protected:
-    virtual void hoverEnterEvent(QHoverEvent *event) override;
-    virtual void hoverMoveEvent(QHoverEvent *event) override;
-    virtual void hoverLeaveEvent(QHoverEvent *event) override;
+    virtual VisualizerRenderer *createRenderer() const override;
 };
 
 #endif // VISUALIZER_H
