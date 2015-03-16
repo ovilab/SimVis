@@ -28,12 +28,21 @@ ApplicationWindow {
         simulator: simulator
         camera: camera
         backgroundColor: "white"
+        navigator: navigator
+
+        TrackballNavigator {
+            id: navigator
+            anchors.fill: parent
+            camera: camera
+        }
+
         Billboards {
             id: billboards
             visible: billboardsVisible.checked
             texture: ":/football.png"
             scale: 0.1
         }
+
         Points {
             id: points
             visible: pointsVisible.checked

@@ -200,6 +200,7 @@ void Billboards::setPositions(QVector<QVector3D> &positions)
 
 void BillboardsRenderer::beforeLinkProgram() {
     program().addShaderFromSourceCode(QOpenGLShader::Vertex,
+                                      "uniform highp mat4 modelViewProjectionMatrix;\n"
                                       "attribute highp vec3 a_position;\n"
                                       "attribute highp vec3 a_color;\n"
                                       "attribute highp vec2 a_texcoord;\n"
@@ -207,7 +208,7 @@ void BillboardsRenderer::beforeLinkProgram() {
                                       "varying highp float light;\n"
                                       "varying highp vec3 color;\n"
                                       "void main() {\n"
-                                      "    gl_Position = vec4(a_position, 1.0);\n"
+                                      "    gl_Position = modelViewProjectionMatrix*vec4(a_position, 1.0);\n"
                                       "    coords = a_texcoord;\n"
                                       "    color = a_color;\n"
                                       "}");
@@ -226,6 +227,9 @@ void BillboardsRenderer::render()
     if(m_vertexCount == 0) {
         return;
     }
+
+    QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
+    program().setUniformValue("modelViewProjectionMatrix", modelViewProjectionMatrix);
 
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);

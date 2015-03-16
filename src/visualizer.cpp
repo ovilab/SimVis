@@ -3,13 +3,14 @@
 #include "billboards.h"
 #include "simulator.h"
 #include "camera.h"
+#include "navigator.h"
+#include "trackballnavigator.h"
 #include <QDebug>
 #include <QOpenGLFramebufferObjectFormat>
 
 Visualizer::Visualizer()
 {
-    setAcceptedMouseButtons(Qt::AllButtons);
-    setAcceptHoverEvents(true);
+
 }
 
 Visualizer::~Visualizer()
@@ -38,6 +39,14 @@ Camera *Visualizer::camera()
 QColor Visualizer::backgroundColor() const
 {
     return m_backgroundColor;
+}
+
+Navigator *Visualizer::navigator()
+{
+    if(!m_navigator) {
+        m_navigator = new Navigator(camera(), this);
+    }
+    return m_navigator;
 }
 
 void Visualizer::setSimulator(Simulator *arg)
@@ -69,6 +78,15 @@ void Visualizer::setBackgroundColor(QColor arg)
 
     m_backgroundColor = arg;
     emit backgroundColorChanged(arg);
+}
+
+void Visualizer::setNavigator(Navigator *arg)
+{
+    if (m_navigator == arg)
+        return;
+
+    m_navigator = arg;
+    emit navigatorChanged(arg);
 }
 
 void Visualizer::synchronizeWorker(SimulatorWorker *worker)

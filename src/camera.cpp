@@ -24,10 +24,7 @@ QMatrix4x4 Camera::modelViewMatrix()
         m_modelViewMatrix.translate(m_position);
     }
 
-    // m_modelViewMatrix.lookAt(m_position, m_position + m_forwardVector, m_upVector);
     m_modelViewMatrix.rotate(90, 1, 0, 0);
-
-    //m_modelViewMatrix.rotate(m_rotation);
     m_modelViewMatrix.rotate(m_tilt, 1, 0, 0);
     m_modelViewMatrix.rotate(m_pan, 0, 0, 1);
 

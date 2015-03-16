@@ -1,9 +1,13 @@
 #include "navigator.h"
 #include "camera.h"
 
-Navigator::Navigator(Camera *camera)
+Navigator::Navigator(Camera *camera, QQuickItem *parent) :
+    QQuickItem(parent)
 {
-
+    m_camera = camera;
+    setAcceptedMouseButtons(Qt::AllButtons);
+    setAcceptHoverEvents(true);
+    qDebug() << "Created navigator with parent: " << parent << " and camera " << camera;
 }
 
 Navigator::~Navigator()
@@ -18,6 +22,7 @@ Camera *Navigator::camera() const
 
 void Navigator::setCamera(Camera *arg)
 {
+    qDebug() << "Setting camera: " << arg;
     if (m_camera == arg)
         return;
 
