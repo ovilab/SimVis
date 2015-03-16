@@ -11,7 +11,8 @@ SOURCES += main.cpp \
     renderable.cpp \
     billboards2d.cpp \
     points2d.cpp \
-    camera.cpp
+    camera.cpp \
+    quickworker.cpp
 
 RESOURCES += qml.qrc
 
@@ -26,6 +27,7 @@ HEADERS += \
     mysimulator.h \
     visualizer.h \
     renderable.h \
-    billboards2d.h \
     points2d.h \
-    camera.h
+    camera.h \
+    quickworker.h \
+    billboards2d.h
