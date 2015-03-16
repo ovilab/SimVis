@@ -26,7 +26,8 @@ ApplicationWindow {
         width: applicationRoot.width - 350
         height: applicationRoot.height - row1.height
         simulator: simulator
-//        camera: camera
+        camera: camera
+        backgroundColor: "white"
         Billboards2D {
             id: billboards
             visible: billboardsVisible.checked
@@ -40,9 +41,9 @@ ApplicationWindow {
         }
     }
 
-//    Camera {
-//        id: camera
-//    }
+    Camera {
+        id: camera
+    }
 
     FastBlur {
         id: blurEffect

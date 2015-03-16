@@ -27,9 +27,17 @@ Simulator *Visualizer::simulator() const
     return m_simulator;
 }
 
-Camera *Visualizer::camera() const
+Camera *Visualizer::camera()
 {
+    if(!m_camera) {
+        m_camera = new Camera(static_cast<QObject*>(this));
+    }
     return m_camera;
+}
+
+QColor Visualizer::backgroundColor() const
+{
+    return m_backgroundColor;
 }
 
 void Visualizer::setSimulator(Simulator *arg)
@@ -52,6 +60,15 @@ void Visualizer::setCamera(Camera *arg)
 
     m_camera = arg;
     emit cameraChanged(arg);
+}
+
+void Visualizer::setBackgroundColor(QColor arg)
+{
+    if (m_backgroundColor == arg)
+        return;
+
+    m_backgroundColor = arg;
+    emit backgroundColorChanged(arg);
 }
 
 void Visualizer::synchronizeWorker(SimulatorWorker *worker)
@@ -95,7 +112,7 @@ void Visualizer::hoverLeaveEvent(QHoverEvent *event)
 void VisualizerRenderer::render()
 {
     QOpenGLFunctions funcs(QOpenGLContext::currentContext());
-    funcs.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    funcs.glClearColor(m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF(), m_backgroundColor.alphaF());
     funcs.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for(Renderable* renderable : m_renderables) {
         if(renderable->visible()) {
@@ -108,12 +125,28 @@ void VisualizerRenderer::synchronize(QQuickFramebufferObject *fbo)
 {
     Visualizer* visualizer = static_cast<Visualizer*>(fbo);
     m_renderables = visualizer->findChildren<Renderable*>();
+    m_camera = visualizer->camera();
+    m_backgroundColor = visualizer->backgroundColor();
+
     for(Renderable* renderable : m_renderables) {
         if(renderable->visible()) {
+            if(!renderable->camera()) {
+                renderable->setCamera(camera());
+            }
             renderable->requestSynchronize();
         }
     }
 }
+Camera *VisualizerRenderer::camera() const
+{
+    return m_camera;
+}
+
+void VisualizerRenderer::setCamera(Camera *camera)
+{
+    m_camera = camera;
+}
+
 
 QOpenGLFramebufferObject *VisualizerRenderer::createFramebufferObject(const QSize &size) {
     QOpenGLFramebufferObjectFormat format;

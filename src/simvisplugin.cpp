@@ -4,6 +4,7 @@
 #include "points2d.h"
 #include "renderable.h"
 #include "visualizer.h"
+#include "camera.h"
 
 #include <qqml.h>
 
@@ -15,7 +16,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<Billboards2D>("SimVis", 1, 0, "Billboards2D");
     qmlRegisterType<Points2D>("SimVis", 1, 0, "Points2D");
     qmlRegisterType<Visualizer>("SimVis", 1, 0, "Visualizer");
-//    qmlRegisterType<Camera>("SimVis", 1, 0, "Camera");
+    qmlRegisterType<Camera>("SimVis", 1, 0, "Camera");
 }
 
 

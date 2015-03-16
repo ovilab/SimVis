@@ -14,6 +14,8 @@ SOURCES += \
     billboards2d.cpp \
     points2d.cpp \
     camera.cpp \
+    quickworker.cpp \
+    navigator.cpp \
     simvisplugin.cpp
 
 HEADERS += \
@@ -23,6 +25,8 @@ HEADERS += \
     billboards2d.h \
     points2d.h \
     camera.h \
+    quickworker.h \
+    navigator.h \
     simvisplugin.h
 
 DISTFILES = qmldir

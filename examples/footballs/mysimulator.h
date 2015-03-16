@@ -1,10 +1,11 @@
 #ifndef MYSIMULATOR_H
 #define MYSIMULATOR_H
 #include "simulator.h"
+#include "quickworker.h"
 #include <QDebug>
 #include <QVector2D>
 
-class MyWorker : public SimulatorWorker
+class MyWorker : public QuickWorker
 {
     Q_OBJECT
 public:
@@ -12,14 +13,12 @@ public:
 
 private:
     virtual void synchronizeSimulator(Simulator *simulator) override;
-    virtual void synchronizeRenderer(Renderable *renderableObject) override;
     virtual void work() override;
     void reset();
     float m_springConstant = 1.0;
     float m_mass = 1.0;
     float m_dt = 0.01;
     int   m_numberOfBalls = 100;
-    QVector<QVector2D> m_positions;
     QVector<QVector2D> m_velocities;
 };
 
