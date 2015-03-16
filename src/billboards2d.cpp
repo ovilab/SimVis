@@ -256,11 +256,11 @@ void Billboards2DRenderer::render()
 
     // Draw cube geometry using indices from VBO 1
     m_texture->bind();
-    glFunctions()->glDisable(GL_DEPTH_TEST);
-    glFunctions()->glEnable(GL_BLEND);
-    glFunctions()->glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glFunctions()->glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
-    glFunctions()->glDisable(GL_BLEND);
+    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
+    glDisable(GL_BLEND);
 
     program().disableAttributeArray(vertexLocation);
     program().disableAttributeArray(colorLocation);

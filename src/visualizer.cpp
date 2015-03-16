@@ -112,8 +112,8 @@ void Visualizer::hoverLeaveEvent(QHoverEvent *event)
 void VisualizerRenderer::render()
 {
     QOpenGLFunctions funcs(QOpenGLContext::currentContext());
-    funcs.glClearColor(m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF(), m_backgroundColor.alphaF());
-    funcs.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF(), m_backgroundColor.alphaF());
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for(Renderable* renderable : m_renderables) {
         if(renderable->visible()) {
             renderable->requestRender();

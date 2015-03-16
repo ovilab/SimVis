@@ -89,7 +89,7 @@ void Points2DRenderer::render()
 
     // Draw cube geometry using indices from VBO 1
     glPointSize(m_pointSize);
-    glFunctions()->glDrawArrays(GL_POINTS, 0, m_vertexCount);
+    glDrawArrays(GL_POINTS, 0, m_vertexCount);
 
     program().disableAttributeArray(vertexLocation);
 }
