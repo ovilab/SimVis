@@ -136,11 +136,11 @@ ApplicationWindow {
             anchors.top: controlsRow3.bottom
 
             TextField {
-                text: simulator.numberOfBalls
+                text: simulator.ballCount
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
                 onTextChanged: {
                     var value = Math.round(parseInt(text))
-                    simulator.setNumberOfBalls(text)
+                    simulator.ballCount = value
                     simulator.reset()
                 }
             }

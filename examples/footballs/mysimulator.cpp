@@ -27,7 +27,7 @@ float MySimulator::dt() const
     return m_dt;
 }
 
-int MySimulator::numberOfBalls() const
+int MySimulator::ballCount() const
 {
     return m_numberOfBalls;
 }
@@ -64,13 +64,13 @@ void MySimulator::reset()
     m_willReset = true;
 }
 
-void MySimulator::setNumberOfBalls(int arg)
+void MySimulator::setBallCount(int arg)
 {
     if (m_numberOfBalls == arg)
         return;
 
     m_numberOfBalls = arg;
-    emit numberOfBallsChanged(arg);
+    emit ballCountChanged(arg);
 }
 
 SimulatorWorker *MySimulator::createWorker()
@@ -89,7 +89,7 @@ void MyWorker::synchronizeSimulator(Simulator *simulator)
     m_dt = sim->dt();
     m_springConstant = sim->springConstant();
     m_mass = sim->mass();
-    m_numberOfBalls = sim->numberOfBalls();
+    m_ballCount = sim->ballCount();
     if(sim->m_willReset) {
         reset();
         sim->m_willReset = false;
@@ -98,16 +98,19 @@ void MyWorker::synchronizeSimulator(Simulator *simulator)
 
 void MyWorker::work()
 {
-    float oneOverMass = 1.0/m_mass;
-    for(auto i=0; i<m_positions.size(); i++) {
-        QVector2D force;
-        force[0] = -m_positions[i][0]*m_springConstant;
-        force[1] = -m_positions[i][1]*m_springConstant;
-        m_velocities[i][0] += force[0]*oneOverMass*m_dt;
-        m_velocities[i][1] += force[1]*oneOverMass*m_dt;
+    float m = m_mass;
+    float k = m_springConstant;
+    float dt = m_dt;
+    for(int i = 0; i < m_positions.size(); i++) {
+        QVector3D F;
+        QVector3D a;
+        QVector3D &r = m_positions[i];
+        QVector3D &v = m_velocities[i];
 
-        m_positions[i][0] += m_velocities[i][0]*m_dt;
-        m_positions[i][1] += m_velocities[i][1]*m_dt;
+        F = -r*k;
+        a = F / m;
+        v += a*dt;
+        r += v*dt;
     }
 }
 
@@ -115,20 +118,17 @@ void MyWorker::reset()
 {
     m_positions.clear();
     m_velocities.clear();
-    m_positions.resize(m_numberOfBalls);
-    m_velocities.resize(m_numberOfBalls);
-    for(auto i=0; i<m_numberOfBalls; i++) {
+    m_positions.resize(m_ballCount);
+    m_velocities.resize(m_ballCount);
+    for(auto i=0; i < m_ballCount; i++) {
         float x =  2.0*(rand() / double(RAND_MAX)) - 1.0;
         float y =  2.0*(rand() / double(RAND_MAX)) - 1.0;
+        float z =  2.0*(rand() / double(RAND_MAX)) - 1.0;
         float vx = 2.0*(rand() / double(RAND_MAX)) - 1.0;
         float vy = 2.0*(rand() / double(RAND_MAX)) - 1.0;
+        float vz = 2.0*(rand() / double(RAND_MAX)) - 1.0;
 
-        x *= 0.5;
-        y *= 0.5;
-        vx *= 0.3;
-        vy *= 0.3;
-
-        m_positions[i] = QVector3D(x, y, 0);
-        m_velocities[i] = QVector2D(vx,vy);
+        m_positions[i] = 0.5 * QVector3D(x, y, z);
+        m_velocities[i] = 0.3 * QVector3D(vx, vy, vz);
     }
 }

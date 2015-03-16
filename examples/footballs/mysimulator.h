@@ -3,7 +3,7 @@
 #include <SimVis/Simulator>
 #include <SimVis/QuickWorker>
 #include <QDebug>
-#include <QVector2D>
+#include <QVector3D>
 
 class MyWorker : public QuickWorker
 {
@@ -18,8 +18,8 @@ private:
     float m_springConstant = 1.0;
     float m_mass = 1.0;
     float m_dt = 0.01;
-    int   m_numberOfBalls = 100;
-    QVector<QVector2D> m_velocities;
+    int   m_ballCount = 100;
+    QVector<QVector3D> m_velocities;
 };
 
 class MySimulator : public Simulator
@@ -28,7 +28,7 @@ class MySimulator : public Simulator
     Q_PROPERTY(float springConstant READ springConstant WRITE setSpringConstant NOTIFY springConstantChanged)
     Q_PROPERTY(float mass READ mass WRITE setMass NOTIFY massChanged)
     Q_PROPERTY(float dt READ dt WRITE setDt NOTIFY dtChanged)
-    Q_PROPERTY(int numberOfBalls READ numberOfBalls WRITE setNumberOfBalls NOTIFY numberOfBallsChanged)
+    Q_PROPERTY(int ballCount READ ballCount WRITE setBallCount NOTIFY ballCountChanged)
 public:
     explicit MySimulator();
     ~MySimulator();
@@ -36,20 +36,20 @@ public:
     float springConstant() const;
     float mass() const;
     float dt() const;
-    int numberOfBalls() const;
+    int ballCount() const;
 
 public slots:
     void setSpringConstant(float arg);
     void setMass(float arg);
     void setDt(float arg);
     void reset();
-    void setNumberOfBalls(int arg);
+    void setBallCount(int arg);
 
 signals:
     void springConstantChanged(float arg);
     void massChanged(float arg);
     void dtChanged(float arg);
-    void numberOfBallsChanged(int arg);
+    void ballCountChanged(int arg);
 
 protected:
     SimulatorWorker *createWorker();

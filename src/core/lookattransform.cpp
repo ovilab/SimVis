@@ -39,7 +39,6 @@ QMatrix4x4 LookAtTransform::transformMatrix() const
 {
     Q_D(const LookAtTransform);
     if (d->m_matrixDirty) {
-        qDebug() << "Looking at" << d->m_viewCenter << "from" << d->m_position << "up" << d->m_upVector;
         d->m_matrix.setToIdentity();
         d->m_matrix.lookAt(d->m_position, d->m_viewCenter, d->m_upVector);
         d->m_matrixDirty = false;

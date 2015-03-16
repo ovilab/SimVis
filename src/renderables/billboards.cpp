@@ -6,6 +6,8 @@
 #include <cmath>
 #include <QThread>
 
+#include "../core/camera.h"
+
 Billboards::Billboards()
 {
     m_color = QVector3D(1.0, 1.0, 1.0);
@@ -90,6 +92,11 @@ BillboardsRenderer::BillboardsRenderer()
 void BillboardsRenderer::synchronize(Renderable* renderer)
 {
     Billboards* billboards = static_cast<Billboards*>(renderer);
+
+    m_upVector = billboards->camera()->upVector().normalized();
+    m_viewVector = billboards->camera()->viewVector().normalized();
+    m_rightVector = QVector3D::crossProduct(m_viewVector, m_upVector);
+
     if(!m_isInitialized) {
         generateVBOs();
         m_isInitialized = true;
@@ -115,14 +122,8 @@ void BillboardsRenderer::uploadVBOs(Billboards* billboards)
     QVector3D& color = billboards->m_color;
     QVector<float>& rotations = billboards->m_rotations;
 
-    QVector3D right;
-    right.setX(m_modelViewMatrix(0,0));
-    right.setY(m_modelViewMatrix(0,1));
-    right.setZ(m_modelViewMatrix(0,2));
-    QVector3D up;
-    up.setX(m_modelViewMatrix(1,0));
-    up.setY(m_modelViewMatrix(1,1));
-    up.setZ(m_modelViewMatrix(1,2));
+    QVector3D right = m_rightVector;
+    QVector3D up = m_upVector;
 
     QVector3D ul = (0.5*up - 0.5*right)*scale;
     QVector3D ur = (0.5*up + 0.5*right)*scale;
@@ -151,21 +152,25 @@ void BillboardsRenderer::uploadVBOs(Billboards* billboards)
         vertices[4*i + 0].position = position;
         vertices[4*i + 0].position[0] += dl[0]*cosTheta - dl[1]*sinTheta;
         vertices[4*i + 0].position[1] += dl[0]*sinTheta + dl[1]*cosTheta;
+        vertices[4*i + 0].position[2] += dl[2];
         vertices[4*i + 0].textureCoord= QVector2D(0,1);
 
         vertices[4*i + 1].position = position;
         vertices[4*i + 1].position[0] += dr[0]*cosTheta - dr[1]*sinTheta;
         vertices[4*i + 1].position[1] += dr[0]*sinTheta + dr[1]*cosTheta;
+        vertices[4*i + 1].position[2] += dr[2];
         vertices[4*i + 1].textureCoord= QVector2D(1,1);
 
         vertices[4*i + 2].position = position;
         vertices[4*i + 2].position[0] += ur[0]*cosTheta - ur[1]*sinTheta;
         vertices[4*i + 2].position[1] += ur[0]*sinTheta + ur[1]*cosTheta;
+        vertices[4*i + 2].position[2] += ur[2];
         vertices[4*i + 2].textureCoord= QVector2D(1,0);
 
         vertices[4*i + 3].position = position;
         vertices[4*i + 3].position[0] += ul[0]*cosTheta - ul[1]*sinTheta;
         vertices[4*i + 3].position[1] += ul[0]*sinTheta + ul[1]*cosTheta;
+        vertices[4*i + 3].position[2] += ul[2];
         vertices[4*i + 3].textureCoord= QVector2D(0,0);
 
         QVector3D color = normalColor;

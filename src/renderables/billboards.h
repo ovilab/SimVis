@@ -35,6 +35,9 @@ private:
     bool m_isTextureUploaded = false;
     int m_vertexCount;
     int m_indexCount;
+    QVector3D m_upVector;
+    QVector3D m_viewVector;
+    QVector3D m_rightVector;
 };
 
 class Billboards : public Renderable
