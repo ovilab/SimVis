@@ -2,11 +2,6 @@
 #include <QQmlApplicationEngine>
 #include <QtQml>
 #include "mysimulator.h"
-#include "billboards.h"
-#include "points.h"
-#include "visualizer.h"
-#include "camera.h"
-#include "simvisplugin.h"
 
 int main(int argc, char *argv[])
 {
