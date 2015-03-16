@@ -116,11 +116,13 @@ void BillboardsRenderer::uploadVBOs(Billboards* billboards)
     QVector<float>& rotations = billboards->m_rotations;
 
     QVector3D right;
-    right.setX(1.0);
-    right.setY(0.0);
+    right.setX(m_modelViewMatrix(0,0));
+    right.setY(m_modelViewMatrix(0,1));
+    right.setZ(m_modelViewMatrix(0,2));
     QVector3D up;
-    up.setX(0.0);
-    up.setY(1.0);
+    up.setX(m_modelViewMatrix(1,0));
+    up.setY(m_modelViewMatrix(1,1));
+    up.setZ(m_modelViewMatrix(1,2));
 
     QVector3D ul = (0.5*up - 0.5*right)*scale;
     QVector3D ur = (0.5*up + 0.5*right)*scale;
@@ -184,11 +186,11 @@ void BillboardsRenderer::uploadVBOs(Billboards* billboards)
 
     // Transfer vertex data to VBO 0
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
-    glFunctions()->glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(BillboardVBOData), &vertices[0], GL_STATIC_DRAW);
+    glFunctions()->glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(BillboardVBOData), &vertices.front(), GL_STATIC_DRAW);
 
     // Transfer index data to VBO 1
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
-    glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
+    glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices.front(), GL_STATIC_DRAW);
 }
 
 void Billboards::setPositions(QVector<QVector3D> &positions)
@@ -216,7 +218,6 @@ void BillboardsRenderer::beforeLinkProgram() {
                                       "varying highp vec3 color;\n"
                                       "void main() {\n"
                                       "    gl_FragColor = texture2D(texture, coords.st)*vec4(color, 1.0);\n"
-                                      // "    if(gl_FragColor.w==0.0) { discard; }\n"
                                       "}");
 }
 

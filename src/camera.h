@@ -28,18 +28,18 @@ class Camera : public QObject
     Q_PROPERTY(bool fixedPosition READ fixedPosition WRITE setFixedPosition NOTIFY fixedPositionChanged)
 
 private:
-    QVector3D m_position = QVector3D(0,0,5);
+    QVector3D m_position = QVector3D(0,0,-1);
     float m_tilt = 0;
     float m_pan = 0;
     float m_roll = 0;
     QMatrix4x4 m_projectionMatrix;
     QMatrix4x4 m_modelViewMatrix;
     bool m_fixedPosition = false;
-    float m_fieldOfView = 65.0;
+    float m_fieldOfView = 90.0;
     float m_farPlane = 0.1;
     float m_nearPlane = 2000.0;
-    QVector3D m_forwardVector = QVector3D(1.0, 0.0, 0.0);
-    QVector3D m_upVector = QVector3D(0.0, 0.0, 1.0);
+    QVector3D m_forwardVector = QVector3D(0.0, 0.0, 1.0);
+    QVector3D m_upVector = QVector3D(0.0, 1.0, 0.0);
     float m_aspectRatio = 1.0;
 
 public:
