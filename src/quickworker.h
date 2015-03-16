@@ -9,7 +9,7 @@ class QuickWorker : public SimulatorWorker
 private:
     friend class Simulator;
 protected:
-    QVector<QVector2D> m_positions;
+    QVector<QVector3D> m_positions;
 public:
     QuickWorker();
     ~QuickWorker();

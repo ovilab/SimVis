@@ -10,12 +10,12 @@ Points::~Points()
 
 }
 
-void Points::setPositions(QVector<QVector2D> &positions)
+void Points::setPositions(QVector<QVector3D> &positions)
 {
     m_vertices = positions;
 }
 
-QVector<QVector2D> &Points::positions()
+QVector<QVector3D> &Points::positions()
 {
     return m_vertices;
 }
@@ -85,7 +85,7 @@ void PointsRenderer::render()
     int vertexLocation = program().attributeLocation("a_position");
     program().setUniformValue("color", m_color);
     program().enableAttributeArray(vertexLocation);
-    glFunctions()->glVertexAttribPointer(vertexLocation, 2, GL_FLOAT, GL_FALSE, sizeof(QVector2D), 0);
+    glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D), 0);
 
     // Draw cube geometry using indices from VBO 1
     glPointSize(m_pointSize);
@@ -102,7 +102,7 @@ void PointsRenderer::uploadVBO(Points *points)
     // Transfer vertex data to VBO 0
     m_vertexCount = points->m_vertices.size();
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
-    glFunctions()->glBufferData(GL_ARRAY_BUFFER, m_vertexCount * sizeof(QVector2D), &points->m_vertices.front(), GL_STATIC_DRAW);
+    glFunctions()->glBufferData(GL_ARRAY_BUFFER, m_vertexCount * sizeof(QVector3D), &points->m_vertices.front(), GL_STATIC_DRAW);
 }
 
 void PointsRenderer::beforeLinkProgram()
