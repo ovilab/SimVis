@@ -26,6 +26,7 @@ ApplicationWindow {
         height: applicationRoot.height - row1.height
         simulator: simulator
         camera: camera
+        backgroundColor: "white"
         Billboards2D {
             id: billboards
             visible: billboardsVisible.checked
