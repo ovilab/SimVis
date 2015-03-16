@@ -3,8 +3,9 @@
 
 #include <QQuickItem>
 #include <QQuickFramebufferObject>
+#include "camera.h"
 
-class Renderable; class Simulator; class SimulatorWorker; class Camera;
+class Renderable; class Simulator; class SimulatorWorker;
 
 class VisualizerRenderer : public QQuickFramebufferObject::Renderer
 {
@@ -53,6 +54,7 @@ signals:
 private:
     Simulator* m_simulator = 0;
     Camera* m_camera = 0;
+    Camera m_defaultCamera;
     QColor m_backgroundColor = QColor(0,0,0,0);
 
     friend class VisualizerRenderer;

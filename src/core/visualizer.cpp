@@ -6,7 +6,8 @@
 #include <QDebug>
 #include <QOpenGLFramebufferObjectFormat>
 
-Visualizer::Visualizer()
+Visualizer::Visualizer() :
+    m_defaultCamera(this)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
@@ -30,7 +31,7 @@ Simulator *Visualizer::simulator() const
 Camera *Visualizer::camera()
 {
     if(!m_camera) {
-        m_camera = new Camera(static_cast<QObject*>(this));
+        m_camera = &m_defaultCamera;
     }
     return m_camera;
 }
