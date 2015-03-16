@@ -34,7 +34,7 @@ ApplicationWindow {
             texture: ":/football.png"
             scale: 0.1
         }
-        Points2D {
+        Points {
             id: points
             visible: pointsVisible.checked
             pointSize: 10.0

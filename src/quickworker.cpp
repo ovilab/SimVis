@@ -1,6 +1,6 @@
 #include "quickworker.h"
 #include "billboards.h"
-#include "points2d.h"
+#include "points.h"
 QuickWorker::QuickWorker()
 {
 
@@ -19,7 +19,7 @@ void QuickWorker::synchronizeRenderer(Renderable *renderableObject)
         return;
     }
 
-    Points2D* points = qobject_cast<Points2D*>(renderableObject);
+    Points* points = qobject_cast<Points*>(renderableObject);
     if(points) {
         points->setPositions(m_positions);
         return;

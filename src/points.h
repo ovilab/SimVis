@@ -1,6 +1,6 @@
 #pragma once
-#ifndef POINTS2D_H
-#define POINTS2D_H
+#ifndef POINTS_H
+#define POINTS_H
 
 #include "renderable.h"
 #include <QtGui/QOpenGLShaderProgram>
@@ -9,17 +9,17 @@
 #include <QColor>
 class Simulator;
 
-class Points2D;
-class Points2DRenderer : public RenderableRenderer
+class Points;
+class PointsRenderer : public RenderableRenderer
 {
     Q_OBJECT
 public:
-    Points2DRenderer();
+    PointsRenderer();
 private:
     virtual void synchronize(Renderable *renderable) override;
     virtual void render() override;
 
-    void uploadVBO(Points2D* points);
+    void uploadVBO(Points* points);
     void beforeLinkProgram() override;
     int m_vertexCount = 0;
     float m_pointSize = 1.0;
@@ -27,15 +27,15 @@ private:
     bool m_isInitialized = false;
 };
 
-class Points2D : public Renderable
+class Points : public Renderable
 {
     Q_OBJECT
     Q_PROPERTY(float pointSize READ pointSize WRITE setPointSize NOTIFY pointSizeChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 
 public:
-    Points2D();
-    ~Points2D();
+    Points();
+    ~Points();
     void setPositions(QVector<QVector2D> &positions);
     QVector<QVector2D> &positions();
     virtual RenderableRenderer* createRenderer();
@@ -57,8 +57,8 @@ private:
     QVector<QVector2D> m_vertices;
     float m_pointSize = 1.0;
     QColor m_color = "red";
-    friend class Points2DRenderer;
+    friend class PointsRenderer;
 };
 
 
-#endif // POINTS2D_H
+#endif // POINTS_H
