@@ -84,6 +84,7 @@ protected:
 //    void copy(const QNode *ref) Q_DECL_OVERRIDE;
 
 private:
+    CameraLensPrivate* d_ptr;
     Q_DECLARE_PRIVATE(CameraLens)
 //    QT3D_CLONEABLE(CameraLens)
 };

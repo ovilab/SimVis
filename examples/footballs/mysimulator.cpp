@@ -128,7 +128,7 @@ void MyWorker::reset()
         vx *= 0.3;
         vy *= 0.3;
 
-        m_positions[i] = QVector3D(x, y, -1);
+        m_positions[i] = QVector3D(x, y, 0);
         m_velocities[i] = QVector2D(vx,vy);
     }
 }

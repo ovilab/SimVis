@@ -22,6 +22,7 @@ CameraLensPrivate::CameraLensPrivate(CameraLens *qq)
 //    : QComponent(*new CameraLensPrivate(this), parent)
 CameraLens::CameraLens(QObject *parent)
     : QObject(parent)
+    , d_ptr(new CameraLensPrivate(this))
 {
     Q_D(CameraLens);
     d->updateProjectionMatrix();

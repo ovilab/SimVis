@@ -10,7 +10,9 @@
 
 Visualizer::Visualizer()
 {
-
+    connect(this, &Visualizer::widthChanged, this, &Visualizer::resetAspectRatio);
+    connect(this, &Visualizer::heightChanged, this, &Visualizer::resetAspectRatio);
+    connect(this, &Visualizer::componentComplete, this, &Visualizer::resetAspectRatio);
 }
 
 Visualizer::~Visualizer()
@@ -100,6 +102,14 @@ void Visualizer::synchronizeWorker(SimulatorWorker *worker)
         }
     }
     update();
+}
+
+void Visualizer::resetAspectRatio()
+{
+    if(width() > 0 && height() > 0) {
+        qDebug() << "Setting aspect ratio to" << width() / height();
+        camera()->setAspectRatio(width() / height());
+    }
 }
 
 void VisualizerRenderer::render()

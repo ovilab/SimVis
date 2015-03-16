@@ -44,6 +44,7 @@ protected:
 
 private:
 //    QT3D_CLONEABLE(LookAtTransform)
+    LookAtTransformPrivate* d_ptr;
     Q_DECLARE_PRIVATE(LookAtTransform)
 };
 

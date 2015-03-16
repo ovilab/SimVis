@@ -44,8 +44,12 @@ void TrackballNavigator::mouseMoveEvent(QMouseEvent *event)
     delta.setX( delta.x() / width());
     delta.setY( delta.y() / height());
 
-    float deltaPan = -delta.x();
-    float deltaTilt = -delta.y();
+    float deltaPan = -delta.x() * 100;
+    float deltaTilt = -delta.y() * 100;
+
+    m_camera->panAboutViewCenter(deltaPan);
+    m_camera->tiltAboutViewCenter(deltaTilt);
+
 //    float pan = m_camera->pan();
 //    float tilt = m_camera->tilt();
 

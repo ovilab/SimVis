@@ -48,6 +48,7 @@ public slots:
 
 private slots:
     void synchronizeWorker(SimulatorWorker* worker);
+    void resetAspectRatio();
 
 signals:
     void simulatorChanged(Simulator* arg);
