@@ -16,16 +16,13 @@ SimpleWorker::SimpleWorker()
     for(auto i=0; i < ballCount; i++) {
         float x =  2.0*(rand() / double(RAND_MAX)) - 1.0;
         float y =  2.0*(rand() / double(RAND_MAX)) - 1.0;
+        float z =  2.0*(rand() / double(RAND_MAX)) - 1.0;
         float vx = 2.0*(rand() / double(RAND_MAX)) - 1.0;
         float vy = 2.0*(rand() / double(RAND_MAX)) - 1.0;
+        float vz = 2.0*(rand() / double(RAND_MAX)) - 1.0;
 
-        x *= 0.5;
-        y *= 0.5;
-        vx *= 0.3;
-        vy *= 0.3;
-
-        m_positions[i] = QVector3D(x, y, 0);
-        m_velocities[i] = QVector3D(vx, vy, 0);
+        m_positions[i] = 0.5 * QVector3D(x, y, z);
+        m_velocities[i] = 0.3 * QVector3D(vx, vy, vz);
     }
 }
 
