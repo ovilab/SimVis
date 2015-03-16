@@ -4,7 +4,8 @@
 #include "../renderables/points.h"
 #include "visualizer.h"
 #include "camera.h"
-
+#include "navigator.h"
+#include "navigators/trackballnavigator.h"
 #include <qqml.h>
 
 void SimVisPlugin::registerTypes(const char *uri)
@@ -17,6 +18,8 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<Points>("SimVis", 1, 0, "Points");
     qmlRegisterType<Visualizer>("SimVis", 1, 0, "Visualizer");
     qmlRegisterType<Camera>("SimVis", 1, 0, "Camera");
+    qmlRegisterType<Navigator>("SimVis", 1, 0, "Navigator");;
+    qmlRegisterType<TrackballNavigator>("SimVis", 1, 0, "TrackballNavigator");;
 }
 
 

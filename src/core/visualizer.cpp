@@ -3,14 +3,17 @@
 #include "../renderables/billboards.h"
 #include "simulator.h"
 #include "camera.h"
+#include "navigator.h"
+#include "../navigators/trackballnavigator.h"
 #include <QDebug>
 #include <QOpenGLFramebufferObjectFormat>
 
 Visualizer::Visualizer() :
     m_defaultCamera(this)
 {
-    setAcceptedMouseButtons(Qt::AllButtons);
-    setAcceptHoverEvents(true);
+    connect(this, &Visualizer::widthChanged, this, &Visualizer::resetAspectRatio);
+    connect(this, &Visualizer::heightChanged, this, &Visualizer::resetAspectRatio);
+    connect(this, &Visualizer::componentComplete, this, &Visualizer::resetAspectRatio);
 }
 
 Visualizer::~Visualizer()
@@ -39,6 +42,14 @@ Camera *Visualizer::camera()
 QColor Visualizer::backgroundColor() const
 {
     return m_backgroundColor;
+}
+
+Navigator *Visualizer::navigator()
+{
+    if(!m_navigator) {
+        m_navigator = new Navigator(camera(), this);
+    }
+    return m_navigator;
 }
 
 void Visualizer::setSimulator(Simulator *arg)
@@ -72,6 +83,15 @@ void Visualizer::setBackgroundColor(QColor arg)
     emit backgroundColorChanged(arg);
 }
 
+void Visualizer::setNavigator(Navigator *arg)
+{
+    if (m_navigator == arg)
+        return;
+
+    m_navigator = arg;
+    emit navigatorChanged(arg);
+}
+
 void Visualizer::synchronizeWorker(SimulatorWorker *worker)
 {
     QList<Renderable*> renderables = findChildren<Renderable*>();
@@ -83,6 +103,14 @@ void Visualizer::synchronizeWorker(SimulatorWorker *worker)
         }
     }
     update();
+}
+
+void Visualizer::resetAspectRatio()
+{
+    if(width() > 0 && height() > 0) {
+        qDebug() << "Setting aspect ratio to" << width() / height();
+        camera()->setAspectRatio(width() / height());
+    }
 }
 
 void VisualizerRenderer::render()

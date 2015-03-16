@@ -25,7 +25,7 @@ void Renderable::requestSynchronize()
     if(!m_renderer) {
         m_renderer = createRenderer();
     }
-    m_renderer->m_modelViewMatrix = m_camera->modelViewMatrix();
+    m_renderer->m_modelViewMatrix = m_camera->matrix();
     m_renderer->m_projectionMatrix = m_camera->projectionMatrix();
     m_renderer->synchronize(this);
 }

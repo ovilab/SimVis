@@ -11,7 +11,7 @@ class Navigator : public QQuickItem
 protected:
     Camera* m_camera = 0;
 public:
-    explicit Navigator(Camera *camera);
+    explicit Navigator(Camera *camera = 0, QQuickItem *parent = 0);
     ~Navigator();
     Camera* camera() const;
 public slots:

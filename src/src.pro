@@ -17,7 +17,9 @@ SOURCES += \
     core/simulator.cpp \
     core/simvisplugin.cpp \
     navigators/trackballnavigator.cpp \
-    core/visualizer.cpp
+    core/visualizer.cpp \
+    core/cameralens.cpp \
+    core/lookattransform.cpp
 
 HEADERS += \
     core/navigator.h \
@@ -29,7 +31,12 @@ HEADERS += \
     renderables/points.h \
     core/simvisplugin.h \
     navigators/trackballnavigator.h \
-    core/visualizer.h
+    core/visualizer.h \
+    core/camera_p.h \
+    core/cameralens.h \
+    core/cameralens_p.h \
+    core/lookattransform.h \
+    core/lookattransform_p.h
 
 DISTFILES = qmldir
 
