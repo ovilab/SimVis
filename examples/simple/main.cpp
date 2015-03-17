@@ -3,12 +3,15 @@
 #include <QtQml>
 #include "simplesimulator.h"
 
+Q_IMPORT_PLUGIN(SimVisPlugin)
+
 int main(int argc, char *argv[])
 {
     qmlRegisterType<SimpleSimulator>("SimpleSimulator", 1, 0, "SimpleSimulator");
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+    engine.addImportPath(":/org.compphys.SimVis/imports");
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     return app.exec();
