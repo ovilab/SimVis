@@ -78,6 +78,9 @@ void PointsRenderer::render()
         return;
     }
 
+    QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
+    program().setUniformValue("modelViewProjectionMatrix", modelViewProjectionMatrix);
+
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
 
@@ -108,9 +111,10 @@ void PointsRenderer::uploadVBO(Points *points)
 void PointsRenderer::beforeLinkProgram()
 {
     program().addShaderFromSourceCode(QOpenGLShader::Vertex,
+                                      "uniform highp mat4 modelViewProjectionMatrix;\n"
                                       "attribute highp vec4 a_position;\n"
                                       "void main() {\n"
-                                      "    gl_Position = a_position;\n"
+                                      "    gl_Position = modelViewProjectionMatrix*a_position;\n"
                                       "}");
 
     program().addShaderFromSourceCode(QOpenGLShader::Fragment,
