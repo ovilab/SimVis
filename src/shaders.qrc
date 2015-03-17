@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>renderables/billboards.vsh</file>
+        <file>renderables/billboards.fsh</file>
+    </qresource>
+</RCC>

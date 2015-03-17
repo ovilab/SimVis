@@ -18,3 +18,5 @@ include(../../library_deployment.pri)
 
 HEADERS += \
     mysimulator.h
+
+DISTFILES +=

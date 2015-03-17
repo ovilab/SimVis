@@ -204,31 +204,8 @@ void Billboards::setPositions(QVector<QVector3D> &positions)
 }
 
 void BillboardsRenderer::beforeLinkProgram() {
-    program().addShaderFromSourceCode(QOpenGLShader::Vertex,
-                                      "uniform highp mat4 modelViewProjectionMatrix;\n"
-                                      "attribute highp vec4 a_position;\n"
-                                      "attribute highp vec3 a_color;\n"
-                                      "attribute highp vec2 a_texcoord;\n"
-                                      "varying highp vec2 coords;\n"
-                                      "varying highp float light;\n"
-                                      "varying highp vec3 color;\n"
-                                      "void main() {\n"
-                                      "    gl_Position = modelViewProjectionMatrix*a_position;\n"
-                                      "    coords = a_texcoord;\n"
-                                      "    color = a_color;\n"
-                                      "}");
-
-    program().addShaderFromSourceCode(QOpenGLShader::Fragment,
-                                      "uniform sampler2D texture;\n"
-                                      "varying highp vec2 coords;\n"
-                                      "varying highp vec3 color;\n"
-                                      "void main() {\n"
-                                      "    vec4 picture = texture2D(texture, coords.st);"
-                                      "    if(picture.a < 0.9) {"
-                                      "        discard;"
-                                      "    }"
-                                      "    gl_FragColor = picture*vec4(color, 1.0);\n"
-                                      "}");
+    program().addShaderFromSourceFile(QOpenGLShader::Vertex, ":/renderables/billboards.vsh");
+    program().addShaderFromSourceFile(QOpenGLShader::Fragment, ":/renderables/billboards.fsh");
 }
 
 void BillboardsRenderer::render()
