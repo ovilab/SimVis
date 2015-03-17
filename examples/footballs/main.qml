@@ -47,6 +47,7 @@ ApplicationWindow {
             visible: billboardsVisible.checked
             texture: ":/football.png"
             scale: 0.1
+            shadowColor: visualizer.backgroundColor
         }
     }
 

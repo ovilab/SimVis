@@ -10,5 +10,5 @@ void main() {
     gl_Position = modelViewProjectionMatrix*a_position;
     coords = a_texcoord;
     color = a_color;
-    light = clamp(0.5*gl_Position.z - 0.5, 0.0, 1.0);
+    light = clamp(2.0 - 0.5*gl_Position.z, 0.0, 1.0);
 }

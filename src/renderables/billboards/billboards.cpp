@@ -8,9 +8,10 @@
 
 #include "../../core/camera.h"
 
-Billboards::Billboards()
+Billboards::Billboards(QObject *parent)
+    : Renderable(parent)
 {
-    m_color = QVector3D(1.0, 1.0, 1.0);
+
 }
 
 Billboards::~Billboards()
@@ -75,6 +76,11 @@ QString Billboards::texture() const
     return m_texture;
 }
 
+QColor Billboards::shadowColor() const
+{
+    return m_shadowColor;
+}
+
 void Billboards::setTexture(QString arg)
 {
     if (m_texture == arg)
@@ -82,6 +88,15 @@ void Billboards::setTexture(QString arg)
 
     m_texture = arg;
     emit textureChanged(arg);
+}
+
+void Billboards::setShadowColor(QColor arg)
+{
+    if (m_shadowColor == arg)
+        return;
+
+    m_shadowColor = arg;
+    emit shadowColorChanged(arg);
 }
 
 BillboardsRenderer::BillboardsRenderer()
@@ -96,6 +111,7 @@ void BillboardsRenderer::synchronize(Renderable* renderer)
     m_upVector = billboards->camera()->upVector().normalized();
     m_viewVector = billboards->camera()->viewVector().normalized();
     m_rightVector = QVector3D::crossProduct(m_viewVector, m_upVector);
+    m_shadowColor = billboards->shadowColor();
 
     if(!m_isInitialized) {
         generateVBOs();
@@ -216,6 +232,7 @@ void BillboardsRenderer::render()
 
     QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
     program().setUniformValue("modelViewProjectionMatrix", modelViewProjectionMatrix);
+    program().setUniformValue("shadowColor", m_shadowColor);
 
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
