@@ -2,7 +2,7 @@ uniform sampler2D texture;
 varying highp vec2 coords;
 varying highp vec3 color;
 void main() {
-    vec4 picture = texture2D(texture, coords.st);
+    highp vec4 picture = texture2D(texture, coords.st);
     if(picture.a < 0.9) {
         discard;
     }
