@@ -6,5 +6,5 @@ void main() {
     if(picture.a < 0.9) {
         discard;
     }
-    gl_FragColor = picture*highp vec4(color, 1.0);
+    gl_FragColor = picture*vec4(color, 1.0);
 }
