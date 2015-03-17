@@ -2,7 +2,7 @@ TEMPLATE = lib
 TARGET = SimVis
 CONFIG += qt plugin c++11
 
-android|ios {
+ios {
     CONFIG += static
 }
 

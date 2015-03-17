@@ -3,11 +3,13 @@ LIB_NAME = SimVis
 LIB_TARGET = $$qtLibraryTarget($$LIB_NAME)
 LIBS += -L$$OUT_PWD/../../dist/$${LIB_NAME} -l$${LIB_TARGET}
 
-android|ios {
+ios {
     CONFIG += static
     DEFINES += STATIC_BUILD
 }
 
+QML_IMPORT_PATH += $$OUT_PWD/../../dist/
+QML2_IMPORT_PATH += $$QML_IMPORT_PATH
 INCLUDEPATH += $$_PRO_FILE_PWD_/../../src
 
 # Deployment of dynamic library
