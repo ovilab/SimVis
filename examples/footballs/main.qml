@@ -36,17 +36,17 @@ ApplicationWindow {
             camera: camera
         }
 
+        Points {
+            id: points
+            visible: pointsVisible.checked
+            pointSize: 10.0
+        }
+
         Billboards {
             id: billboards
             visible: billboardsVisible.checked
             texture: ":/football.png"
             scale: 0.1
-        }
-
-        Points {
-            id: points
-            visible: pointsVisible.checked
-            pointSize: 10.0
         }
     }
 
