@@ -66,8 +66,8 @@ void TrackballNavigator::mouseMoveEvent(QMouseEvent *event)
 
 void TrackballNavigator::wheelEvent(QWheelEvent *event)
 {
-    float effectiveSensitivity = m_zoomSensitivity / 540.0; // Typical deltaY is 120, scale by factor 540
-    float deltaY = event->angleDelta().y() * effectiveSensitivity;
+    float effectiveSensitivity = m_zoomSensitivity / 1080.0; // Typical deltaY is 120, scale by factor 540
+    float deltaY = -event->angleDelta().y() * effectiveSensitivity;
     float factor = exp(deltaY);
     m_camera->setPosition(m_camera->position()*factor);
 }
