@@ -38,7 +38,9 @@ HEADERS += \
     renderables/billboards/billboards.h \
     renderables/points/points.h
 
-DISTFILES = qmldir
+DISTFILES = qmldir \
+    renderables/billboards/billboards_lighted.vsh \
+    renderables/billboards/billboards_lighted.fsh
 
 DESTDIR = $$OUT_PWD/../dist/SimVis
 HEADERS_DESTDIR = $$OUT_PWD/../dist/include
