@@ -23,7 +23,7 @@ private:
     void uploadVBO(Points* points);
     void beforeLinkProgram() override;
     int m_vertexCount = 0;
-    float m_pointSize = 1.0;
+    float m_pointSize = 10.0;
     QVector4D m_color = QVector4D(1.0, 0.0, 0.0, 0.0);
     bool m_isInitialized = false;
 };
@@ -56,7 +56,7 @@ signals:
 
 private:
     QVector<QVector3D> m_vertices;
-    float m_pointSize = 1.0;
+    float m_pointSize = 10.0;
     QColor m_color = "red";
     friend class PointsRenderer;
 };
