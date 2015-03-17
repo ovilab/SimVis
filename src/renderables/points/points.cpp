@@ -92,7 +92,9 @@ void PointsRenderer::render()
     glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D), 0);
 
     // Draw cube geometry using indices from VBO 1
-    // glPointSize(m_pointSize);
+#ifndef Q_OS_ANDROID
+    glPointSize(m_pointSize);
+#endif
     glDrawArrays(GL_POINTS, 0, m_vertexCount);
 
     program().disableAttributeArray(vertexLocation);
@@ -116,7 +118,7 @@ void PointsRenderer::beforeLinkProgram()
                                       "uniform highp float pointSize;\n"
                                       "attribute highp vec4 a_position;\n"
                                       "void main() {\n"
-                                      "    gl_PointSize = pointSize;\n"
+                                      "    gl_PointSize = 10.0;\n"
                                       "    gl_Position = modelViewProjectionMatrix*a_position;\n"
                                       "}");
 

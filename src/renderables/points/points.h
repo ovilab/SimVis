@@ -56,7 +56,7 @@ signals:
 
 private:
     QVector<QVector3D> m_vertices;
-    float m_pointSize = 10.0;
+    float m_pointSize = 100.0;
     QColor m_color = "red";
     friend class PointsRenderer;
 };
