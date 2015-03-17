@@ -12,5 +12,4 @@ public:
     void registerTypes(const char *uri);
 };
 
-
 #endif // SIMVISPLUGIN_H

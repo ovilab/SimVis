@@ -1,6 +1,7 @@
 TEMPLATE = lib
 TARGET = SimVis
 CONFIG += qt plugin c++11
+CONFIG += static
 
 TARGET = $$qtLibraryTarget($$TARGET)
 uri = com.mycompany.qmlcomponents
@@ -43,6 +44,10 @@ DISTFILES = qmldir
 DESTDIR = $$OUT_PWD/../dist/SimVis
 HEADERS_DESTDIR = $$OUT_PWD/../dist/include
 
+RESOURCES += \
+    shaders.qrc
+
+# Used for dynamic builds
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
     copy_qmldir.target = $$DESTDIR/qmldir
     copy_qmldir.depends = $$_PRO_FILE_PWD_/qmldir
@@ -58,6 +63,3 @@ unix {
     target.path = $$installPath
     INSTALLS += target qmldir
 }
-
-RESOURCES += \
-    shaders.qrc
