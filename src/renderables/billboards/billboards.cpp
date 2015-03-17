@@ -6,7 +6,7 @@
 #include <cmath>
 #include <QThread>
 
-#include "../core/camera.h"
+#include "../../core/camera.h"
 
 Billboards::Billboards()
 {
@@ -204,8 +204,8 @@ void Billboards::setPositions(QVector<QVector3D> &positions)
 }
 
 void BillboardsRenderer::beforeLinkProgram() {
-    program().addShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/billboards.vsh");
-    program().addShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/billboards.fsh");
+    program().addShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/billboards/billboards.vsh");
+    program().addShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/billboards/billboards.fsh");
 }
 
 void BillboardsRenderer::render()

@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/org.compphys.SimVis">
-        <file>renderables/billboards.vsh</file>
-        <file>renderables/billboards.fsh</file>
+        <file>renderables/billboards/billboards.vsh</file>
+        <file>renderables/billboards/billboards.fsh</file>
     </qresource>
 </RCC>

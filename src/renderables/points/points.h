@@ -2,7 +2,7 @@
 #ifndef POINTS_H
 #define POINTS_H
 
-#include "../core/renderable.h"
+#include "../../core/renderable.h"
 
 #include <QtGui/QOpenGLShaderProgram>
 #include <QOpenGLFunctions>

@@ -1,6 +1,5 @@
 #include "visualizer.h"
 #include "renderable.h"
-#include "../renderables/billboards.h"
 #include "simulator.h"
 #include "camera.h"
 #include "navigator.h"

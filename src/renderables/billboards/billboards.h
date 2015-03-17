@@ -2,7 +2,7 @@
 #ifndef BILLBOARDS_H
 #define BILLBOARDS_H
 
-#include "../core/renderable.h"
+#include "../../core/renderable.h"
 
 #include <QOpenGLFunctions>
 #include <QOpenGLTexture>

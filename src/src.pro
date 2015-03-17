@@ -8,10 +8,8 @@ uri = com.mycompany.qmlcomponents
 QT += qml quick widgets opengl openglextensions
 
 SOURCES += \
-    renderables/billboards.cpp \
     core/camera.cpp \
     core/navigator.cpp \
-    renderables/points.cpp \
     core/quickworker.cpp \
     core/renderable.cpp \
     core/simulator.cpp \
@@ -19,7 +17,9 @@ SOURCES += \
     navigators/trackballnavigator.cpp \
     core/visualizer.cpp \
     core/cameralens.cpp \
-    core/lookattransform.cpp
+    core/lookattransform.cpp \
+    renderables/billboards/billboards.cpp \
+    renderables/points/points.cpp
 
 HEADERS += \
     core/navigator.h \
@@ -27,8 +27,6 @@ HEADERS += \
     core/renderable.h \
     core/simulator.h \
     core/camera.h \
-    renderables/billboards.h \
-    renderables/points.h \
     core/simvisplugin.h \
     navigators/trackballnavigator.h \
     core/visualizer.h \
@@ -36,7 +34,9 @@ HEADERS += \
     core/cameralens.h \
     core/cameralens_p.h \
     core/lookattransform.h \
-    core/lookattransform_p.h
+    core/lookattransform_p.h \
+    renderables/billboards/billboards.h \
+    renderables/points/points.h
 
 DISTFILES = qmldir
 
