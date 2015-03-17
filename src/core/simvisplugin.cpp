@@ -6,12 +6,18 @@
 #include "camera.h"
 #include "navigator.h"
 #include "navigators/trackballnavigator.h"
+
 #include <qqml.h>
+#include <QQmlEngine>
+
+SimVisPlugin::SimVisPlugin()
+{
+    Q_INIT_RESOURCE(shaders);
+    Q_INIT_RESOURCE(qmldir);
+}
 
 void SimVisPlugin::registerTypes(const char *uri)
 {
-    Q_INIT_RESOURCE(shaders);
-
     // @uri SimVis
     Q_ASSERT(uri == QLatin1String("SimVis"));
     qmlRegisterUncreatableType<Simulator>("SimVis", 1, 0, "Simulator",
@@ -22,6 +28,10 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<Camera>("SimVis", 1, 0, "Camera");
     qmlRegisterType<Navigator>("SimVis", 1, 0, "Navigator");;
     qmlRegisterType<TrackballNavigator>("SimVis", 1, 0, "TrackballNavigator");;
+}
+
+void SimVisPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
+{
 }
 
 
