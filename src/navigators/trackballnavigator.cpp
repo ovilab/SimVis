@@ -13,6 +13,20 @@ TrackballNavigator::~TrackballNavigator()
 
 }
 
+float TrackballNavigator::zoomSensitivity() const
+{
+    return m_zoomSensitivity;
+}
+
+void TrackballNavigator::setZoomSensitivity(float arg)
+{
+    if (m_zoomSensitivity == arg)
+        return;
+
+    m_zoomSensitivity = arg;
+    emit zoomSensitivityChanged(arg);
+}
+
 void TrackballNavigator::keyPressEvent(QKeyEvent *event)
 {
 
@@ -25,13 +39,12 @@ void TrackballNavigator::keyReleaseEvent(QKeyEvent *event)
 
 void TrackballNavigator::mouseReleaseEvent(QMouseEvent *event)
 {
-    qDebug() << "Released mouse";
+
 }
 
 void TrackballNavigator::mousePressEvent(QMouseEvent *event)
 {
     m_lastMousePosition = QVector2D(event->pos().x(), event->pos().y());
-    qDebug() << "Pressed mouse at " << m_lastMousePosition;
 }
 
 void TrackballNavigator::mouseMoveEvent(QMouseEvent *event)
@@ -49,23 +62,14 @@ void TrackballNavigator::mouseMoveEvent(QMouseEvent *event)
 
     m_camera->panAboutViewCenter(deltaPan);
     m_camera->tiltAboutViewCenter(deltaTilt);
-
-//    float pan = m_camera->pan();
-//    float tilt = m_camera->tilt();
-
-//    pan += deltaPan;
-//    tilt += deltaTilt;
-//    tilt = std::max(-90.0f, std::min(90.0f, tilt));
-
-//    m_camera->setPan(pan);
-//    m_camera->setTilt(tilt);
-
-//    qDebug() << "Moved mouse in navigator. Pan: " << pan << " and tilt: " << tilt;
 }
 
 void TrackballNavigator::wheelEvent(QWheelEvent *event)
 {
-
+    float effectiveSensitivity = m_zoomSensitivity / 540.0; // Typical deltaY is 120, scale by factor 540
+    float deltaY = event->angleDelta().y() * effectiveSensitivity;
+    float factor = exp(deltaY);
+    m_camera->setPosition(m_camera->position()*factor);
 }
 
 void TrackballNavigator::touchEvent(QTouchEvent *event)
