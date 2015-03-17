@@ -10,12 +10,6 @@
 #include <qqml.h>
 #include <QQmlEngine>
 
-SimVisPlugin::SimVisPlugin()
-{
-    Q_INIT_RESOURCE(shaders);
-    Q_INIT_RESOURCE(qmldir);
-}
-
 void SimVisPlugin::registerTypes(const char *uri)
 {
     // @uri SimVis

@@ -4,14 +4,14 @@ CONFIG += qt plugin c++11
 
 ios {
     CONFIG += static
+    DEFINES += STATIC_BUILD
+    QMAKE_MOC_OPTIONS += -Muri=SimVis
 }
 
 TARGET = $$qtLibraryTarget($$TARGET)
 uri = com.mycompany.qmlcomponents
 
 QT += qml quick widgets opengl openglextensions
-
-QMAKE_MOC_OPTIONS += -Muri=SimVis
 
 SOURCES += \
     core/camera.cpp \

@@ -9,8 +9,6 @@ class SimVisPlugin : public QQmlExtensionPlugin
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 
 public:
-    SimVisPlugin();
-
     void registerTypes(const char *uri);
 
     // QQmlExtensionInterface interface

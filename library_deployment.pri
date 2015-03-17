@@ -4,8 +4,9 @@ LIB_TARGET = $$qtLibraryTarget($$LIB_NAME)
 LIBS += -L$$OUT_PWD/../../dist/$${LIB_NAME} -l$${LIB_TARGET}
 
 ios {
-    CONFIG += static
-    DEFINES += STATIC_BUILD
+    simvis_lib.files = $$_PRO_FILE_PWD_/../../src/imports/SimVis
+    simvis_lib.path = qt_qml
+    QMAKE_BUNDLE_DATA += simvis_lib
 }
 
 QML_IMPORT_PATH += $$OUT_PWD/../../dist/
