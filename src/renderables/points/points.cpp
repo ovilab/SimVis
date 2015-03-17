@@ -80,6 +80,7 @@ void PointsRenderer::render()
 
     QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
     program().setUniformValue("modelViewProjectionMatrix", modelViewProjectionMatrix);
+    program().setUniformValue("pointSize", m_pointSize);
 
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
@@ -91,7 +92,6 @@ void PointsRenderer::render()
     glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D), 0);
 
     // Draw cube geometry using indices from VBO 1
-    glPointSize(m_pointSize);
     glDrawArrays(GL_POINTS, 0, m_vertexCount);
 
     program().disableAttributeArray(vertexLocation);
@@ -112,8 +112,10 @@ void PointsRenderer::beforeLinkProgram()
 {
     program().addShaderFromSourceCode(QOpenGLShader::Vertex,
                                       "uniform highp mat4 modelViewProjectionMatrix;\n"
+                                      "uniform highp float pointSize;\n"
                                       "attribute highp vec4 a_position;\n"
                                       "void main() {\n"
+                                      "    gl_PointSize = pointSize;\n"
                                       "    gl_Position = modelViewProjectionMatrix*a_position;\n"
                                       "}");
 
