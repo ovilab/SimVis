@@ -121,7 +121,7 @@ void PointsRenderer::beforeLinkProgram()
                                       "}");
 
     program().addShaderFromSourceCode(QOpenGLShader::Fragment,
-                                      "uniform vec4 color;"
+                                      "uniform highp vec4 color;"
                                       "void main() {\n"
                                       "    gl_FragColor = color;\n"
                                       "}");
