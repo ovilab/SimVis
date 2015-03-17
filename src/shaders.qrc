@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/org.compphys.SimVis">
         <file>renderables/billboards.vsh</file>
         <file>renderables/billboards.fsh</file>
     </qresource>
