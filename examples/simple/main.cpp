@@ -1,11 +1,8 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QtQml>
-#include "simplesimulator.h"
 
-#ifdef Q_OS_IOS
-Q_IMPORT_PLUGIN(SimVisPlugin)
-#endif
+#include "simplesimulator.h"
 
 int main(int argc, char *argv[])
 {
