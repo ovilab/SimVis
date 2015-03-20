@@ -25,7 +25,9 @@ SOURCES += \
     core/cameralens.cpp \
     core/lookattransform.cpp \
     renderables/billboards/billboards.cpp \
-    renderables/points/points.cpp
+    renderables/points/points.cpp \
+    renderables/marchingcubes/marchingcubes.cpp \
+    renderables/marchingcubes/marchingcubesgenerator.cpp
 
 HEADERS += \
     core/navigator.h \
@@ -42,7 +44,9 @@ HEADERS += \
     core/lookattransform.h \
     core/lookattransform_p.h \
     renderables/billboards/billboards.h \
-    renderables/points/points.h
+    renderables/points/points.h \
+    renderables/marchingcubes/marchingcubes.h \
+    renderables/marchingcubes/marchingcubesgenerator.h
 
 DISTFILES = qmldir \
     core/simvisplugin.json
