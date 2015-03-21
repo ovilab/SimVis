@@ -132,14 +132,13 @@ void MarchingCubesRenderer::synchronize(Renderable *renderable)
 
 void MarchingCubesRenderer::render()
 {
-    cout << "Rendering" << endl;
     if(m_indexCount == 0) {
         return;
     }
 
     QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
     program().setUniformValue("modelViewProjectionMatrix", modelViewProjectionMatrix);
-    program().setUniformValue("lightPosition", QVector3D(5,0,0));
+    program().setUniformValue("lightPosition", QVector3D(-5,-5,-5));
 
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
@@ -162,7 +161,6 @@ void MarchingCubesRenderer::render()
     glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(MarchingCubesVBOData), (const void *)offset);
 
     // Draw cube geometry using indices from VBO 1
-    qDebug() << "Will draw triangles, num indices: " << m_indexCount;
     glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
 
     program().disableAttributeArray(vertexLocation);
@@ -170,16 +168,13 @@ void MarchingCubesRenderer::render()
 
 void MarchingCubesRenderer::uploadVBOs()
 {
-    cout << "Uploading VBO" << endl;
     if(m_generator.m_data.size() == 0) return;
     // Transfer vertex data to VBO 0
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
     glFunctions()->glBufferData(GL_ARRAY_BUFFER, m_generator.m_data.size() * sizeof(MarchingCubesVBOData), &m_generator.m_data[0], GL_STATIC_DRAW);
-    qDebug() << "We have " << m_generator.m_data.size() << " vertices.";
     // Transfer index data to VBO 1
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
     glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_generator.m_triangles.size() * sizeof(Triangle), &m_generator.m_triangles[0], GL_STATIC_DRAW);
-    qDebug() << "We have " << m_generator.m_triangles.size() << " triangles.";
 
     m_indexCount = 3*m_generator.m_triangles.size();
 }

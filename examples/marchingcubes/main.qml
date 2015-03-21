@@ -22,7 +22,8 @@ ApplicationWindow {
 
         Camera {
             id: camera
-            position: Qt.vector3d(4,4,4)
+            position: Qt.vector3d(10,10,10)
+            fieldOfView: 65
         }
 
         TrackballNavigator {
@@ -33,9 +34,9 @@ ApplicationWindow {
 
         MarchingCubes {
             id: points
-            numVoxels: Qt.vector3d(10, 10, 10)
-            min: Qt.vector3d(-5, -5, -5)
-            max: Qt.vector3d(5, 5, 5)
+            numVoxels: Qt.vector3d(100, 100, 100)
+            min: Qt.vector3d(-10, -10, -10)
+            max: Qt.vector3d(10, 10, 10)
             threshold: 3
         }
     }

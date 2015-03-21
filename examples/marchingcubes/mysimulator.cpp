@@ -23,9 +23,12 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
         if(!m_didSetScalarFieldEvaluator) {
             marchingCubes->setScalarFieldEvaluator([&](const QVector3D vec) {
                 float value = 0;
-                if(vec.x() < -1 || vec.x() > 1) value = 5.0;
-                if(vec.y() < -1 || vec.y() > 1) value = 5.0;
-                if(vec.z() < -1 || vec.z() > 1) value = 5.0;
+                // QVector3D center = QVector3D(5,5,5);
+                // QVector3D newVec = vec - center;
+                if(vec.x() < -3 || vec.x() > 3) value = 5.0;
+                if(vec.y() < -3 || vec.y() > 3) value = 5.0;
+                if(vec.z() < -3 || vec.z() > 3) value = 5.0;
+
 
                 // return vec.lengthSquared();
                 return value;

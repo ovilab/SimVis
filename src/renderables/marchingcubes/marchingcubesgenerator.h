@@ -99,7 +99,7 @@ protected:
     Cube createCube();
     void calculateNormals();
     int getEdgeID(unsigned int i, unsigned int j, unsigned int k, unsigned int nEdgeNo);
-    unsigned int getVertexID(unsigned int nX, unsigned int nY, unsigned int nZ);
+    unsigned int getVertexID(unsigned int i, unsigned int j, unsigned int k);
     QVector3D calculateIntersection(Edge &edge);
     void deleteSurface();
 
