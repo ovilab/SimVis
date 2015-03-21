@@ -91,7 +91,7 @@ protected:
     float m_threshold = 0.0;
     bool m_validSurface = false;
     QVector3D m_numberOfVoxels;
-    function<float(const QVector3D &point)> m_scalarFieldEvaluator;
+    function<float(const QVector3D point)> m_scalarFieldEvaluator;
     QVector<MarchingCubesVBOData> m_data;
     std::vector<Triangle> m_triangles;
     VertexMap m_vertexMap; // Maps getEdgeID's to QVector3D's
@@ -108,8 +108,8 @@ public:
     MarchingCubesGenerator();
     ~MarchingCubesGenerator();
 
-    function<float (const QVector3D &point)> scalarFieldEvaluator() const;
-    void setScalarFieldEvaluator(const function<float (const QVector3D &point)> &scalarFieldEvaluator);
+    function<float (const QVector3D point)> scalarFieldEvaluator() const;
+    void setScalarFieldEvaluator(const function<float (const QVector3D point)> &scalarFieldEvaluator);
     void generateSurface(QVector3D minValues, QVector3D maxValues, QVector3D numberOfVoxels, float threshold);
 
     float threshold() const;

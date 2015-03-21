@@ -2,6 +2,8 @@ TEMPLATE = lib
 TARGET = SimVis
 CONFIG += qt plugin c++11
 
+QMAKE_CXXFLAGS += -g
+
 ios {
     CONFIG += static
     DEFINES += STATIC_BUILD
@@ -46,7 +48,10 @@ HEADERS += \
     renderables/billboards/billboards.h \
     renderables/points/points.h \
     renderables/marchingcubes/marchingcubes.h \
-    renderables/marchingcubes/marchingcubesgenerator.h
+    renderables/marchingcubes/marchingcubesgenerator.h \
+    SimVis/Billboards \
+    SimVis/Points \
+    SimVis/MarchingCubes
 
 DISTFILES = qmldir \
     core/simvisplugin.json

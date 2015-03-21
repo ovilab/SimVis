@@ -11,6 +11,8 @@
 #include <QVector3D>
 #include <QHash>
 #include <QDebug>
+#include <iostream>
+using namespace std;
 
 const unsigned int MarchingCubesGenerator::m_edgeTable[256] = {
     0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
@@ -348,16 +350,19 @@ Cube MarchingCubesGenerator::createCube() {
 
     cube.edges.edge11.point1 = &cube.vertices.v_100; // Vertex 3
     cube.edges.edge11.point2 = &cube.vertices.v_101; // Vertex 7
+
+    return cube;
 }
 
 
-function<float (const QVector3D &point)> MarchingCubesGenerator::scalarFieldEvaluator() const
+function<float (const QVector3D point)> MarchingCubesGenerator::scalarFieldEvaluator() const
 {
     return m_scalarFieldEvaluator;
 }
 
-void MarchingCubesGenerator::setScalarFieldEvaluator(const function<float (const QVector3D &point)> &scalarFieldEvaluator)
+void MarchingCubesGenerator::setScalarFieldEvaluator(const function<float (const QVector3D point)> &scalarFieldEvaluator)
 {
+    cout << "Setting scalar field evaluator" << endl;
     m_scalarFieldEvaluator = scalarFieldEvaluator;
 }
 
@@ -380,6 +385,7 @@ void MarchingCubesGenerator::setNumberOfVoxels(const QVector3D &numberOfVoxels)
 {
     m_numberOfVoxels = numberOfVoxels;
 }
+
 void MarchingCubesGenerator::updateCube(Cube &cube, QVector3D point, QVector3D delta) {
     cube.vertices.v_000.coordinates = point;
     cube.vertices.v_001.coordinates = point; cube.vertices.v_001.coordinates[2] += delta[2];
@@ -403,7 +409,7 @@ void MarchingCubesGenerator::updateCube(Cube &cube, QVector3D point, QVector3D d
 MarchingCubesGenerator::MarchingCubesGenerator()
 {
     m_scalarFieldEvaluator = [](const QVector3D point) {
-        qDebug() << "Scalar field evaluator not set in MarchingCubesGenerator. Aborting!";
+        cout << "Scalar field evaluator not set in MarchingCubesGenerator. Aborting!" << endl;;
         return 0;
     };
 }
@@ -415,17 +421,22 @@ MarchingCubesGenerator::~MarchingCubesGenerator()
 
 void MarchingCubesGenerator::generateSurface(QVector3D minValues, QVector3D maxValues, QVector3D numberOfVoxels, float threshold)
 {
+    cout << "Generating surface" << endl;
+
     if (m_validSurface) deleteSurface();
     float dx = (maxValues[0] - minValues[0]) / numberOfVoxels[0];
     float dy = (maxValues[1] - minValues[1]) / numberOfVoxels[1];
     float dz = (maxValues[2] - minValues[2]) / numberOfVoxels[2];
     QVector3D delta(dx, dy, dz);
-
     m_threshold = threshold;
     m_numberOfVoxels = numberOfVoxels;
 
+    qDebug() << "Min: " << minValues << " and max: " << maxValues << " and numVoxels: " << numberOfVoxels << " gives delta: " << delta;
+    qDebug() << "Threshold: " << threshold;
+
     // Generate isosurface.
     Cube cube = createCube();
+
     CubeVertices &cubeVertices = cube.vertices;
     CubeEdges &cubeEdges = cube.edges;
     unsigned int maxUsedEdgeId = 0;
@@ -577,7 +588,14 @@ void MarchingCubesGenerator::generateSurface(QVector3D minValues, QVector3D maxV
     }
 
     vertexMap.clear();
+    /*
+    m_data.resize(3);
+    m_data[0].vertex = QVector3D(0,0,0);
+    m_data[1].vertex = QVector3D(1,0,-1);
+    m_data[2].vertex = QVector3D(0,1,-2);
+    */
     calculateNormals();
+    m_triangles.push_back(Triangle(0, 1, 2));
     m_validSurface = true;
 }
 

@@ -36,7 +36,8 @@ protected:
     QVector3D m_min;
     QVector3D m_max;
     bool m_dirty;
-    function<float(const QVector3D &point)> m_scalarFieldEvaluator;
+    bool m_hasScalarField = false;
+    function<float(const QVector3D point)> m_scalarFieldEvaluator;
 
 public:
     MarchingCubes();
@@ -48,9 +49,9 @@ public:
     QVector3D max() const;
     bool dirty() const;
     QVector3D numVoxels() const;
-
-    function<float (const QVector3D &point)> scalarFieldEvaluator() const;
-    void setScalarFieldEvaluator(const function<float (const QVector3D &point)> &scalarFieldEvaluator);
+    bool hasScalarField() const;
+    function<float (const QVector3D point)> scalarFieldEvaluator() const;
+    void setScalarFieldEvaluator(const function<float (const QVector3D point)> &scalarFieldEvaluator);
 
 public slots:
     void setThreshold(float arg);
