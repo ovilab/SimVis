@@ -13,6 +13,7 @@
 
 #include <map>
 #include <array>
+#include <vector>
 #include <QVector>
 #include <functional>
 #include <QVector3D>
@@ -20,89 +21,105 @@
 
 using std::function;
 
-struct POINT3DID {
-    unsigned int newID;
-    float x, y, z;
+struct Vertex {
+    QVector3D coordinates;
+    float value;
+    float x() { return coordinates.x(); }
+    float y() { return coordinates.y(); }
+    float z() { return coordinates.z(); }
 };
 
-typedef std::map<unsigned int, POINT3DID> ID2POINT3DID;
+struct Edge {
+    Vertex *point1;
+    Vertex *point2;
+};
+
+struct CubeEdges {
+    // See http://paulbourke.net/geometry/polygonise/ for figure
+    Edge edge0;
+    Edge edge1;
+    Edge edge2;
+    Edge edge3;
+    Edge edge4;
+    Edge edge5;
+    Edge edge6;
+    Edge edge7;
+    Edge edge8;
+    Edge edge9;
+    Edge edge10;
+    Edge edge11;
+};
+
+
+struct CubeVertices {
+    // See http://paulbourke.net/geometry/polygonise/ for figure
+    Vertex v_000; // Corresponds to vertex 0
+    Vertex v_001; // Corresponds to vertex 4
+    Vertex v_011; // Corresponds to vertex 5
+    Vertex v_010; // Corresponds to vertex 1
+    Vertex v_110; // Corresponds to vertex 2
+    Vertex v_111; // Corresponds to vertex 6
+    Vertex v_101; // Corresponds to vertex 7
+    Vertex v_100; // Corresponds to vertex 3
+};
+
+struct Cube {
+    CubeVertices vertices;
+    CubeEdges edges;
+};
+
+struct MarchingCubesVBOData {
+    QVector3D vertex;
+    QVector3D normal;
+};
 
 struct Triangle {
-    unsigned int pointID[3];
+    unsigned int vertexIndices[3];
+    Triangle(unsigned int index1, unsigned int index2, unsigned int index3) {
+        vertexIndices[0] = index1;
+        vertexIndices[1] = index2;
+        vertexIndices[2] = index3;
+    }
 };
 
-typedef QVector<Triangle> TRIANGLEVECTOR;
+typedef std::map<unsigned int, QVector3D> VertexMap;
+
+class MarchingCubesRenderer;
 
 class MarchingCubesGenerator {
 protected:
-    float m_isoValue = 0.0;
+    float m_threshold = 0.0;
     bool m_validSurface = false;
-    QVector<QPair<unsigned int> > m_edgePoints;
-    function<float(float x, float y, float z)> m_scalarFieldEvaluator;
-private:
-    void createEdgePointTable();
-public:
-    MarchingCubesGenerator(function<float(float x, float y, float z)> scalarFieldEvaluator, float isoValue = 0.0);
-    ~MarchingCubesGenerator();
-
-    // Generates the isosurface from the scalar field contained in scalarField array
-    void generateSurface(QVector3D minValues, QVector3D maxValues, QVector3D numberOfCells);
-
-    // Returns true if a valid surface has been generated.
-    bool isSurfaceValid();
-
-    // Deletes the isosurface.
+    QVector3D m_numberOfVoxels;
+    function<float(const QVector3D &point)> m_scalarFieldEvaluator;
+    QVector<MarchingCubesVBOData> m_data;
+    std::vector<Triangle> m_triangles;
+    VertexMap m_vertexMap; // Maps getEdgeID's to QVector3D's
+    void updateCube(Cube &cube, QVector3D point, QVector3D delta);
+    Cube createCube();
+    void calculateNormals();
+    int getEdgeID(unsigned int i, unsigned int j, unsigned int k, unsigned int nEdgeNo);
+    unsigned int getVertexID(unsigned int nX, unsigned int nY, unsigned int nZ);
+    QVector3D calculateIntersection(Edge &edge);
     void deleteSurface();
 
-    // The number of vertices which make up the isosurface.
-    unsigned int m_nVertices;
+    friend class MarchingCubesRenderer;
+public:
+    MarchingCubesGenerator();
+    ~MarchingCubesGenerator();
 
-    // The vertices which make up the isosurface.
-    QArray<QVector3D> m_ppt3dVertices;
+    function<float (const QVector3D &point)> scalarFieldEvaluator() const;
+    void setScalarFieldEvaluator(const function<float (const QVector3D &point)> &scalarFieldEvaluator);
+    void generateSurface(QVector3D minValues, QVector3D maxValues, QVector3D numberOfVoxels, float threshold);
 
-    // The number of triangles which make up the isosurface.
-    unsigned int m_nTriangles;
-
-    // The indices of the vertices which make up the triangles.
-    QArray<std::array<unsigned int, 3> > m_piTriangleIndices;
-
-    // The number of normals.
-    unsigned int m_nNormals;
-
-    // The normals.
-    QArray<QVector3D> m_pvec3dNormals;
-
-    // List of POINT3Ds which form the isosurface.
-    ID2POINT3DID m_i2pt3idVertices;
-
-    // List of TRIANGLES which form the triangulation of the isosurface.
-    TRIANGLEVECTOR m_trivecTriangles;
-
-    // Returns the edge ID.
-    unsigned int getEdgeID(unsigned int nX, unsigned int nY, unsigned int nZ, unsigned int nEdgeNo);
-
-    // Returns the vertex ID.
-    unsigned int getVertexID(unsigned int nX, unsigned int nY, unsigned int nZ);
-
-    // Calculates the intersection point of the isosurface with an
-    // edge.
-    POINT3DID calculateIntersection(const QVector3D &point, const QVector3D &delta, unsigned int edgeNumber);
-
-    // Interpolates between two grid points to produce the point at which
-    // the isosurface intersects an edge.
-    POINT3DID interpolate(float fX1, float fY1, float fZ1, float fX2, float fY2, float fZ2, T tVal1, T tVal2);
-
-    // Renames vertices and triangles so that they can be accessed more
-    // efficiently.
-    void renameVerticesAndTriangles();
-
-    // Calculates the normals.
-    void calculateNormals();
+    float threshold() const;
+    void setThreshold(float threshold);
+    QVector3D numberOfVoxels() const;
+    void setNumberOfVoxels(const QVector3D &numberOfVoxels);
 
     // Lookup tables used in the construction of the isosurface.
     static const unsigned int m_edgeTable[256];
-    static const int m_triTable[256][16];
-    static const float m_cubeTable[12][2][3];
+    static const int m_triangleTable[256][16];
 };
 
 #endif // MARCHINGCUBESGENERATOR_H

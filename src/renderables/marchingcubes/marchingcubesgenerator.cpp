@@ -9,17 +9,8 @@
 #include "marchingcubesgenerator.h"
 #include <cmath>
 #include <QVector3D>
-
-struct CubeValues {
-    float v_000;
-    float v_001;
-    float v_011;
-    float v_010;
-    float v_110;
-    float v_100;
-    float v_101;
-    float v_111;
-};
+#include <QHash>
+#include <QDebug>
 
 const unsigned int MarchingCubesGenerator::m_edgeTable[256] = {
     0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
@@ -56,7 +47,7 @@ const unsigned int MarchingCubesGenerator::m_edgeTable[256] = {
     0x70c, 0x605, 0x50f, 0x406, 0x30a, 0x203, 0x109, 0x0
 };
 
-const int MarchingCubesGenerator::m_triTable[256][16] = {
+const int MarchingCubesGenerator::m_triangleTable[256][16] = {
     {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
     {0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
     {0, 1, 9, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
@@ -315,59 +306,106 @@ const int MarchingCubesGenerator::m_triTable[256][16] = {
     {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
 };
 
-void MarchingCubesGenerator::createEdgePointTable() {
-    QPair<QVector3D> edge0 = QPair(QVector3D(0,0,0), QVector3D(0,1,0));
-    QPair<QVector3D> edge1 = QPair(QVector3D(0,1,0), QVector3D(1,1,0));
-    QPair<QVector3D> edge2 = QPair(QVector3D(1,1,0), QVector3D(1,0,0));
-    QPair<QVector3D> edge3 = QPair(QVector3D(1,0,0), QVector3D(0,0,0));
+Cube MarchingCubesGenerator::createCube() {
+    // See http://paulbourke.net/geometry/polygonise/ for figure
+    Cube cube;
 
-    QPair<QVector3D> edge4 = QPair(QVector3D(0,0,1), QVector3D(0,1,1));
-    QPair<QVector3D> edge5 = QPair(QVector3D(0,1,1), QVector3D(1,1,1));
-    QPair<QVector3D> edge6 = QPair(QVector3D(1,1,1), QVector3D(1,0,1));
-    QPair<QVector3D> edge7 = QPair(QVector3D(1,0,1), QVector3D(0,0,1));
+    // Create edges
+    cube.edges.edge0.point1 = &cube.vertices.v_000; // Vertex 0
+    cube.edges.edge0.point2 = &cube.vertices.v_010; // Vertex 1
 
-    QPair<QVector3D> edge8 = QPair(QVector3D(0,0,0), QVector3D(0,0,1));
-    QPair<QVector3D> edge9 = QPair(QVector3D(0,1,0), QVector3D(0,1,1));
-    QPair<QVector3D> edge10 = QPair(QVector3D(1,1,0), QVector3D(1,1,1));
-    QPair<QVector3D> edge11 = QPair(QVector3D(1,0,0), QVector3D(1,0,1));
+    cube.edges.edge1.point1 = &cube.vertices.v_010; // Vertex 0
+    cube.edges.edge1.point2 = &cube.vertices.v_110; // Vertex 2
 
-    m_edgePoints.push_back(edge0);
-    m_edgePoints.push_back(edge1);
-    m_edgePoints.push_back(edge2);
-    m_edgePoints.push_back(edge3);
-    m_edgePoints.push_back(edge4);
-    m_edgePoints.push_back(edge5);
-    m_edgePoints.push_back(edge6);
-    m_edgePoints.push_back(edge7);
-    m_edgePoints.push_back(edge8);
-    m_edgePoints.push_back(edge9);
-    m_edgePoints.push_back(edge10);
-    m_edgePoints.push_back(edge11);
+    cube.edges.edge2.point1 = &cube.vertices.v_110; // Vertex 2
+    cube.edges.edge2.point2 = &cube.vertices.v_100; // Vertex 3
 
-    m_edgePointIndices.push_back(QPair<unsigned int>());
-    const float MarchingCubesGenerator::m_cubeTable[12][2][3] = {
-        { {0,0,0}, {0, 1, 0} },
-        { {0,1,0}, {1, 1, 0} },
-        { {1,1,0}, {1, 0, 0} },
-        { {1,0,0}, {0, 0, 0} },
+    cube.edges.edge3.point1 = &cube.vertices.v_100; // Vertex 3
+    cube.edges.edge3.point2 = &cube.vertices.v_000; // Vertex 0
 
-        { {0,0,1}, {0, 1, 1} },
-        { {0,1,1}, {1, 1, 1} },
-        { {1,1,1}, {1, 0, 1} },
-        { {1,0,1}, {0, 0, 1} },
 
-        { {0,0,0}, {0, 0, 1} },
-        { {0,1,0}, {0, 1, 1} },
-        { {1,1,0}, {1, 1, 1} },
-        { {1,0,0}, {1, 0, 1} }
-    };
+    cube.edges.edge4.point1 = &cube.vertices.v_001; // Vertex 4
+    cube.edges.edge4.point2 = &cube.vertices.v_011; // Vertex 5
+
+    cube.edges.edge5.point1 = &cube.vertices.v_011; // Vertex 5
+    cube.edges.edge5.point2 = &cube.vertices.v_111; // Vertex 6
+
+    cube.edges.edge6.point1 = &cube.vertices.v_111; // Vertex 6
+    cube.edges.edge6.point2 = &cube.vertices.v_101; // Vertex 7
+
+    cube.edges.edge7.point1 = &cube.vertices.v_101; // Vertex 7
+    cube.edges.edge7.point2 = &cube.vertices.v_001; // Vertex 4
+
+
+    cube.edges.edge8.point1 = &cube.vertices.v_000; // Vertex 0
+    cube.edges.edge8.point2 = &cube.vertices.v_001; // Vertex 4
+
+    cube.edges.edge9.point1 = &cube.vertices.v_010; // Vertex 1
+    cube.edges.edge9.point2 = &cube.vertices.v_011; // Vertex 5
+
+    cube.edges.edge10.point1 = &cube.vertices.v_110; // Vertex 2
+    cube.edges.edge10.point2 = &cube.vertices.v_111; // Vertex 6
+
+    cube.edges.edge11.point1 = &cube.vertices.v_100; // Vertex 3
+    cube.edges.edge11.point2 = &cube.vertices.v_101; // Vertex 7
 }
 
-MarchingCubesGenerator::MarchingCubesGenerator(function<float(float, float, float)> scalarFieldEvaluator, float isoValue) :
-    m_isoValue(isoValue),
-    m_scalarFieldEvaluator(scalarFieldEvaluator)
+
+function<float (const QVector3D &point)> MarchingCubesGenerator::scalarFieldEvaluator() const
 {
-    createEdgePointTable();
+    return m_scalarFieldEvaluator;
+}
+
+void MarchingCubesGenerator::setScalarFieldEvaluator(const function<float (const QVector3D &point)> &scalarFieldEvaluator)
+{
+    m_scalarFieldEvaluator = scalarFieldEvaluator;
+}
+
+float MarchingCubesGenerator::threshold() const
+{
+    return m_threshold;
+}
+
+void MarchingCubesGenerator::setThreshold(float threshold)
+{
+    m_threshold = threshold;
+}
+
+QVector3D MarchingCubesGenerator::numberOfVoxels() const
+{
+    return m_numberOfVoxels;
+}
+
+void MarchingCubesGenerator::setNumberOfVoxels(const QVector3D &numberOfVoxels)
+{
+    m_numberOfVoxels = numberOfVoxels;
+}
+void MarchingCubesGenerator::updateCube(Cube &cube, QVector3D point, QVector3D delta) {
+    cube.vertices.v_000.coordinates = point;
+    cube.vertices.v_001.coordinates = point; cube.vertices.v_001.coordinates[2] += delta[2];
+    cube.vertices.v_011.coordinates = point; cube.vertices.v_011.coordinates[1] += delta[1]; cube.vertices.v_011.coordinates[2] += delta[2];
+    cube.vertices.v_010.coordinates = point; cube.vertices.v_010.coordinates[1] += delta[1];
+    cube.vertices.v_110.coordinates = point; cube.vertices.v_110.coordinates[0] += delta[0]; cube.vertices.v_110.coordinates[1] += delta[1];
+    cube.vertices.v_111.coordinates = point; cube.vertices.v_111.coordinates[0] += delta[0]; cube.vertices.v_111.coordinates[1] += delta[1];  cube.vertices.v_111.coordinates[2] += delta[2];
+    cube.vertices.v_101.coordinates = point; cube.vertices.v_101.coordinates[0] += delta[0]; cube.vertices.v_101.coordinates[2] += delta[2];
+    cube.vertices.v_100.coordinates = point; cube.vertices.v_100.coordinates[0] += delta[0];
+
+    cube.vertices.v_000.value = m_scalarFieldEvaluator(cube.vertices.v_000.coordinates);
+    cube.vertices.v_001.value = m_scalarFieldEvaluator(cube.vertices.v_001.coordinates);
+    cube.vertices.v_011.value = m_scalarFieldEvaluator(cube.vertices.v_011.coordinates);
+    cube.vertices.v_010.value = m_scalarFieldEvaluator(cube.vertices.v_010.coordinates);
+    cube.vertices.v_110.value = m_scalarFieldEvaluator(cube.vertices.v_110.coordinates);
+    cube.vertices.v_111.value = m_scalarFieldEvaluator(cube.vertices.v_111.coordinates);
+    cube.vertices.v_101.value = m_scalarFieldEvaluator(cube.vertices.v_101.coordinates);
+    cube.vertices.v_100.value = m_scalarFieldEvaluator(cube.vertices.v_100.coordinates);
+}
+
+MarchingCubesGenerator::MarchingCubesGenerator()
+{
+    m_scalarFieldEvaluator = [](const QVector3D point) {
+        qDebug() << "Scalar field evaluator not set in MarchingCubesGenerator. Aborting!";
+        return 0;
+    };
 }
 
 MarchingCubesGenerator::~MarchingCubesGenerator()
@@ -375,325 +413,263 @@ MarchingCubesGenerator::~MarchingCubesGenerator()
     deleteSurface();
 }
 
-void MarchingCubesGenerator::generateSurface(QVector3D minValues, QVector3D maxValues, QVector3D numberOfCells)
+void MarchingCubesGenerator::generateSurface(QVector3D minValues, QVector3D maxValues, QVector3D numberOfVoxels, float threshold)
 {
     if (m_validSurface) deleteSurface();
-
-    float dx = (maxValues[0] - minValues[0]) / numberOfCells[0];
-    float dy = (maxValues[1] - minValues[1]) / numberOfCells[1];
-    float dz = (maxValues[2] - minValues[2]) / numberOfCells[2];
+    float dx = (maxValues[0] - minValues[0]) / numberOfVoxels[0];
+    float dy = (maxValues[1] - minValues[1]) / numberOfVoxels[1];
+    float dz = (maxValues[2] - minValues[2]) / numberOfVoxels[2];
     QVector3D delta(dx, dy, dz);
 
-    // Generate isosurface.
-    CubeValues cubeValues;
+    m_threshold = threshold;
+    m_numberOfVoxels = numberOfVoxels;
 
-    for (float x = minValues[0]; x < maxValues[0]; x+=dx) {
-        for (float y = minValues[1]; y < maxValues[1]; y+=dy) {
-            for (float z = minValues[2]; z < maxValues[2]; z+=dz) {
+    // Generate isosurface.
+    Cube cube = createCube();
+    CubeVertices &cubeVertices = cube.vertices;
+    CubeEdges &cubeEdges = cube.edges;
+    unsigned int maxUsedEdgeId = 0;
+
+    for (unsigned int i = 0; i < numberOfVoxels[0]; i++) {
+        for (unsigned int j = 0; j < numberOfVoxels[1]; j++) {
+            for (unsigned int k = 0; k < numberOfVoxels[2]; k++) {
+                float x = minValues[0] + i*dx;
+                float y = minValues[1] + j*dy;
+                float z = minValues[2] + k*dz;
+
                 QVector3D point(x,y,z);
+                updateCube(cube, point, delta);
 
                 // Calculate table lookup index from those
                 // vertices which are below the isolevel.
                 unsigned int tableIndex = 0;
-                cubeValues.v_000 = m_scalarFieldEvaluator(x,y,z);
-                cubeValues.v_001 = m_scalarFieldEvaluator(x,y,z+dz);
-                cubeValues.v_011 = m_scalarFieldEvaluator(x,y+dy,z+dz);
-                cubeValues.v_010 = m_scalarFieldEvaluator(x,y+dy,z);
-                cubeValues.v_110 = m_scalarFieldEvaluator(x+dx,y+dy,z);
-                cubeValues.v_111 = m_scalarFieldEvaluator(x+dx,y+dy,z+dz);
-                cubeValues.v_101 = m_scalarFieldEvaluator(x+dx,y,z+dz);
 
-                if (cubeValues.v_000 <= m_isoValue) tableIndex |= 1;
-                if (cubeValues.v_010 <= m_isoValue) tableIndex |= 2;
-                if (cubeValues.v_110 <= m_isoValue) tableIndex |= 4;
-                if (cubeValues.v_100 <= m_isoValue) tableIndex |= 8;
-                if (cubeValues.v_001 <= m_isoValue) tableIndex |= 16;
-                if (cubeValues.v_011 <= m_isoValue) tableIndex |= 32;
-                if (cubeValues.v_111 <= m_isoValue) tableIndex |= 64;
-                if (cubeValues.v_101 <= m_isoValue) tableIndex |= 128;
+
+                if (cubeVertices.v_000.value <= m_threshold) tableIndex |= 1;
+                if (cubeVertices.v_010.value <= m_threshold) tableIndex |= 2;
+                if (cubeVertices.v_110.value <= m_threshold) tableIndex |= 4;
+                if (cubeVertices.v_100.value <= m_threshold) tableIndex |= 8;
+                if (cubeVertices.v_001.value <= m_threshold) tableIndex |= 16;
+                if (cubeVertices.v_011.value <= m_threshold) tableIndex |= 32;
+                if (cubeVertices.v_111.value <= m_threshold) tableIndex |= 64;
+                if (cubeVertices.v_101.value <= m_threshold) tableIndex |= 128;
 
                 // Now create a triangulation of the isosurface in this cell.
                 if (m_edgeTable[tableIndex] != 0) {
+
                     if (m_edgeTable[tableIndex] & 8) {
-                        POINT3DID pt = calculateIntersection(x, y, z, 3, scalarField);
-                        unsigned int id = getEdgeID(x, y, z, 3);
-                        m_i2pt3idVertices.insert(ID2POINT3DID::value_type(id, pt));
-                    }
-                    if (m_edgeTable[tableIndex] & 1) {
-                        POINT3DID pt = calculateIntersection(x, y, z, 0, scalarField);
-                        unsigned int id = getEdgeID(x, y, z, 0);
-                        m_i2pt3idVertices.insert(ID2POINT3DID::value_type(id, pt));
-                    }
-                    if (m_edgeTable[tableIndex] & 256) {
-                        POINT3DID pt = calculateIntersection(x, y, z, 8, scalarField);
-                        unsigned int id = getEdgeID(x, y, z, 8);
-                        m_i2pt3idVertices.insert(ID2POINT3DID::value_type(id, pt));
+                        QVector3D intersectionPoint = calculateIntersection(cubeEdges.edge3);
+                        unsigned int id = getEdgeID(i, j, k, 3);
+                        m_vertexMap.insert(VertexMap::value_type(id, intersectionPoint));
                     }
 
-                    if (x == m_nCellsX - 1) {
+                    if (m_edgeTable[tableIndex] & 1) {
+                        QVector3D intersectionPoint = calculateIntersection(cubeEdges.edge0);
+                        unsigned int id = getEdgeID(x, y, z, 0);
+                        m_vertexMap.insert(VertexMap::value_type(id, intersectionPoint));
+                    }
+
+                    if (m_edgeTable[tableIndex] & 256) {
+                        QVector3D intersectionPoint = calculateIntersection(cubeEdges.edge8);
+                        unsigned int id = getEdgeID(x, y, z, 8);
+                        m_vertexMap.insert(VertexMap::value_type(id, intersectionPoint));
+                    }
+
+                    if (i == m_numberOfVoxels[0] - 1) {
                         if (m_edgeTable[tableIndex] & 4) {
-                            POINT3DID pt = calculateIntersection(x, y, z, 2, scalarField);
+                            QVector3D intersectionPoint = calculateIntersection(cubeEdges.edge2);
                             unsigned int id = getEdgeID(x, y, z, 2);
-                            m_i2pt3idVertices.insert(ID2POINT3DID::value_type(id, pt));
+                            m_vertexMap.insert(VertexMap::value_type(id, intersectionPoint));
                         }
                         if (m_edgeTable[tableIndex] & 2048) {
-                            POINT3DID pt = calculateIntersection(x, y, z, 11, scalarField);
+                            QVector3D intersectionPoint = calculateIntersection(cubeEdges.edge11);
                             unsigned int id = getEdgeID(x, y, z, 11);
-                            m_i2pt3idVertices.insert(ID2POINT3DID::value_type(id, pt));
+                            m_vertexMap.insert(VertexMap::value_type(id, intersectionPoint));
                         }
                     }
-                    if (y == m_nCellsY - 1) {
+
+                    if (j == m_numberOfVoxels[1] - 1) {
                         if (m_edgeTable[tableIndex] & 2) {
-                            POINT3DID pt = calculateIntersection(x, y, z, 1, scalarField);
+                            QVector3D intersectionPoint = calculateIntersection(cubeEdges.edge1);
                             unsigned int id = getEdgeID(x, y, z, 1);
-                            m_i2pt3idVertices.insert(ID2POINT3DID::value_type(id, pt));
+                            m_vertexMap.insert(VertexMap::value_type(id, intersectionPoint));
                         }
                         if (m_edgeTable[tableIndex] & 512) {
-                            POINT3DID pt = calculateIntersection(x, y, z, 9, scalarField);
+                            QVector3D intersectionPoint = calculateIntersection(cubeEdges.edge9);
                             unsigned int id = getEdgeID(x, y, z, 9);
-                            m_i2pt3idVertices.insert(ID2POINT3DID::value_type(id, pt));
+                            m_vertexMap.insert(VertexMap::value_type(id, intersectionPoint));
                         }
                     }
-                    if (z == m_nCellsZ - 1) {
+
+                    if (k == m_numberOfVoxels[2] - 1) {
                         if (m_edgeTable[tableIndex] & 16) {
-                            POINT3DID pt = calculateIntersection(x, y, z, 4, scalarField);
+                            QVector3D intersectionPoint = calculateIntersection(cubeEdges.edge4);
                             unsigned int id = getEdgeID(x, y, z, 4);
-                            m_i2pt3idVertices.insert(ID2POINT3DID::value_type(id, pt));
+                            m_vertexMap.insert(VertexMap::value_type(id, intersectionPoint));
                         }
                         if (m_edgeTable[tableIndex] & 128) {
-                            POINT3DID pt = calculateIntersection(x, y, z, 7, scalarField);
+                            QVector3D intersectionPoint = calculateIntersection(cubeEdges.edge7);
                             unsigned int id = getEdgeID(x, y, z, 7);
-                            m_i2pt3idVertices.insert(ID2POINT3DID::value_type(id, pt));
+                            m_vertexMap.insert(VertexMap::value_type(id, intersectionPoint));
                         }
                     }
-                    if ((x==m_nCellsX - 1) && (y==m_nCellsY - 1))
-                        if (m_edgeTable[tableIndex] & 1024) {
-                            POINT3DID pt = calculateIntersection(x, y, z, 10, scalarField);
-                            unsigned int id = getEdgeID(x, y, z, 10);
-                            m_i2pt3idVertices.insert(ID2POINT3DID::value_type(id, pt));
-                        }
-                    if ((x==m_nCellsX - 1) && (z==m_nCellsZ - 1))
-                        if (m_edgeTable[tableIndex] & 64) {
-                            POINT3DID pt = calculateIntersection(x, y, z, 6, scalarField);
-                            unsigned int id = getEdgeID(x, y, z, 6);
-                            m_i2pt3idVertices.insert(ID2POINT3DID::value_type(id, pt));
-                        }
-                    if ((y==m_nCellsY - 1) && (z==m_nCellsZ - 1))
-                        if (m_edgeTable[tableIndex] & 32) {
-                            POINT3DID pt = calculateIntersection(x, y, z, 5, scalarField);
-                            unsigned int id = getEdgeID(x, y, z, 5);
-                            m_i2pt3idVertices.insert(ID2POINT3DID::value_type(id, pt));
-                        }
 
-                    for (unsigned int i = 0; m_triTable[tableIndex][i] != -1; i += 3) {
-                        TRIANGLE triangle;
-                        unsigned int pointID0, pointID1, pointID2;
-                        pointID0 = getEdgeID(x, y, z, m_triTable[tableIndex][i]);
-                        pointID1 = getEdgeID(x, y, z, m_triTable[tableIndex][i+1]);
-                        pointID2 = getEdgeID(x, y, z, m_triTable[tableIndex][i+2]);
-                        triangle.pointID[0] = pointID0;
-                        triangle.pointID[1] = pointID1;
-                        triangle.pointID[2] = pointID2;
-                        m_trivecTriangles.push_back(triangle);
+                    if ((i==m_numberOfVoxels[0] - 1) && (j==m_numberOfVoxels[1] - 1)) {
+                        if (m_edgeTable[tableIndex] & 1024) {
+                            QVector3D intersectionPoint = calculateIntersection(cubeEdges.edge10);
+                            unsigned int id = getEdgeID(x, y, z, 10);
+                            m_vertexMap.insert(VertexMap::value_type(id, intersectionPoint));
+                        }
+                    }
+
+                    if ((i==m_numberOfVoxels[0] - 1) && (k==m_numberOfVoxels[2] - 1)) {
+                        if (m_edgeTable[tableIndex] & 64) {
+                            QVector3D intersectionPoint = calculateIntersection(cubeEdges.edge6);
+                            unsigned int id = getEdgeID(x, y, z, 6);
+                            m_vertexMap.insert(VertexMap::value_type(id, intersectionPoint));
+                        }
+                    }
+
+                    if ((j==m_numberOfVoxels[1] - 1) && (k==m_numberOfVoxels[2] - 1)) {
+                        if (m_edgeTable[tableIndex] & 32) {
+                            QVector3D intersectionPoint = calculateIntersection(cubeEdges.edge5);
+                            unsigned int id = getEdgeID(x, y, z, 5);
+                            m_vertexMap.insert(VertexMap::value_type(id, intersectionPoint));
+                        }
+                    }
+
+                    for (unsigned int l = 0; m_triangleTable[tableIndex][l] != -1; l += 3) {
+                        // TRIANGLE triangle;
+                        unsigned int pointId0 = getEdgeID(i, j, k, m_triangleTable[tableIndex][l]);
+                        unsigned int pointId1 = getEdgeID(i, j, k, m_triangleTable[tableIndex][l+1]);
+                        unsigned int pointId2 = getEdgeID(i, j, k, m_triangleTable[tableIndex][l+2]);
+                        maxUsedEdgeId = std::max(maxUsedEdgeId, pointId0);
+                        maxUsedEdgeId = std::max(maxUsedEdgeId, pointId1);
+                        maxUsedEdgeId = std::max(maxUsedEdgeId, pointId2);
+
+                        m_triangles.push_back(Triangle(pointId0, pointId1, pointId2));
                     }
                 }
             }
         }
     }
 
-    renameVerticesAndTriangles();
+    // Add all these triangles sequentially in memory and note the mapping between edgeID and
+    // index in the sequential index
+    unsigned int numberOfEdges = maxUsedEdgeId+1;
+    QVector<unsigned int> vertexMap(numberOfEdges, 0);
+    m_data.resize(m_vertexMap.size());
+    unsigned int counter = 0;
+    for(auto it=m_vertexMap.begin(); it!=m_vertexMap.end(); it++) {
+        QVector3D &vertex = it->second;
+        unsigned int index = it->first;
+        // Map this vertex in the map to the index of the sequential vector
+        vertexMap[index] = counter;
+        m_data[counter].vertex = vertex;
+        counter++;
+    }
+
+    // Update triangle list with the new indices
+    for(Triangle &triangle : m_triangles) {
+        triangle.vertexIndices[0] = vertexMap[triangle.vertexIndices[0]];
+        triangle.vertexIndices[1] = vertexMap[triangle.vertexIndices[1]];
+        triangle.vertexIndices[2] = vertexMap[triangle.vertexIndices[2]];
+    }
+
+    vertexMap.clear();
     calculateNormals();
     m_validSurface = true;
 }
 
-bool MarchingCubesGenerator::isSurfaceValid()
-{
-    return m_validSurface;
-}
-
 void MarchingCubesGenerator::deleteSurface()
 {
-    m_nTriangles = 0;
-    m_nNormals = 0;
-    m_nVertices = 0;
-    m_ppt3dVertices.clear();
-
-    m_piTriangleIndices.clear();
-    m_pvec3dNormals.clear();
-    m_isoValue = 0;
+    m_vertexMap.clear();
+    m_data.clear();
+    m_triangles.clear();
+    m_threshold = 0;
     m_validSurface = false;
 }
 
-unsigned int MarchingCubesGenerator::getEdgeID(unsigned int nX, unsigned int nY, unsigned int nZ, unsigned int nEdgeNo)
+int MarchingCubesGenerator::getEdgeID(unsigned int i, unsigned int j, unsigned int k, unsigned int nEdgeNo)
 {
     switch (nEdgeNo) {
     case 0:
-        return getVertexID(nX, nY, nZ) + 1;
+        return getVertexID(i, j, k) + 1;
     case 1:
-        return getVertexID(nX, nY + 1, nZ);
+        return getVertexID(i, j + 1, k);
     case 2:
-        return getVertexID(nX + 1, nY, nZ) + 1;
+        return getVertexID(i + 1, j, k) + 1;
     case 3:
-        return getVertexID(nX, nY, nZ);
+        return getVertexID(i, j, k);
     case 4:
-        return getVertexID(nX, nY, nZ + 1) + 1;
+        return getVertexID(i, j, k + 1) + 1;
     case 5:
-        return getVertexID(nX, nY + 1, nZ + 1);
+        return getVertexID(i, j + 1, k + 1);
     case 6:
-        return getVertexID(nX + 1, nY, nZ + 1) + 1;
+        return getVertexID(i + 1, j, k + 1) + 1;
     case 7:
-        return getVertexID(nX, nY, nZ + 1);
+        return getVertexID(i, j, k + 1);
     case 8:
-        return getVertexID(nX, nY, nZ) + 2;
+        return getVertexID(i, j, k) + 2;
     case 9:
-        return getVertexID(nX, nY + 1, nZ) + 2;
+        return getVertexID(i, j + 1, k) + 2;
     case 10:
-        return getVertexID(nX + 1, nY + 1, nZ) + 2;
+        return getVertexID(i + 1, j + 1, k) + 2;
     case 11:
-        return getVertexID(nX + 1, nY, nZ) + 2;
+        return getVertexID(i + 1, j, k) + 2;
     default:
-        // Invalid edge no.
-        return -1;
+        qDebug() << "Invalid edge ID, something is clearly wrong.";
+        exit(1);
     }
 }
 
 unsigned int MarchingCubesGenerator::getVertexID(unsigned int nX, unsigned int nY, unsigned int nZ)
 {
-    return 3*(nZ*(m_nCellsY + 1)*(m_nCellsX + 1) + nY*(m_nCellsX + 1) + nX);
+    return 3*(nZ*(m_numberOfVoxels[1] + 1)*(m_numberOfVoxels[0] + 1) + nY*(m_numberOfVoxels[0] + 1) + nX);
 }
 
-POINT3DID MarchingCubesGenerator::calculateIntersection(const QVector3D &point, const QVector3D &delta, unsigned int edgeNumber)
+QVector3D MarchingCubesGenerator::calculateIntersection(Edge &edge)
 {
-    QVector3D p1 = point;
-    QVector3D p2 = point;
+    float linearDistance = (m_threshold - edge.point1->value) / (edge.point2->value - edge.point1->value);
+    QVector3D intersectionPoint;
 
+    intersectionPoint[0] = edge.point1->x() + linearDistance*(edge.point2->x() - edge.point1->x());
+    intersectionPoint[1] = edge.point1->y() + linearDistance*(edge.point2->y() - edge.point1->y());
+    intersectionPoint[2] = edge.point1->z() + linearDistance*(edge.point2->z() - edge.point1->z());
 
-    const float &points[2][3] = m_cubeTable[edgeNumber];
-
-
-    // First point on this edge
-    x1 += points[0][0]*;
-    y1 += points[0][1];
-    z1 += points[0][2];
-
-    // Second point on this edge
-    x2 += points[1][0];
-    y2 += points[1][1];
-    z2 += points[1][2];
-
-    x1 = v1x*m_fCellLengthX;
-    y1 = v1y*m_fCellLengthY;
-    z1 = v1z*m_fCellLengthZ;
-    x2 = v2x*m_fCellLengthX;
-    y2 = v2y*m_fCellLengthY;
-    z2 = v2z*m_fCellLengthZ;
-
-    T val1 = scalarField[v1x][v1y][v1z];
-    T val2 = scalarField[v2x][v2y][v2z];
-    POINT3DID intersection = Interpolate(x1, y1, z1, x2, y2, z2, val1, val2);
-
-    return intersection;
+    return intersectionPoint;
 }
 
-POINT3DID MarchingCubesGenerator::interpolate(float fX1, float fY1, float fZ1, float fX2, float fY2, float fZ2, T tVal1, T tVal2)
+void MarchingCubesGenerator::calculateNormals()
 {
-    POINT3DID interpolation;
-    float mu;
-
-    mu = float((m_isoValue - tVal1))/(tVal2 - tVal1);
-    interpolation.x = fX1 + mu*(fX2 - fX1);
-    interpolation.y = fY1 + mu*(fY2 - fY1);
-    interpolation.z = fZ1 + mu*(fZ2 - fZ1);
-
-    return interpolation;
-}
-
-void MarchingCubesGenerator::renameVerticesAndTriangles()
-{
-    unsigned int nextID = 0;
-    ID2POINT3DID::iterator mapIterator = m_i2pt3idVertices.begin();
-    TRIANGLEVECTOR::iterator vecIterator = m_trivecTriangles.begin();
-
-    // Rename vertices.
-    while (mapIterator != m_i2pt3idVertices.end()) {
-        (*mapIterator).second.newID = nextID;
-        nextID++;
-        mapIterator++;
-    }
-
-    // Now rename triangles.
-    while (vecIterator != m_trivecTriangles.end()) {
-        for (unsigned int i = 0; i < 3; i++) {
-            unsigned int newID = m_i2pt3idVertices[(*vecIterator).pointID[i]].newID;
-            (*vecIterator).pointID[i] = newID;
-        }
-        vecIterator++;
-    }
-
-    // Copy all the vertices and triangles into two arrays so that they
-    // can be efficiently accessed.
-    // Copy vertices.
-    mapIterator = m_i2pt3idVertices.begin();
-    m_nVertices = m_i2pt3idVertices.size();
-    m_ppt3dVertices.resize(m_nVertices);
-    for (unsigned int i = 0; i < m_nVertices; i++, mapIterator++) {
-        m_ppt3dVertices[i].setX((*mapIterator).second.x);
-        m_ppt3dVertices[i].setY((*mapIterator).second.y);
-        m_ppt3dVertices[i].setZ((*mapIterator).second.z);
-    }
-    // Copy vertex indices which make triangles.
-    vecIterator = m_trivecTriangles.begin();
-    m_nTriangles = m_trivecTriangles.size();
-    m_piTriangleIndices.resize(m_nTriangles);
-    for (unsigned int i = 0; i < m_nTriangles; i++, vecIterator++) {
-        m_piTriangleIndices[i][0] = (*vecIterator).pointID[0];
-        m_piTriangleIndices[i][1] = (*vecIterator).pointID[1];
-        m_piTriangleIndices[i][2] = (*vecIterator).pointID[2];
-    }
-
-    m_i2pt3idVertices.clear();
-    m_trivecTriangles.clear();
-}
-
-void MarchingCubesGenerator::CalculateNormals()
-{
-    m_nNormals = m_nVertices;
-    m_pvec3dNormals.resize(m_nNormals);
-
-    // Set all normals to 0.
-    for (unsigned int i = 0; i < m_nNormals; i++) {
-        m_pvec3dNormals[i].setX(0);
-        m_pvec3dNormals[i].setY(0);
-        m_pvec3dNormals[i].setZ(0);
-    }
-
     // Calculate normals.
-    for (unsigned int i = 0; i < m_nTriangles; i++) {
-        QVector3D vec1, vec2;
+    for (Triangle &triangle : m_triangles) {
+        unsigned int index0 = triangle.vertexIndices[0];
+        unsigned int index1 = triangle.vertexIndices[1];
+        unsigned int index2 = triangle.vertexIndices[2];
 
-        unsigned int id0, id1, id2;
-        id0 = m_piTriangleIndices[i][0];
-        id1 = m_piTriangleIndices[i][1];
-        id2 = m_piTriangleIndices[i][2];
+        QVector3D &point0 = m_data[index0].vertex;
+        QVector3D &point1 = m_data[index1].vertex;
+        QVector3D &point2 = m_data[index2].vertex;
 
-        vec1.setX(m_ppt3dVertices[id1].x() - m_ppt3dVertices[id0].x());
-        vec1.setY(m_ppt3dVertices[id1].y() - m_ppt3dVertices[id0].y());
-        vec1.setZ(m_ppt3dVertices[id1].z() - m_ppt3dVertices[id0].z());
-        vec2.setX(m_ppt3dVertices[id2].x() - m_ppt3dVertices[id0].x());
-        vec2.setY(m_ppt3dVertices[id2].y() - m_ppt3dVertices[id0].y());
-        vec2.setZ(m_ppt3dVertices[id2].z() - m_ppt3dVertices[id0].z());
+        // TODO: Speed up by doing cross product directly on components
+        QVector3D vec1 = point1 - point0;
+        QVector3D vec2 = point2 - point0;
 
         QVector3D normal = QVector3D(vec1.z()*vec2.y() - vec1.y()*vec2.z(), vec1.x()*vec2.z() - vec1.z()*vec2.x(), vec1.y()*vec2.x() - vec1.x()*vec2.y());
         normal.normalize();
 
-        QVector3D n1 = m_pvec3dNormals[id0];
-        QVector3D n2 = m_pvec3dNormals[id1];
-        QVector3D n3 = m_pvec3dNormals[id2];
+        QVector3D &normal0 = m_data[index0].normal;
+        QVector3D &normal1 = m_data[index1].normal;
+        QVector3D &normal2 = m_data[index2].normal;
 
-        if(QVector3D::dotProduct(normal,n1) >= 0) m_pvec3dNormals[id0] += normal;
-        if(QVector3D::dotProduct(normal,n2) >= 0) m_pvec3dNormals[id1] += normal;
-        if(QVector3D::dotProduct(normal,n3) >= 0) m_pvec3dNormals[id2] += normal;
+        // TODO: Speed up by doing additions directly on components
+        if(QVector3D::dotProduct(normal,normal0) >= 0) normal0 += normal;
+        if(QVector3D::dotProduct(normal,normal1) >= 0) normal1 += normal;
+        if(QVector3D::dotProduct(normal,normal2) >= 0) normal2 += normal;
     }
 
-    for (unsigned int i = 0; i < m_nNormals; i++) m_pvec3dNormals[i].normalize();
+    for (MarchingCubesVBOData &data : m_data) {
+        data.normal.normalize();
+    }
 }
