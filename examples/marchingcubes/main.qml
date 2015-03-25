@@ -19,6 +19,7 @@ ApplicationWindow {
         simulator: simulator
         camera: camera
         navigator: navigator
+        focus: true
 
         Camera {
             id: camera
@@ -33,12 +34,29 @@ ApplicationWindow {
         }
 
         MarchingCubes {
-            id: points
+            id: marchingCubes
             numVoxels: Qt.vector3d(50, 50, 50)
             min: Qt.vector3d(-Math.PI, -Math.PI, -Math.PI)
             max: Qt.vector3d(Math.PI, Math.PI, Math.PI)
             threshold: 0.0
             color: "green"
+        }
+
+        Keys.onPressed: {
+            console.log("Pressed key: "+event.key)
+            if(event.key == Qt.Key_1) {
+                console.log("Front and back")
+                marchingCubes.mode = MarchingCubes.FRONT_AND_BACK
+            } else if(event.key == Qt.Key_2) {
+                console.log("Front")
+                marchingCubes.mode = MarchingCubes.FRONT
+            } else if(event.key == Qt.Key_3) {
+                console.log("Back")
+                marchingCubes.mode = MarchingCubes.BACK
+            } else if(event.key == Qt.Key_4) {
+                console.log("Lines")
+                marchingCubes.mode = MarchingCubes.LINES
+            }
         }
     }
 }

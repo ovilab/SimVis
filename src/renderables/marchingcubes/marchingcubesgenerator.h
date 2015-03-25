@@ -81,6 +81,14 @@ struct Triangle {
         vertexIndices[1] = index2;
         vertexIndices[2] = index3;
     }
+
+    Triangle() {
+
+    }
+};
+
+struct TriangleLines {
+    unsigned int vertexIndices[6];
 };
 
 typedef std::map<unsigned int, QVector3D> VertexMap;
@@ -97,7 +105,9 @@ protected:
     function<float(const QVector3D point)> m_scalarFieldEvaluator;
     function<QVector3D(const QVector3D point)> m_colorEvaluator;
     QVector<MarchingCubesVBOData> m_data;
-    std::vector<Triangle> m_triangles;
+    std::vector<Triangle> m_trianglesFront;
+    std::vector<Triangle> m_trianglesBack;
+    std::vector<TriangleLines> m_lines;
     VertexMap m_edgeMap; // Maps getEdgeID's to QVector3D's intersecting the edge
     void updateCube(Cube &cube, const QVector3D &minValues, const QVector3D &vertexIndices, const QVector3D &delta);
     Cube createCube();

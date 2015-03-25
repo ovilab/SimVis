@@ -12,12 +12,18 @@ void MarchingCubes::setScalarFieldEvaluator(const function<float(const QVector3D
 {
     m_scalarFieldEvaluator = scalarFieldEvaluator;
     m_hasScalarField = true;
+    setScalarFieldDirty(true);
     setDirty(true);
 }
 
 QColor MarchingCubes::color() const
 {
     return m_color;
+}
+
+MarchingCubes::Mode MarchingCubes::mode() const
+{
+    return m_mode;
 }
 
 function<QVector3D (const QVector3D point)> MarchingCubes::colorEvaluator() const
@@ -27,6 +33,8 @@ function<QVector3D (const QVector3D point)> MarchingCubes::colorEvaluator() cons
 
 void MarchingCubes::setColorEvaluator(const function<QVector3D (const QVector3D point)> &colorEvaluator)
 {
+    setScalarFieldDirty(true);
+    setDirty(true);
     m_colorEvaluator = colorEvaluator;
 }
 
@@ -81,6 +89,7 @@ void MarchingCubes::setThreshold(float arg)
         return;
 
     m_threshold = arg;
+    setScalarFieldDirty(true);
     setDirty(true);
     emit thresholdChanged(arg);
 }
@@ -91,6 +100,7 @@ void MarchingCubes::setMin(QVector3D arg)
         return;
 
     m_min = arg;
+    setScalarFieldDirty(true);
     setDirty(true);
     emit minChanged(arg);
 }
@@ -101,6 +111,7 @@ void MarchingCubes::setMax(QVector3D arg)
         return;
 
     m_max = arg;
+    setScalarFieldDirty(true);
     setDirty(true);
     emit maxChanged(arg);
 }
@@ -120,6 +131,7 @@ void MarchingCubes::setNumVoxels(QVector3D arg)
         return;
 
     m_numVoxels = arg;
+    setScalarFieldDirty(true);
     setDirty(true);
     emit numVoxelsChanged(arg);
 }
@@ -129,13 +141,35 @@ void MarchingCubes::setColor(QColor arg)
     if (m_color == arg)
         return;
 
+    setScalarFieldDirty(true);
+    setDirty(true);
     m_color = arg;
     emit colorChanged(arg);
 }
 
+void MarchingCubes::setMode(MarchingCubes::Mode arg)
+{
+    if (m_mode == arg)
+        return;
+
+    m_mode = arg;
+    setDirty(true);
+    emit modeChanged(arg);
+}
+bool MarchingCubes::scalarFieldDirty() const
+{
+    return m_scalarFieldDirty;
+}
+
+void MarchingCubes::setScalarFieldDirty(bool scalarFieldDirty)
+{
+    m_scalarFieldDirty = scalarFieldDirty;
+}
+
+
 MarchingCubesRenderer::MarchingCubesRenderer()
 {
-    m_numberOfVBOs = 2;
+    m_numberOfVBOs = 4;
 }
 
 void MarchingCubesRenderer::synchronize(Renderable *renderable)
@@ -147,7 +181,7 @@ void MarchingCubesRenderer::synchronize(Renderable *renderable)
     }
 
     if(marchingCubes->dirty()) {
-        if(marchingCubes->hasScalarField()) {
+        if(marchingCubes->hasScalarField() && marchingCubes->m_scalarFieldDirty) {
             if(marchingCubes->m_colorEvaluator != 0) {
                 m_generator.m_colorEvaluator = marchingCubes->m_colorEvaluator;
                 m_generator.m_hasColorEvaluator = true;
@@ -159,14 +193,16 @@ void MarchingCubesRenderer::synchronize(Renderable *renderable)
             m_generator.setScalarFieldEvaluator(marchingCubes->scalarFieldEvaluator());
             m_generator.generateSurface(marchingCubes->min(), marchingCubes->max(), marchingCubes->numVoxels(), marchingCubes->threshold());
             uploadVBOs();
+            marchingCubes->setScalarFieldDirty(false);
         }
+        m_mode = marchingCubes->mode();
         marchingCubes->setDirty(false);
     }
 }
 
 void MarchingCubesRenderer::render()
 {
-    if(m_indexCount == 0) {
+    if(m_triangleIndexCount == 0) {
         return;
     }
 
@@ -176,7 +212,6 @@ void MarchingCubesRenderer::render()
 
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
-    glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
 
     // Offset for position
     quintptr offset = 0;
@@ -203,8 +238,23 @@ void MarchingCubesRenderer::render()
     glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(MarchingCubesVBOData), (const void *)offset);
 
     // Draw cube geometry using indices from VBO 1
-    program().setUniformValue("delta", QVector3D(0,0,0));
-    glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
+    if(m_mode == MarchingCubes::FRONT_AND_BACK || m_mode == MarchingCubes::FRONT) {
+        glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
+        program().setUniformValue("normalVectorSign", 1.0f);
+        glDrawElements(GL_TRIANGLES, m_triangleIndexCount, GL_UNSIGNED_INT, 0);
+    }
+
+    if(m_mode == MarchingCubes::FRONT_AND_BACK || m_mode == MarchingCubes::BACK) {
+        glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[2]);
+        program().setUniformValue("normalVectorSign", -1.0f);
+        glDrawElements(GL_TRIANGLES, m_triangleIndexCount, GL_UNSIGNED_INT, 0);
+    }
+
+    if(m_mode == MarchingCubes::LINES) {
+        glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[3]);
+        program().setUniformValue("normalVectorSign", 1.0f);
+        glDrawElements(GL_LINES, m_lineIndexCount, GL_UNSIGNED_INT, 0);
+    }
 
     program().disableAttributeArray(vertexLocation);
 }
@@ -215,11 +265,21 @@ void MarchingCubesRenderer::uploadVBOs()
     // Transfer vertex data to VBO 0
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
     glFunctions()->glBufferData(GL_ARRAY_BUFFER, m_generator.m_data.size() * sizeof(MarchingCubesVBOData), &m_generator.m_data[0], GL_STATIC_DRAW);
-    // Transfer index data to VBO 1
-    glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
-    glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_generator.m_triangles.size() * sizeof(Triangle), &m_generator.m_triangles[0], GL_STATIC_DRAW);
 
-    m_indexCount = 3*m_generator.m_triangles.size();
+    // Transfer index data for front triangles to VBO 1
+    glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
+    glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_generator.m_trianglesFront.size() * sizeof(Triangle), &m_generator.m_trianglesFront[0], GL_STATIC_DRAW);
+
+    // Transfer index data for back triangles to VBO 2
+    glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[2]);
+    glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_generator.m_trianglesBack.size() * sizeof(Triangle), &m_generator.m_trianglesBack[0], GL_STATIC_DRAW);
+
+    // Transfer index data for back triangles to VBO 2
+    glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[3]);
+    glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_generator.m_lines.size() * sizeof(TriangleLines), &m_generator.m_lines[0], GL_STATIC_DRAW);
+
+    m_triangleIndexCount = 3*m_generator.m_trianglesFront.size();
+    m_lineIndexCount = 6*m_generator.m_lines.size();
 }
 
 void MarchingCubesRenderer::beforeLinkProgram()

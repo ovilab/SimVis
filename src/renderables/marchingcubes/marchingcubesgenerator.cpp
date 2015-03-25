@@ -474,9 +474,9 @@ void MarchingCubesGenerator::generateSurface(QVector3D minValues, QVector3D maxV
     QVector3D delta(dx, dy, dz);
     m_threshold = threshold;
 
-    m_numberOfVoxels[0] = numberOfVoxels[0] - 1;
-    m_numberOfVoxels[1] = numberOfVoxels[1] - 1;
-    m_numberOfVoxels[2] = numberOfVoxels[2] - 1;
+    m_numberOfVoxels[0] = numberOfVoxels[0];
+    m_numberOfVoxels[1] = numberOfVoxels[1];
+    m_numberOfVoxels[2] = numberOfVoxels[2];
 
     // Generate isosurface.
     Cube cube = createCube();
@@ -593,7 +593,7 @@ void MarchingCubesGenerator::generateSurface(QVector3D minValues, QVector3D maxV
                         unsigned int vertex1Id = getEdgeId(i, j, k, m_triangleTable[tableIndex][l+1]);
                         unsigned int vertex2Id = getEdgeId(i, j, k, m_triangleTable[tableIndex][l+2]);
 
-                        m_triangles.push_back(Triangle(vertex0Id, vertex1Id, vertex2Id));
+                        m_trianglesFront.push_back(Triangle(vertex0Id, vertex1Id, vertex2Id));
                     }
                 }
             }
@@ -618,25 +618,44 @@ void MarchingCubesGenerator::generateSurface(QVector3D minValues, QVector3D maxV
     }
 
     // Update triangle list with the new indices
-    for(Triangle &triangle : m_triangles) {
-        triangle.vertexIndices[0] = vertexMap[triangle.vertexIndices[0]];
-        triangle.vertexIndices[1] = vertexMap[triangle.vertexIndices[1]];
-        triangle.vertexIndices[2] = vertexMap[triangle.vertexIndices[2]];
+    m_trianglesBack.resize(m_trianglesFront.size());
+    m_lines.resize(m_trianglesFront.size());
+    for(unsigned int i=0; i<m_trianglesFront.size(); i++) {
+        Triangle &triangleFront = m_trianglesFront[i];
+        Triangle &triangleBack = m_trianglesBack[i];
+        TriangleLines &triangleLines = m_lines[i];
+
+        triangleFront.vertexIndices[0] = vertexMap[triangleFront.vertexIndices[0]];
+        triangleFront.vertexIndices[1] = vertexMap[triangleFront.vertexIndices[1]];
+        triangleFront.vertexIndices[2] = vertexMap[triangleFront.vertexIndices[2]];
+
+        triangleBack.vertexIndices[0] = triangleFront.vertexIndices[2];
+        triangleBack.vertexIndices[1] = triangleFront.vertexIndices[1];
+        triangleBack.vertexIndices[2] = triangleFront.vertexIndices[0];
+
+        triangleLines.vertexIndices[0] = triangleFront.vertexIndices[0];
+        triangleLines.vertexIndices[1] = triangleFront.vertexIndices[1];
+        triangleLines.vertexIndices[2] = triangleFront.vertexIndices[1];
+        triangleLines.vertexIndices[3] = triangleFront.vertexIndices[2];
+        triangleLines.vertexIndices[4] = triangleFront.vertexIndices[2];
+        triangleLines.vertexIndices[5] = triangleFront.vertexIndices[0];
     }
 
-    qDebug() << "Marching cubes created with " << m_data.size() << " vertices and " << m_triangles.size() << " triangles in " << elapsed.elapsed() << " ms.";
+    qDebug() << "Marching cubes created with " << m_data.size() << " vertices, " << 2*m_trianglesFront.size() << " triangles and " << m_lines.size() << " lines in " << elapsed.elapsed() << " ms.";
 
     elapsed.restart();
     calculateNormals();
 
+    m_edgeMap.clear();
+    vertexMap.clear();
     m_validSurface = true;
 }
 
 void MarchingCubesGenerator::deleteSurface()
 {
-    m_edgeMap.clear();
     m_data.clear();
-    m_triangles.clear();
+    m_trianglesFront.clear();
+    m_trianglesBack.clear();
     m_threshold = 0;
     m_validSurface = false;
 }

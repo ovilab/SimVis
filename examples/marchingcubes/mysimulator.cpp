@@ -23,7 +23,7 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
     if(marchingCubes) {
         if(!m_didSetScalarFieldEvaluator) {
             marchingCubes->setScalarFieldEvaluator([](const QVector3D point) {
-                float n = 10.0;
+                float n = 4.0;
                 return sin(n*M_PI*0.5*point.x()) + sin(n*M_PI*0.5*point.y()) + sin(n*M_PI*0.5*point.z());
             });
 
