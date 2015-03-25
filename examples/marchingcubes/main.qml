@@ -22,7 +22,7 @@ ApplicationWindow {
 
         Camera {
             id: camera
-            position: Qt.vector3d(10,10,10)
+            position: Qt.vector3d(10,0,10)
             fieldOfView: 65
         }
 
@@ -37,7 +37,8 @@ ApplicationWindow {
             numVoxels: Qt.vector3d(100, 100, 100)
             min: Qt.vector3d(-10, -10, -10)
             max: Qt.vector3d(10, 10, 10)
-            threshold: 3
+            threshold: 0.5
+            color: "green"
         }
     }
 }

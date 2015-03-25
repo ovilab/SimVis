@@ -1,5 +1,6 @@
 #include "marchingcubes.h"
 #include <iostream>
+#include <QElapsedTimer>
 using namespace std;
 
 function<float (const QVector3D point)> MarchingCubes::scalarFieldEvaluator() const
@@ -13,6 +14,22 @@ void MarchingCubes::setScalarFieldEvaluator(const function<float(const QVector3D
     m_hasScalarField = true;
     setDirty(true);
 }
+
+QColor MarchingCubes::color() const
+{
+    return m_color;
+}
+
+function<QVector3D (const QVector3D point)> MarchingCubes::colorEvaluator() const
+{
+    return m_colorEvaluator;
+}
+
+void MarchingCubes::setColorEvaluator(const function<QVector3D (const QVector3D point)> &colorEvaluator)
+{
+    m_colorEvaluator = colorEvaluator;
+}
+
 MarchingCubes::MarchingCubes()
 {
 
@@ -107,6 +124,15 @@ void MarchingCubes::setNumVoxels(QVector3D arg)
     emit numVoxelsChanged(arg);
 }
 
+void MarchingCubes::setColor(QColor arg)
+{
+    if (m_color == arg)
+        return;
+
+    m_color = arg;
+    emit colorChanged(arg);
+}
+
 MarchingCubesRenderer::MarchingCubesRenderer()
 {
     m_numberOfVBOs = 2;
@@ -122,6 +148,14 @@ void MarchingCubesRenderer::synchronize(Renderable *renderable)
 
     if(marchingCubes->dirty()) {
         if(marchingCubes->hasScalarField()) {
+            if(marchingCubes->m_colorEvaluator != 0) {
+                m_generator.m_colorEvaluator = marchingCubes->m_colorEvaluator;
+                m_generator.m_hasColorEvaluator = true;
+            } else {
+                m_generator.setColor(marchingCubes->color());
+                m_generator.m_hasColorEvaluator = false;
+            }
+
             m_generator.setScalarFieldEvaluator(marchingCubes->scalarFieldEvaluator());
             m_generator.generateSurface(marchingCubes->min(), marchingCubes->max(), marchingCubes->numVoxels(), marchingCubes->threshold());
             uploadVBOs();
@@ -160,7 +194,16 @@ void MarchingCubesRenderer::render()
     program().enableAttributeArray(vertexLocation);
     glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(MarchingCubesVBOData), (const void *)offset);
 
+    // Offset for texture coordinate
+    offset += sizeof(QVector3D);
+
+    // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
+    vertexLocation = program().attributeLocation("a_color");
+    program().enableAttributeArray(vertexLocation);
+    glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(MarchingCubesVBOData), (const void *)offset);
+
     // Draw cube geometry using indices from VBO 1
+    program().setUniformValue("delta", QVector3D(0,0,0));
     glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
 
     program().disableAttributeArray(vertexLocation);

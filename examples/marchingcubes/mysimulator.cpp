@@ -1,5 +1,6 @@
 #include "mysimulator.h"
 #include <SimVis/MarchingCubes>
+#include <cmath>
 MyWorker::MyWorker() {
 
 }
@@ -21,17 +22,24 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
     MarchingCubes* marchingCubes = qobject_cast<MarchingCubes*>(renderableObject);
     if(marchingCubes) {
         if(!m_didSetScalarFieldEvaluator) {
-            marchingCubes->setScalarFieldEvaluator([&](const QVector3D vec) {
-                float value = 0;
-                // QVector3D center = QVector3D(5,5,5);
-                // QVector3D newVec = vec - center;
-                if(vec.x() < -3 || vec.x() > 3) value = 5.0;
-                if(vec.y() < -3 || vec.y() > 3) value = 5.0;
-                if(vec.z() < -3 || vec.z() > 3) value = 5.0;
+            marchingCubes->setScalarFieldEvaluator([](const QVector3D point) {
+                // return sin(point.x()*point.y()) + point.z()*cos(point.z());
+                return point.length();
+            });
 
+            marchingCubes->setColorEvaluator([](const QVector3D point) {
+                float min = -5;
+                float max = 5;
 
-                // return vec.lengthSquared();
-                return value;
+                QVector3D color = point;
+                color[0] -= min;
+                color[1] -= min;
+                color[2] -= min;
+
+                color[0] /= max - min;
+                color[1] /= max - min;
+                color[2] /= max - min;
+                return color;
             });
 
             m_didSetScalarFieldEvaluator = true;

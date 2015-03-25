@@ -5,7 +5,7 @@
 TrackballNavigator::TrackballNavigator(Camera *camera, QQuickItem *parent) :
     Navigator(camera, parent)
 {
-    qDebug() << "Created trackball";
+
 }
 
 TrackballNavigator::~TrackballNavigator()

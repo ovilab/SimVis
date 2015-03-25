@@ -71,6 +71,7 @@ struct Cube {
 struct MarchingCubesVBOData {
     QVector3D vertex;
     QVector3D normal;
+    QVector3D color;
 };
 
 struct Triangle {
@@ -90,20 +91,24 @@ class MarchingCubesGenerator {
 protected:
     float m_threshold = 0.0;
     bool m_validSurface = false;
-    QVector3D m_numberOfVoxels;
+    bool m_hasColorEvaluator = false;
+    unsigned int m_numberOfVoxels[3];
+    QVector3D m_color;
     function<float(const QVector3D point)> m_scalarFieldEvaluator;
+    function<QVector3D(const QVector3D point)> m_colorEvaluator;
     QVector<MarchingCubesVBOData> m_data;
     std::vector<Triangle> m_triangles;
     VertexMap m_vertexMap; // Maps getEdgeID's to QVector3D's
-    void updateCube(Cube &cube, QVector3D point, QVector3D delta);
+    void updateCube(Cube &cube, const QVector3D &minValues, const QVector3D &vertexIndices, const QVector3D &delta);
     Cube createCube();
     void calculateNormals();
-    int getEdgeID(unsigned int i, unsigned int j, unsigned int k, unsigned int nEdgeNo);
+    unsigned int getEdgeID(unsigned int i, unsigned int j, unsigned int k, unsigned int nEdgeNo);
     unsigned int getVertexID(unsigned int i, unsigned int j, unsigned int k);
     QVector3D calculateIntersection(Edge &edge);
     void deleteSurface();
 
     friend class MarchingCubesRenderer;
+    void calculateNormal(MarchingCubesVBOData &point);
 public:
     MarchingCubesGenerator();
     ~MarchingCubesGenerator();
@@ -114,12 +119,13 @@ public:
 
     float threshold() const;
     void setThreshold(float threshold);
-    QVector3D numberOfVoxels() const;
-    void setNumberOfVoxels(const QVector3D &numberOfVoxels);
 
     // Lookup tables used in the construction of the isosurface.
     static const unsigned int m_edgeTable[256];
     static const int m_triangleTable[256][16];
+    void setColorEvaluator(const function<QVector3D (const QVector3D point)> &colorEvaluator);
+    void setColor(const QVector3D &color);
+    void setColor(const QColor &color);
 };
 
 #endif // MARCHINGCUBESGENERATOR_H
