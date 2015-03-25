@@ -17,6 +17,7 @@
 #include <QVector>
 #include <functional>
 #include <QVector3D>
+#include <QVector4D>
 #include <QPair>
 
 using std::function;
@@ -71,7 +72,7 @@ struct Cube {
 struct MarchingCubesVBOData {
     QVector3D vertex;
     QVector3D normal;
-    QVector3D color;
+    QVector4D color;
 };
 
 struct Triangle {
@@ -101,9 +102,9 @@ protected:
     bool m_validSurface = false;
     bool m_hasColorEvaluator = false;
     unsigned int m_numberOfVoxels[3];
-    QVector3D m_color;
+    QVector4D m_color;
     function<float(const QVector3D point)> m_scalarFieldEvaluator;
-    function<QVector3D(const QVector3D point)> m_colorEvaluator;
+    function<QVector4D(const QVector3D point)> m_colorEvaluator;
     QVector<MarchingCubesVBOData> m_data;
     std::vector<Triangle> m_trianglesFront;
     std::vector<Triangle> m_trianglesBack;
@@ -126,16 +127,15 @@ public:
     function<float (const QVector3D point)> scalarFieldEvaluator() const;
     void setScalarFieldEvaluator(const function<float (const QVector3D point)> &scalarFieldEvaluator);
     void generateSurface(QVector3D minValues, QVector3D maxValues, QVector3D numberOfVoxels, float threshold);
-
     float threshold() const;
     void setThreshold(float threshold);
+    void setColorEvaluator(const function<QVector3D (const QVector3D point)> &colorEvaluator);
+    void setColor(QVector3D color, float alpha = 1.0);
+    void setColor(const QColor &color);
 
     // Lookup tables used in the construction of the isosurface.
     static const unsigned int m_edgeTable[256];
     static const int m_triangleTable[256][16];
-    void setColorEvaluator(const function<QVector3D (const QVector3D point)> &colorEvaluator);
-    void setColor(const QVector3D &color);
-    void setColor(const QColor &color);
 };
 
 #endif // MARCHINGCUBESGENERATOR_H

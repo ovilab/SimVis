@@ -26,15 +26,19 @@ MarchingCubes::Mode MarchingCubes::mode() const
     return m_mode;
 }
 
-function<QVector3D (const QVector3D point)> MarchingCubes::colorEvaluator() const
+float MarchingCubes::alpha() const
+{
+    return m_alpha;
+}
+
+function<QVector4D (const QVector3D point)> MarchingCubes::colorEvaluator() const
 {
     return m_colorEvaluator;
 }
 
-void MarchingCubes::setColorEvaluator(const function<QVector3D (const QVector3D point)> &colorEvaluator)
+void MarchingCubes::setColorEvaluator(const function<QVector4D (const QVector3D point)> &colorEvaluator)
 {
     setScalarFieldDirty(true);
-    setDirty(true);
     m_colorEvaluator = colorEvaluator;
 }
 
@@ -90,7 +94,6 @@ void MarchingCubes::setThreshold(float arg)
 
     m_threshold = arg;
     setScalarFieldDirty(true);
-    setDirty(true);
     emit thresholdChanged(arg);
 }
 
@@ -101,7 +104,6 @@ void MarchingCubes::setMin(QVector3D arg)
 
     m_min = arg;
     setScalarFieldDirty(true);
-    setDirty(true);
     emit minChanged(arg);
 }
 
@@ -112,7 +114,6 @@ void MarchingCubes::setMax(QVector3D arg)
 
     m_max = arg;
     setScalarFieldDirty(true);
-    setDirty(true);
     emit maxChanged(arg);
 }
 
@@ -132,7 +133,6 @@ void MarchingCubes::setNumVoxels(QVector3D arg)
 
     m_numVoxels = arg;
     setScalarFieldDirty(true);
-    setDirty(true);
     emit numVoxelsChanged(arg);
 }
 
@@ -142,7 +142,6 @@ void MarchingCubes::setColor(QColor arg)
         return;
 
     setScalarFieldDirty(true);
-    setDirty(true);
     m_color = arg;
     emit colorChanged(arg);
 }
@@ -156,6 +155,15 @@ void MarchingCubes::setMode(MarchingCubes::Mode arg)
     setDirty(true);
     emit modeChanged(arg);
 }
+
+void MarchingCubes::setAlpha(float arg)
+{
+    if (m_alpha == arg)
+        return;
+    setDirty(true);
+    m_alpha = arg;
+    emit alphaChanged(arg);
+}
 bool MarchingCubes::scalarFieldDirty() const
 {
     return m_scalarFieldDirty;
@@ -164,6 +172,7 @@ bool MarchingCubes::scalarFieldDirty() const
 void MarchingCubes::setScalarFieldDirty(bool scalarFieldDirty)
 {
     m_scalarFieldDirty = scalarFieldDirty;
+    if(m_scalarFieldDirty) setDirty(true);
 }
 
 
@@ -195,7 +204,10 @@ void MarchingCubesRenderer::synchronize(Renderable *renderable)
             uploadVBOs();
             marchingCubes->setScalarFieldDirty(false);
         }
+
+        m_color = QVector4D(marchingCubes->color().redF(), marchingCubes->color().greenF(), marchingCubes->color().blueF(), marchingCubes->color().alphaF());
         m_mode = marchingCubes->mode();
+        m_alpha = marchingCubes->alpha();
         marchingCubes->setDirty(false);
     }
 }
@@ -209,6 +221,8 @@ void MarchingCubesRenderer::render()
     QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
     program().setUniformValue("modelViewProjectionMatrix", modelViewProjectionMatrix);
     program().setUniformValue("lightPosition", QVector3D(10, 0, 10));
+    program().setUniformValue("uniformColor", m_color);
+    program().setUniformValue("alpha", m_alpha);
 
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
@@ -235,7 +249,7 @@ void MarchingCubesRenderer::render()
     // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
     vertexLocation = program().attributeLocation("a_color");
     program().enableAttributeArray(vertexLocation);
-    glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(MarchingCubesVBOData), (const void *)offset);
+    glFunctions()->glVertexAttribPointer(vertexLocation, 4, GL_FLOAT, GL_FALSE, sizeof(MarchingCubesVBOData), (const void *)offset);
 
     // Draw cube geometry using indices from VBO 1
     if(m_mode == MarchingCubes::FRONT_AND_BACK || m_mode == MarchingCubes::FRONT) {

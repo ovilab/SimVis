@@ -15,7 +15,8 @@ ApplicationWindow {
 
     Visualizer {
         id: visualizer
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height - row1.height
         simulator: simulator
         camera: camera
         navigator: navigator
@@ -43,20 +44,36 @@ ApplicationWindow {
         }
 
         Keys.onPressed: {
-            console.log("Pressed key: "+event.key)
-            if(event.key == Qt.Key_1) {
+            if(event.key === Qt.Key_1) {
                 console.log("Front and back")
                 marchingCubes.mode = MarchingCubes.FRONT_AND_BACK
-            } else if(event.key == Qt.Key_2) {
+            } else if(event.key === Qt.Key_2) {
                 console.log("Front")
                 marchingCubes.mode = MarchingCubes.FRONT
-            } else if(event.key == Qt.Key_3) {
+            } else if(event.key === Qt.Key_3) {
                 console.log("Back")
                 marchingCubes.mode = MarchingCubes.BACK
-            } else if(event.key == Qt.Key_4) {
+            } else if(event.key === Qt.Key_4) {
                 console.log("Lines")
                 marchingCubes.mode = MarchingCubes.LINES
             }
+        }
+    }
+
+    Row {
+        id: row1
+        anchors.top: visualizer.bottom
+        spacing: 10
+
+        Slider {
+            id: alphaSlider
+            minimumValue: 0.0
+            maximumValue: 1.0
+            value: 1.0
+            onValueChanged: marchingCubes.alpha = value
+        }
+        Label {
+            text: qsTr("Alpha: %1").arg(alphaSlider.value.toFixed(2))
         }
     }
 }

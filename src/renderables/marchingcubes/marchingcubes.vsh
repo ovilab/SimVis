@@ -5,11 +5,11 @@ uniform float normalVectorSign;
 
 attribute highp vec4 a_position;
 attribute highp vec3 a_normal;
-attribute highp vec3 a_color;
+attribute highp vec4 a_color;
 
 varying float light;
 varying highp vec3 normal;
-varying highp vec3 color;
+varying highp vec4 color;
 
 void main() {
     gl_Position = modelViewProjectionMatrix*a_position;

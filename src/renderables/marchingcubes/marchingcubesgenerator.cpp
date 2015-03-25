@@ -396,14 +396,14 @@ void MarchingCubesGenerator::setColorEvaluator(const function<QVector3D (const Q
     m_colorEvaluator = colorEvaluator;
 }
 
-void MarchingCubesGenerator::setColor(const QVector3D &color)
+void MarchingCubesGenerator::setColor(QVector3D color, float alpha)
 {
-    m_color = color;
+    m_color = QVector4D(color, alpha);
 }
 
 void MarchingCubesGenerator::setColor(const QColor &color)
 {
-    m_color = QVector3D(color.redF(), color.greenF(), color.blueF());
+    m_color = QVector4D(color.redF(), color.greenF(), color.blueF(), color.alphaF());
 }
 
 void MarchingCubesGenerator::updateCube(Cube &cube, const QVector3D &minValues, const QVector3D &vertexIndices, const QVector3D &delta) {
