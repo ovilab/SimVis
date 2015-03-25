@@ -1,4 +1,5 @@
 TEMPLATE = subdirs
 SUBDIRS += footballs \
-    simple
+    simple \
+    marchingcubes
 CONFIG += ordered
