@@ -7,7 +7,7 @@ ApplicationWindow {
     visible: true
     width: 640
     height: 480
-    title: qsTr("Simple harmonic oscillator")
+    title: qsTr("Marching cubes demo")
 
     MySimulator {
         id: simulator
