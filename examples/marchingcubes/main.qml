@@ -34,10 +34,10 @@ ApplicationWindow {
 
         MarchingCubes {
             id: points
-            numVoxels: Qt.vector3d(100, 100, 100)
-            min: Qt.vector3d(-10, -10, -10)
-            max: Qt.vector3d(10, 10, 10)
-            threshold: 0.5
+            numVoxels: Qt.vector3d(50, 50, 50)
+            min: Qt.vector3d(-Math.PI, -Math.PI, -Math.PI)
+            max: Qt.vector3d(Math.PI, Math.PI, Math.PI)
+            threshold: 0.0
             color: "green"
         }
     }

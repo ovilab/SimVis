@@ -172,7 +172,7 @@ void MarchingCubesRenderer::render()
 
     QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
     program().setUniformValue("modelViewProjectionMatrix", modelViewProjectionMatrix);
-    program().setUniformValue("lightPosition", QVector3D(-5,-5,-5));
+    program().setUniformValue("lightPosition", QVector3D(10, 0, 10));
 
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);

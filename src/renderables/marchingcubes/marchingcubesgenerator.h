@@ -98,11 +98,11 @@ protected:
     function<QVector3D(const QVector3D point)> m_colorEvaluator;
     QVector<MarchingCubesVBOData> m_data;
     std::vector<Triangle> m_triangles;
-    VertexMap m_vertexMap; // Maps getEdgeID's to QVector3D's
+    VertexMap m_edgeMap; // Maps getEdgeID's to QVector3D's intersecting the edge
     void updateCube(Cube &cube, const QVector3D &minValues, const QVector3D &vertexIndices, const QVector3D &delta);
     Cube createCube();
     void calculateNormals();
-    unsigned int getEdgeID(unsigned int i, unsigned int j, unsigned int k, unsigned int nEdgeNo);
+    unsigned int getEdgeId(unsigned int i, unsigned int j, unsigned int k, unsigned int nEdgeNo);
     unsigned int getVertexID(unsigned int i, unsigned int j, unsigned int k);
     QVector3D calculateIntersection(Edge &edge);
     void deleteSurface();

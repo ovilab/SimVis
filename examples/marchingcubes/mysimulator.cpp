@@ -23,13 +23,13 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
     if(marchingCubes) {
         if(!m_didSetScalarFieldEvaluator) {
             marchingCubes->setScalarFieldEvaluator([](const QVector3D point) {
-                // return sin(point.x()*point.y()) + point.z()*cos(point.z());
-                return point.length();
+                float n = 10.0;
+                return sin(n*M_PI*0.5*point.x()) + sin(n*M_PI*0.5*point.y()) + sin(n*M_PI*0.5*point.z());
             });
 
             marchingCubes->setColorEvaluator([](const QVector3D point) {
-                float min = -5;
-                float max = 5;
+                float min = -M_PI;
+                float max = M_PI;
 
                 QVector3D color = point;
                 color[0] -= min;

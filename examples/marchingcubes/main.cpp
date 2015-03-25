@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QtQml>
-
+#include <cmath>
 #include "mysimulator.h"
 
 int main(int argc, char *argv[])
