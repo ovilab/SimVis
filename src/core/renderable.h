@@ -44,12 +44,7 @@ public:
 
     void requestRender();
     void requestSynchronize();
-
-    bool visible() const
-    {
-        return m_visible;
-    }
-
+    bool visible() const;
     Camera* camera() const;
 
 signals:

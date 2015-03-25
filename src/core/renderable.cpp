@@ -30,6 +30,11 @@ void Renderable::requestSynchronize()
     m_renderer->synchronize(this);
 }
 
+bool Renderable::visible() const
+{
+    return m_visible;
+}
+
 Camera *Renderable::camera() const
 {
     return m_camera;

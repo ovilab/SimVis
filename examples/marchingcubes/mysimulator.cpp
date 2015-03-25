@@ -31,7 +31,7 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
                 float min = -M_PI;
                 float max = M_PI;
 
-                QVector4D color = QVector4D(point, 1.0);
+                QVector3D color = point;
                 color[0] -= min;
                 color[1] -= min;
                 color[2] -= min;

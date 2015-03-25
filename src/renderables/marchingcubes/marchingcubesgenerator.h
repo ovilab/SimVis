@@ -17,7 +17,6 @@
 #include <QVector>
 #include <functional>
 #include <QVector3D>
-#include <QVector4D>
 #include <QPair>
 
 using std::function;
@@ -72,7 +71,7 @@ struct Cube {
 struct MarchingCubesVBOData {
     QVector3D vertex;
     QVector3D normal;
-    QVector4D color;
+    QVector3D color;
 };
 
 struct Triangle {
@@ -102,9 +101,9 @@ protected:
     bool m_validSurface = false;
     bool m_hasColorEvaluator = false;
     unsigned int m_numberOfVoxels[3];
-    QVector4D m_color;
+    QVector3D m_color;
     function<float(const QVector3D point)> m_scalarFieldEvaluator;
-    function<QVector4D(const QVector3D point)> m_colorEvaluator;
+    function<QVector3D(const QVector3D point)> m_colorEvaluator;
     QVector<MarchingCubesVBOData> m_data;
     std::vector<Triangle> m_trianglesFront;
     std::vector<Triangle> m_trianglesBack;
@@ -130,7 +129,7 @@ public:
     float threshold() const;
     void setThreshold(float threshold);
     void setColorEvaluator(const function<QVector3D (const QVector3D point)> &colorEvaluator);
-    void setColor(QVector3D color, float alpha = 1.0);
+    void setColor(QVector3D color);
     void setColor(const QColor &color);
 
     // Lookup tables used in the construction of the isosurface.
