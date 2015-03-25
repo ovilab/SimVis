@@ -11,6 +11,7 @@ class MarchingCubes : public Renderable
     Q_OBJECT
     Q_ENUMS(Mode)
     Q_PROPERTY(float threshold READ threshold WRITE setThreshold NOTIFY thresholdChanged)
+    Q_PROPERTY(float scale READ scale WRITE setScale NOTIFY scaleChanged)
     Q_PROPERTY(QVector3D min READ min WRITE setMin NOTIFY minChanged)
     Q_PROPERTY(QVector3D max READ max WRITE setMax NOTIFY maxChanged)
     Q_PROPERTY(QVector3D numVoxels READ numVoxels WRITE setNumVoxels NOTIFY numVoxelsChanged)
@@ -45,6 +46,7 @@ public:
     QColor color() const;
     Mode mode() const;
     QVector3D lightPosition() const;
+    float scale() const;
 
 public slots:
     void setThreshold(float arg);
@@ -55,6 +57,7 @@ public slots:
     void setColor(QColor arg);
     void setMode(Mode arg);
     void setLightPosition(QVector3D arg);
+    void setScale(float arg);
 
 signals:
     void thresholdChanged(float arg);
@@ -65,9 +68,11 @@ signals:
     void colorChanged(QColor arg);
     void modeChanged(Mode arg);
     void lightPositionChanged(QVector3D arg);
+    void scaleChanged(float arg);
 
 private:
     float m_threshold = 0.0;
+    float m_scale = 1.0;
     QVector3D m_numVoxels;
     QVector3D m_min;
     QVector3D m_max;
@@ -91,6 +96,7 @@ protected:
     MarchingCubesGenerator m_generator;
     unsigned int m_triangleIndexCount = 0;
     unsigned int m_lineIndexCount = 0;
+    float m_scale = 1.0;
     QVector3D m_color;
     QVector3D m_lightPosition;
     MarchingCubes::Mode m_mode = MarchingCubes::FRONT_AND_BACK;

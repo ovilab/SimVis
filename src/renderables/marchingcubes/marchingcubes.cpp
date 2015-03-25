@@ -31,6 +31,11 @@ QVector3D MarchingCubes::lightPosition() const
     return m_lightPosition;
 }
 
+float MarchingCubes::scale() const
+{
+    return m_scale;
+}
+
 function<QVector4D (const QVector3D point)> MarchingCubes::colorEvaluator() const
 {
     return m_colorEvaluator;
@@ -164,6 +169,15 @@ void MarchingCubes::setLightPosition(QVector3D arg)
     emit lightPositionChanged(arg);
 }
 
+void MarchingCubes::setScale(float arg)
+{
+    if (m_scale == arg)
+        return;
+
+    m_scale = arg;
+    emit scaleChanged(arg);
+}
+
 MarchingCubesRenderer::MarchingCubesRenderer()
 {
     m_numberOfVBOs = 4;
@@ -198,6 +212,7 @@ void MarchingCubesRenderer::synchronize(Renderable *renderable)
     m_lightPosition = marchingCubes->lightPosition();
     m_color = QVector3D(marchingCubes->color().redF(), marchingCubes->color().greenF(), marchingCubes->color().blueF());
     m_mode = marchingCubes->mode();
+    m_scale = marchingCubes->scale();
 
 }
 
@@ -211,6 +226,7 @@ void MarchingCubesRenderer::render()
     program().setUniformValue("modelViewProjectionMatrix", modelViewProjectionMatrix);
     program().setUniformValue("lightPosition", m_lightPosition);
     program().setUniformValue("uniformColor", m_color);
+    program().setUniformValue("scale", m_scale);
 
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);

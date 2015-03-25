@@ -15,7 +15,8 @@ ApplicationWindow {
 
     Visualizer {
         id: visualizer
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height - row1.height
         simulator: simulator
         camera: camera
         navigator: navigator
@@ -39,7 +40,7 @@ ApplicationWindow {
             min: Qt.vector3d(-Math.PI, -Math.PI, -Math.PI)
             max: Qt.vector3d(Math.PI, Math.PI, Math.PI)
             threshold: 0.0
-            lightpos: camera.position
+            lightPosition: camera.position
             color: "green"
         }
 
@@ -57,6 +58,23 @@ ApplicationWindow {
                 console.log("Lines")
                 marchingCubes.mode = MarchingCubes.LINES
             }
+        }
+    }
+
+    Row {
+        id: row1
+        anchors.top: visualizer.bottom
+        spacing: 10
+
+        Slider {
+            id: scaleSlider
+            minimumValue: 0.1
+            maximumValue: 5.0
+            value: 1.0
+            onValueChanged: marchingCubes.scale = value
+        }
+        Label {
+            text: qsTr("Scale: %1").arg(scaleSlider.value.toFixed(2))
         }
     }
 }
