@@ -41,6 +41,7 @@ ApplicationWindow {
             max: Qt.vector3d(Math.PI, Math.PI, Math.PI)
             threshold: 0.0
             color: "green"
+            // mode: MarchingCubes.FRONT
         }
 
         Keys.onPressed: {

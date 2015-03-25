@@ -1,13 +1,13 @@
 uniform highp mat4 modelViewProjectionMatrix;
-uniform vec3 lightPosition;
-uniform float lightFalloffDistance;
-uniform float normalVectorSign;
+uniform highp vec3 lightPosition;
+uniform highp float lightFalloffDistance;
+uniform highp float normalVectorSign;
 
 attribute highp vec4 a_position;
 attribute highp vec3 a_normal;
 attribute highp vec4 a_color;
 
-varying float light;
+varying highp float light;
 varying highp vec3 normal;
 varying highp vec4 color;
 
