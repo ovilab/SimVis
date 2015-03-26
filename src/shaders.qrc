@@ -6,5 +6,7 @@
         <file>renderables/billboards/billboards.fsh</file>
         <file>renderables/billboards/billboards_lighted.fsh</file>
         <file>renderables/billboards/billboards_lighted.vsh</file>
+        <file>renderables/shadereffects/perlin3.fsh</file>
+        <file>renderables/shadereffects/perlin4.fsh</file>
     </qresource>
 </RCC>

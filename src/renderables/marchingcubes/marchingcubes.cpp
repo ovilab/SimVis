@@ -1,6 +1,7 @@
 #include "marchingcubes.h"
 #include <iostream>
 #include <QElapsedTimer>
+#include <QFile>
 using namespace std;
 
 function<float (const QVector3D point)> MarchingCubes::scalarFieldEvaluator() const
@@ -312,8 +313,30 @@ void MarchingCubesRenderer::uploadVBOs()
     m_lineIndexCount = 6*m_generator.m_lines.size();
 }
 
+QString MarchingCubesRenderer::contentFromFile(QString filename) {
+    QFile f(filename);
+    if (!f.open(QFile::ReadOnly | QFile::Text)) {
+        qDebug() << "Could not open " << f.fileName() << ". Aborting!";
+        exit(1);
+    }
+    QTextStream stream(&f);
+    QString content = stream.readAll();
+    content.append("\n");
+    return content;
+}
+
+QString MarchingCubesRenderer::fragmentShaderBase()
+{
+    QString fragmentShaderBase = contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin3.fsh");
+    fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin4.fsh"));
+    return fragmentShaderBase;
+}
+
 void MarchingCubesRenderer::beforeLinkProgram()
 {
+    QString fragmentShader = fragmentShaderBase();
+    fragmentShader.append(contentFromFile(":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.fsh"));
+
     program().addShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.vsh");
-    program().addShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.fsh");
+    program().addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShader);
 }

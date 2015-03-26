@@ -108,12 +108,14 @@ protected:
     QElapsedTimer m_elapsedTime;
     MarchingCubes::Mode m_mode = MarchingCubes::FRONT_AND_BACK;
 
+    QString contentFromFile(QString filename);
 private:
     virtual void synchronize(Renderable *) override;
     virtual void render() override;
 
     void uploadVBOs();
 
+    QString fragmentShaderBase();
     virtual void beforeLinkProgram() override;
     bool m_isInitialized = false;
 };
