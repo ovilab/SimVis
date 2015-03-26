@@ -34,5 +34,5 @@ void main() {
     lowp float n = surface4(vec4(scaledPosition.xyz,time*0.1)); // From perlin4.fsh
 
     lowp float lightValue = 0.2 + light*clamp(dot(normalize(lightPosition), normalize(normal)), 0.0, 1.0);
-    gl_FragColor = vec4(color*lightValue*n, 1.0);
+    gl_FragColor = vec4( color*lightValue*n , 1.0);
 }

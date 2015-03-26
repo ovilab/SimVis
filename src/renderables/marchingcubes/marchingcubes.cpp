@@ -334,6 +334,7 @@ QString MarchingCubesRenderer::fragmentShaderBase()
     fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex2.fsh"));
     fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex3.fsh"));
     fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex4.fsh"));
+    fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/effects.fsh"));
     return fragmentShaderBase;
 }
 
