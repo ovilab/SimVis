@@ -327,7 +327,8 @@ QString MarchingCubesRenderer::contentFromFile(QString filename) {
 
 QString MarchingCubesRenderer::fragmentShaderBase()
 {
-    QString fragmentShaderBase = contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin2.fsh");
+    QString fragmentShaderBase;
+    fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin2.fsh"));
     fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin3.fsh"));
     fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin4.fsh"));
     fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex2.fsh"));
