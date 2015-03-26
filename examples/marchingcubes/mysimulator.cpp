@@ -81,19 +81,19 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
                 });
             }
 
-            marchingCubes->setColorEvaluator([](const QVector3D point) {
-                float min = -M_PI;
-                float max = M_PI;
-                QVector3D color = point;
-                color[0] -= min;
-                color[1] -= min;
-                color[2] -= min;
+//            marchingCubes->setColorEvaluator([](const QVector3D point) {
+//                float min = -M_PI;
+//                float max = M_PI;
+//                QVector3D color = point;
+//                color[0] -= min;
+//                color[1] -= min;
+//                color[2] -= min;
 
-                color[0] /= max - min;
-                color[1] /= max - min;
-                color[2] /= max - min;
-                return color;
-            });
+//                color[0] /= max - min;
+//                color[1] /= max - min;
+//                color[2] /= max - min;
+//                return color;
+//            });
 
             //marchingCubes->setColorEvaluator(0);
 
