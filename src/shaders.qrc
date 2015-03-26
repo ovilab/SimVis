@@ -12,5 +12,6 @@
         <file>renderables/shadereffects/simplex4.fsh</file>
         <file>renderables/shadereffects/perlin2.fsh</file>
         <file>renderables/shadereffects/simplex2.fsh</file>
+        <file>renderables/shadereffects/effects.fsh</file>
     </qresource>
 </RCC>

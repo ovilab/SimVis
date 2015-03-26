@@ -52,7 +52,7 @@ highp vec3 fade(highp vec3 t) {
 #endif
 
 // Classic Perlin noise
-lowp float cnoise(highp vec3 P)
+highp float cnoise(highp vec3 P)
 {
     highp vec3 Pi0 = floor(P); // Integer part for indexing
     highp vec3 Pi1 = Pi0 + vec3(1.0); // Integer part + 1

@@ -44,7 +44,7 @@ highp vec4 fade(highp vec4 t) {
 #endif
 
 // Classic Perlin noise
-float cnoise(highp vec4 P)
+highp float cnoise(highp vec4 P)
 {
   highp vec4 Pi0 = floor(P); // Integer part for indexing
   highp vec4 Pi1 = Pi0 + 1.0; // Integer part + 1
@@ -128,58 +128,58 @@ float cnoise(highp vec4 P)
   highp vec4 g0111 = vec4(gx11.z,gy11.z,gz11.z,gw11.z);
   highp vec4 g1111 = vec4(gx11.w,gy11.w,gz11.w,gw11.w);
 
-  highp vec4 norm00 = taylorInvSqrt(highp vec4(dot(g0000, g0000), dot(g0100, g0100), dot(g1000, g1000), dot(g1100, g1100)));
+  highp vec4 norm00 = taylorInvSqrt(vec4(dot(g0000, g0000), dot(g0100, g0100), dot(g1000, g1000), dot(g1100, g1100)));
   g0000 *= norm00.x;
   g0100 *= norm00.y;
   g1000 *= norm00.z;
   g1100 *= norm00.w;
 
-  highp vec4 norm01 = taylorInvSqrt(highp vec4(dot(g0001, g0001), dot(g0101, g0101), dot(g1001, g1001), dot(g1101, g1101)));
+  highp vec4 norm01 = taylorInvSqrt(vec4(dot(g0001, g0001), dot(g0101, g0101), dot(g1001, g1001), dot(g1101, g1101)));
   g0001 *= norm01.x;
   g0101 *= norm01.y;
   g1001 *= norm01.z;
   g1101 *= norm01.w;
 
-  highp vec4 norm10 = taylorInvSqrt(highp vec4(dot(g0010, g0010), dot(g0110, g0110), dot(g1010, g1010), dot(g1110, g1110)));
+  highp vec4 norm10 = taylorInvSqrt(vec4(dot(g0010, g0010), dot(g0110, g0110), dot(g1010, g1010), dot(g1110, g1110)));
   g0010 *= norm10.x;
   g0110 *= norm10.y;
   g1010 *= norm10.z;
   g1110 *= norm10.w;
 
-  highp vec4 norm11 = taylorInvSqrt(highp vec4(dot(g0011, g0011), dot(g0111, g0111), dot(g1011, g1011), dot(g1111, g1111)));
+  highp vec4 norm11 = taylorInvSqrt(vec4(dot(g0011, g0011), dot(g0111, g0111), dot(g1011, g1011), dot(g1111, g1111)));
   g0011 *= norm11.x;
   g0111 *= norm11.y;
   g1011 *= norm11.z;
   g1111 *= norm11.w;
 
-  float n0000 = dot(g0000, Pf0);
-  float n1000 = dot(g1000, vec4(Pf1.x, Pf0.yzw));
-  float n0100 = dot(g0100, vec4(Pf0.x, Pf1.y, Pf0.zw));
-  float n1100 = dot(g1100, vec4(Pf1.xy, Pf0.zw));
-  float n0010 = dot(g0010, vec4(Pf0.xy, Pf1.z, Pf0.w));
-  float n1010 = dot(g1010, vec4(Pf1.x, Pf0.y, Pf1.z, Pf0.w));
-  float n0110 = dot(g0110, vec4(Pf0.x, Pf1.yz, Pf0.w));
-  float n1110 = dot(g1110, vec4(Pf1.xyz, Pf0.w));
-  float n0001 = dot(g0001, vec4(Pf0.xyz, Pf1.w));
-  float n1001 = dot(g1001, vec4(Pf1.x, Pf0.yz, Pf1.w));
-  float n0101 = dot(g0101, vec4(Pf0.x, Pf1.y, Pf0.z, Pf1.w));
-  float n1101 = dot(g1101, vec4(Pf1.xy, Pf0.z, Pf1.w));
-  float n0011 = dot(g0011, vec4(Pf0.xy, Pf1.zw));
-  float n1011 = dot(g1011, vec4(Pf1.x, Pf0.y, Pf1.zw));
-  float n0111 = dot(g0111, vec4(Pf0.x, Pf1.yzw));
-  float n1111 = dot(g1111, Pf1);
+  highp float n0000 = dot(g0000, Pf0);
+  highp float n1000 = dot(g1000, vec4(Pf1.x, Pf0.yzw));
+  highp float n0100 = dot(g0100, vec4(Pf0.x, Pf1.y, Pf0.zw));
+  highp float n1100 = dot(g1100, vec4(Pf1.xy, Pf0.zw));
+  highp float n0010 = dot(g0010, vec4(Pf0.xy, Pf1.z, Pf0.w));
+  highp float n1010 = dot(g1010, vec4(Pf1.x, Pf0.y, Pf1.z, Pf0.w));
+  highp float n0110 = dot(g0110, vec4(Pf0.x, Pf1.yz, Pf0.w));
+  highp float n1110 = dot(g1110, vec4(Pf1.xyz, Pf0.w));
+  highp float n0001 = dot(g0001, vec4(Pf0.xyz, Pf1.w));
+  highp float n1001 = dot(g1001, vec4(Pf1.x, Pf0.yz, Pf1.w));
+  highp float n0101 = dot(g0101, vec4(Pf0.x, Pf1.y, Pf0.z, Pf1.w));
+  highp float n1101 = dot(g1101, vec4(Pf1.xy, Pf0.z, Pf1.w));
+  highp float n0011 = dot(g0011, vec4(Pf0.xy, Pf1.zw));
+  highp float n1011 = dot(g1011, vec4(Pf1.x, Pf0.y, Pf1.zw));
+  highp float n0111 = dot(g0111, vec4(Pf0.x, Pf1.yzw));
+  highp float n1111 = dot(g1111, Pf1);
 
   highp vec4 fade_xyzw = fade(Pf0);
   highp vec4 n_0w = mix(vec4(n0000, n1000, n0100, n1100), vec4(n0001, n1001, n0101, n1101), fade_xyzw.w);
   highp vec4 n_1w = mix(vec4(n0010, n1010, n0110, n1110), vec4(n0011, n1011, n0111, n1111), fade_xyzw.w);
   highp vec4 n_zw = mix(n_0w, n_1w, fade_xyzw.z);
-  vec2 n_yzw = mix(n_zw.xy, n_zw.zw, fade_xyzw.y);
-  float n_xyzw = mix(n_yzw.x, n_yzw.y, fade_xyzw.x);
+  highp vec2 n_yzw = mix(n_zw.xy, n_zw.zw, fade_xyzw.y);
+  highp float n_xyzw = mix(n_yzw.x, n_yzw.y, fade_xyzw.x);
   return 2.2 * n_xyzw;
 }
 
 // Classic Perlin noise, periodic version
-float pnoise(highp vec4 P, highp vec4 rep)
+highp float pnoise(highp vec4 P, highp vec4 rep)
 {
   highp vec4 Pi0 = mod(floor(P), rep); // Integer part modulo rep
   highp vec4 Pi1 = mod(Pi0 + 1.0, rep); // Integer part + 1 mod rep
@@ -263,52 +263,52 @@ float pnoise(highp vec4 P, highp vec4 rep)
   highp vec4 g0111 = vec4(gx11.z,gy11.z,gz11.z,gw11.z);
   highp vec4 g1111 = vec4(gx11.w,gy11.w,gz11.w,gw11.w);
 
-  highp vec4 norm00 = taylorInvSqrt(highp vec4(dot(g0000, g0000), dot(g0100, g0100), dot(g1000, g1000), dot(g1100, g1100)));
+  highp vec4 norm00 = taylorInvSqrt(vec4(dot(g0000, g0000), dot(g0100, g0100), dot(g1000, g1000), dot(g1100, g1100)));
   g0000 *= norm00.x;
   g0100 *= norm00.y;
   g1000 *= norm00.z;
   g1100 *= norm00.w;
 
-  highp vec4 norm01 = taylorInvSqrt(highp vec4(dot(g0001, g0001), dot(g0101, g0101), dot(g1001, g1001), dot(g1101, g1101)));
+  highp vec4 norm01 = taylorInvSqrt(vec4(dot(g0001, g0001), dot(g0101, g0101), dot(g1001, g1001), dot(g1101, g1101)));
   g0001 *= norm01.x;
   g0101 *= norm01.y;
   g1001 *= norm01.z;
   g1101 *= norm01.w;
 
-  highp vec4 norm10 = taylorInvSqrt(highp vec4(dot(g0010, g0010), dot(g0110, g0110), dot(g1010, g1010), dot(g1110, g1110)));
+  highp vec4 norm10 = taylorInvSqrt(vec4(dot(g0010, g0010), dot(g0110, g0110), dot(g1010, g1010), dot(g1110, g1110)));
   g0010 *= norm10.x;
   g0110 *= norm10.y;
   g1010 *= norm10.z;
   g1110 *= norm10.w;
 
-  highp vec4 norm11 = taylorInvSqrt(highp vec4(dot(g0011, g0011), dot(g0111, g0111), dot(g1011, g1011), dot(g1111, g1111)));
+  highp vec4 norm11 = taylorInvSqrt(vec4(dot(g0011, g0011), dot(g0111, g0111), dot(g1011, g1011), dot(g1111, g1111)));
   g0011 *= norm11.x;
   g0111 *= norm11.y;
   g1011 *= norm11.z;
   g1111 *= norm11.w;
 
-  float n0000 = dot(g0000, Pf0);
-  float n1000 = dot(g1000, vec4(Pf1.x, Pf0.yzw));
-  float n0100 = dot(g0100, vec4(Pf0.x, Pf1.y, Pf0.zw));
-  float n1100 = dot(g1100, vec4(Pf1.xy, Pf0.zw));
-  float n0010 = dot(g0010, vec4(Pf0.xy, Pf1.z, Pf0.w));
-  float n1010 = dot(g1010, vec4(Pf1.x, Pf0.y, Pf1.z, Pf0.w));
-  float n0110 = dot(g0110, vec4(Pf0.x, Pf1.yz, Pf0.w));
-  float n1110 = dot(g1110, vec4(Pf1.xyz, Pf0.w));
-  float n0001 = dot(g0001, vec4(Pf0.xyz, Pf1.w));
-  float n1001 = dot(g1001, vec4(Pf1.x, Pf0.yz, Pf1.w));
-  float n0101 = dot(g0101, vec4(Pf0.x, Pf1.y, Pf0.z, Pf1.w));
-  float n1101 = dot(g1101, vec4(Pf1.xy, Pf0.z, Pf1.w));
-  float n0011 = dot(g0011, vec4(Pf0.xy, Pf1.zw));
-  float n1011 = dot(g1011, vec4(Pf1.x, Pf0.y, Pf1.zw));
-  float n0111 = dot(g0111, vec4(Pf0.x, Pf1.yzw));
-  float n1111 = dot(g1111, Pf1);
+  highp float n0000 = dot(g0000, Pf0);
+  highp float n1000 = dot(g1000, vec4(Pf1.x, Pf0.yzw));
+  highp float n0100 = dot(g0100, vec4(Pf0.x, Pf1.y, Pf0.zw));
+  highp float n1100 = dot(g1100, vec4(Pf1.xy, Pf0.zw));
+  highp float n0010 = dot(g0010, vec4(Pf0.xy, Pf1.z, Pf0.w));
+  highp float n1010 = dot(g1010, vec4(Pf1.x, Pf0.y, Pf1.z, Pf0.w));
+  highp float n0110 = dot(g0110, vec4(Pf0.x, Pf1.yz, Pf0.w));
+  highp float n1110 = dot(g1110, vec4(Pf1.xyz, Pf0.w));
+  highp float n0001 = dot(g0001, vec4(Pf0.xyz, Pf1.w));
+  highp float n1001 = dot(g1001, vec4(Pf1.x, Pf0.yz, Pf1.w));
+  highp float n0101 = dot(g0101, vec4(Pf0.x, Pf1.y, Pf0.z, Pf1.w));
+  highp float n1101 = dot(g1101, vec4(Pf1.xy, Pf0.z, Pf1.w));
+  highp float n0011 = dot(g0011, vec4(Pf0.xy, Pf1.zw));
+  highp float n1011 = dot(g1011, vec4(Pf1.x, Pf0.y, Pf1.zw));
+  highp float n0111 = dot(g0111, vec4(Pf0.x, Pf1.yzw));
+  highp float n1111 = dot(g1111, Pf1);
 
   highp vec4 fade_xyzw = fade(Pf0);
   highp vec4 n_0w = mix(vec4(n0000, n1000, n0100, n1100), vec4(n0001, n1001, n0101, n1101), fade_xyzw.w);
   highp vec4 n_1w = mix(vec4(n0010, n1010, n0110, n1110), vec4(n0011, n1011, n0111, n1111), fade_xyzw.w);
   highp vec4 n_zw = mix(n_0w, n_1w, fade_xyzw.z);
-  vec2 n_yzw = mix(n_zw.xy, n_zw.zw, fade_xyzw.y);
-  float n_xyzw = mix(n_yzw.x, n_yzw.y, fade_xyzw.x);
+  highp vec2 n_yzw = mix(n_zw.xy, n_zw.zw, fade_xyzw.y);
+  highp float n_xyzw = mix(n_yzw.x, n_yzw.y, fade_xyzw.x);
   return 2.2 * n_xyzw;
 }

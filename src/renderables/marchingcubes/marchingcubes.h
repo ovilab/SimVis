@@ -109,6 +109,7 @@ protected:
     MarchingCubes::Mode m_mode = MarchingCubes::FRONT_AND_BACK;
 
     QString contentFromFile(QString filename);
+    QString vertexShaderBase();
 private:
     virtual void synchronize(Renderable *) override;
     virtual void render() override;
