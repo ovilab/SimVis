@@ -48,6 +48,9 @@ public:
     QVector3D lightPosition() const;
     float scale() const;
 
+    bool hasContinuousScalarField() const;
+    void setHasContinuousScalarField(bool hasContinuousScalarField);
+
 public slots:
     void setThreshold(float arg);
     void setMin(QVector3D arg);
@@ -80,6 +83,7 @@ private:
     Mode m_mode = FRONT_AND_BACK;
     bool m_dirty = false;
     bool m_hasScalarField = false;
+    bool m_hasContinuousScalarField = false;
     function<float(const QVector3D point)> m_scalarFieldEvaluator;
     function<QVector3D(const QVector3D point)> m_colorEvaluator = 0;
 

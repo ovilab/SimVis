@@ -5,18 +5,19 @@ import SimVis 1.0
 
 ApplicationWindow {
     visible: true
-    width: 640
-    height: 480
+    width: 1600
+    height: 900
     title: qsTr("Marching cubes demo")
 
     MySimulator {
         id: simulator
+        continuousScalarField: true
     }
 
     Visualizer {
         id: visualizer
         width: parent.width
-        height: parent.height - row1.height
+        height: parent.height - row1.height - row2.height
         simulator: simulator
         camera: camera
         navigator: navigator
@@ -57,6 +58,8 @@ ApplicationWindow {
             } else if(event.key === Qt.Key_4) {
                 console.log("Lines")
                 marchingCubes.mode = MarchingCubes.LINES
+            } else if(event.key === Qt.Key_5) {
+                simulator.continuousScalarField = !simulator.continuousScalarField;
             }
         }
     }
@@ -75,6 +78,77 @@ ApplicationWindow {
         }
         Label {
             text: qsTr("Scale: %1").arg(scaleSlider.value.toFixed(2))
+        }
+    }
+
+    Row {
+        id: row2
+        anchors.top: row1.bottom
+        spacing: 10
+
+        Label {
+            text: "Nx:"
+        }
+
+        TextField {
+            id: numVoxelsX
+            text: marchingCubes.numVoxels.x
+        }
+
+        Label {
+            text: "Ny:"
+        }
+
+        TextField {
+            id: numVoxelsY
+            text: marchingCubes.numVoxels.y
+        }
+
+        Label {
+            text: "Nz:"
+        }
+
+        TextField {
+            id: numVoxelsZ
+            text: marchingCubes.numVoxels.z
+        }
+
+        Button {
+            id: sinus
+            text: "Sinus"
+            onClicked: {
+                simulator.geometry = MySimulator.SINUS
+                marchingCubes.threshold = 0
+                marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
+            }
+        }
+        Button {
+            id: sphere
+            text: "Sphere"
+            onClicked: {
+                simulator.geometry = MySimulator.SPHERE
+                marchingCubes.threshold = 3
+                marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
+            }
+        }
+        Button {
+            id: cube
+            text: "Cube"
+            onClicked: {
+                simulator.geometry = MySimulator.CUBE
+                marchingCubes.threshold = 3
+                marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
+            }
+        }
+
+        Button {
+            id: perlin
+            text: "Perlin"
+            onClicked: {
+                simulator.geometry = MySimulator.PERLIN
+                marchingCubes.threshold = 0.5
+                marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
+            }
         }
     }
 }

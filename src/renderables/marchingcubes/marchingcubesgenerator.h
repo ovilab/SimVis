@@ -100,6 +100,7 @@ protected:
     float m_threshold = 0.0;
     bool m_validSurface = false;
     bool m_hasColorEvaluator = false;
+    bool m_hasContinuousField = false;
     unsigned int m_numberOfVoxels[3];
     QVector3D m_color;
     function<float(const QVector3D point)> m_scalarFieldEvaluator;

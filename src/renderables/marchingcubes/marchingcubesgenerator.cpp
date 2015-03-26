@@ -715,7 +715,6 @@ QVector3D MarchingCubesGenerator::calculateIntersection(Edge &edge)
 void MarchingCubesGenerator::calculateNormal(MarchingCubesVBOData &data) {
     // Numerical differentiation with the two point formula:
     // f' ≈ ( f(x+h) - f(x-h) ) / 2h
-
     static const float h = 0.01;
     static const float oneOverTwoH = 1.0 / (2*h);
 
@@ -736,7 +735,27 @@ void MarchingCubesGenerator::calculateNormal(MarchingCubesVBOData &data) {
 
 void MarchingCubesGenerator::calculateNormals()
 {
-    for (MarchingCubesVBOData &data : m_data) {
-        calculateNormal(data);
+    if(m_hasContinuousField) {
+        for (MarchingCubesVBOData &data : m_data) {
+            calculateNormal(data);
+        }
+    } else {
+        for(Triangle &triangle : m_trianglesFront) {
+            MarchingCubesVBOData &v0 = m_data[triangle.vertexIndices[0]];
+            MarchingCubesVBOData &v1 = m_data[triangle.vertexIndices[1]];
+            MarchingCubesVBOData &v2 = m_data[triangle.vertexIndices[2]];
+            QVector3D p1 = v1.vertex - v0.vertex;
+            QVector3D p2 = v2.vertex - v0.vertex;
+            QVector3D crossProduct = QVector3D::crossProduct(p1, p2);
+            QVector3D normal = crossProduct;
+
+            v0.normal += normal;
+            v1.normal += normal;
+            v2.normal += normal;
+        }
+
+        for(MarchingCubesVBOData &data : m_data) {
+            data.normal.normalize();
+        }
     }
 }

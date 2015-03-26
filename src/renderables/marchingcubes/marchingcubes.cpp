@@ -13,7 +13,6 @@ void MarchingCubes::setScalarFieldEvaluator(const function<float(const QVector3D
     m_scalarFieldEvaluator = scalarFieldEvaluator;
     m_hasScalarField = true;
     setDirty(true);
-    setDirty(true);
 }
 
 QColor MarchingCubes::color() const
@@ -177,6 +176,16 @@ void MarchingCubes::setScale(float arg)
     m_scale = arg;
     emit scaleChanged(arg);
 }
+bool MarchingCubes::hasContinuousScalarField() const
+{
+    return m_hasContinuousScalarField;
+}
+
+void MarchingCubes::setHasContinuousScalarField(bool hasContinuousScalarField)
+{
+    m_hasContinuousScalarField = hasContinuousScalarField;
+}
+
 
 MarchingCubesRenderer::MarchingCubesRenderer()
 {
@@ -200,8 +209,9 @@ void MarchingCubesRenderer::synchronize(Renderable *renderable)
                 m_generator.setColor(marchingCubes->color());
                 m_generator.m_hasColorEvaluator = false;
             }
-
+            m_generator.m_hasContinuousField = marchingCubes->m_hasContinuousScalarField;
             m_generator.setScalarFieldEvaluator(marchingCubes->scalarFieldEvaluator());
+            qDebug() << "Will generate surface with min: " << marchingCubes->min() << " and max: " << marchingCubes->max() << " and num voxels: " << marchingCubes->numVoxels() << " and threshold: " << marchingCubes->threshold();
             m_generator.generateSurface(marchingCubes->min(), marchingCubes->max(), marchingCubes->numVoxels(), marchingCubes->threshold());
             uploadVBOs();
         }

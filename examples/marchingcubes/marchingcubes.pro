@@ -6,7 +6,8 @@ QT += qml quick widgets opengl openglextensions
 
 SOURCES += \
     main.cpp \
-    mysimulator.cpp
+    mysimulator.cpp \
+    perlinnoise.cpp
 
 RESOURCES += qml.qrc
 
@@ -18,4 +19,5 @@ include(deployment.pri)
 include(../../library_deployment.pri)
 
 HEADERS += \
-    mysimulator.h
+    mysimulator.h \
+    perlinnoise.h
