@@ -33,6 +33,11 @@ PerlinNoise::PerlinNoise() {
 
 // Generate a new permutation vector based on the value of seed
 PerlinNoise::PerlinNoise(unsigned int seed) {
+    setSeed(seed);
+}
+
+void PerlinNoise::setSeed(unsigned int seed) {
+    p.clear();
     p.resize(256);
 
     // Fill p with values from 0 to 255

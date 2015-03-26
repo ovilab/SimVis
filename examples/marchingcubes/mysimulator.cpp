@@ -75,6 +75,7 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
                 });
             } else if(m_geometry == MySimulator::PERLIN) {
                 qDebug() << "Choosing perlin geometry";
+                m_perlin.setSeed(time(NULL));
                 marchingCubes->setScalarFieldEvaluator([&](const QVector3D point) {
                     return m_perlin.noise(point.x(), point.y(), point.z());
                 });

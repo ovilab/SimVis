@@ -17,7 +17,7 @@ ApplicationWindow {
     Visualizer {
         id: visualizer
         width: parent.width
-        height: parent.height - row1.height - row2.height
+        height: parent.height - row1.height - row2.height - row3.height
         simulator: simulator
         camera: camera
         navigator: navigator
@@ -59,7 +59,7 @@ ApplicationWindow {
                 console.log("Lines")
                 marchingCubes.mode = MarchingCubes.LINES
             } else if(event.key === Qt.Key_5) {
-                simulator.continuousScalarField = !simulator.continuousScalarField;
+                // simulator.continuousScalarField = !simulator.continuousScalarField;
             }
         }
     }
@@ -79,6 +79,22 @@ ApplicationWindow {
         Label {
             text: qsTr("Scale: %1").arg(scaleSlider.value.toFixed(2))
         }
+
+        Button {
+            id: rendering
+            text: "Lines"
+            onClicked: {
+                visualizer.focus = true
+                if(marchingCubes.mode == MarchingCubes.LINES) {
+                    text = "Lines"
+                    marchingCubes.mode = MarchingCubes.FRONT_AND_BACK
+                }
+                else {
+                    text = "Triangles"
+                    marchingCubes.mode = MarchingCubes.LINES
+                }
+            }
+        }
     }
 
     Row {
@@ -92,6 +108,7 @@ ApplicationWindow {
 
         TextField {
             id: numVoxelsX
+            width: 40
             text: marchingCubes.numVoxels.x
         }
 
@@ -101,6 +118,7 @@ ApplicationWindow {
 
         TextField {
             id: numVoxelsY
+            width: 40
             text: marchingCubes.numVoxels.y
         }
 
@@ -110,13 +128,22 @@ ApplicationWindow {
 
         TextField {
             id: numVoxelsZ
+            width: 40
             text: marchingCubes.numVoxels.z
         }
+    }
+
+    Row {
+        id: row3
+        anchors.top: row2.bottom
+        spacing: 10
 
         Button {
             id: sinus
             text: "Sinus"
+            width: 50
             onClicked: {
+                visualizer.focus = true
                 simulator.geometry = MySimulator.SINUS
                 marchingCubes.threshold = 0
                 marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
@@ -125,7 +152,9 @@ ApplicationWindow {
         Button {
             id: sphere
             text: "Sphere"
+            width: 60
             onClicked: {
+                visualizer.focus = true
                 simulator.geometry = MySimulator.SPHERE
                 marchingCubes.threshold = 3
                 marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
@@ -134,7 +163,9 @@ ApplicationWindow {
         Button {
             id: cube
             text: "Cube"
+            width: 50
             onClicked: {
+                visualizer.focus = true
                 simulator.geometry = MySimulator.CUBE
                 marchingCubes.threshold = 3
                 marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
@@ -144,9 +175,11 @@ ApplicationWindow {
         Button {
             id: perlin
             text: "Perlin"
+            width: 50
             onClicked: {
+                visualizer.focus = true
                 simulator.geometry = MySimulator.PERLIN
-                marchingCubes.threshold = 0.5
+                marchingCubes.threshold = 0.6
                 marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
             }
         }
