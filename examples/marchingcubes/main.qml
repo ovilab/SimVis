@@ -23,6 +23,10 @@ ApplicationWindow {
         navigator: navigator
         focus: true
 
+        Component.onCompleted: {
+            console.log("Resolution: "+width+" x "+height)
+        }
+
         Camera {
             id: camera
             position: Qt.vector3d(0, 10, 0)

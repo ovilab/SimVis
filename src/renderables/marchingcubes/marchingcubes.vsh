@@ -11,9 +11,9 @@ attribute highp vec3 a_color;
 varying highp float light;
 varying highp vec3 normal;
 varying highp vec3 color;
-
+varying highp vec4 scaledPosition;
 void main() {
-    highp vec4 scaledPosition = vec4(a_position.xyz*scale, a_position.w);
+    scaledPosition = vec4(a_position.xyz*scale, a_position.w);
     gl_Position = modelViewProjectionMatrix*scaledPosition;
     normal = a_normal*normalVectorSign;
     color = a_color;
