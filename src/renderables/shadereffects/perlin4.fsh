@@ -36,9 +36,12 @@ highp vec4 taylorInvSqrt(highp vec4 r)
 }
 #endif
 
+#ifndef FADEVEC4
+#define FADEVEC4
 highp vec4 fade(highp vec4 t) {
   return t*t*t*(t*(t*6.0-15.0)+10.0);
 }
+#endif
 
 // Classic Perlin noise
 float cnoise(highp vec4 P)

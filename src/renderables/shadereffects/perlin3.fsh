@@ -12,10 +12,13 @@
 // https://github.com/ashima/webgl-noise
 //
 
+#ifndef MOD289VEC3
+#define MOD289VEC3
 highp vec3 mod289(highp vec3 x)
 {
     return x - floor(x * (1.0 / 289.0)) * 289.0;
 }
+#endif
 
 #ifndef MOD289VEC4
 #define MOD289VEC4
@@ -41,9 +44,12 @@ highp vec4 taylorInvSqrt(highp vec4 r)
 }
 #endif
 
+#ifndef FADEVEC3
+#define FADEVEC3
 highp vec3 fade(highp vec3 t) {
     return t*t*t*(t*(t*6.0-15.0)+10.0);
 }
+#endif
 
 // Classic Perlin noise
 lowp float cnoise(highp vec3 P)

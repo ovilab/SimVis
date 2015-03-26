@@ -8,5 +8,7 @@
         <file>renderables/billboards/billboards_lighted.vsh</file>
         <file>renderables/shadereffects/perlin3.fsh</file>
         <file>renderables/shadereffects/perlin4.fsh</file>
+        <file>renderables/shadereffects/simplex3.fsh</file>
+        <file>renderables/shadereffects/simplex4.fsh</file>
     </qresource>
 </RCC>
