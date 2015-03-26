@@ -14,6 +14,8 @@ protected:
     unsigned int m_numberOfVBOs = 0;
     QMatrix4x4 m_modelViewMatrix;
     QMatrix4x4 m_projectionMatrix;
+    QVector3D m_viewVector;
+    QVector3D m_cameraPosition;
     QVector<GLuint> m_vboIds;
     QOpenGLShaderProgram& program();
     QOpenGLFunctions* glFunctions();

@@ -236,10 +236,17 @@ void MarchingCubesRenderer::render()
 
     QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
     program().setUniformValue("modelViewProjectionMatrix", modelViewProjectionMatrix);
+    program().setUniformValue("cameraPosition", m_cameraPosition);
+    program().setUniformValue("viewVector", m_viewVector);
     program().setUniformValue("lightPosition", m_lightPosition);
     program().setUniformValue("uniformColor", m_color);
     program().setUniformValue("scale", m_scale);
     program().setUniformValue("time", float(m_elapsedTime.elapsed()*1e-3));
+
+    //    program().setUniformValue("ambientColor", QVector3D(0.1, 0.14, 0.02));
+    //    program().setUniformValue("specularColor", QVector3D(0.3, 0.3, 0.3));
+    //    program().setUniformValue("diffuseIntensity", 0.8f);
+    //    program().setUniformValue("ambientIntensity", 0.2f);
 
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
@@ -338,11 +345,26 @@ QString MarchingCubesRenderer::fragmentShaderBase()
     return fragmentShaderBase;
 }
 
+QString MarchingCubesRenderer::vertexShaderBase()
+{
+    QString vertexShaderBase;
+    vertexShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin2.fsh"));
+    vertexShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin3.fsh"));
+    vertexShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin4.fsh"));
+    vertexShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex2.fsh"));
+    vertexShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex3.fsh"));
+    vertexShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex4.fsh"));
+    return vertexShaderBase;
+}
+
 void MarchingCubesRenderer::beforeLinkProgram()
 {
     QString fragmentShader = fragmentShaderBase();
     fragmentShader.append(contentFromFile(":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.fsh"));
 
-    program().addShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.vsh");
+    QString vertexShader = vertexShaderBase();
+    vertexShader.append(contentFromFile(":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.vsh"));
+
+    program().addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShader);
     program().addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShader);
 }
