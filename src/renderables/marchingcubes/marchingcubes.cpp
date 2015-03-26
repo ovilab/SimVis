@@ -190,6 +190,7 @@ void MarchingCubes::setHasContinuousScalarField(bool hasContinuousScalarField)
 MarchingCubesRenderer::MarchingCubesRenderer()
 {
     m_numberOfVBOs = 4;
+    m_elapsedTime.start();
 }
 
 void MarchingCubesRenderer::synchronize(Renderable *renderable)
@@ -237,8 +238,7 @@ void MarchingCubesRenderer::render()
     program().setUniformValue("lightPosition", m_lightPosition);
     program().setUniformValue("uniformColor", m_color);
     program().setUniformValue("scale", m_scale);
-    program().setUniformValue("time", 1.0f);
-    program().setUniformValue("resolution", QVector2D(1600, 900));
+    program().setUniformValue("time", float(m_elapsedTime.elapsed()*1e-3));
 
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);

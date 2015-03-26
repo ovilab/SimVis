@@ -4,6 +4,8 @@
 #include "../../core/renderable.h"
 #include "marchingcubesgenerator.h"
 #include <QColor>
+#include <QElapsedTimer>
+
 class MarchingCubesRenderer;
 
 class MarchingCubes : public Renderable
@@ -103,6 +105,7 @@ protected:
     float m_scale = 1.0;
     QVector3D m_color;
     QVector3D m_lightPosition;
+    QElapsedTimer m_elapsedTime;
     MarchingCubes::Mode m_mode = MarchingCubes::FRONT_AND_BACK;
 
 private:

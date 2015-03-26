@@ -3,9 +3,7 @@ varying highp vec3 normal;
 varying highp float light;
 varying highp vec3 color;
 varying highp vec4 scaledPosition;
-
-uniform float time;
-uniform vec2 resolution;
+uniform lowp float time;
 
 //
 // GLSL textureless classic 3D noise "cnoise",
@@ -131,8 +129,8 @@ float surface3 ( vec3 coord ) {
 void main() {
   // vec2 position = gl_FragCoord.xy / resolution.xy;
   // float n = surface3(vec3(position, time * 0.1));
-    float n = surface3(scaledPosition.xyz);
+    lowp float n = surface3(scaledPosition.xyz*time*0.1);
 
-  highp float lightValue = 0.2 + light*clamp(dot(normalize(lightPosition), normalize(normal)), 0.0, 1.0);
+  lowp float lightValue = 0.2 + light*clamp(dot(normalize(lightPosition), normalize(normal)), 0.0, 1.0);
   gl_FragColor = vec4(color*lightValue*n, 1.0);
 }
