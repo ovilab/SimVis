@@ -139,9 +139,9 @@ private:
     QColor m_specular;
     QVector3D m_lightPosition;
     float m_diffuseIntensity = 1.0;
-    float m_ambientIntensity = 1.0;
-    float m_shininess = 1.0;
-    float m_attenuation = 1.0;
+    float m_ambientIntensity = 0.1;
+    float m_shininess = 20.0;
+    float m_attenuation = 0.01;
 };
 
 #endif // RENDERABLE_H
