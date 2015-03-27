@@ -20,6 +20,13 @@ void main() {
 #ifdef SIMPLEXTEXTURE
     lowp float n = surface4(vec4(vertexPosition, 0.1*cp_time)); // From perlin3.fsh
 #endif
+
+#define BUMPMAP
+#ifdef BUMPMAP
+    highp vec3 normal2 = simplexbump(normal, vertexPosition);
+#else
+    highp vec3 normal2 = normal;
+#endif
 //    lowp float n = surface4(vec4(scaledPosition.xyz,0.1)) + 1.0; // From perlin4.fsh
 //    lowp float n1 = surface4(0.2*vec4(scaledPosition.xyz,time*0.0)); // From perlin4.fsh
 //    lowp float n2 = surface4(0.2*vec4(scaledPosition.zxy,time*0.0)); // From perlin4.fsh
@@ -28,8 +35,8 @@ void main() {
     // lowp float lightValue = 0.2 + light*clamp(dot(normalize(lightPosition), normalize(normal+0.3*(2.0*vec3(n1, n2, n3) - 1.0))), 0.0, 1.0);
     // lowp float lightValue = 0.2 + light*clamp(dot(normalize(cp_lightPosition), normal), 0.0, 1.0);
 #ifdef SIMPLEXTEXTURE
-    gl_FragColor = vec4(ambient(color) + attenuationFactor*(diffuse(normal, vertexPosition, color) + specular(normal, vertexPosition, cp_specularColor))*n, 1.0);
+    gl_FragColor = vec4(ambient(color) + attenuationFactor*(diffuse(normal2, vertexPosition, color) + specular(normal2, vertexPosition, cp_specularColor))*n, 1.0);
 #else
-    gl_FragColor = vec4(ambient(color) + attenuationFactor*(diffuse(normal, vertexPosition, color) + specular(normal, vertexPosition, cp_specularColor)), 1.0);
+    gl_FragColor = vec4(ambient(color) + attenuationFactor*(diffuse(normal2, vertexPosition, color) + specular(normal2, vertexPosition, cp_specularColor)), 1.0);
 #endif
 }

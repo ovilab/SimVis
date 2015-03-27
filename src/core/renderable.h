@@ -20,6 +20,8 @@ namespace CompPhys {
         Simplex4,
         ColorEffects,
         Light,
+        Tools,
+        SimplexBump
     };
 }
 
@@ -40,8 +42,11 @@ protected:
     QVector3D m_lightPosition;
     float m_diffuseIntensity;
     float m_ambientIntensity;
+    float m_specularIntensity;
     float m_shininess;
     float m_attenuation;
+    float m_bumpIntensity;
+    float m_bumpScale;
     QMatrix4x4 m_modelViewMatrix;
     QMatrix4x4 m_projectionMatrix;
     QVector3D m_viewVector;
@@ -81,10 +86,14 @@ class Renderable : public QObject
     Q_PROPERTY(QColor specular READ specular WRITE setSpecular NOTIFY specularChanged)
     Q_PROPERTY(float diffuseIntensity READ diffuseIntensity WRITE setDiffuseIntensity NOTIFY diffuseIntensityChanged)
     Q_PROPERTY(float ambientIntensity READ ambientIntensity WRITE setAmbientIntensity NOTIFY ambientIntensityChanged)
+    Q_PROPERTY(float specularIntensity READ specularIntensity WRITE setSpecularIntensity NOTIFY specularIntensityChanged)
     Q_PROPERTY(float shininess READ shininess WRITE setShininess NOTIFY shininessChanged)
     Q_PROPERTY(float attenuation READ attenuation WRITE setAttenuation NOTIFY attenuationChanged)
     Q_PROPERTY(Camera* camera READ camera WRITE setCamera NOTIFY cameraChanged)
     Q_PROPERTY(QVector3D lightPosition READ lightPosition WRITE setLightPosition NOTIFY lightPositionChanged)
+    Q_PROPERTY(float bumpIntensity READ bumpIntensity WRITE setBumpIntensity NOTIFY bumpIntensityChanged)
+    Q_PROPERTY(float bumpScale READ bumpScale WRITE setBumpScale NOTIFY bumpScaleChanged)
+
 public:
     explicit Renderable(QObject *parent = 0);
     ~Renderable();
@@ -103,6 +112,17 @@ public:
     float shininess() const;
     QColor specular() const;
     float attenuation() const;
+    float specularIntensity() const;
+
+    float bumpIntensity() const
+    {
+        return m_bumpIntensity;
+    }
+
+    float bumpScale() const
+    {
+        return m_bumpScale;
+    }
 
 signals:
 
@@ -116,6 +136,11 @@ signals:
     void shininessChanged(float arg);
     void specularChanged(QColor arg);
     void attenuationChanged(float arg);
+    void specularIntensityChanged(float arg);
+
+    void bumpIntensityChanged(float arg);
+
+    void bumpScaleChanged(float arg);
 
 public slots:
 
@@ -129,6 +154,25 @@ public slots:
     void setShininess(float arg);
     void setSpecular(QColor arg);
     void setAttenuation(float arg);
+    void setSpecularIntensity(float arg);
+
+    void setBumpIntensity(float arg)
+    {
+        if (m_bumpIntensity == arg)
+            return;
+
+        m_bumpIntensity = arg;
+        emit bumpIntensityChanged(arg);
+    }
+
+    void setBumpScale(float arg)
+    {
+        if (m_bumpScale == arg)
+            return;
+
+        m_bumpScale = arg;
+        emit bumpScaleChanged(arg);
+    }
 
 private:
     RenderableRenderer* m_renderer;
@@ -139,9 +183,12 @@ private:
     QColor m_specular;
     QVector3D m_lightPosition;
     float m_diffuseIntensity = 1.0;
+    float m_specularIntensity = 0.1;
     float m_ambientIntensity = 0.1;
     float m_shininess = 20.0;
     float m_attenuation = 0.01;
+    float m_bumpIntensity = 1.0;
+    float m_bumpScale = 1.0;
 };
 
 #endif // RENDERABLE_H

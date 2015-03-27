@@ -52,7 +52,10 @@ ApplicationWindow {
             diffuse: "blue"
             ambientIntensity: 0.1
             diffuseIntensity: 1.0
-            shininess: 20.0
+            specularIntensity: 0.001
+            bumpIntensity: 0.1
+            bumpScale: 3.0
+            shininess: 30.0
             attenuation: 0.01
         }
 

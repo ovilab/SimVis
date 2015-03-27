@@ -9,6 +9,7 @@ uniform highp float cp_attenuation;
 uniform highp float cp_shininess;
 uniform highp float cp_diffuseIntensity;
 uniform highp float cp_ambientIntensity;
+uniform highp float cp_specularIntensity;
 
 highp vec3 diffuse(highp vec3 normal, highp vec3 vertexPosition, highp vec3 color) {
     highp vec3 surfaceToLight = normalize(cp_lightPosition - vertexPosition);
@@ -35,7 +36,7 @@ highp vec3 specular(highp vec3 normal, highp vec3 vertexPosition, highp vec3 col
     highp float cosAngle = max(0.0, dot(surfaceToCamera, reflectionVector));
     highp float specularCoefficient = pow(cosAngle, cp_shininess);
 
-    return color*specularCoefficient;
+    return color*specularCoefficient*cp_specularIntensity;
 }
 
 highp vec3 specular(highp vec3 normal, highp vec3 vertexPosition, highp vec4 color) {

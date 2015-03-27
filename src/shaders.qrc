@@ -15,5 +15,7 @@
         <file>renderables/shadereffects/coloreffects.glsl</file>
         <file>renderables/shadereffects/light.glsl</file>
         <file>renderables/shadereffects/default.glsl</file>
+        <file>renderables/shadereffects/tools.glsl</file>
+        <file>renderables/shadereffects/simplexbump.glsl</file>
     </qresource>
 </RCC>
