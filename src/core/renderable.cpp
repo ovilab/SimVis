@@ -226,14 +226,6 @@ void RenderableRenderer::prepareAndRender()
     m_program.setUniformValue("cp_cameraPosition", m_cameraPosition);
     m_program.setUniformValue("cp_lightPosition", m_lightPosition);
     m_program.setUniformValue("cp_time", float(m_elapsedTime.elapsed()*1e-3));
-    qDebug() << "Setting uniforms: ";
-    qDebug() << "Ambient: " << m_ambient;
-    qDebug() << "Diffuse: " << m_diffuse;
-    qDebug() << "Specular: " << m_specular;
-    qDebug() << "Shininess: " << m_shininess;
-    qDebug() << "Attenuation: " << m_attenuation;
-    qDebug() << "Diffuse intensity: " << m_diffuseIntensity;
-    qDebug() << "Ambient intensity: " << m_ambientIntensity;
 
     render();
     m_program.release();

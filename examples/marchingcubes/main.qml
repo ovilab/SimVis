@@ -41,13 +41,13 @@ ApplicationWindow {
 
         MarchingCubes {
             id: marchingCubes
-            numVoxels: Qt.vector3d(50, 50, 50)
+            numVoxels: Qt.vector3d(100, 100, 100)
             min: Qt.vector3d(-Math.PI, -Math.PI, -Math.PI)
             max: Qt.vector3d(Math.PI, Math.PI, Math.PI)
             threshold: 0.0
             lightPosition: camera.position
-            color: "blue"
-            ambient: "blue"
+            color: "#fd20c1"
+            ambient: "green"
             specular: "white"
             diffuse: "blue"
             ambientIntensity: 0.1
@@ -137,6 +137,7 @@ ApplicationWindow {
             id: numVoxelsX
             width: 40
             text: marchingCubes.numVoxels.x
+            onFocusChanged: if(focus) selectAll()
         }
 
         Label {
@@ -147,6 +148,7 @@ ApplicationWindow {
             id: numVoxelsY
             width: 40
             text: marchingCubes.numVoxels.y
+            onFocusChanged: if(focus) selectAll()
         }
 
         Label {
@@ -157,6 +159,7 @@ ApplicationWindow {
             id: numVoxelsZ
             width: 40
             text: marchingCubes.numVoxels.z
+            onFocusChanged: if(focus) selectAll()
         }
     }
 

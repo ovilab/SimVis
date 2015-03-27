@@ -28,11 +28,8 @@ void main() {
     // lowp float lightValue = 0.2 + light*clamp(dot(normalize(lightPosition), normalize(normal+0.3*(2.0*vec3(n1, n2, n3) - 1.0))), 0.0, 1.0);
     // lowp float lightValue = 0.2 + light*clamp(dot(normalize(cp_lightPosition), normal), 0.0, 1.0);
 #ifdef SIMPLEXTEXTURE
-    gl_FragColor = vec4(color*lightValue*n, 1.0);
+    gl_FragColor = vec4(ambient(color) + attenuationFactor*(diffuse(normal, vertexPosition, color) + specular(normal, vertexPosition, cp_specularColor))*n, 1.0);
 #else
-    // gl_FragColor = vec4(color * (ambient() + attenuationFactor*diffuseAndSpecular(normal, vertexPosition)), 1.0);
-    gl_FragColor = vec4(ambient(color) + attenuationFactor*diffuseAndSpecular(normal, vertexPosition), 1.0);
-    // gl_FragColor = vec4(ambient(color) + diffuseAndSpecular(normal, vertexPosition)), 1.0);
-    // gl_FragColor = vec4(color*lightValue, 1.0);
+    gl_FragColor = vec4(ambient(color) + attenuationFactor*(diffuse(normal, vertexPosition, color) + specular(normal, vertexPosition, cp_specularColor)), 1.0);
 #endif
 }
