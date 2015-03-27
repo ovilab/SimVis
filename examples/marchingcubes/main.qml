@@ -46,7 +46,14 @@ ApplicationWindow {
             max: Qt.vector3d(Math.PI, Math.PI, Math.PI)
             threshold: 0.0
             lightPosition: camera.position
-            color: "green"
+            color: "blue"
+            ambient: "blue"
+            specular: "white"
+            diffuse: "blue"
+            ambientIntensity: 0.1
+            diffuseIntensity: 1.0
+            shininess: 20.0
+            attenuation: 0.01
         }
 
         Keys.onPressed: {

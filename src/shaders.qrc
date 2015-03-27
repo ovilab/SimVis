@@ -13,5 +13,7 @@
         <file>renderables/shadereffects/perlin2.glsl</file>
         <file>renderables/shadereffects/simplex2.glsl</file>
         <file>renderables/shadereffects/coloreffects.glsl</file>
+        <file>renderables/shadereffects/light.glsl</file>
+        <file>renderables/shadereffects/default.glsl</file>
     </qresource>
 </RCC>

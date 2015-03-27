@@ -317,6 +317,8 @@ void MarchingCubesRenderer::uploadVBOs()
 void MarchingCubesRenderer::beforeLinkProgram()
 {
     addShaderLibrary(QOpenGLShader::Fragment, CompPhys::Simplex4);
+    addShaderLibrary(QOpenGLShader::Fragment, CompPhys::Light);
+    addShaderLibrary(QOpenGLShader::Vertex, CompPhys::Light);
     if(m_simplexTexture) {
         addShaderCodeToBase(QOpenGLShader::Fragment, "#define SIMPLEXTEXTURE");
     }

@@ -33,7 +33,13 @@ void Renderable::requestSynchronize()
     m_renderer->m_cameraPosition = m_camera->position();
     m_renderer->m_ambient = m_ambient;
     m_renderer->m_diffuse = m_diffuse;
+    m_renderer->m_specular = m_specular;
+    m_renderer->m_diffuseIntensity = m_diffuseIntensity;
+    m_renderer->m_ambientIntensity = m_ambientIntensity;
+    m_renderer->m_attenuation = m_attenuation;
+    m_renderer->m_shininess = m_shininess;
     m_renderer->m_lightPosition = m_lightPosition;
+
     m_renderer->synchronize(this);
 }
 
@@ -60,6 +66,31 @@ QColor Renderable::diffuse() const
 QVector3D Renderable::lightPosition() const
 {
     return m_lightPosition;
+}
+
+float Renderable::diffuseIntensity() const
+{
+    return m_diffuseIntensity;
+}
+
+float Renderable::ambientIntensity() const
+{
+    return m_ambientIntensity;
+}
+
+float Renderable::shininess() const
+{
+    return m_shininess;
+}
+
+QColor Renderable::specular() const
+{
+    return m_specular;
+}
+
+float Renderable::attenuation() const
+{
+    return m_attenuation;
 }
 
 void Renderable::setVisible(bool arg)
@@ -107,6 +138,51 @@ void Renderable::setLightPosition(QVector3D arg)
     emit lightPositionChanged(arg);
 }
 
+void Renderable::setDiffuseIntensity(float arg)
+{
+    if (m_diffuseIntensity == arg)
+        return;
+
+    m_diffuseIntensity = arg;
+    emit diffuseIntensityChanged(arg);
+}
+
+void Renderable::setAmbientIntensity(float arg)
+{
+    if (m_ambientIntensity == arg)
+        return;
+
+    m_ambientIntensity = arg;
+    emit ambientIntensityChanged(arg);
+}
+
+void Renderable::setShininess(float arg)
+{
+    if (m_shininess == arg)
+        return;
+
+    m_shininess = arg;
+    emit shininessChanged(arg);
+}
+
+void Renderable::setSpecular(QColor arg)
+{
+    if (m_specular == arg)
+        return;
+
+    m_specular = arg;
+    emit specularChanged(arg);
+}
+
+void Renderable::setAttenuation(float arg)
+{
+    if (m_attenuation == arg)
+        return;
+
+    m_attenuation = arg;
+    emit attenuationChanged(arg);
+}
+
 RenderableRenderer::RenderableRenderer()
 {
     m_elapsedTime.start();
@@ -126,6 +202,9 @@ void RenderableRenderer::prepareAndRender()
         // TODO: Only build the shader bases once?
         m_fragmentShaderBase.clear();
         m_vertexShaderBase.clear();
+        addShaderCodeToBase(QOpenGLShader::Fragment, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/default.glsl"));
+        addShaderCodeToBase(QOpenGLShader::Vertex, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/default.glsl"));
+
         beforeLinkProgram();
         m_program.link();
         m_shadersDirty = false;
@@ -138,10 +217,24 @@ void RenderableRenderer::prepareAndRender()
     m_program.setUniformValue("cp_projectionMatrix", m_projectionMatrix);
     m_program.setUniformValue("cp_ambientColor", m_ambient);
     m_program.setUniformValue("cp_diffuseColor", m_diffuse);
+    m_program.setUniformValue("cp_specularColor", m_specular);
+    m_program.setUniformValue("cp_shininess", m_shininess);
+    m_program.setUniformValue("cp_attenuation", m_attenuation);
+    m_program.setUniformValue("cp_diffuseIntensity", m_diffuseIntensity);
+    m_program.setUniformValue("cp_ambientIntensity", m_ambientIntensity);
     m_program.setUniformValue("cp_viewVector", m_viewVector);
     m_program.setUniformValue("cp_cameraPosition", m_cameraPosition);
     m_program.setUniformValue("cp_lightPosition", m_lightPosition);
     m_program.setUniformValue("cp_time", float(m_elapsedTime.elapsed()*1e-3));
+    qDebug() << "Setting uniforms: ";
+    qDebug() << "Ambient: " << m_ambient;
+    qDebug() << "Diffuse: " << m_diffuse;
+    qDebug() << "Specular: " << m_specular;
+    qDebug() << "Shininess: " << m_shininess;
+    qDebug() << "Attenuation: " << m_attenuation;
+    qDebug() << "Diffuse intensity: " << m_diffuseIntensity;
+    qDebug() << "Ambient intensity: " << m_ambientIntensity;
+
     render();
     m_program.release();
 }
@@ -211,6 +304,7 @@ void RenderableRenderer::addShaderLibrary(QOpenGLShader::ShaderType type, CompPh
     if(shader == CompPhys::AllShaders || shader == CompPhys::Simplex3) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex3.glsl"));
     if(shader == CompPhys::AllShaders || shader == CompPhys::Simplex4) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex4.glsl"));
     if(shader == CompPhys::AllShaders || shader == CompPhys::ColorEffects) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/coloreffects.glsl"));
+    if(shader == CompPhys::AllShaders || shader == CompPhys::Light) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/light.glsl"));
 }
 
 QOpenGLFunctions* RenderableRenderer::glFunctions() {
