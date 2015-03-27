@@ -12,6 +12,9 @@
 // https://github.com/ashimavec/webgl-noise
 //
 
+#ifndef PERLIN4
+#define PERLIN4
+
 #ifndef MOD289VEC4
 #define MOD289VEC4
 highp vec4 mod289(highp vec4 x)
@@ -312,3 +315,4 @@ highp float pnoise(highp vec4 P, highp vec4 rep)
   highp float n_xyzw = mix(n_yzw.x, n_yzw.y, fade_xyzw.x);
   return 2.2 * n_xyzw;
 }
+#endif

@@ -11,6 +11,8 @@
 // Distributed under the MIT license. See LICENSE file.
 // https://github.com/ashimavec/webgl-noise
 //
+#ifndef SIMPLEX4
+#define SIMPLEX4
 
 #ifndef MOD289VEC4
 #define MOD289VEC4
@@ -151,3 +153,4 @@ highp float snoise(highp vec4 v)
                     + dot(m1*m1, vec2( dot( p3, x3 ), dot( p4, x4 ) ) ) ) ;
 
 }
+#endif

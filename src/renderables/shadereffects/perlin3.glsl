@@ -11,6 +11,8 @@
 // Distributed under the MIT license. See LICENSE file.
 // https://github.com/ashima/webgl-noise
 //
+#ifndef PERLIN3
+#define PERLIN3
 
 #ifndef MOD289VEC3
 #define MOD289VEC3
@@ -120,3 +122,4 @@ highp float cnoise(highp vec3 P)
     highp float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);
     return 2.2 * n_xyz;
 }
+#endif

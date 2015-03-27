@@ -1,6 +1,6 @@
-// Based on https://github.com/mattdesl/lwjgl-basics/wiki/ShaderLesson3
-
-//sepia colour, adjust to taste
+#ifndef COLOREFFECTS
+#define COLOREFFECTS
+//Sepia color based on https://github.com/mattdesl/lwjgl-basics/wiki/ShaderLesson3
 const highp vec3 SEPIA = vec3(1.2, 1.0, 0.8);
 
 highp vec3 applySepia(highp vec3 color) {
@@ -15,3 +15,4 @@ highp vec3 applySepia(highp vec3 color) {
 
     return color;
 }
+#endif

@@ -12,6 +12,9 @@
 // https://github.com/ashimavec/webgl-noise
 //
 
+#ifndef SIMPLEX2
+#define SIMPLEX2
+
 #ifndef MOD289VEC3
 #define MOD289VEC3
 highp vec3 mod289(highp vec3 x)
@@ -84,3 +87,4 @@ highp float snoise(highp vec2 v)
   g.yz = a0.yz * x12.xz + h.yz * x12.yw;
   return 130.0 * dot(m, g);
 }
+#endif
