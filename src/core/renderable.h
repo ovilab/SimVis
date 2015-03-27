@@ -47,6 +47,7 @@ protected:
     QOpenGLFunctions* glFunctions();
     QString contentFromFile(QString fileName);
     void addShaderLibrary(QOpenGLShader::ShaderType type, CompPhys::Shader shader);
+    void addShaderCodeToBase(QOpenGLShader::ShaderType type, QString shaderCode);
     void setShaderFromSourceCode(QOpenGLShader::ShaderType type, QString shaderCode);
     void setShaderFromSourceFile(QOpenGLShader::ShaderType type, QString fileName);
 signals:
@@ -54,7 +55,6 @@ signals:
 private:
     void prepareAndRender();
     void removeShader(QOpenGLShader::ShaderType type);
-    void addShaderCodeToBase(QOpenGLShader::ShaderType type, QString shaderCode);
 
     virtual void beforeLinkProgram() = 0;
     virtual void synchronize(Renderable* renderable) = 0;

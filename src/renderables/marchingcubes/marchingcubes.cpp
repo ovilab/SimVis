@@ -317,11 +317,9 @@ void MarchingCubesRenderer::uploadVBOs()
 void MarchingCubesRenderer::beforeLinkProgram()
 {
     addShaderLibrary(QOpenGLShader::Fragment, CompPhys::Simplex4);
-    QString fragmentShader;
     if(m_simplexTexture) {
-        fragmentShader.append("#define SIMPLEXTEXTURE");
+        addShaderCodeToBase(QOpenGLShader::Fragment, "#define SIMPLEXTEXTURE");
     }
-    fragmentShader.append(contentFromFile(":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.fsh"));
-    setShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShader);
+    setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.fsh");
     setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.vsh");
 }
