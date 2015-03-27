@@ -72,9 +72,13 @@ void RenderableRenderer::generateVBOs()
 
 void RenderableRenderer::prepareAndRender()
 {
-    if(!m_program.isLinked()) {
+    if(m_shadersDirty) {
+        // TODO: Only build the shader bases once?
+        m_fragmentShaderBase.clear();
+        m_vertexShaderBase.clear();
         beforeLinkProgram();
         m_program.link();
+        m_shadersDirty = false;
     }
     m_program.bind();
     render();

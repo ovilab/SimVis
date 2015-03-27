@@ -27,6 +27,7 @@ class RenderableRenderer : public QObject
 protected:
     void generateVBOs();
     unsigned int m_numberOfVBOs = 0;
+    bool m_shadersDirty = true;
     QMatrix4x4 m_modelViewMatrix;
     QMatrix4x4 m_projectionMatrix;
     QVector3D m_viewVector;
@@ -53,7 +54,6 @@ private:
 
     QOpenGLShaderProgram m_program;
     QOpenGLFunctions* m_funcs = 0;
-
 
     friend class Renderable;
 };
