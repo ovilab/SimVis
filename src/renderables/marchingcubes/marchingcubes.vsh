@@ -1,5 +1,5 @@
-uniform highp mat4 modelViewProjectionMatrix;
-uniform highp vec3 lightPosition;
+uniform highp mat4 cp_modelViewProjectionMatrix;
+uniform highp vec3 cp_lightPosition;
 uniform highp float lightFalloffDistance;
 uniform highp float normalVectorSign;
 uniform highp float scale;
@@ -16,11 +16,11 @@ varying highp vec3 vertexPosition;
 void main() {
     vertexPosition = a_position.xyz;
     highp vec4 scaledPosition = vec4(a_position.xyz*scale, a_position.w);
-    gl_Position = modelViewProjectionMatrix*scaledPosition;
+    gl_Position = cp_modelViewProjectionMatrix*scaledPosition;
     normal = a_normal*normalVectorSign;
 
     color = a_color;
-    highp vec4 lightPositionProjected = modelViewProjectionMatrix*vec4(lightPosition, 1.0);
+    highp vec4 lightPositionProjected = cp_modelViewProjectionMatrix*vec4(cp_lightPosition, 1.0);
     highp float lightDistance = lightPositionProjected.z;
     light = clamp((lightFalloffDistance * 0.85 - lightDistance) / (lightFalloffDistance * 0.7), 0.4, 1.0);
 }

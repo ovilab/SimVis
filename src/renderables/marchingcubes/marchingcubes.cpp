@@ -26,10 +26,6 @@ MarchingCubes::Mode MarchingCubes::mode() const
     return m_mode;
 }
 
-QVector3D MarchingCubes::lightPosition() const
-{
-    return m_lightPosition;
-}
 
 float MarchingCubes::scale() const
 {
@@ -160,15 +156,6 @@ void MarchingCubes::setMode(MarchingCubes::Mode arg)
     emit modeChanged(arg);
 }
 
-void MarchingCubes::setLightPosition(QVector3D arg)
-{
-    if (m_lightPosition == arg)
-        return;
-
-    m_lightPosition = arg;
-    emit lightPositionChanged(arg);
-}
-
 void MarchingCubes::setScale(float arg)
 {
     if (m_scale == arg)
@@ -205,7 +192,6 @@ bool MarchingCubes::simplexTexture() const
 MarchingCubesRenderer::MarchingCubesRenderer()
 {
     m_numberOfVBOs = 4;
-    m_elapsedTime.start();
 }
 
 void MarchingCubesRenderer::synchronize(Renderable *renderable)
@@ -240,7 +226,6 @@ void MarchingCubesRenderer::synchronize(Renderable *renderable)
         marchingCubes->m_shadersDirty = false;
     }
     m_simplexTexture = marchingCubes->simplexTexture();
-    m_lightPosition = marchingCubes->lightPosition();
     m_color = QVector3D(marchingCubes->color().redF(), marchingCubes->color().greenF(), marchingCubes->color().blueF());
     m_mode = marchingCubes->mode();
     m_scale = marchingCubes->scale();
@@ -255,17 +240,7 @@ void MarchingCubesRenderer::render()
 
     QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
     program().setUniformValue("modelViewProjectionMatrix", modelViewProjectionMatrix);
-    program().setUniformValue("cameraPosition", m_cameraPosition);
-    program().setUniformValue("viewVector", m_viewVector);
-    program().setUniformValue("lightPosition", m_lightPosition);
-    program().setUniformValue("uniformColor", m_color);
     program().setUniformValue("scale", m_scale);
-    program().setUniformValue("time", float(m_elapsedTime.elapsed()*1e-3));
-
-    //    program().setUniformValue("ambientColor", QVector3D(0.1, 0.14, 0.02));
-    //    program().setUniformValue("specularColor", QVector3D(0.3, 0.3, 0.3));
-    //    program().setUniformValue("diffuseIntensity", 0.8f);
-    //    program().setUniformValue("ambientIntensity", 0.2f);
 
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);

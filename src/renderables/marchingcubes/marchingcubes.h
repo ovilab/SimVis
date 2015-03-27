@@ -17,7 +17,6 @@ class MarchingCubes : public Renderable
     Q_PROPERTY(QVector3D min READ min WRITE setMin NOTIFY minChanged)
     Q_PROPERTY(QVector3D max READ max WRITE setMax NOTIFY maxChanged)
     Q_PROPERTY(QVector3D numVoxels READ numVoxels WRITE setNumVoxels NOTIFY numVoxelsChanged)
-    Q_PROPERTY(QVector3D lightPosition READ lightPosition WRITE setLightPosition NOTIFY lightPositionChanged)
     Q_PROPERTY(bool dirty READ dirty WRITE setDirty NOTIFY dirtyChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(Mode mode READ mode WRITE setMode NOTIFY modeChanged)
@@ -48,7 +47,6 @@ public:
     void setColorEvaluator(const function<QVector3D(const QVector3D)> &colorEvaluator);
     QColor color() const;
     Mode mode() const;
-    QVector3D lightPosition() const;
     float scale() const;
     bool hasContinuousScalarField() const;
     void setHasContinuousScalarField(bool hasContinuousScalarField);
@@ -62,7 +60,6 @@ public slots:
     void setNumVoxels(QVector3D arg);
     void setColor(QColor arg);
     void setMode(Mode arg);
-    void setLightPosition(QVector3D arg);
     void setScale(float arg);
     void setSimplexTexture(bool arg);
 
@@ -74,7 +71,6 @@ signals:
     void numVoxelsChanged(QVector3D arg);
     void colorChanged(QColor arg);
     void modeChanged(Mode arg);
-    void lightPositionChanged(QVector3D arg);
     void scaleChanged(float arg);
     void simplexTextureChanged(bool arg);
 
@@ -95,7 +91,6 @@ private:
     function<QVector3D(const QVector3D point)> m_colorEvaluator = 0;
 
     friend class MarchingCubesRenderer;
-    QVector3D m_lightPosition;
 };
 
 class MarchingCubesRenderer : public RenderableRenderer
@@ -110,8 +105,6 @@ protected:
     float m_scale = 1.0;
     bool m_simplexTexture = false;
     QVector3D m_color;
-    QVector3D m_lightPosition;
-    QElapsedTimer m_elapsedTime;
     MarchingCubes::Mode m_mode = MarchingCubes::FRONT_AND_BACK;
 private:
     virtual void synchronize(Renderable *) override;

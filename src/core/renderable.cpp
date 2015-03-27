@@ -31,6 +31,9 @@ void Renderable::requestSynchronize()
     m_renderer->m_projectionMatrix = m_camera->projectionMatrix();
     m_renderer->m_viewVector = m_camera->viewVector();
     m_renderer->m_cameraPosition = m_camera->position();
+    m_renderer->m_ambient = m_ambient;
+    m_renderer->m_diffuse = m_diffuse;
+    m_renderer->m_lightPosition = m_lightPosition;
     m_renderer->synchronize(this);
 }
 
@@ -42,6 +45,21 @@ bool Renderable::visible() const
 Camera *Renderable::camera() const
 {
     return m_camera;
+}
+
+QColor Renderable::ambient() const
+{
+    return m_ambient;
+}
+
+QColor Renderable::diffuse() const
+{
+    return m_diffuse;
+}
+
+QVector3D Renderable::lightPosition() const
+{
+    return m_lightPosition;
 }
 
 void Renderable::setVisible(bool arg)
@@ -62,6 +80,38 @@ void Renderable::setCamera(Camera *arg)
     emit cameraChanged(arg);
 }
 
+void Renderable::setAmbient(QColor arg)
+{
+    if (m_ambient == arg)
+        return;
+
+    m_ambient = arg;
+    emit ambientChanged(arg);
+}
+
+void Renderable::setDiffuse(QColor arg)
+{
+    if (m_diffuse == arg)
+        return;
+
+    m_diffuse = arg;
+    emit diffuseChanged(arg);
+}
+
+void Renderable::setLightPosition(QVector3D arg)
+{
+    if (m_lightPosition == arg)
+        return;
+
+    m_lightPosition = arg;
+    emit lightPositionChanged(arg);
+}
+
+RenderableRenderer::RenderableRenderer()
+{
+    m_elapsedTime.start();
+}
+
 void RenderableRenderer::generateVBOs()
 {
     if(m_numberOfVBOs>0) {
@@ -80,7 +130,18 @@ void RenderableRenderer::prepareAndRender()
         m_program.link();
         m_shadersDirty = false;
     }
+
     m_program.bind();
+    QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
+    m_program.setUniformValue("cp_modelViewProjectionMatrix", modelViewProjectionMatrix);
+    m_program.setUniformValue("cp_modelViewMatrix", m_modelViewMatrix);
+    m_program.setUniformValue("cp_projectionMatrix", m_projectionMatrix);
+    m_program.setUniformValue("cp_ambientColor", m_ambient);
+    m_program.setUniformValue("cp_diffuseColor", m_diffuse);
+    m_program.setUniformValue("cp_viewVector", m_viewVector);
+    m_program.setUniformValue("cp_cameraPosition", m_cameraPosition);
+    m_program.setUniformValue("cp_lightPosition", m_lightPosition);
+    m_program.setUniformValue("cp_time", float(m_elapsedTime.elapsed()*1e-3));
     render();
     m_program.release();
 }
