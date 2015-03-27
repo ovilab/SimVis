@@ -50,10 +50,8 @@ public:
     Mode mode() const;
     QVector3D lightPosition() const;
     float scale() const;
-
     bool hasContinuousScalarField() const;
     void setHasContinuousScalarField(bool hasContinuousScalarField);
-
     bool simplexTexture() const;
 
 public slots:
@@ -66,7 +64,6 @@ public slots:
     void setMode(Mode arg);
     void setLightPosition(QVector3D arg);
     void setScale(float arg);
-
     void setSimplexTexture(bool arg);
 
 signals:
@@ -79,17 +76,18 @@ signals:
     void modeChanged(Mode arg);
     void lightPositionChanged(QVector3D arg);
     void scaleChanged(float arg);
-
     void simplexTextureChanged(bool arg);
 
 private:
     float m_threshold = 0.0;
     float m_scale = 1.0;
+    bool m_simplexTexture = false;
     QVector3D m_numVoxels;
     QVector3D m_min;
     QVector3D m_max;
     QColor m_color;
     Mode m_mode = FRONT_AND_BACK;
+    bool m_shadersDirty = false;
     bool m_dirty = false;
     bool m_hasScalarField = false;
     bool m_hasContinuousScalarField = false;
@@ -98,7 +96,6 @@ private:
 
     friend class MarchingCubesRenderer;
     QVector3D m_lightPosition;
-    bool m_simplexTexture;
 };
 
 class MarchingCubesRenderer : public RenderableRenderer
@@ -111,6 +108,7 @@ protected:
     unsigned int m_triangleIndexCount = 0;
     unsigned int m_lineIndexCount = 0;
     float m_scale = 1.0;
+    bool m_simplexTexture = false;
     QVector3D m_color;
     QVector3D m_lightPosition;
     QElapsedTimer m_elapsedTime;

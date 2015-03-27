@@ -86,19 +86,16 @@ void RenderableRenderer::prepareAndRender()
 }
 
 void RenderableRenderer::removeShader(QOpenGLShader::ShaderType type) {
-    qDebug() << "Removing shader code of type " << type;
     QOpenGLShader *shader = 0;
     for(auto it = m_program.shaders().begin(); it != m_program.shaders().end(); it++) {
         QOpenGLShader *thisShader = *it;
         if(thisShader->shaderType() == type) {
-            qDebug() << "Found shader of this type, this will be great";
             shader = thisShader;
             break;
         }
     }
 
     if(shader) {
-        qDebug() << "We have a shader that can be removed.";
         m_program.removeShader(shader);
     }
 }
@@ -114,7 +111,8 @@ QString RenderableRenderer::contentFromFile(QString fileName) {
         exit(1);
     }
     QTextStream stream(&f);
-    QString content = stream.readAll();
+    QString content = "\n";
+    content.append(stream.readAll());
     content.append("\n");
     f.close();
 

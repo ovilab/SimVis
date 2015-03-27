@@ -99,6 +99,22 @@ ApplicationWindow {
                 }
             }
         }
+
+        Button {
+            id: texture
+            text: "Simplex"
+            onClicked: {
+                visualizer.focus = true
+                marchingCubes.simplexTexture = !marchingCubes.simplexTexture;
+
+                if(marchingCubes.simplexTexture) {
+                    text = "Normal"
+                }
+                else {
+                    text = "Simplex"
+                }
+            }
+        }
     }
 
     Row {

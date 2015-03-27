@@ -182,7 +182,7 @@ void MarchingCubes::setSimplexTexture(bool arg)
 {
     if (m_simplexTexture == arg)
         return;
-
+    m_shadersDirty = true;
     m_simplexTexture = arg;
     emit simplexTextureChanged(arg);
 }
@@ -235,6 +235,11 @@ void MarchingCubesRenderer::synchronize(Renderable *renderable)
         marchingCubes->setDirty(false);
     }
 
+    if(marchingCubes->m_shadersDirty) {
+        m_shadersDirty = true;
+        marchingCubes->m_shadersDirty = false;
+    }
+    m_simplexTexture = marchingCubes->simplexTexture();
     m_lightPosition = marchingCubes->lightPosition();
     m_color = QVector3D(marchingCubes->color().redF(), marchingCubes->color().greenF(), marchingCubes->color().blueF());
     m_mode = marchingCubes->mode();
@@ -337,6 +342,11 @@ void MarchingCubesRenderer::uploadVBOs()
 void MarchingCubesRenderer::beforeLinkProgram()
 {
     addShaderLibrary(QOpenGLShader::Fragment, CompPhys::Simplex4);
-    setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.fsh");
+    QString fragmentShader;
+    if(m_simplexTexture) {
+        fragmentShader.append("#define SIMPLEXTEXTURE");
+    }
+    fragmentShader.append(contentFromFile(":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.fsh"));
+    setShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShader);
     setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.vsh");
 }
