@@ -86,17 +86,12 @@ void RenderableRenderer::prepareAndRender()
 }
 
 void RenderableRenderer::removeShader(QOpenGLShader::ShaderType type) {
-    QOpenGLShader *shader = 0;
-    for(auto it = m_program.shaders().begin(); it != m_program.shaders().end(); it++) {
-        QOpenGLShader *thisShader = *it;
-        if(thisShader->shaderType() == type) {
-            shader = thisShader;
-            break;
+    // Remove a shader of this type if it exists
+    for(QOpenGLShader *shader : m_program.shaders()) {
+        if(shader->shaderType() == type) {
+            m_program.removeShader(shader);
+            return;
         }
-    }
-
-    if(shader) {
-        m_program.removeShader(shader);
     }
 }
 
