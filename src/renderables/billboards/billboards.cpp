@@ -220,10 +220,8 @@ void Billboards::setPositions(QVector<QVector3D> &positions)
 }
 
 void BillboardsRenderer::beforeLinkProgram() {
-    // program().addShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/billboards/billboards.vsh");
-    // program().addShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/billboards/billboards.fsh");
-    program().addShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/billboards/billboards_lighted.vsh");
-    program().addShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/billboards/billboards_lighted.fsh");
+    setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/billboards/billboards_lighted.vsh");
+    setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/billboards/billboards_lighted.fsh");
 }
 
 void BillboardsRenderer::render()

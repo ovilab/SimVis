@@ -320,51 +320,12 @@ void MarchingCubesRenderer::uploadVBOs()
     m_lineIndexCount = 6*m_generator.m_lines.size();
 }
 
-QString MarchingCubesRenderer::contentFromFile(QString filename) {
-    QFile f(filename);
-    if (!f.open(QFile::ReadOnly | QFile::Text)) {
-        qDebug() << "Could not open " << f.fileName() << ". Aborting!";
-        exit(1);
-    }
-    QTextStream stream(&f);
-    QString content = stream.readAll();
-    content.append("\n");
-    return content;
-}
-
-QString MarchingCubesRenderer::fragmentShaderBase()
-{
-    QString fragmentShaderBase;
-    fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin2.fsh"));
-    fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin3.fsh"));
-    fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin4.fsh"));
-    fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex2.fsh"));
-    fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex3.fsh"));
-    fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex4.fsh"));
-    fragmentShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/effects.fsh"));
-    return fragmentShaderBase;
-}
-
-QString MarchingCubesRenderer::vertexShaderBase()
-{
-    QString vertexShaderBase;
-    vertexShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin2.fsh"));
-    vertexShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin3.fsh"));
-    vertexShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin4.fsh"));
-    vertexShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex2.fsh"));
-    vertexShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex3.fsh"));
-    vertexShaderBase.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex4.fsh"));
-    return vertexShaderBase;
-}
-
 void MarchingCubesRenderer::beforeLinkProgram()
 {
-    QString fragmentShader = fragmentShaderBase();
-    fragmentShader.append(contentFromFile(":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.fsh"));
-
-    QString vertexShader = vertexShaderBase();
-    vertexShader.append(contentFromFile(":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.vsh"));
-
-    program().addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShader);
-    program().addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShader);
+    qDebug() << "Will add shader library for fragment, all shaders:";
+    addShaderLibrary(QOpenGLShader::Fragment, CompPhys::AllShaders);
+    qDebug() << "Will add shader library for vertex, all shaders:";
+    addShaderLibrary(QOpenGLShader::Vertex, CompPhys::AllShaders);
+    setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.fsh");
+    setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.vsh");
 }

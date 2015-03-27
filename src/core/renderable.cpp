@@ -1,5 +1,7 @@
 #include "renderable.h"
 #include "camera.h"
+#include <QFile>
+
 Renderable::Renderable(QObject *parent) :
     QObject(parent),
     m_renderer(0)
@@ -77,6 +79,81 @@ void RenderableRenderer::prepareAndRender()
     m_program.bind();
     render();
     m_program.release();
+}
+
+void RenderableRenderer::removeShader(QOpenGLShader::ShaderType type) {
+    qDebug() << "Removing shader code of type " << type;
+    QOpenGLShader *shader = 0;
+    for(auto it = m_program.shaders().begin(); it != m_program.shaders().end(); it++) {
+        QOpenGLShader *thisShader = *it;
+        if(thisShader->shaderType() == type) {
+            qDebug() << "Found shader of this type, this will be great";
+            shader = thisShader;
+            break;
+        }
+    }
+
+    if(shader) {
+        qDebug() << "We have a shader that can be removed.";
+        m_program.removeShader(shader);
+    }
+}
+
+QString RenderableRenderer::contentFromFile(QString fileName) {
+    QFile f(fileName);
+    if (!f.open(QFile::ReadOnly | QFile::Text)) {
+        qDebug() << "Could not open " << f.fileName() << ". Aborting!";
+        exit(1);
+    }
+    if(!f.isOpen()) {
+        qDebug() << "Could not open " << f.fileName() << ". Aborting!";
+        exit(1);
+    }
+    QTextStream stream(&f);
+    QString content = stream.readAll();
+    content.append("\n");
+    f.close();
+
+    return content;
+}
+
+void RenderableRenderer::setShaderFromSourceCode(QOpenGLShader::ShaderType type, QString shaderCode) {
+    QString fullShaderCode;
+    if(type == QOpenGLShader::Vertex) {
+        fullShaderCode = m_vertexShaderBase;
+    } else if(type == QOpenGLShader::Fragment) {
+        fullShaderCode = m_fragmentShaderBase;
+    } else {
+        qDebug() << "Shaders of this type aren't supported yet.";
+        return;
+    }
+
+    fullShaderCode.append(shaderCode);
+    removeShader(type);
+    m_program.addShaderFromSourceCode(type, fullShaderCode);
+}
+
+void RenderableRenderer::setShaderFromSourceFile(QOpenGLShader::ShaderType type, QString fileName) {
+    QString shaderCode = contentFromFile(fileName);
+    setShaderFromSourceCode(type, shaderCode);
+}
+
+void RenderableRenderer::addShaderCodeToBase(QOpenGLShader::ShaderType type, QString shaderCode) {
+    if(type == QOpenGLShader::Fragment) m_fragmentShaderBase.append(shaderCode);
+    else if(type == QOpenGLShader::Vertex) m_vertexShaderBase.append(shaderCode);
+    else qDebug() << "Shaders of this type aren't supported yet.";
+}
+
+void RenderableRenderer::addShaderLibrary(QOpenGLShader::ShaderType type, CompPhys::Shader shader)
+{
+//    if(shader == CompPhys::AllShaders || shader == CompPhys::Perlin2) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin2.glsl"));
+//    if(shader == CompPhys::AllShaders || shader == CompPhys::Perlin3) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin3.glsl"));
+//    if(shader == CompPhys::AllShaders || shader == CompPhys::Perlin4) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin4.glsl"));
+//    if(shader == CompPhys::AllShaders || shader == CompPhys::Simplex2) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex2.glsl"));
+//    if(shader == CompPhys::AllShaders || shader == CompPhys::Simplex3) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex3.glsl"));
+    if(shader == CompPhys::AllShaders || shader == CompPhys::Simplex4) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex4.glsl"));
+    // if(shader == CompPhys::AllShaders || shader == CompPhys::ColorEffects) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/coloreffects.glsl"));
+
 }
 
 QOpenGLFunctions* RenderableRenderer::glFunctions() {

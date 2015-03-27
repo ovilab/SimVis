@@ -6,12 +6,12 @@
         <file>renderables/billboards/billboards.fsh</file>
         <file>renderables/billboards/billboards_lighted.fsh</file>
         <file>renderables/billboards/billboards_lighted.vsh</file>
-        <file>renderables/shadereffects/perlin3.fsh</file>
-        <file>renderables/shadereffects/perlin4.fsh</file>
-        <file>renderables/shadereffects/simplex3.fsh</file>
-        <file>renderables/shadereffects/simplex4.fsh</file>
-        <file>renderables/shadereffects/perlin2.fsh</file>
-        <file>renderables/shadereffects/simplex2.fsh</file>
-        <file>renderables/shadereffects/effects.fsh</file>
+        <file>renderables/shadereffects/perlin3.glsl</file>
+        <file>renderables/shadereffects/perlin4.glsl</file>
+        <file>renderables/shadereffects/simplex3.glsl</file>
+        <file>renderables/shadereffects/simplex4.glsl</file>
+        <file>renderables/shadereffects/perlin2.glsl</file>
+        <file>renderables/shadereffects/simplex2.glsl</file>
+        <file>renderables/shadereffects/coloreffects.glsl</file>
     </qresource>
 </RCC>

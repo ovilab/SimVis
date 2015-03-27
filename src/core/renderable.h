@@ -5,6 +5,21 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 #include <QMatrix4x4>
+
+namespace CompPhys {
+    enum Shader
+    {
+        AllShaders,
+        Perlin2,
+        Perlin3,
+        Perlin4,
+        Simplex2,
+        Simplex3,
+        Simplex4,
+        ColorEffects,
+    };
+}
+
 class Renderable; class Camera;
 class RenderableRenderer : public QObject
 {
@@ -17,18 +32,28 @@ protected:
     QVector3D m_viewVector;
     QVector3D m_cameraPosition;
     QVector<GLuint> m_vboIds;
+    QString m_fragmentShaderBase;
+    QString m_vertexShaderBase;
     QOpenGLShaderProgram& program();
     QOpenGLFunctions* glFunctions();
+    QString contentFromFile(QString fileName);
+    void addShaderLibrary(QOpenGLShader::ShaderType type, CompPhys::Shader shader);
+    void setShaderFromSourceCode(QOpenGLShader::ShaderType type, QString shaderCode);
+    void setShaderFromSourceFile(QOpenGLShader::ShaderType type, QString fileName);
 signals:
 
 private:
     void prepareAndRender();
+    void removeShader(QOpenGLShader::ShaderType type);
+    void addShaderCodeToBase(QOpenGLShader::ShaderType type, QString shaderCode);
+
     virtual void beforeLinkProgram() = 0;
     virtual void synchronize(Renderable* renderable) = 0;
     virtual void render() = 0;
 
     QOpenGLShaderProgram m_program;
     QOpenGLFunctions* m_funcs = 0;
+
 
     friend class Renderable;
 };
