@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>LightControl.qml</file>
+        <file>RenderControl.qml</file>
+        <file>GeometryControl.qml</file>
     </qresource>
 </RCC>

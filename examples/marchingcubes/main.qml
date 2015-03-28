@@ -4,6 +4,7 @@ import MySimulator 1.0
 import SimVis 1.0
 
 ApplicationWindow {
+    id: applicationRoot
     visible: true
     width: 1600
     height: 900
@@ -11,21 +12,16 @@ ApplicationWindow {
 
     MySimulator {
         id: simulator
-        continuousScalarField: true
     }
 
     Visualizer {
         id: visualizer
         width: parent.width
-        height: parent.height - row1.height - row2.height - row3.height
+        height: parent.height
         simulator: simulator
         camera: camera
         navigator: navigator
         focus: true
-
-        Component.onCompleted: {
-            console.log("Resolution: "+width+" x "+height)
-        }
 
         Camera {
             id: camera
@@ -88,154 +84,62 @@ ApplicationWindow {
             } else if(event.key === Qt.Key_4) {
                 console.log("Lines")
                 marchingCubes.mode = MarchingCubes.LINES
-            } else if(event.key === Qt.Key_5) {
-                // simulator.continuousScalarField = !simulator.continuousScalarField;
             }
         }
     }
 
-    Row {
-        id: row1
-        anchors.top: visualizer.bottom
-        spacing: 10
-
-        Slider {
-            id: scaleSlider
-            minimumValue: 0.1
-            maximumValue: 5.0
-            value: 1.0
-            onValueChanged: marchingCubes.scale = value
-            // onValueChanged: simplexBump.scale = value
-        }
-        Label {
-            text: qsTr("Scale: %1").arg(scaleSlider.value.toFixed(2))
-        }
+    Item {
+        width: 314
+        height: 30
+        opacity: 0.9
 
         Button {
-            id: rendering
-            text: "Lines"
+            id: lightButton
+            text: "Light"
             onClicked: {
-                visualizer.focus = true
-                if(marchingCubes.mode == MarchingCubes.LINES) {
-                    text = "Lines"
-                    marchingCubes.mode = MarchingCubes.FRONT_AND_BACK
-                }
-                else {
-                    text = "Triangles"
-                    marchingCubes.mode = MarchingCubes.LINES
-                }
+                lightControl.visible = !lightControl.visible
             }
         }
 
         Button {
-            id: texture
-            text: "Simplex"
+            id: geometryButton
+            anchors.left: lightButton.right
+            text: "Geometry"
             onClicked: {
-                visualizer.focus = true
-                if(simplexTexture.enabled && simplexTexture.timeDependent) {
-                    simplexTexture.enabled = false
-                    simplexTexture.timeDependent = false
-                    text = "Simplex"
-                } else if(simplexTexture.enabled && !simplexTexture.timeDependent) {
-                    simplexTexture.timeDependent = true
-                    text = "Normal"
-                } else {
-                    simplexTexture.enabled = true
-                    simplexTexture.timeDependent = false
-                    text = "Simplex Time"
-                }
+                geometryControl.visible = !geometryControl.visible
+            }
+        }
+
+        Button {
+            id: renderButton
+            anchors.left: geometryButton.right
+            x: 175
+            y: 0
+            text: "Rendering"
+            onClicked: {
+                renderControl.visible = !renderControl.visible
             }
         }
     }
 
-    Row {
-        id: row2
-        anchors.top: row1.bottom
-        spacing: 10
-
-        Label {
-            text: "Nx:"
-        }
-
-        TextField {
-            id: numVoxelsX
-            width: 40
-            text: marchingCubes.numVoxels.x
-            onFocusChanged: if(focus) selectAll()
-        }
-
-        Label {
-            text: "Ny:"
-        }
-
-        TextField {
-            id: numVoxelsY
-            width: 40
-            text: marchingCubes.numVoxels.y
-            onFocusChanged: if(focus) selectAll()
-        }
-
-        Label {
-            text: "Nz:"
-        }
-
-        TextField {
-            id: numVoxelsZ
-            width: 40
-            text: marchingCubes.numVoxels.z
-            onFocusChanged: if(focus) selectAll()
-        }
+    LightControl {
+        id: lightControl
+        x: applicationRoot.width*0.5 - width*0.5
+        y: applicationRoot.height*0.5 - height*0.5
+        visible: false
     }
 
-    Row {
-        id: row3
-        anchors.top: row2.bottom
-        spacing: 10
+    GeometryControl {
+        id: geometryControl
+        x: applicationRoot.width*0.5 - width*0.5
+        y: applicationRoot.height*0.5 - height*0.5
+        visible: false
+    }
 
-        Button {
-            id: sinus
-            text: "Sinus"
-            width: 50
-            onClicked: {
-                visualizer.focus = true
-                simulator.geometry = MySimulator.SINUS
-                marchingCubes.threshold = 0
-                marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
-            }
-        }
-        Button {
-            id: sphere
-            text: "Sphere"
-            width: 60
-            onClicked: {
-                visualizer.focus = true
-                simulator.geometry = MySimulator.SPHERE
-                marchingCubes.threshold = 3
-                marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
-            }
-        }
-        Button {
-            id: cube
-            text: "Cube"
-            width: 50
-            onClicked: {
-                visualizer.focus = true
-                simulator.geometry = MySimulator.CUBE
-                marchingCubes.threshold = 3
-                marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
-            }
-        }
-
-        Button {
-            id: perlin
-            text: "Perlin"
-            width: 50
-            onClicked: {
-                visualizer.focus = true
-                simulator.geometry = MySimulator.PERLIN
-                marchingCubes.threshold = 0.6
-                marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
-            }
-        }
+    RenderControl {
+        id: renderControl
+        x: applicationRoot.width*0.5 - width*0.5
+        y: applicationRoot.height*0.5 - height*0.5
+        visible: false
     }
 }
