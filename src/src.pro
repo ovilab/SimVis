@@ -32,7 +32,8 @@ SOURCES += \
     renderables/marchingcubes/marchingcubesgenerator.cpp \
     core/shadereffect.cpp \
     shadereffects/simplexbump.cpp \
-    shadereffects/defaultlight.cpp
+    shadereffects/defaultlight.cpp \
+    shadereffects/simplextexture.cpp
 
 HEADERS += \
     core/navigator.h \
@@ -57,7 +58,8 @@ HEADERS += \
     SimVis/MarchingCubes \
     core/shadereffect.h \
     shadereffects/simplexbump.h \
-    shadereffects/defaultlight.h
+    shadereffects/defaultlight.h \
+    shadereffects/simplextexture.h
 
 DISTFILES = qmldir \
     core/simvisplugin.json

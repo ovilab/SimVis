@@ -20,8 +20,6 @@ class MarchingCubes : public Renderable
     Q_PROPERTY(bool dirty READ dirty WRITE setDirty NOTIFY dirtyChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(Mode mode READ mode WRITE setMode NOTIFY modeChanged)
-    Q_PROPERTY(bool simplexTexture READ simplexTexture WRITE setSimplexTexture NOTIFY simplexTextureChanged)
-
 public:
     enum Mode
     {
@@ -50,7 +48,6 @@ public:
     float scale() const;
     bool hasContinuousScalarField() const;
     void setHasContinuousScalarField(bool hasContinuousScalarField);
-    bool simplexTexture() const;
 
 public slots:
     void setThreshold(float arg);
@@ -61,7 +58,6 @@ public slots:
     void setColor(QColor arg);
     void setMode(Mode arg);
     void setScale(float arg);
-    void setSimplexTexture(bool arg);
 
 signals:
     void thresholdChanged(float arg);
@@ -72,12 +68,10 @@ signals:
     void colorChanged(QColor arg);
     void modeChanged(Mode arg);
     void scaleChanged(float arg);
-    void simplexTextureChanged(bool arg);
 
 private:
     float m_threshold = 0.0;
     float m_scale = 1.0;
-    bool m_simplexTexture = false;
     QVector3D m_numVoxels;
     QVector3D m_min;
     QVector3D m_max;
@@ -103,7 +97,6 @@ protected:
     unsigned int m_triangleIndexCount = 0;
     unsigned int m_lineIndexCount = 0;
     float m_scale = 1.0;
-    bool m_simplexTexture = false;
     QVector3D m_color;
     MarchingCubes::Mode m_mode = MarchingCubes::FRONT_AND_BACK;
 private:

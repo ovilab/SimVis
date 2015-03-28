@@ -15,14 +15,14 @@ QString DefaultLight::vertexShaderDefines()
 QString DefaultLight::fragmentShaderLibrary()
 {
     QString shaderLibrary;
-    shaderLibrary.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/light.glsl"));
+    shaderLibrary.append(contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/light.glsl"));
     return shaderLibrary;
 }
 
 QString DefaultLight::vertexShaderLibrary()
 {
     QString shaderLibrary;
-    shaderLibrary.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/light.glsl"));
+    shaderLibrary.append(contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/light.glsl"));
     return shaderLibrary;
 }
 
@@ -37,7 +37,9 @@ void DefaultLight::copyState(ShaderEffect *source) {
     setSpecularIntensity(defaultLight->specularIntensity());
     setAmbientIntensity(defaultLight->ambientIntensity());
     setPosition(defaultLight->position());
-    setShadersDirty(defaultLight->shadersDirty());
+
+    m_enabled = (source->enabled());
+    m_shadersDirty = (source->shadersDirty());
 }
 
 DefaultLight *DefaultLight::clone()

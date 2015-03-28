@@ -66,6 +66,12 @@ ApplicationWindow {
                 attenuation: 0.01
                 position: camera.position
             }
+
+            SimplexTexture {
+                id: simplexTexture
+                scale: 1.0
+                enabled: false
+            }
         }
 
         Keys.onPressed: {
@@ -125,9 +131,9 @@ ApplicationWindow {
             text: "Simplex"
             onClicked: {
                 visualizer.focus = true
-                marchingCubes.simplexTexture = !marchingCubes.simplexTexture;
+                simplexTexture.enabled = !simplexTexture.enabled
 
-                if(marchingCubes.simplexTexture) {
+                if(simplexTexture.enabled) {
                     text = "Normal"
                 }
                 else {

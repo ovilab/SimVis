@@ -214,6 +214,7 @@ void RenderableRenderer::generateVBOs()
 
 void RenderableRenderer::prepareAndRender()
 {
+    // If any of the shader effects is marked dirty, we need to recompile the shaders
     for(ShaderEffect *shaderEffect : m_shaderEffects) {
         if(shaderEffect->shadersDirty()) {
             m_shadersDirty = true;
@@ -222,17 +223,19 @@ void RenderableRenderer::prepareAndRender()
     }
 
     if(m_shadersDirty) {
-        // TODO: Only build the shader bases once?
         m_fragmentShaderBase.clear();
         m_vertexShaderBase.clear();
-        addShaderCodeToBase(QOpenGLShader::Fragment, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/default.glsl"));
-        addShaderCodeToBase(QOpenGLShader::Vertex, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/default.glsl"));
+        addShaderCodeToBase(QOpenGLShader::Fragment, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/default.glsl"));
+        addShaderCodeToBase(QOpenGLShader::Vertex, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/default.glsl"));
 
         for(ShaderEffect *shaderEffect : m_shaderEffects) {
-            addShaderCodeToBase(QOpenGLShader::Fragment, shaderEffect->fragmentShaderLibrary());
-            addShaderCodeToBase(QOpenGLShader::Vertex, shaderEffect->vertexShaderLibrary());
-            addShaderCodeToBase(QOpenGLShader::Fragment, shaderEffect->fragmentShaderDefines());
-            addShaderCodeToBase(QOpenGLShader::Vertex, shaderEffect->vertexShaderDefines());
+            if(shaderEffect->enabled()) {
+                // Defines must come before library
+                addShaderCodeToBase(QOpenGLShader::Fragment, shaderEffect->fragmentShaderDefines());
+                addShaderCodeToBase(QOpenGLShader::Vertex, shaderEffect->vertexShaderDefines());
+                addShaderCodeToBase(QOpenGLShader::Fragment, shaderEffect->fragmentShaderLibrary());
+                addShaderCodeToBase(QOpenGLShader::Vertex, shaderEffect->vertexShaderLibrary());
+            }
         }
 
         beforeLinkProgram();
@@ -249,7 +252,9 @@ void RenderableRenderer::prepareAndRender()
     m_program.setUniformValue("cp_cameraPosition", m_cameraPosition);
     m_program.setUniformValue("cp_time", float(m_elapsedTime.elapsed()*1e-3));
     for(ShaderEffect *shaderEffect : m_shaderEffects) {
-        shaderEffect->setUniformValues(m_program);
+        if(shaderEffect->enabled()) {
+            shaderEffect->setUniformValues(m_program);
+        }
     }
 
     render();
@@ -274,11 +279,11 @@ void RenderableRenderer::copyShaderEffects(Renderable *renderable)
     }
     m_shaderEffects.clear();
 
-
     QList<ShaderEffect*> shaderEffects = renderable->findChildren<ShaderEffect*>();
     for(ShaderEffect *shaderEffect : shaderEffects) {
-        ShaderEffect *shaderEffectCopy = shaderEffect->clone();
-        m_shaderEffects.push_back(shaderEffectCopy);
+        ShaderEffect *shaderEffectClone = shaderEffect->clone();
+        m_shaderEffects.push_back(shaderEffectClone);
+        shaderEffect->setShadersDirty(false);
     }
 }
 
@@ -330,15 +335,14 @@ void RenderableRenderer::addShaderCodeToBase(QOpenGLShader::ShaderType type, QSt
 
 void RenderableRenderer::addShaderLibrary(QOpenGLShader::ShaderType type, CompPhys::Shader shader)
 {
-    if(shader == CompPhys::AllShaders || shader == CompPhys::Perlin2) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin2.glsl"));
-    if(shader == CompPhys::AllShaders || shader == CompPhys::Perlin3) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin3.glsl"));
-    if(shader == CompPhys::AllShaders || shader == CompPhys::Perlin4) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/perlin4.glsl"));
-    if(shader == CompPhys::AllShaders || shader == CompPhys::Simplex2) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex2.glsl"));
-    if(shader == CompPhys::AllShaders || shader == CompPhys::Simplex3) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex3.glsl"));
-    if(shader == CompPhys::AllShaders || shader == CompPhys::Simplex4) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex4.glsl"));
-    if(shader == CompPhys::AllShaders || shader == CompPhys::ColorEffects) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/coloreffects.glsl"));
-    if(shader == CompPhys::AllShaders || shader == CompPhys::Light) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/light.glsl"));
-    if(shader == CompPhys::AllShaders || shader == CompPhys::Tools) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/tools.glsl"));
+    if(shader == CompPhys::AllShaders || shader == CompPhys::Perlin2) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/perlin2.glsl"));
+    if(shader == CompPhys::AllShaders || shader == CompPhys::Perlin3) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/perlin3.glsl"));
+    if(shader == CompPhys::AllShaders || shader == CompPhys::Perlin4) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/perlin4.glsl"));
+    if(shader == CompPhys::AllShaders || shader == CompPhys::Simplex2) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/simplex2.glsl"));
+    if(shader == CompPhys::AllShaders || shader == CompPhys::Simplex3) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/simplex3.glsl"));
+    if(shader == CompPhys::AllShaders || shader == CompPhys::Simplex4) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/simplex4.glsl"));
+    if(shader == CompPhys::AllShaders || shader == CompPhys::ColorEffects) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/coloreffects.glsl"));
+    if(shader == CompPhys::AllShaders || shader == CompPhys::Tools) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/tools.glsl"));
 }
 
 QOpenGLFunctions* RenderableRenderer::glFunctions() {

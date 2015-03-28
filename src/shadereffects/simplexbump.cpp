@@ -21,8 +21,8 @@ QString SimplexBump::fragmentShaderLibrary()
 {
     QString shaderLibrary;
     // Remember to include dependencies here
-    shaderLibrary.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplex2.glsl"));
-    shaderLibrary.append(contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplexbump.glsl"));
+    shaderLibrary.append(contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/simplex2.glsl"));
+    shaderLibrary.append(contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/simplexbump.glsl"));
     return shaderLibrary;
 }
 
@@ -45,7 +45,9 @@ void SimplexBump::copyState(ShaderEffect *source)
     SimplexBump *simplexBump = qobject_cast<SimplexBump*>(source);
     setIntensity(simplexBump->intensity());
     setScale(simplexBump->scale());
-    setShadersDirty(simplexBump->shadersDirty());
+
+    m_enabled = (source->enabled());
+    m_shadersDirty = (source->shadersDirty());
 }
 
 void SimplexBump::setUniformValues(QOpenGLShaderProgram &shaderProgram)

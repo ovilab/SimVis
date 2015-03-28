@@ -6,16 +6,17 @@
         <file>renderables/billboards/billboards.fsh</file>
         <file>renderables/billboards/billboards_lighted.fsh</file>
         <file>renderables/billboards/billboards_lighted.vsh</file>
-        <file>renderables/shadereffects/perlin3.glsl</file>
-        <file>renderables/shadereffects/perlin4.glsl</file>
-        <file>renderables/shadereffects/simplex3.glsl</file>
-        <file>renderables/shadereffects/simplex4.glsl</file>
-        <file>renderables/shadereffects/perlin2.glsl</file>
-        <file>renderables/shadereffects/simplex2.glsl</file>
-        <file>renderables/shadereffects/coloreffects.glsl</file>
-        <file>renderables/shadereffects/light.glsl</file>
-        <file>renderables/shadereffects/default.glsl</file>
-        <file>renderables/shadereffects/tools.glsl</file>
-        <file>renderables/shadereffects/simplexbump.glsl</file>
+        <file>shadereffects/shaders/perlin3.glsl</file>
+        <file>shadereffects/shaders/perlin4.glsl</file>
+        <file>shadereffects/shaders/simplex3.glsl</file>
+        <file>shadereffects/shaders/simplex4.glsl</file>
+        <file>shadereffects/shaders/perlin2.glsl</file>
+        <file>shadereffects/shaders/simplex2.glsl</file>
+        <file>shadereffects/shaders/coloreffects.glsl</file>
+        <file>shadereffects/shaders/light.glsl</file>
+        <file>shadereffects/shaders/default.glsl</file>
+        <file>shadereffects/shaders/tools.glsl</file>
+        <file>shadereffects/shaders/simplexbump.glsl</file>
+        <file>shadereffects/shaders/simplextexture.glsl</file>
     </qresource>
 </RCC>

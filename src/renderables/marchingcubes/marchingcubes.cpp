@@ -165,14 +165,6 @@ void MarchingCubes::setScale(float arg)
     emit scaleChanged(arg);
 }
 
-void MarchingCubes::setSimplexTexture(bool arg)
-{
-    if (m_simplexTexture == arg)
-        return;
-    m_shadersDirty = true;
-    m_simplexTexture = arg;
-    emit simplexTextureChanged(arg);
-}
 bool MarchingCubes::hasContinuousScalarField() const
 {
     return m_hasContinuousScalarField;
@@ -182,12 +174,6 @@ void MarchingCubes::setHasContinuousScalarField(bool hasContinuousScalarField)
 {
     m_hasContinuousScalarField = hasContinuousScalarField;
 }
-
-bool MarchingCubes::simplexTexture() const
-{
-    return m_simplexTexture;
-}
-
 
 MarchingCubesRenderer::MarchingCubesRenderer()
 {
@@ -225,7 +211,6 @@ void MarchingCubesRenderer::synchronize(Renderable *renderable)
         m_shadersDirty = true;
         marchingCubes->m_shadersDirty = false;
     }
-    m_simplexTexture = marchingCubes->simplexTexture();
     m_color = QVector3D(marchingCubes->color().redF(), marchingCubes->color().greenF(), marchingCubes->color().blueF());
     m_mode = marchingCubes->mode();
     m_scale = marchingCubes->scale();
@@ -316,13 +301,6 @@ void MarchingCubesRenderer::uploadVBOs()
 
 void MarchingCubesRenderer::beforeLinkProgram()
 {
-    addShaderLibrary(QOpenGLShader::Fragment, CompPhys::Simplex4);
-    addShaderLibrary(QOpenGLShader::Fragment, CompPhys::Tools);
-    addShaderLibrary(QOpenGLShader::Fragment, CompPhys::Light);
-    addShaderLibrary(QOpenGLShader::Vertex, CompPhys::Light);
-    if(m_simplexTexture) {
-        addShaderCodeToBase(QOpenGLShader::Fragment, "#define SIMPLEXTEXTURE");
-    }
     setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.fsh");
     setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.vsh");
 }

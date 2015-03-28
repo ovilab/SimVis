@@ -21,7 +21,6 @@ namespace CompPhys {
         Simplex3,
         Simplex4,
         ColorEffects,
-        Light,
         Tools
     };
 }
