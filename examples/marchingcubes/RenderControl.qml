@@ -5,8 +5,8 @@ import MySimulator 1.0
 
 Rectangle {
     id: renderControlRoot
-    width: 300
-    height: 220
+    width: 320
+    height: renderingMode.height + texture.height + bump.height + okButton.height + 10
     color: "#ffffff"
     opacity: 0.9
 
@@ -16,16 +16,12 @@ Rectangle {
 
     GroupBox {
         id: renderingMode
-        x: 0
-        y: 0
-        width: 300
-        height: 49
+        width: parent.width
+        height: 66
         title: qsTr("Rendering mode")
 
         Button {
             id: rendering
-            x: 0
-            y: -4
             text: "Lines"
             onClicked: {
                 marchingCubes.mode = MarchingCubes.LINES
@@ -34,8 +30,7 @@ Rectangle {
 
         Button {
             id: rendering1
-            x: 73
-            y: -4
+            anchors.left: rendering.right
             text: "Triangles"
             onClicked: {
                 marchingCubes.mode = MarchingCubes.FRONT_AND_BACK
@@ -45,16 +40,13 @@ Rectangle {
 
     GroupBox {
         id: texture
-        x: 0
-        y: 55
-        width: 300
-        height: 53
+        anchors.top: renderingMode.bottom
+        width: parent.width
+        height: renderingMode.height
         title: qsTr("Texture")
 
         Button {
             id: textureNone
-            x: 0
-            y: -4
             text: "None"
             onClicked: {
                 simplexTexture.enabled = false
@@ -64,8 +56,7 @@ Rectangle {
 
         Button {
             id: textureSimplex
-            x: 74
-            y: -4
+            anchors.left: textureNone.right
             text: "Simplex"
             onClicked: {
                 simplexTexture.enabled = true
@@ -75,8 +66,7 @@ Rectangle {
 
         Button {
             id: textureSimplexTime
-            x: 164
-            y: -4
+            anchors.left: textureSimplex.right
             text: "Time Simplex"
             onClicked: {
                 simplexTexture.enabled = true
@@ -85,20 +75,11 @@ Rectangle {
         }
     }
 
-    Button {
-        id: button1
-        x: 123
-        y: 186
-        text: qsTr("OK")
-        onClicked: renderControlRoot.visible = false
-    }
-
     GroupBox {
         id: bump
-        x: 0
-        y: 114
-        width: 300
-        height: 66
+        anchors.top: texture.bottom
+        width: parent.width
+        height: 82
         title: qsTr("Bump map")
 
 
@@ -112,7 +93,8 @@ Rectangle {
         Slider {
             id: bumpIntensity
             anchors.left: strengthLabel.right
-            minimumValue: 0
+            anchors.leftMargin: 5
+            minimumValue: 0.0
             maximumValue: 0.5
             value: simplexBump.intensity
             onValueChanged: simplexBump.intensity = value
@@ -130,12 +112,22 @@ Rectangle {
         Slider {
             id: bumpScale
             anchors.left: scaleLabel.right
+            anchors.leftMargin: 5
             y: 20
-            minimumValue: 0.1
-            maximumValue: 5
+            minimumValue: 0.0
+            maximumValue: 5.0
             value: simplexBump.scale
             onValueChanged: simplexBump.scale = value
         }
+    }
+
+    Button {
+        id: okButton
+        x: parent.width*0.5 - width*0.5
+        anchors.top: bump.bottom
+        anchors.topMargin: 5
+        text: qsTr("OK")
+        onClicked: renderControlRoot.visible = false
     }
 
     Keys.onPressed: {

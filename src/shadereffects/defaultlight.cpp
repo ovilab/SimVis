@@ -28,18 +28,17 @@ QString DefaultLight::vertexShaderLibrary()
 
 void DefaultLight::copyState(ShaderEffect *source) {
     DefaultLight *defaultLight = qobject_cast<DefaultLight*>(source);
-    setAmbient(defaultLight->ambient());
-    setDiffuse(defaultLight->diffuse());
-    setSpecular(defaultLight->specular());
-    setShininess(defaultLight->shininess());
-    setAttenuation(defaultLight->attenuation());
-    setDiffuseIntensity(defaultLight->diffuseIntensity());
-    setSpecularIntensity(defaultLight->specularIntensity());
-    setAmbientIntensity(defaultLight->ambientIntensity());
-    setPosition(defaultLight->position());
-
-    m_enabled = (source->enabled());
-    m_shadersDirty = (source->shadersDirty());
+    m_ambient = defaultLight->ambient();
+    m_diffuse = defaultLight->diffuse();
+    m_specular = defaultLight->specular();
+    m_shininess = defaultLight->shininess();
+    m_attenuation = defaultLight->attenuation();
+    m_diffuseIntensity = defaultLight->diffuseIntensity();
+    m_specularIntensity = defaultLight->specularIntensity();
+    m_ambientIntensity = defaultLight->ambientIntensity();
+    m_position = defaultLight->position();
+    m_enabled = source->enabled();
+    m_shadersDirty = source->shadersDirty();
 }
 
 DefaultLight *DefaultLight::clone()

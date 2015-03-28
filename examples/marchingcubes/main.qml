@@ -57,7 +57,7 @@ ApplicationWindow {
                 diffuse: "blue"
                 ambientIntensity: 0.1
                 diffuseIntensity: 1.0
-                specularIntensity: 0.1
+                specularIntensity: 1.0
                 shininess: 30.0
                 attenuation: 0.01
                 position: camera.position

@@ -64,11 +64,11 @@ private:
     QColor m_ambient;
     QColor m_diffuse;
     QColor m_specular;
-    float m_diffuseIntensity;
-    float m_ambientIntensity;
-    float m_specularIntensity;
-    float m_shininess;
-    float m_attenuation;
+    float m_diffuseIntensity = 1.0;
+    float m_ambientIntensity = 0.1;
+    float m_specularIntensity = 0.1;
+    float m_shininess = 30.0;
+    float m_attenuation = 0.01;
     QVector3D m_position;
 };
 

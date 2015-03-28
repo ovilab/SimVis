@@ -5,7 +5,7 @@ import MySimulator 1.0
 
 Rectangle {
     id: geometryControlRoot
-    width: 300
+    width: 320
     height: 180
     color: "#ffffff"
     opacity: 0.9
@@ -18,7 +18,7 @@ Rectangle {
         id: numberOfVoxels
         x: 0
         y: 0
-        width: 300
+        width: parent.width
         height: 51
         title: qsTr("Number of voxels")
 
@@ -60,7 +60,7 @@ Rectangle {
         id: geometry
         x: 0
         y: 57
-        width: 300
+        width: parent.width
         height: 93
         title: qsTr("Geometries")
 
@@ -110,7 +110,7 @@ Rectangle {
 
     Button {
         id: button1
-        x: 123
+        x: parent.width*0.5 - width*0.5
         y: 154
         text: qsTr("OK")
         onClicked: geometryControlRoot.visible = false

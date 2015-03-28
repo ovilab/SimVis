@@ -47,11 +47,11 @@ SimplexTexture *SimplexTexture::clone()
 void SimplexTexture::copyState(ShaderEffect *source)
 {
     SimplexTexture *simplexTexture = qobject_cast<SimplexTexture*>(source);
-    setScale(simplexTexture->scale());
-    setTimeDependent(simplexTexture->timeDependent());
+    m_scale = simplexTexture->scale();
+    m_timeDependent = simplexTexture->timeDependent();
 
-    m_enabled = (source->enabled());
-    m_shadersDirty = (source->shadersDirty());
+    m_enabled = source->enabled();
+    m_shadersDirty = source->shadersDirty();
 }
 
 void SimplexTexture::setUniformValues(QOpenGLShaderProgram &shaderProgram)

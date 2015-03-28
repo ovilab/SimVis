@@ -43,11 +43,11 @@ SimplexBump *SimplexBump::clone()
 void SimplexBump::copyState(ShaderEffect *source)
 {
     SimplexBump *simplexBump = qobject_cast<SimplexBump*>(source);
-    setIntensity(simplexBump->intensity());
-    setScale(simplexBump->scale());
+    m_intensity = simplexBump->intensity();
+    m_scale = simplexBump->scale();
 
-    m_enabled = (source->enabled());
-    m_shadersDirty = (source->shadersDirty());
+    m_enabled = source->enabled();
+    m_shadersDirty = source->shadersDirty();
 }
 
 void SimplexBump::setUniformValues(QOpenGLShaderProgram &shaderProgram)
@@ -79,7 +79,6 @@ void SimplexBump::setScale(float arg)
 {
     if (m_scale == arg)
         return;
-
     m_scale = arg;
     emit scaleChanged(arg);
 }

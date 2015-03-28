@@ -4,8 +4,8 @@ import SimVis 1.0
 
 Rectangle {
     id: lightControlRoot
-    width: 300
-    height: 130
+    width: 320
+    height: sliders.height + okButton.height + 10
     color: "#ffffff"
     opacity: 0.9
 
@@ -13,80 +13,88 @@ Rectangle {
         focus = visible
     }
 
-    Label {
-        id: ambient
-        x: 20
-        y: 8
-        text: "Ambient"
-    }
+    GroupBox {
+        id: sliders
+        width: parent.width
+        height: 120
+        title: qsTr("Light")
 
-    Slider {
-        id: ambientIntensity
-        x: 81
-        y: 5
-        maximumValue: 1
-        minimumValue: 0
-        value: light.ambientIntensity
-        onValueChanged: light.ambientIntensity = value
-    }
+        Label {
+            id: ambient
+            width: shininess.width
+            text: "Ambient"
+        }
 
-    Label {
-        id: ambient1
-        x: 20
-        y: 30
-        text: "Diffuse"
-    }
+        Slider {
+            id: ambientIntensity
+            anchors.left: ambient.right
+            anchors.leftMargin: 5
+            maximumValue: 1
+            minimumValue: 0
+            value: light.ambientIntensity
+            onValueChanged: light.ambientIntensity = value
+        }
 
-    Slider {
-        id: diffuseIntensity
-        x: 81
-        y: 27
-        maximumValue: 1
-        minimumValue: 0
-        value: light.diffuseIntensity
-        onValueChanged: light.diffuseIntensity = value
-    }
+        Label {
+            id: diffuse
+            width: shininess.width
+            anchors.top: ambient.bottom
+            text: "Diffuse"
+        }
 
-    Label {
-        id: ambient2
-        x: 20
-        y: 52
-        text: "Specular"
-    }
+        Slider {
+            id: diffuseIntensity
+            anchors.top: diffuse.top
+            anchors.left: diffuse.right
+            anchors.leftMargin: 5
+            maximumValue: 1.0
+            minimumValue: 0.0
+            value: light.diffuseIntensity
+            onValueChanged: light.diffuseIntensity = value
+        }
 
-    Slider {
-        id: specularIntensity
-        x: 81
-        y: 49
-        maximumValue: 1
-        minimumValue: 0
-        value: light.specularIntensity
-        onValueChanged: light.specularIntensity = value
-    }
+        Label {
+            id: specular
+            width: shininess.width
+            anchors.top: diffuse.bottom
+            text: "Specular"
+        }
 
-    Label {
-        id: shininess
-        x: 20
-        y: 74
-        text: "Shininess"
+        Slider {
+            id: specularIntensity
+            anchors.top: specular.top
+            anchors.left: specular.right
+            anchors.leftMargin: 5
+            maximumValue: 1.0
+            minimumValue: 0.0
+            value: light.specularIntensity
+            onValueChanged: light.specularIntensity = value
+        }
 
-    }
+        Label {
+            id: shininess
+            anchors.top: specular.bottom
+            text: "Shininess"
+        }
 
-    Slider {
-        id: specularIntensity1
-        x: 81
-        y: 71
-        height: 22
-        maximumValue: 50
-        minimumValue: 0
-        value: light.shininess
-        onValueChanged: light.shininess = value
+        Slider {
+            id: shininessIntensity
+            anchors.top: shininess.top
+            anchors.left: shininess.right
+            anchors.leftMargin: 5
+            height: 22
+            maximumValue: 50
+            minimumValue: 0.0
+            value: light.shininess
+            onValueChanged: light.shininess = value
+        }
     }
 
     Button {
-        id: button1
-        x: 123
-        y: 99
+        id: okButton
+        x: parent.width*0.5 - width*0.5
+        anchors.top: sliders.bottom
+        anchors.topMargin: 5
         text: qsTr("OK")
         onClicked: lightControlRoot.visible = false
     }
@@ -97,4 +105,3 @@ Rectangle {
         }
     }
 }
-
