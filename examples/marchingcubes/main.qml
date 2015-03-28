@@ -52,9 +52,9 @@ ApplicationWindow {
 
             DefaultLight {
                 id: light
-                ambient: "green"
-                specular: "white"
-                diffuse: "blue"
+                ambientColor: "green"
+                specularColor: "white"
+                diffuseColor: "blue"
                 ambientIntensity: 0.1
                 diffuseIntensity: 1.0
                 specularIntensity: 1.0

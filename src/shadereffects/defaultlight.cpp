@@ -28,9 +28,9 @@ QString DefaultLight::vertexShaderLibrary()
 
 void DefaultLight::copyState(ShaderEffect *source) {
     DefaultLight *defaultLight = qobject_cast<DefaultLight*>(source);
-    m_ambient = defaultLight->ambient();
-    m_diffuse = defaultLight->diffuse();
-    m_specular = defaultLight->specular();
+    m_ambientColor = defaultLight->ambientColor();
+    m_diffuseColor = defaultLight->diffuseColor();
+    m_specularColor = defaultLight->specularColor();
     m_shininess = defaultLight->shininess();
     m_attenuation = defaultLight->attenuation();
     m_diffuseIntensity = defaultLight->diffuseIntensity();
@@ -51,9 +51,9 @@ DefaultLight *DefaultLight::clone()
 
 void DefaultLight::setUniformValues(QOpenGLShaderProgram &shaderProgram)
 {
-    shaderProgram.setUniformValue("cp_ambientColor", m_ambient);
-    shaderProgram.setUniformValue("cp_diffuseColor", m_diffuse);
-    shaderProgram.setUniformValue("cp_specularColor", m_specular);
+    shaderProgram.setUniformValue("cp_ambientColor", m_ambientColor);
+    shaderProgram.setUniformValue("cp_diffuseColor", m_diffuseColor);
+    shaderProgram.setUniformValue("cp_specularColor", m_specularColor);
     shaderProgram.setUniformValue("cp_shininess", m_shininess);
     shaderProgram.setUniformValue("cp_attenuation", m_attenuation);
     shaderProgram.setUniformValue("cp_diffuseIntensity", m_diffuseIntensity);
@@ -62,19 +62,19 @@ void DefaultLight::setUniformValues(QOpenGLShaderProgram &shaderProgram)
     shaderProgram.setUniformValue("cp_lightPosition", m_position);
 }
 
-QColor DefaultLight::ambient() const
+QColor DefaultLight::ambientColor() const
 {
-    return m_ambient;
+    return m_ambientColor;
 }
 
-QColor DefaultLight::diffuse() const
+QColor DefaultLight::diffuseColor() const
 {
-    return m_diffuse;
+    return m_diffuseColor;
 }
 
-QColor DefaultLight::specular() const
+QColor DefaultLight::specularColor() const
 {
-    return m_specular;
+    return m_specularColor;
 }
 
 float DefaultLight::diffuseIntensity() const
@@ -107,31 +107,31 @@ QVector3D DefaultLight::position() const
     return m_position;
 }
 
-void DefaultLight::setAmbient(QColor arg)
+void DefaultLight::setAmbientColor(QColor arg)
 {
-    if (m_ambient == arg)
+    if (m_ambientColor == arg)
         return;
 
-    m_ambient = arg;
-    emit ambientChanged(arg);
+    m_ambientColor = arg;
+    emit ambientColorChanged(arg);
 }
 
-void DefaultLight::setDiffuse(QColor arg)
+void DefaultLight::setDiffuseColor(QColor arg)
 {
-    if (m_diffuse == arg)
+    if (m_diffuseColor == arg)
         return;
 
-    m_diffuse = arg;
-    emit diffuseChanged(arg);
+    m_diffuseColor = arg;
+    emit diffuseColorChanged(arg);
 }
 
-void DefaultLight::setSpecular(QColor arg)
+void DefaultLight::setSpecularColor(QColor arg)
 {
-    if (m_specular == arg)
+    if (m_specularColor == arg)
         return;
 
-    m_specular = arg;
-    emit specularChanged(arg);
+    m_specularColor = arg;
+    emit specularColorChanged(arg);
 }
 
 void DefaultLight::setDiffuseIntensity(float arg)

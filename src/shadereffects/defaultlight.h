@@ -9,9 +9,9 @@
 class DefaultLight : public ShaderEffect
 {
     Q_OBJECT
-    Q_PROPERTY(QColor ambient READ ambient WRITE setAmbient NOTIFY ambientChanged)
-    Q_PROPERTY(QColor diffuse READ diffuse WRITE setDiffuse NOTIFY diffuseChanged)
-    Q_PROPERTY(QColor specular READ specular WRITE setSpecular NOTIFY specularChanged)
+    Q_PROPERTY(QColor ambientColor READ ambientColor WRITE setAmbientColor NOTIFY ambientColorChanged)
+    Q_PROPERTY(QColor diffuseColor READ diffuseColor WRITE setDiffuseColor NOTIFY diffuseColorChanged)
+    Q_PROPERTY(QColor specularColor READ specularColor WRITE setSpecularColor NOTIFY specularColorChanged)
     Q_PROPERTY(float diffuseIntensity READ diffuseIntensity WRITE setDiffuseIntensity NOTIFY diffuseIntensityChanged)
     Q_PROPERTY(float ambientIntensity READ ambientIntensity WRITE setAmbientIntensity NOTIFY ambientIntensityChanged)
     Q_PROPERTY(float specularIntensity READ specularIntensity WRITE setSpecularIntensity NOTIFY specularIntensityChanged)
@@ -28,9 +28,9 @@ public:
     DefaultLight *clone() override;
     void setUniformValues(QOpenGLShaderProgram &shaderProgram) override;
     void copyState(ShaderEffect *source) override;
-    QColor ambient() const;
-    QColor diffuse() const;
-    QColor specular() const;
+    QColor ambientColor() const;
+    QColor diffuseColor() const;
+    QColor specularColor() const;
     float diffuseIntensity() const;
     float ambientIntensity() const;
     float specularIntensity() const;
@@ -39,9 +39,9 @@ public:
     QVector3D position() const;
 
 public slots:
-    void setAmbient(QColor arg);
-    void setDiffuse(QColor arg);
-    void setSpecular(QColor arg);
+    void setAmbientColor(QColor arg);
+    void setDiffuseColor(QColor arg);
+    void setSpecularColor(QColor arg);
     void setDiffuseIntensity(float arg);
     void setAmbientIntensity(float arg);
     void setSpecularIntensity(float arg);
@@ -50,9 +50,9 @@ public slots:
     void setPosition(QVector3D arg);
 
 signals:
-    void ambientChanged(QColor arg);
-    void diffuseChanged(QColor arg);
-    void specularChanged(QColor arg);
+    void ambientColorChanged(QColor arg);
+    void diffuseColorChanged(QColor arg);
+    void specularColorChanged(QColor arg);
     void diffuseIntensityChanged(float arg);
     void ambientIntensityChanged(float arg);
     void specularIntensityChanged(float arg);
@@ -61,9 +61,9 @@ signals:
     void positionChanged(QVector3D arg);
 
 private:
-    QColor m_ambient;
-    QColor m_diffuse;
-    QColor m_specular;
+    QColor m_ambientColor;
+    QColor m_diffuseColor;
+    QColor m_specularColor;
     float m_diffuseIntensity = 1.0;
     float m_ambientIntensity = 0.1;
     float m_specularIntensity = 0.1;
