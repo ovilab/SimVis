@@ -51,6 +51,11 @@ Navigator *Visualizer::navigator()
     return m_navigator;
 }
 
+float Visualizer::fps() const
+{
+    return m_fps;
+}
+
 void Visualizer::setSimulator(Simulator *arg)
 {
     if (m_simulator == arg) {
@@ -89,6 +94,15 @@ void Visualizer::setNavigator(Navigator *arg)
 
     m_navigator = arg;
     emit navigatorChanged(arg);
+}
+
+void Visualizer::setFps(float arg)
+{
+    if (m_fps == arg)
+        return;
+
+    m_fps = arg;
+    emit fpsChanged(arg);
 }
 
 void Visualizer::synchronizeWorker(SimulatorWorker *worker)
@@ -137,6 +151,15 @@ void VisualizerRenderer::render()
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
+
+    if(m_frameCount % 60 == 0 && m_frameCount > 0) {
+        qint64 t1 = QDateTime::currentMSecsSinceEpoch();
+        qint64 dt = t1 - m_fpsCounterTimeZero;
+        m_fpsCounterTimeZero = QDateTime::currentMSecsSinceEpoch();
+        m_fps = 60.0 / dt * 1000;
+    }
+
+    m_frameCount++;
 }
 
 void VisualizerRenderer::synchronize(QQuickFramebufferObject *fbo)
@@ -154,6 +177,7 @@ void VisualizerRenderer::synchronize(QQuickFramebufferObject *fbo)
             renderable->requestSynchronize();
         }
     }
+    visualizer->setFps(m_fps);
 }
 Camera *VisualizerRenderer::camera() const
 {

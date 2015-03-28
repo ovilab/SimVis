@@ -93,8 +93,14 @@ ApplicationWindow {
         height: 30
         opacity: 0.9
 
+        Label {
+            id: fpslabel
+            text: "Fps: "+visualizer.fps.toFixed(1)
+        }
+
         Button {
             id: lightButton
+            anchors.left: fpslabel.right
             text: "Light"
             onClicked: {
                 lightControl.visible = !lightControl.visible
