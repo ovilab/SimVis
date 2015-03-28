@@ -52,11 +52,16 @@ ApplicationWindow {
             diffuse: "blue"
             ambientIntensity: 0.1
             diffuseIntensity: 1.0
-            specularIntensity: 0.001
-            bumpIntensity: 0.1
-            bumpScale: 3.0
+            specularIntensity: 0.1
             shininess: 30.0
             attenuation: 0.01
+
+            SimplexBump {
+                id: simplexBump
+                enabled: true
+                intensity: 0.1
+                scale: 1.0
+            }
         }
 
         Keys.onPressed: {
@@ -89,6 +94,7 @@ ApplicationWindow {
             maximumValue: 5.0
             value: 1.0
             onValueChanged: marchingCubes.scale = value
+            // onValueChanged: simplexBump.scale = value
         }
         Label {
             text: qsTr("Scale: %1").arg(scaleSlider.value.toFixed(2))

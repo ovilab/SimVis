@@ -2,8 +2,8 @@
 #include "camera.h"
 #include <QFile>
 
-Renderable::Renderable(QObject *parent) :
-    QObject(parent),
+Renderable::Renderable(QQuickItem *parent) :
+    QQuickItem(parent),
     m_renderer(0)
 {
 
@@ -40,8 +40,7 @@ void Renderable::requestSynchronize()
     m_renderer->m_shininess = m_shininess;
     m_renderer->m_lightPosition = m_lightPosition;
     m_renderer->m_specularIntensity = m_specularIntensity;
-    m_renderer->m_bumpIntensity = m_bumpIntensity;
-    m_renderer->m_bumpScale = m_bumpScale;
+    m_renderer->copyShaderEffects(this);
 
     m_renderer->synchronize(this);
 }
@@ -215,12 +214,24 @@ void RenderableRenderer::generateVBOs()
 
 void RenderableRenderer::prepareAndRender()
 {
+    for(ShaderEffect *shaderEffect : m_shaderEffects) {
+        if(shaderEffect->shadersDirty()) {
+            m_shadersDirty = true;
+            shaderEffect->setShadersDirty(false);
+        }
+    }
     if(m_shadersDirty) {
-        // TODO: Only build the shader bases once?
         m_fragmentShaderBase.clear();
         m_vertexShaderBase.clear();
         addShaderCodeToBase(QOpenGLShader::Fragment, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/default.glsl"));
         addShaderCodeToBase(QOpenGLShader::Vertex, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/default.glsl"));
+
+        for(ShaderEffect *shaderEffect : m_shaderEffects) {
+            addShaderCodeToBase(QOpenGLShader::Fragment, shaderEffect->fragmentShaderLibrary());
+            addShaderCodeToBase(QOpenGLShader::Vertex, shaderEffect->vertexShaderLibrary());
+            addShaderCodeToBase(QOpenGLShader::Fragment, shaderEffect->fragmentShaderDefines());
+            addShaderCodeToBase(QOpenGLShader::Vertex, shaderEffect->vertexShaderDefines());
+        }
 
         beforeLinkProgram();
         m_program.link();
@@ -243,9 +254,10 @@ void RenderableRenderer::prepareAndRender()
     m_program.setUniformValue("cp_viewVector", m_viewVector);
     m_program.setUniformValue("cp_cameraPosition", m_cameraPosition);
     m_program.setUniformValue("cp_lightPosition", m_lightPosition);
-    m_program.setUniformValue("cp_bumpIntensity", m_bumpIntensity);
-    m_program.setUniformValue("cp_bumpScale", m_bumpScale);
     m_program.setUniformValue("cp_time", float(m_elapsedTime.elapsed()*1e-3));
+    for(ShaderEffect *shaderEffect : m_shaderEffects) {
+        shaderEffect->setUniformValues(m_program);
+    }
 
     render();
     m_program.release();
@@ -258,6 +270,22 @@ void RenderableRenderer::removeShader(QOpenGLShader::ShaderType type) {
             m_program.removeShader(shader);
             return;
         }
+    }
+}
+
+void RenderableRenderer::copyShaderEffects(Renderable *renderable)
+{
+    // Remove the copies we have in renderer
+    for(ShaderEffect *shaderEffect : m_shaderEffects) {
+        delete shaderEffect;
+    }
+    m_shaderEffects.clear();
+
+
+    QList<ShaderEffect*> shaderEffects = renderable->findChildren<ShaderEffect*>();
+    for(ShaderEffect *shaderEffect : shaderEffects) {
+        ShaderEffect *shaderEffectCopy = shaderEffect->clone();
+        m_shaderEffects.push_back(shaderEffectCopy);
     }
 }
 
@@ -318,7 +346,6 @@ void RenderableRenderer::addShaderLibrary(QOpenGLShader::ShaderType type, CompPh
     if(shader == CompPhys::AllShaders || shader == CompPhys::ColorEffects) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/coloreffects.glsl"));
     if(shader == CompPhys::AllShaders || shader == CompPhys::Light) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/light.glsl"));
     if(shader == CompPhys::AllShaders || shader == CompPhys::Tools) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/tools.glsl"));
-    if(shader == CompPhys::AllShaders || shader == CompPhys::SimplexBump) addShaderCodeToBase(type, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/simplexbump.glsl"));
 }
 
 QOpenGLFunctions* RenderableRenderer::glFunctions() {

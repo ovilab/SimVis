@@ -8,7 +8,7 @@
 
 #include "../../core/camera.h"
 
-Billboards::Billboards(QObject *parent)
+Billboards::Billboards(QQuickItem *parent)
     : Renderable(parent)
 {
 

@@ -49,7 +49,7 @@ class Billboards : public Renderable
     Q_PROPERTY(QString texture READ texture WRITE setTexture NOTIFY textureChanged)
     Q_PROPERTY(QColor shadowColor READ shadowColor WRITE setShadowColor NOTIFY shadowColorChanged)
 public:
-    Billboards(QObject *parent = 0);
+    Billboards(QQuickItem *parent = 0);
     ~Billboards();
     void setPositions(QVector<QVector3D> &positions);
     QVector<QVector3D> &positions();

@@ -1,0 +1,37 @@
+#ifndef SHADEREFFECT_H
+#define SHADEREFFECT_H
+#include <QObject>
+#include <QString>
+#include <QOpenGLShaderProgram>
+
+class ShaderEffect : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
+public:
+    ShaderEffect();
+    ~ShaderEffect();
+    virtual QString fragmentShaderDefines() = 0;
+    virtual QString vertexShaderDefines() = 0;
+    virtual QString fragmentShaderLibrary() = 0;
+    virtual QString vertexShaderLibrary() = 0;
+    virtual ShaderEffect *clone() = 0;
+    virtual void setUniformValues(QOpenGLShaderProgram &shaderProgram) = 0;
+    bool enabled() const;
+
+    bool shadersDirty() const;
+    void setShadersDirty(bool shadersDirty);
+
+public slots:
+    void setEnabled(bool arg);
+
+signals:
+    void enabledChanged(bool arg);
+
+protected:
+    QString contentFromFile(QString fileName);
+    bool m_enabled = true;
+    bool m_shadersDirty = false;
+};
+
+#endif // SHADEREFFECT_H

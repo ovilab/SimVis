@@ -29,7 +29,9 @@ SOURCES += \
     renderables/billboards/billboards.cpp \
     renderables/points/points.cpp \
     renderables/marchingcubes/marchingcubes.cpp \
-    renderables/marchingcubes/marchingcubesgenerator.cpp
+    renderables/marchingcubes/marchingcubesgenerator.cpp \
+    core/shadereffect.cpp \
+    shadereffects/simplexbump.cpp
 
 HEADERS += \
     core/navigator.h \
@@ -51,7 +53,9 @@ HEADERS += \
     renderables/marchingcubes/marchingcubesgenerator.h \
     SimVis/Billboards \
     SimVis/Points \
-    SimVis/MarchingCubes
+    SimVis/MarchingCubes \
+    core/shadereffect.h \
+    shadereffects/simplexbump.h
 
 DISTFILES = qmldir \
     core/simvisplugin.json

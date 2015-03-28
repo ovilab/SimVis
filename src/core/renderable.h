@@ -1,5 +1,6 @@
 #ifndef RENDERABLE_H
 #define RENDERABLE_H
+#include "shadereffect.h"
 
 #include <QObject>
 #include <QOpenGLFunctions>
@@ -7,6 +8,7 @@
 #include <QMatrix4x4>
 #include <QColor>
 #include <QElapsedTimer>
+#include <QQuickItem>
 
 namespace CompPhys {
     enum Shader
@@ -20,8 +22,7 @@ namespace CompPhys {
         Simplex4,
         ColorEffects,
         Light,
-        Tools,
-        SimplexBump
+        Tools
     };
 }
 
@@ -35,6 +36,7 @@ protected:
     void generateVBOs();
     unsigned int m_numberOfVBOs = 0;
     bool m_shadersDirty = true;
+    QList<ShaderEffect*> m_shaderEffects;
     QElapsedTimer m_elapsedTime;
     QColor m_ambient;
     QColor m_diffuse;
@@ -66,6 +68,7 @@ signals:
 private:
     void prepareAndRender();
     void removeShader(QOpenGLShader::ShaderType type);
+    void copyShaderEffects(Renderable *renderable);
 
     virtual void beforeLinkProgram() = 0;
     virtual void synchronize(Renderable* renderable) = 0;
@@ -77,7 +80,7 @@ private:
     friend class Renderable;
 };
 
-class Renderable : public QObject
+class Renderable : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged)
@@ -91,11 +94,9 @@ class Renderable : public QObject
     Q_PROPERTY(float attenuation READ attenuation WRITE setAttenuation NOTIFY attenuationChanged)
     Q_PROPERTY(Camera* camera READ camera WRITE setCamera NOTIFY cameraChanged)
     Q_PROPERTY(QVector3D lightPosition READ lightPosition WRITE setLightPosition NOTIFY lightPositionChanged)
-    Q_PROPERTY(float bumpIntensity READ bumpIntensity WRITE setBumpIntensity NOTIFY bumpIntensityChanged)
-    Q_PROPERTY(float bumpScale READ bumpScale WRITE setBumpScale NOTIFY bumpScaleChanged)
 
 public:
-    explicit Renderable(QObject *parent = 0);
+    explicit Renderable(QQuickItem *parent = 0);
     ~Renderable();
 
     virtual RenderableRenderer* createRenderer() = 0;
@@ -114,16 +115,6 @@ public:
     float attenuation() const;
     float specularIntensity() const;
 
-    float bumpIntensity() const
-    {
-        return m_bumpIntensity;
-    }
-
-    float bumpScale() const
-    {
-        return m_bumpScale;
-    }
-
 signals:
 
     void visibleChanged(bool arg);
@@ -137,11 +128,6 @@ signals:
     void specularChanged(QColor arg);
     void attenuationChanged(float arg);
     void specularIntensityChanged(float arg);
-
-    void bumpIntensityChanged(float arg);
-
-    void bumpScaleChanged(float arg);
-
 public slots:
 
     void setVisible(bool arg);
@@ -155,25 +141,6 @@ public slots:
     void setSpecular(QColor arg);
     void setAttenuation(float arg);
     void setSpecularIntensity(float arg);
-
-    void setBumpIntensity(float arg)
-    {
-        if (m_bumpIntensity == arg)
-            return;
-
-        m_bumpIntensity = arg;
-        emit bumpIntensityChanged(arg);
-    }
-
-    void setBumpScale(float arg)
-    {
-        if (m_bumpScale == arg)
-            return;
-
-        m_bumpScale = arg;
-        emit bumpScaleChanged(arg);
-    }
-
 private:
     RenderableRenderer* m_renderer;
     bool m_visible = true;
@@ -187,8 +154,6 @@ private:
     float m_ambientIntensity = 0.1;
     float m_shininess = 20.0;
     float m_attenuation = 0.01;
-    float m_bumpIntensity = 1.0;
-    float m_bumpScale = 1.0;
 };
 
 #endif // RENDERABLE_H
