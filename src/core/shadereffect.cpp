@@ -6,6 +6,11 @@ ShaderEffect::ShaderEffect()
 
 }
 
+ShaderEffect::ShaderEffect(QUuid uniqueId)
+{
+
+}
+
 ShaderEffect::~ShaderEffect()
 {
 
@@ -22,6 +27,7 @@ void ShaderEffect::setEnabled(bool arg)
         return;
 
     m_enabled = arg;
+    m_shadersDirty = true;
     emit enabledChanged(arg);
 }
 

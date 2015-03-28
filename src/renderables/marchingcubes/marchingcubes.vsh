@@ -16,7 +16,9 @@ void main() {
     highp vec4 scaledPosition = vec4(a_position.xyz*scale, a_position.w);
 
     normal = a_normal*normalVectorSign;
+#ifdef DEFAULTLIGHT
     attenuationFactor = attenuation(vertexPosition);
+#endif
     color = a_color;
 
     gl_Position = cp_modelViewProjectionMatrix*scaledPosition;

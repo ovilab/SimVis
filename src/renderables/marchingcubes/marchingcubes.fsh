@@ -27,9 +27,15 @@ void main() {
     highp vec3 normal2 = normal;
 #endif
 
-#ifdef SIMPLEXTEXTURE
-    gl_FragColor = vec4(ambient(color) + attenuationFactor*(diffuse(normal2, vertexPosition, color) + specular(normal2, vertexPosition, cp_specularColor))*n, 1.0);
+#ifdef DEFAULTLIGHT
+    highp vec3 light = vec3(ambient(color) + attenuationFactor*(diffuse(normal2, vertexPosition, color) + specular(normal2, vertexPosition, cp_specularColor)));
 #else
-    gl_FragColor = vec4(ambient(color) + attenuationFactor*(diffuse(normal2, vertexPosition, color) + specular(normal2, vertexPosition, cp_specularColor)), 1.0);
+    highp vec3 light = vec3(color);
 #endif
+
+#ifdef SIMPLEXTEXTURE
+    light *= n;
+#endif
+
+    gl_FragColor = vec4(light, 1.0);
 }

@@ -9,16 +9,14 @@ class SimplexBump : public ShaderEffect
     Q_PROPERTY(float intensity READ intensity WRITE setIntensity NOTIFY intensityChanged)
     Q_PROPERTY(float scale READ scale WRITE setScale NOTIFY scaleChanged)
 public:
-    SimplexBump();
-    ~SimplexBump();
-
     // ShaderEffect interface
-    QString fragmentShaderDefines();
-    QString vertexShaderDefines();
-    QString fragmentShaderLibrary();
-    QString vertexShaderLibrary();
-    SimplexBump *clone();
-    void setUniformValues(QOpenGLShaderProgram &shaderProgram);
+    QString fragmentShaderDefines() override;
+    QString vertexShaderDefines() override;
+    QString fragmentShaderLibrary() override;
+    QString vertexShaderLibrary() override;
+    SimplexBump *clone() override;
+    void copyState(ShaderEffect *source) override;
+    void setUniformValues(QOpenGLShaderProgram &shaderProgram) override;
 
     float intensity() const;
     float scale() const;

@@ -220,7 +220,9 @@ void RenderableRenderer::prepareAndRender()
             shaderEffect->setShadersDirty(false);
         }
     }
+
     if(m_shadersDirty) {
+        // TODO: Only build the shader bases once?
         m_fragmentShaderBase.clear();
         m_vertexShaderBase.clear();
         addShaderCodeToBase(QOpenGLShader::Fragment, contentFromFile(":/org.compphys.SimVis/renderables/shadereffects/default.glsl"));
@@ -243,17 +245,8 @@ void RenderableRenderer::prepareAndRender()
     m_program.setUniformValue("cp_modelViewProjectionMatrix", modelViewProjectionMatrix);
     m_program.setUniformValue("cp_modelViewMatrix", m_modelViewMatrix);
     m_program.setUniformValue("cp_projectionMatrix", m_projectionMatrix);
-    m_program.setUniformValue("cp_ambientColor", m_ambient);
-    m_program.setUniformValue("cp_diffuseColor", m_diffuse);
-    m_program.setUniformValue("cp_specularColor", m_specular);
-    m_program.setUniformValue("cp_shininess", m_shininess);
-    m_program.setUniformValue("cp_attenuation", m_attenuation);
-    m_program.setUniformValue("cp_diffuseIntensity", m_diffuseIntensity);
-    m_program.setUniformValue("cp_specularIntensity", m_specularIntensity);
-    m_program.setUniformValue("cp_ambientIntensity", m_ambientIntensity);
     m_program.setUniformValue("cp_viewVector", m_viewVector);
     m_program.setUniformValue("cp_cameraPosition", m_cameraPosition);
-    m_program.setUniformValue("cp_lightPosition", m_lightPosition);
     m_program.setUniformValue("cp_time", float(m_elapsedTime.elapsed()*1e-3));
     for(ShaderEffect *shaderEffect : m_shaderEffects) {
         shaderEffect->setUniformValues(m_program);

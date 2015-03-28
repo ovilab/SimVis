@@ -45,22 +45,26 @@ ApplicationWindow {
             min: Qt.vector3d(-Math.PI, -Math.PI, -Math.PI)
             max: Qt.vector3d(Math.PI, Math.PI, Math.PI)
             threshold: 0.0
-            lightPosition: camera.position
             color: "#fd20c1"
-            ambient: "green"
-            specular: "white"
-            diffuse: "blue"
-            ambientIntensity: 0.1
-            diffuseIntensity: 1.0
-            specularIntensity: 0.1
-            shininess: 30.0
-            attenuation: 0.01
 
             SimplexBump {
                 id: simplexBump
                 enabled: true
                 intensity: 0.1
                 scale: 1.0
+            }
+
+            DefaultLight {
+                id: light
+                ambient: "green"
+                specular: "white"
+                diffuse: "blue"
+                ambientIntensity: 0.1
+                diffuseIntensity: 1.0
+                specularIntensity: 0.1
+                shininess: 30.0
+                attenuation: 0.01
+                position: camera.position
             }
         }
 

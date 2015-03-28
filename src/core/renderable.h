@@ -84,16 +84,7 @@ class Renderable : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged)
-    Q_PROPERTY(QColor ambient READ ambient WRITE setAmbient NOTIFY ambientChanged)
-    Q_PROPERTY(QColor diffuse READ diffuse WRITE setDiffuse NOTIFY diffuseChanged)
-    Q_PROPERTY(QColor specular READ specular WRITE setSpecular NOTIFY specularChanged)
-    Q_PROPERTY(float diffuseIntensity READ diffuseIntensity WRITE setDiffuseIntensity NOTIFY diffuseIntensityChanged)
-    Q_PROPERTY(float ambientIntensity READ ambientIntensity WRITE setAmbientIntensity NOTIFY ambientIntensityChanged)
-    Q_PROPERTY(float specularIntensity READ specularIntensity WRITE setSpecularIntensity NOTIFY specularIntensityChanged)
-    Q_PROPERTY(float shininess READ shininess WRITE setShininess NOTIFY shininessChanged)
-    Q_PROPERTY(float attenuation READ attenuation WRITE setAttenuation NOTIFY attenuationChanged)
     Q_PROPERTY(Camera* camera READ camera WRITE setCamera NOTIFY cameraChanged)
-    Q_PROPERTY(QVector3D lightPosition READ lightPosition WRITE setLightPosition NOTIFY lightPositionChanged)
 
 public:
     explicit Renderable(QQuickItem *parent = 0);

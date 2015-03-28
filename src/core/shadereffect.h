@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QString>
 #include <QOpenGLShaderProgram>
+#include <QUuid> // TODO: Use UUID to copy data instead of cloning each time
 
 class ShaderEffect : public QObject
 {
@@ -10,15 +11,16 @@ class ShaderEffect : public QObject
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
 public:
     ShaderEffect();
+    ShaderEffect(QUuid uniqueId);
     ~ShaderEffect();
     virtual QString fragmentShaderDefines() = 0;
     virtual QString vertexShaderDefines() = 0;
     virtual QString fragmentShaderLibrary() = 0;
     virtual QString vertexShaderLibrary() = 0;
     virtual ShaderEffect *clone() = 0;
+    virtual void copyState(ShaderEffect *source) = 0;
     virtual void setUniformValues(QOpenGLShaderProgram &shaderProgram) = 0;
     bool enabled() const;
-
     bool shadersDirty() const;
     void setShadersDirty(bool shadersDirty);
 

@@ -1,15 +1,5 @@
 #include "simplexbump.h"
 
-SimplexBump::SimplexBump()
-{
-
-}
-
-SimplexBump::~SimplexBump()
-{
-
-}
-
 QString SimplexBump::fragmentShaderDefines()
 {
     QString defines;
@@ -44,11 +34,18 @@ QString SimplexBump::vertexShaderLibrary()
 
 SimplexBump *SimplexBump::clone()
 {
-    SimplexBump *copy = new SimplexBump();
-    copy->setIntensity(intensity());
-    copy->setScale(scale());
-    copy->setShadersDirty(shadersDirty());
-    return copy;
+    SimplexBump *clone = new SimplexBump();
+    clone->copyState(this);
+
+    return clone;
+}
+
+void SimplexBump::copyState(ShaderEffect *source)
+{
+    SimplexBump *simplexBump = qobject_cast<SimplexBump*>(source);
+    setIntensity(simplexBump->intensity());
+    setScale(simplexBump->scale());
+    setShadersDirty(simplexBump->shadersDirty());
 }
 
 void SimplexBump::setUniformValues(QOpenGLShaderProgram &shaderProgram)
@@ -73,7 +70,6 @@ void SimplexBump::setIntensity(float arg)
         return;
 
     m_intensity = arg;
-    m_shadersDirty = true;
     emit intensityChanged(arg);
 }
 
@@ -83,7 +79,6 @@ void SimplexBump::setScale(float arg)
         return;
 
     m_scale = arg;
-    m_shadersDirty = true;
     emit scaleChanged(arg);
 }
 
