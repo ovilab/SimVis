@@ -67,7 +67,7 @@ Rectangle {
         Button {
             id: textureSimplexTime
             anchors.left: textureSimplex.right
-            text: "Time Simplex"
+            text: "Simplex(t)"
             onClicked: {
                 simplexTexture.enabled = true
                 simplexTexture.timeDependent = true

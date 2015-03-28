@@ -16,13 +16,14 @@ Rectangle {
     GroupBox {
         id: sliders
         width: parent.width
-        height: 120
+        height: 142
         title: qsTr("Light")
 
-        Label {
+        CheckBox {
             id: ambient
-            width: shininess.width
             text: "Ambient"
+            checked: light.ambient
+            onCheckedChanged: light.ambient = checked
         }
 
         Slider {
@@ -35,11 +36,13 @@ Rectangle {
             onValueChanged: light.ambientIntensity = value
         }
 
-        Label {
+        CheckBox {
             id: diffuse
-            width: shininess.width
+            width: ambient.width
             anchors.top: ambient.bottom
             text: "Diffuse"
+            checked: light.diffuse
+            onCheckedChanged: light.diffuse = checked
         }
 
         Slider {
@@ -53,11 +56,13 @@ Rectangle {
             onValueChanged: light.diffuseIntensity = value
         }
 
-        Label {
+        CheckBox {
             id: specular
-            width: shininess.width
+            width: ambient.width
             anchors.top: diffuse.bottom
             text: "Specular"
+            checked: light.specular
+            onCheckedChanged: light.specular = checked
         }
 
         Slider {
@@ -73,6 +78,7 @@ Rectangle {
 
         Label {
             id: shininess
+            width: ambient.width
             anchors.top: specular.bottom
             text: "Shininess"
         }
@@ -85,8 +91,27 @@ Rectangle {
             height: 22
             maximumValue: 50
             minimumValue: 0.0
-            value: light.shininess
-            onValueChanged: light.shininess = value
+            value: (maximumValue+1) - light.shininess
+            onValueChanged: light.shininess = (maximumValue+1) - value
+        }
+
+        Label {
+            id: attenuation
+            width: ambient.width
+            anchors.top: shininess.bottom
+            text: "Attenuation"
+        }
+
+        Slider {
+            id: attenuationValue
+            anchors.top: attenuation.top
+            anchors.left: attenuation.right
+            anchors.leftMargin: 5
+            height: 22
+            maximumValue: 50
+            minimumValue: 0.0
+            value: 1000.0*light.attenuation
+            onValueChanged: light.attenuation = 0.001*value
         }
     }
 

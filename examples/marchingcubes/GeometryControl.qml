@@ -6,7 +6,7 @@ import MySimulator 1.0
 Rectangle {
     id: geometryControlRoot
     width: 320
-    height: 180
+    height: numberOfVoxels.height + geometry.height + okButton.height + 10
     color: "#ffffff"
     opacity: 0.9
 
@@ -16,10 +16,8 @@ Rectangle {
 
     GroupBox {
         id: numberOfVoxels
-        x: 0
-        y: 0
         width: parent.width
-        height: 51
+        height: 56
         title: qsTr("Number of voxels")
 
         TextField {
@@ -58,8 +56,7 @@ Rectangle {
 
     GroupBox {
         id: geometry
-        x: 0
-        y: 57
+        anchors.top: numberOfVoxels.bottom
         width: parent.width
         height: 93
         title: qsTr("Geometries")
@@ -71,6 +68,7 @@ Rectangle {
                 simulator.geometry = MySimulator.SINUS
                 marchingCubes.threshold = 0
                 marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
+                geometryControlRoot.visible = false
             }
         }
 
@@ -82,6 +80,7 @@ Rectangle {
                 simulator.geometry = MySimulator.SPHERE
                 marchingCubes.threshold = 3
                 marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
+                geometryControlRoot.visible = false
             }
         }
 
@@ -93,6 +92,7 @@ Rectangle {
                 simulator.geometry = MySimulator.CUBE
                 marchingCubes.threshold = 3
                 marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
+                geometryControlRoot.visible = false
             }
         }
 
@@ -104,14 +104,16 @@ Rectangle {
                 simulator.geometry = MySimulator.PERLIN
                 marchingCubes.threshold = 0.6
                 marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
+                geometryControlRoot.visible = false
             }
         }
     }
 
     Button {
-        id: button1
+        id: okButton
         x: parent.width*0.5 - width*0.5
-        y: 154
+        anchors.top: geometry.bottom
+        anchors.topMargin: 5
         text: qsTr("OK")
         onClicked: geometryControlRoot.visible = false
     }

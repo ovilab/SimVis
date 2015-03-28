@@ -13,9 +13,13 @@ uniform highp float cp_ambientIntensity;
 uniform highp float cp_specularIntensity;
 
 highp vec3 diffuse(highp vec3 normal, highp vec3 vertexPosition, highp vec3 color) {
+#ifdef DEFAULTLIGHTDIFFUSE
     highp vec3 surfaceToLight = normalize(cp_lightPosition - vertexPosition);
     highp float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
     return color*diffuseCoefficient*cp_diffuseIntensity;
+#else
+    return vec3(0.0,0.0,0.0);
+#endif
 }
 
 highp vec3 diffuse(highp vec3 normal, highp vec3 vertexPosition, highp vec4 color) {
@@ -23,7 +27,11 @@ highp vec3 diffuse(highp vec3 normal, highp vec3 vertexPosition, highp vec4 colo
 }
 
 highp vec3 ambient(highp vec3 color) {
+#ifdef DEFAULTLIGHTAMBIENT
     return color*cp_ambientIntensity;
+#else
+    return vec3(0.0,0.0,0.0);
+#endif
 }
 
 highp vec3 ambient(highp vec4 color) {
@@ -31,6 +39,7 @@ highp vec3 ambient(highp vec4 color) {
 }
 
 highp vec3 specular(highp vec3 normal, highp vec3 vertexPosition, highp vec3 color) {
+#ifdef DEFAULTLIGHTSPECULAR
     highp vec3 surfaceToLight = normalize(cp_lightPosition - vertexPosition);
     highp vec3 reflectionVector = reflect(-surfaceToLight, normal);
     highp vec3 surfaceToCamera = normalize(cp_cameraPosition - vertexPosition); //also a unit vector
@@ -38,6 +47,9 @@ highp vec3 specular(highp vec3 normal, highp vec3 vertexPosition, highp vec3 col
     highp float specularCoefficient = pow(cosAngle, cp_shininess);
 
     return color*specularCoefficient*cp_specularIntensity;
+#else
+    return vec3(0.0,0.0,0.0);
+#endif
 }
 
 highp vec3 specular(highp vec3 normal, highp vec3 vertexPosition, highp vec4 color) {

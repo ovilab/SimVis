@@ -2,7 +2,16 @@
 
 QString DefaultLight::fragmentShaderDefines()
 {
-    QString defines = "\n #define DEFAULTLIGHT \n";
+    QString defines = "\n#define DEFAULTLIGHT \n";
+    if(m_ambient) {
+        defines.append("#define DEFAULTLIGHTAMBIENT \n");
+    }
+    if(m_diffuse) {
+        defines.append("#define DEFAULTLIGHTDIFFUSE \n");
+    }
+    if(m_specular) {
+        defines.append("#define DEFAULTLIGHTSPECULAR \n");
+    }
     return defines;
 }
 
@@ -37,6 +46,9 @@ void DefaultLight::copyState(ShaderEffect *source) {
     m_specularIntensity = defaultLight->specularIntensity();
     m_ambientIntensity = defaultLight->ambientIntensity();
     m_position = defaultLight->position();
+    m_ambient = defaultLight->ambient();
+    m_diffuse = defaultLight->diffuse();
+    m_specular = defaultLight->specular();
     m_enabled = source->enabled();
     m_shadersDirty = source->shadersDirty();
 }
@@ -105,6 +117,21 @@ float DefaultLight::attenuation() const
 QVector3D DefaultLight::position() const
 {
     return m_position;
+}
+
+bool DefaultLight::ambient() const
+{
+    return m_ambient;
+}
+
+bool DefaultLight::diffuse() const
+{
+    return m_diffuse;
+}
+
+bool DefaultLight::specular() const
+{
+    return m_specular;
 }
 
 void DefaultLight::setAmbientColor(QColor arg)
@@ -186,5 +213,35 @@ void DefaultLight::setPosition(QVector3D arg)
 
     m_position = arg;
     emit positionChanged(arg);
+}
+
+void DefaultLight::setAmbient(bool arg)
+{
+    if (m_ambient == arg)
+        return;
+
+    m_ambient = arg;
+    m_shadersDirty = true;
+    emit ambientChanged(arg);
+}
+
+void DefaultLight::setDiffuse(bool arg)
+{
+    if (m_diffuse == arg)
+        return;
+
+    m_diffuse = arg;
+    m_shadersDirty = true;
+    emit diffuseChanged(arg);
+}
+
+void DefaultLight::setSpecular(bool arg)
+{
+    if (m_specular == arg)
+        return;
+
+    m_specular = arg;
+    m_shadersDirty = true;
+    emit specularChanged(arg);
 }
 
