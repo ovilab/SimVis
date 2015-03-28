@@ -87,13 +87,11 @@ void TrackballNavigator::touchEvent(QTouchEvent *event)
         }
 
         if(event->touchPointStates() & Qt::TouchPointMoved) {
-            // QVector2D touch1Position = scaledTouchPosition(QVector2D(touch1Point->pos().x(), touch1Point->pos().y()));
             QVector2D delta1 = scaledTouchPosition(QVector2D(touch1Point->pos() - touch1Point->lastPos()));
 
             if(numberOfTouches >= 2) {
                 // Only do pinching if we didn't release a touch
                 if(!(event->touchPointStates() & Qt::TouchPointReleased)) {
-                    // QVector2D touch2Position = scaledTouchPosition(QVector2D(touch2Point->pos().x(), touch2Point->pos().y()));
                     float initialDistance = scaledTouchPosition(QVector2D(touch1Point->lastPos() - touch2Point->lastPos())).length();
                     float currentDistance = scaledTouchPosition(QVector2D(touch1Point->pos() - touch2Point->pos())).length();
                     float deltaDistance = currentDistance - initialDistance;
