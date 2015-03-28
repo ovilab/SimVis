@@ -7,6 +7,9 @@ QString SimplexTexture::fragmentShaderDefines()
 
     if(m_enabled) {
         defines.append("\n#define SIMPLEXTEXTURE\n");
+        if(m_timeDependent) {
+            defines.append("#define TIMEDEPENDENTSIMPLEXTEXTURE\n");
+        }
     }
 
     return defines;
@@ -22,7 +25,6 @@ QString SimplexTexture::fragmentShaderLibrary()
 {
     QString shaderLibrary;
     // Remember to include dependencies here
-    shaderLibrary.append(contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/simplex2.glsl"));
     shaderLibrary.append(contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/simplex3.glsl"));
     shaderLibrary.append(contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/simplex4.glsl"));
     shaderLibrary.append(contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/simplextexture.glsl"));
@@ -46,6 +48,7 @@ void SimplexTexture::copyState(ShaderEffect *source)
 {
     SimplexTexture *simplexTexture = qobject_cast<SimplexTexture*>(source);
     setScale(simplexTexture->scale());
+    setTimeDependent(simplexTexture->timeDependent());
 
     m_enabled = (source->enabled());
     m_shadersDirty = (source->shadersDirty());
@@ -61,6 +64,11 @@ float SimplexTexture::scale() const
     return m_scale;
 }
 
+bool SimplexTexture::timeDependent() const
+{
+    return m_timeDependent;
+}
+
 void SimplexTexture::setScale(float arg)
 {
     if (m_scale == arg)
@@ -68,4 +76,14 @@ void SimplexTexture::setScale(float arg)
 
     m_scale = arg;
     emit scaleChanged(arg);
+}
+
+void SimplexTexture::setTimeDependent(bool arg)
+{
+    if (m_timeDependent == arg)
+        return;
+
+    m_timeDependent = arg;
+    m_shadersDirty = true;
+    emit timeDependentChanged(arg);
 }

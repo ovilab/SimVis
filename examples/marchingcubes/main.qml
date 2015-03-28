@@ -71,6 +71,7 @@ ApplicationWindow {
                 id: simplexTexture
                 scale: 1.0
                 enabled: false
+                timeDependent: true
             }
         }
 
@@ -131,13 +132,17 @@ ApplicationWindow {
             text: "Simplex"
             onClicked: {
                 visualizer.focus = true
-                simplexTexture.enabled = !simplexTexture.enabled
-
-                if(simplexTexture.enabled) {
-                    text = "Normal"
-                }
-                else {
+                if(simplexTexture.enabled && simplexTexture.timeDependent) {
+                    simplexTexture.enabled = false
+                    simplexTexture.timeDependent = false
                     text = "Simplex"
+                } else if(simplexTexture.enabled && !simplexTexture.timeDependent) {
+                    simplexTexture.timeDependent = true
+                    text = "Normal"
+                } else {
+                    simplexTexture.enabled = true
+                    simplexTexture.timeDependent = false
+                    text = "Simplex Time"
                 }
             }
         }

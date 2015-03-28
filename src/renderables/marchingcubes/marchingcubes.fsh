@@ -18,7 +18,7 @@ void main() {
 #endif
 
 #ifdef SIMPLEXTEXTURE
-    n = surface(vec4(vertexPosition, 0.1*cp_time)); // From simplextexture.fsh
+    n = surface(vertexPosition); // From simplextexture.fsh
 #endif
 
     gl_FragColor = vec4(light*n, 1.0);
