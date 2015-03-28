@@ -27,21 +27,14 @@ void TrackballNavigator::setZoomSensitivity(float arg)
     emit zoomSensitivityChanged(arg);
 }
 
-void TrackballNavigator::pressed(QVector2D position)
-{
-    m_lastPosition = position;
+QVector2D TrackballNavigator::scaledTouchPosition(QVector2D touchPosition) {
+    return QVector2D(touchPosition.x()/width(), touchPosition.y()/height());
 }
 
-void TrackballNavigator::moved(QVector2D position)
+void TrackballNavigator::moved(QVector2D delta)
 {
-    QVector2D delta = position - m_lastPosition;
-    m_lastPosition = position;
-
-    delta.setX( delta.x() / width());
-    delta.setY( delta.y() / height());
-
-    float deltaPan = -delta.x() * 100;
-    float deltaTilt = -delta.y() * 100;
+    float deltaPan = -delta.x() * 200;
+    float deltaTilt = -delta.y() * 200;
 
     m_camera->panAboutViewCenter(deltaPan);
     m_camera->tiltAboutViewCenter(deltaTilt);
@@ -64,14 +57,15 @@ void TrackballNavigator::mouseReleaseEvent(QMouseEvent *event)
 
 void TrackballNavigator::mousePressEvent(QMouseEvent *event)
 {
-    QVector2D position = QVector2D(event->pos().x(), event->pos().y());
-    pressed(position);
+    m_touch1Position = scaledTouchPosition(QVector2D(event->pos().x(), event->pos().y()));
 }
 
 void TrackballNavigator::mouseMoveEvent(QMouseEvent *event)
 {
-    QVector2D position = QVector2D(event->pos().x(), event->pos().y());
-    moved(position);
+    QVector2D touch1Position = scaledTouchPosition(QVector2D(event->pos().x(), event->pos().y()));
+    QVector2D delta = m_touch1Position - touch1Position;
+    m_touch1Position = touch1Position;
+    moved(-delta);
 }
 
 void TrackballNavigator::wheelEvent(QWheelEvent *event)
@@ -85,18 +79,35 @@ void TrackballNavigator::wheelEvent(QWheelEvent *event)
 void TrackballNavigator::touchEvent(QTouchEvent *event)
 {
     int numberOfTouches = event->touchPoints().size();
-    if(numberOfTouches == 1) {
-        const QTouchEvent::TouchPoint &touchPoint = event->touchPoints().first();
+    if(numberOfTouches >= 1) {
+        const QTouchEvent::TouchPoint *touch1Point = &event->touchPoints().first();
+        const QTouchEvent::TouchPoint *touch2Point = 0;
+        if(numberOfTouches >= 2) {
+            touch2Point = &event->touchPoints().at(1);
+        }
 
-        if(event->touchPointStates() == Qt::TouchPointPressed) {
-            m_initialTouchId = touchPoint.id();
-            QVector2D position = QVector2D(touchPoint.pos().x(), touchPoint.pos().y());
-            pressed(position);
-        } else if(event->touchPointStates() == Qt::TouchPointMoved && touchPoint.id() == m_initialTouchId) {
-            QVector2D position = QVector2D(touchPoint.pos().x(), touchPoint.pos().y());
-            moved(position);
+        if(event->touchPointStates() & Qt::TouchPointMoved) {
+            // QVector2D touch1Position = scaledTouchPosition(QVector2D(touch1Point->pos().x(), touch1Point->pos().y()));
+            QVector2D delta1 = scaledTouchPosition(QVector2D(touch1Point->pos() - touch1Point->lastPos()));
+
+            if(numberOfTouches >= 2) {
+                // Only do pinching if we didn't release a touch
+                if(!(event->touchPointStates() & Qt::TouchPointReleased)) {
+                    // QVector2D touch2Position = scaledTouchPosition(QVector2D(touch2Point->pos().x(), touch2Point->pos().y()));
+                    float initialDistance = scaledTouchPosition(QVector2D(touch1Point->lastPos() - touch2Point->lastPos())).length();
+                    float currentDistance = scaledTouchPosition(QVector2D(touch1Point->pos() - touch2Point->pos())).length();
+                    float deltaDistance = currentDistance - initialDistance;
+                    float factor = exp(-2.0*deltaDistance);
+                    m_camera->setPosition(m_camera->position()*factor);
+                }
+
+                QVector2D delta2 = scaledTouchPosition(QVector2D(touch2Point->pos() - touch2Point->lastPos()));
+                if(touch1Point->state() == Qt::TouchPointMoved) moved(delta1);
+                if(touch2Point->state() == Qt::TouchPointMoved) moved(delta2);
+            } else {
+                moved(delta1);
+            }
         }
     }
-
 }
 

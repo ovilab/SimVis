@@ -2,6 +2,7 @@
 #define TRACKBALLNAVIGATOR_H
 
 #include "../core/navigator.h"
+#include <QVector3D>
 
 class Visualizer;
 class TrackballNavigator : public Navigator
@@ -21,11 +22,12 @@ signals:
 void zoomSensitivityChanged(float arg);
 
 protected:
-    QVector2D m_lastPosition;
-    int m_initialTouchId = -1;
+    QVector2D m_touch1Position;
+    QVector2D m_touch2Position;
+    QVector3D m_initialCameraPosition;
     float m_zoomSensitivity = 1.0;
     void pressed(QVector2D position);
-    void moved(QVector2D position);
+    void moved(QVector2D delta);
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
     void mousePressEvent(QMouseEvent *event);
@@ -33,6 +35,7 @@ protected:
     void wheelEvent(QWheelEvent *event);
     void touchEvent(QTouchEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    QVector2D scaledTouchPosition(QVector2D touchPosition);
 };
 
 #endif // TRACKBALLNAVIGATOR_H
