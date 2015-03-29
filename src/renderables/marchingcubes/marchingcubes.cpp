@@ -165,6 +165,24 @@ void MarchingCubes::setScale(float arg)
     emit scaleChanged(arg);
 }
 
+void MarchingCubes::setNumberOfTriangles(int arg)
+{
+    if (m_numberOfTriangles == arg)
+        return;
+
+    m_numberOfTriangles = arg;
+    emit numberOfTrianglesChanged(arg);
+}
+
+void MarchingCubes::setNumberOfLines(int arg)
+{
+    if (m_numberOfLines == arg)
+        return;
+
+    m_numberOfLines = arg;
+    emit numberOfLinesChanged(arg);
+}
+
 bool MarchingCubes::hasContinuousScalarField() const
 {
     return m_hasContinuousScalarField;
@@ -173,6 +191,16 @@ bool MarchingCubes::hasContinuousScalarField() const
 void MarchingCubes::setHasContinuousScalarField(bool hasContinuousScalarField)
 {
     m_hasContinuousScalarField = hasContinuousScalarField;
+}
+
+int MarchingCubes::numberOfTriangles() const
+{
+    return m_numberOfTriangles;
+}
+
+int MarchingCubes::numberOfLines() const
+{
+    return m_numberOfLines;
 }
 
 MarchingCubesRenderer::MarchingCubesRenderer()
@@ -211,6 +239,8 @@ void MarchingCubesRenderer::synchronize(Renderable *renderable)
         m_shadersDirty = true;
         marchingCubes->m_shadersDirty = false;
     }
+    marchingCubes->setNumberOfTriangles(2*m_generator.m_trianglesFront.size());
+    marchingCubes->setNumberOfLines(6*m_generator.m_lines.size());
     m_color = QVector3D(marchingCubes->color().redF(), marchingCubes->color().greenF(), marchingCubes->color().blueF());
     m_mode = marchingCubes->mode();
     m_scale = marchingCubes->scale();

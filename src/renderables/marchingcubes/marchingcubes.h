@@ -20,6 +20,8 @@ class MarchingCubes : public Renderable
     Q_PROPERTY(bool dirty READ dirty WRITE setDirty NOTIFY dirtyChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(Mode mode READ mode WRITE setMode NOTIFY modeChanged)
+    Q_PROPERTY(int numberOfTriangles READ numberOfTriangles WRITE setNumberOfTriangles NOTIFY numberOfTrianglesChanged)
+    Q_PROPERTY(int numberOfLines READ numberOfLines WRITE setNumberOfLines NOTIFY numberOfLinesChanged)
 public:
     enum Mode
     {
@@ -48,6 +50,8 @@ public:
     float scale() const;
     bool hasContinuousScalarField() const;
     void setHasContinuousScalarField(bool hasContinuousScalarField);
+    int numberOfTriangles() const;
+    int numberOfLines() const;
 
 public slots:
     void setThreshold(float arg);
@@ -58,6 +62,8 @@ public slots:
     void setColor(QColor arg);
     void setMode(Mode arg);
     void setScale(float arg);
+    void setNumberOfTriangles(int arg);
+    void setNumberOfLines(int arg);
 
 signals:
     void thresholdChanged(float arg);
@@ -68,10 +74,14 @@ signals:
     void colorChanged(QColor arg);
     void modeChanged(Mode arg);
     void scaleChanged(float arg);
+    void numberOfTrianglesChanged(int arg);
+    void numberOfLinesChanged(int arg);
 
 private:
     float m_threshold = 0.0;
     float m_scale = 1.0;
+    int m_numberOfTriangles = 0;
+    int m_numberOfLines = 0;
     QVector3D m_numVoxels;
     QVector3D m_min;
     QVector3D m_max;

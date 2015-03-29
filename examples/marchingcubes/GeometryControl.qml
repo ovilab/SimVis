@@ -22,8 +22,6 @@ Rectangle {
 
         TextField {
             id: numVoxelsX
-            x: 0
-            y: -2
             width: 45
             height: 22
             placeholderText: qsTr("NX")
@@ -33,8 +31,7 @@ Rectangle {
 
         TextField {
             id: numVoxelsY
-            x: 51
-            y: -2
+            anchors.left: numVoxelsX.right
             width: 45
             height: 22
             placeholderText: qsTr("NY")
@@ -44,13 +41,22 @@ Rectangle {
 
         TextField {
             id: numVoxelsZ
-            x: 102
-            y: -2
+            anchors.left: numVoxelsY.right
             width: 45
             height: 22
             placeholderText: qsTr("NZ")
             onFocusChanged: if(focus) selectAll()
             text: marchingCubes.numVoxels.z
+        }
+
+        Button {
+            id: setNumVoxels
+            anchors.left: numVoxelsZ.right
+            text: qsTr("Set")
+            onClicked: {
+                marchingCubes.numVoxels = Qt.vector3d(numVoxelsX.text, numVoxelsY.text, numVoxelsZ.text)
+                geometryControlRoot.visible = false
+            }
         }
     }
 

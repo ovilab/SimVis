@@ -73,28 +73,12 @@ ApplicationWindow {
                 timeDependent: true
             }
         }
-
-        Keys.onPressed: {
-            if(event.key === Qt.Key_1) {
-                console.log("Front and back")
-                marchingCubes.mode = MarchingCubes.FRONT_AND_BACK
-            } else if(event.key === Qt.Key_2) {
-                console.log("Front")
-                marchingCubes.mode = MarchingCubes.FRONT
-            } else if(event.key === Qt.Key_3) {
-                console.log("Back")
-                marchingCubes.mode = MarchingCubes.BACK
-            } else if(event.key === Qt.Key_4) {
-                console.log("Lines")
-                marchingCubes.mode = MarchingCubes.LINES
-            }
-        }
     }
 
     Rectangle {
         x: 0.5*(parent.width - width)
-        height: 28
-        width: lightButton.width + geometryButton.width + renderButton.width + fpslabel.width + 10
+        height: 50
+        width: lightButton.width + geometryButton.width + renderButton.width + 5
         opacity: 0.9
 
         Button {
@@ -128,11 +112,18 @@ ApplicationWindow {
         }
 
         Label {
-            anchors.top: parent.top
-            anchors.left: renderButton.right
+            anchors.top: lightButton.bottom
+            anchors.left: parent.left
+            anchors.leftMargin: 3
             anchors.topMargin: 5
-            id: fpslabel
-            text: "Fps: "+visualizer.fps.toFixed(1)
+            id: triangleCount
+            text: {
+                if(marchingCubes.mode == MarchingCubes.LINES) {
+                    return marchingCubes.numberOfLines+" lines with "+ visualizer.fps.toFixed(1) +" fps."
+                } else {
+                    return marchingCubes.numberOfTriangles+" triangles with "+ visualizer.fps.toFixed(1) +" fps."
+                }
+            }
         }
     }
 
