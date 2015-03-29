@@ -91,18 +91,26 @@ void TrackballNavigator::touchEvent(QTouchEvent *event)
             QVector2D delta1 = scaledTouchPosition(QVector2D(touch1Point->pos() - touch1Point->lastPos()));
 
             if(numberOfTouches >= 2) {
+                QVector2D delta2 = scaledTouchPosition(QVector2D(touch2Point->pos() - touch2Point->lastPos()));
+
                 // Only do pinching if we didn't release a touch
                 if(!(event->touchPointStates() & Qt::TouchPointReleased)) {
-                    float initialDistance = scaledTouchPosition(QVector2D(touch1Point->lastPos() - touch2Point->lastPos())).length();
-                    float currentDistance = scaledTouchPosition(QVector2D(touch1Point->pos() - touch2Point->pos())).length();
-                    float deltaDistance = currentDistance - initialDistance;
+                    QVector2D lastDelta = scaledTouchPosition(QVector2D(touch1Point->lastPos() - touch2Point->lastPos()));
+                    QVector2D currentDelta = scaledTouchPosition(QVector2D(touch1Point->pos() - touch2Point->pos()));
+                    float lastDistance = lastDelta.length();
+                    float currentDistance = currentDelta.length();
+                    float deltaDistance = currentDistance - lastDistance;
                     float factor = exp(-2.0*deltaDistance);
                     m_camera->setPosition(m_camera->position()*factor);
+
+                    float lastTheta = atan2(lastDelta.y(), lastDelta.x());
+                    float currentTheta = atan2(currentDelta.y(), currentDelta.x());
+                    float deltaTheta = (lastTheta - currentTheta)*180.0/M_PI;
+                    m_camera->rollAboutViewCenter(deltaTheta);
                 }
 
-                QVector2D delta2 = scaledTouchPosition(QVector2D(touch2Point->pos() - touch2Point->lastPos()));
                 // Require at least movement in both touches if we want to move
-                if(delta1.length() > 0.003 && delta2.length() > 0.003) {
+                if(delta1.length() > 0.002 && delta2.length() > 0.002) {
                     // Move average of the two deltas
                     moved(0.5*(delta1 + delta2));
                 }
