@@ -75,11 +75,10 @@ ApplicationWindow {
         }
     }
 
-    Rectangle {
+    Item {
         x: 0.5*(parent.width - width)
         height: 50
         width: lightButton.width + geometryButton.width + renderButton.width + 5
-        opacity: 0.9
 
         Button {
             anchors.left: parent.left
@@ -113,8 +112,9 @@ ApplicationWindow {
 
         Label {
             anchors.top: lightButton.bottom
-            anchors.left: parent.left
-            anchors.leftMargin: 3
+            x: 0.5*(parent.width - width)
+            // anchors.left: parent.left
+            // anchors.leftMargin: 3
             anchors.topMargin: 5
             id: triangleCount
             text: {

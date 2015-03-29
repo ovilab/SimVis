@@ -17,14 +17,14 @@ Rectangle {
     GroupBox {
         id: numberOfVoxels
         width: parent.width
-        height: 56
+        height: 66
         title: qsTr("Number of voxels")
 
         TextField {
             id: numVoxelsX
             width: 45
-            height: 22
-            placeholderText: qsTr("NX")
+            height: setNumVoxels.height
+            placeholderText: qsTr("nx")
             onFocusChanged: if(focus) selectAll()
             text: marchingCubes.numVoxels.x
         }
@@ -33,8 +33,8 @@ Rectangle {
             id: numVoxelsY
             anchors.left: numVoxelsX.right
             width: 45
-            height: 22
-            placeholderText: qsTr("NY")
+            height: setNumVoxels.height
+            placeholderText: qsTr("ny")
             onFocusChanged: if(focus) selectAll()
             text: marchingCubes.numVoxels.y
         }
@@ -43,8 +43,8 @@ Rectangle {
             id: numVoxelsZ
             anchors.left: numVoxelsY.right
             width: 45
-            height: 22
-            placeholderText: qsTr("NZ")
+            height: setNumVoxels.height
+            placeholderText: qsTr("nz")
             onFocusChanged: if(focus) selectAll()
             text: marchingCubes.numVoxels.z
         }
