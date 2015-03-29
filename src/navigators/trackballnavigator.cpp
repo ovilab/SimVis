@@ -28,7 +28,8 @@ void TrackballNavigator::setZoomSensitivity(float arg)
 }
 
 QVector2D TrackballNavigator::scaledTouchPosition(QVector2D touchPosition) {
-    return QVector2D(touchPosition.x()/width(), touchPosition.y()/height());
+    float scaleFactor = std::min(width(), height());
+    return QVector2D(touchPosition.x()/scaleFactor, touchPosition.y()/scaleFactor);
 }
 
 void TrackballNavigator::moved(QVector2D delta)
