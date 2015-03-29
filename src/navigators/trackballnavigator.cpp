@@ -100,8 +100,11 @@ void TrackballNavigator::touchEvent(QTouchEvent *event)
                 }
 
                 QVector2D delta2 = scaledTouchPosition(QVector2D(touch2Point->pos() - touch2Point->lastPos()));
-                if(touch1Point->state() == Qt::TouchPointMoved) moved(delta1);
-                if(touch2Point->state() == Qt::TouchPointMoved) moved(delta2);
+                // Require at least movement in both touches if we want to move
+                if(delta1.length() > 0.003 && delta2.length() > 0.003) {
+                    // Move average of the two deltas
+                    moved(0.5*(delta1 + delta2));
+                }
             } else {
                 moved(delta1);
             }
