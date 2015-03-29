@@ -91,19 +91,16 @@ ApplicationWindow {
         }
     }
 
-    Item {
-        width: 314
-        height: 30
+    Rectangle {
+        x: 0.5*(parent.width - width)
+        height: 28
+        width: lightButton.width + geometryButton.width + renderButton.width + fpslabel.width + 10
         opacity: 0.9
 
-        Label {
-            id: fpslabel
-            text: "Fps: "+visualizer.fps.toFixed(1)
-        }
-
         Button {
+            anchors.left: parent.left
+            anchors.leftMargin: 3
             id: lightButton
-            anchors.left: fpslabel.right
             text: "Light"
             onClicked: {
                 lightControl.visible = !lightControl.visible
@@ -128,6 +125,14 @@ ApplicationWindow {
             onClicked: {
                 renderControl.visible = !renderControl.visible
             }
+        }
+
+        Label {
+            anchors.top: parent.top
+            anchors.left: renderButton.right
+            anchors.topMargin: 5
+            id: fpslabel
+            text: "Fps: "+visualizer.fps.toFixed(1)
         }
     }
 
