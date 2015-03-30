@@ -59,7 +59,7 @@ ApplicationWindow {
             output: ShaderNodeOutput {
                 property real sum
             }
-            shaderSource: "sum = a + b;"
+            shaderSource: "sum = a+ b;"
             ShaderBinding {
                 source: shaderGraph
                 sourceProperty: "a"

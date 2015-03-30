@@ -111,6 +111,20 @@ void ShaderGraph::componentComplete()
                 m_shaderSource += ";\n";
             }
         }
+
+        const QMetaObject* outputMeta = shaderNode->output()->metaObject();
+        for(int i = outputMeta->propertyOffset(); i < outputMeta->propertyCount(); i++) {
+            QMetaProperty property = outputMeta->property(i);
+            QString propertyName = property.name();
+            nodeSource = nodeSource.replace(QRegularExpression("\\b" + propertyName + "\\b"),
+                                            shaderNode->objectName() + propertyName);
+
+            if(property.type() == QVariant::Double) {
+                m_shaderSource += "    float ";
+            }
+            m_shaderSource += shaderNode->objectName() + QString(property.name()) + ";\n";
+        }
+
         m_shaderSource += "    " + nodeSource + "\n";
     }
     m_shaderSource += "}\n";
