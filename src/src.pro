@@ -33,7 +33,12 @@ SOURCES += \
     core/shadereffect.cpp \
     shadereffects/simplexbump.cpp \
     shadereffects/defaultlight.cpp \
-    shadereffects/simplextexture.cpp
+    shadereffects/simplextexture.cpp \
+    core/shadergraph.cpp \
+    core/shadernode.cpp \
+    core/shadernodeinput.cpp \
+    core/shadernodeoutput.cpp \
+    core/shaderbinding.cpp
 
 HEADERS += \
     core/navigator.h \
@@ -59,7 +64,12 @@ HEADERS += \
     core/shadereffect.h \
     shadereffects/simplexbump.h \
     shadereffects/defaultlight.h \
-    shadereffects/simplextexture.h
+    shadereffects/simplextexture.h \
+    core/shadergraph.h \
+    core/shadernode.h \
+    core/shadernodeinput.h \
+    core/shadernodeoutput.h \
+    core/shaderbinding.h
 
 DISTFILES = qmldir \
     core/simvisplugin.json

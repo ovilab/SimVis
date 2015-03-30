@@ -10,6 +10,11 @@
 #include "../shadereffects/simplexbump.h"
 #include "../shadereffects/defaultlight.h"
 #include "../shadereffects/simplextexture.h"
+#include "../core/shadergraph.h"
+#include "../core/shadernode.h"
+#include "../core/shadernodeinput.h"
+#include "../core/shadernodeoutput.h"
+#include "../core/shaderbinding.h"
 #include <qqml.h>
 #include <QQmlEngine>
 
@@ -26,6 +31,11 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<Visualizer>("SimVis", 1, 0, "Visualizer");
     qmlRegisterType<Camera>("SimVis", 1, 0, "Camera");
     qmlRegisterType<Navigator>("SimVis", 1, 0, "Navigator");
+    qmlRegisterType<ShaderGraph>("SimVis", 1, 0, "ShaderGraph");
+    qmlRegisterType<ShaderNode>("SimVis", 1, 0, "ShaderNode");
+    qmlRegisterType<ShaderNodeInput>("SimVis", 1, 0, "ShaderNodeInput");
+    qmlRegisterType<ShaderNodeOutput>("SimVis", 1, 0, "ShaderNodeOutput");
+    qmlRegisterType<ShaderBinding>("SimVis", 1, 0, "ShaderBinding");
     qmlRegisterType<TrackballNavigator>("SimVis", 1, 0, "TrackballNavigator");
     qmlRegisterType<SimplexBump>("SimVis", 1, 0, "SimplexBump");
     qmlRegisterType<SimplexTexture>("SimVis", 1, 0, "SimplexTexture");

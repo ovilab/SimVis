@@ -1,5 +1,6 @@
 TEMPLATE = subdirs
 SUBDIRS += footballs \
     simple \
-    marchingcubes
+    marchingcubes \
+    shadergraph
 CONFIG += ordered
