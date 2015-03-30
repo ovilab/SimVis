@@ -3,9 +3,11 @@
 #include "simulator.h"
 #include "camera.h"
 #include "navigator.h"
+
 #include "../navigators/trackballnavigator.h"
 #include <QDebug>
 #include <QOpenGLFramebufferObjectFormat>
+#include <QGLFormat>
 
 Visualizer::Visualizer() :
     m_defaultCamera(this)
@@ -13,6 +15,15 @@ Visualizer::Visualizer() :
     connect(this, &Visualizer::widthChanged, this, &Visualizer::resetAspectRatio);
     connect(this, &Visualizer::heightChanged, this, &Visualizer::resetAspectRatio);
     connect(this, &Visualizer::componentComplete, this, &Visualizer::resetAspectRatio);
+
+    QSurfaceFormat format;
+    format.setProfile(QSurfaceFormat::CoreProfile);
+    format.setMajorVersion(4);
+    format.setMinorVersion(1);
+
+    context.setFormat(format);
+    context.create();
+    context.setShareContext(QOpenGLContext::currentContext());
 }
 
 Visualizer::~Visualizer()
@@ -105,6 +116,11 @@ void Visualizer::setFps(float arg)
     emit fpsChanged(arg);
 }
 
+void Visualizer::moveContexToRenderThread(QThread *renderThread)
+{
+    context.moveToThread(renderThread);
+}
+
 void Visualizer::synchronizeWorker(SimulatorWorker *worker)
 {
     QList<Renderable*> renderables = findChildren<Renderable*>();
@@ -121,14 +137,24 @@ void Visualizer::synchronizeWorker(SimulatorWorker *worker)
 void Visualizer::resetAspectRatio()
 {
     if(width() > 0 && height() > 0) {
-        qDebug() << "Setting aspect ratio to" << width() / height();
         camera()->setAspectRatio(width() / height());
     }
 }
 
 void VisualizerRenderer::render()
 {
+    if(context->thread() != QThread::currentThread()) return;
+
+    QOpenGLContext *defaultContext = QOpenGLContext::currentContext();
+    QSurface *defaultSurface = defaultContext->surface();
+
+    // qDebug() << "Before: Driver Version String:" << (QLatin1String(reinterpret_cast<const char*>(glGetString(GL_VERSION))));
+    // defaultContext->doneCurrent();
+    context->makeCurrent(defaultSurface);
+    // qDebug() << "After: Driver Version String:" << (QLatin1String(reinterpret_cast<const char*>(glGetString(GL_VERSION))));
     QOpenGLFunctions funcs(QOpenGLContext::currentContext());
+
+    // qDebug() << QLatin1String(reinterpret_cast<const char*>(glGetString(GL_SHADING_LANGUAGE_VERSION)));
 
     glClearColor(m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF(), m_backgroundColor.alphaF());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -158,6 +184,11 @@ void VisualizerRenderer::render()
         m_fpsCounterTimeZero = QDateTime::currentMSecsSinceEpoch();
         m_fps = 60.0 / dt * 1000;
     }
+    // context->doneCurrent();
+    defaultContext->makeCurrent(defaultSurface);
+
+    glClearColor(m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF(), m_backgroundColor.alphaF());
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     m_frameCount++;
 }
@@ -165,9 +196,24 @@ void VisualizerRenderer::render()
 void VisualizerRenderer::synchronize(QQuickFramebufferObject *fbo)
 {
     Visualizer* visualizer = static_cast<Visualizer*>(fbo);
+
     m_renderables = visualizer->findChildren<Renderable*>();
     m_camera = visualizer->camera();
     m_backgroundColor = visualizer->backgroundColor();
+
+    QOpenGLContext *defaultContext = QOpenGLContext::currentContext();
+    QSurface *defaultSurface = defaultContext->surface();
+    if(context == 0) {
+        context = &visualizer->context;
+        surface = &visualizer->surface;
+        connect(this, &VisualizerRenderer::moveContexToRenderThread, visualizer, &Visualizer::moveContexToRenderThread);
+        emit moveContexToRenderThread(QThread::currentThread());
+    }
+
+    if(context->thread() != QThread::currentThread()) return;
+
+    // defaultContext->doneCurrent();
+    context->makeCurrent(defaultSurface);
 
     for(Renderable* renderable : m_renderables) {
         if(renderable->visible()) {
@@ -177,6 +223,9 @@ void VisualizerRenderer::synchronize(QQuickFramebufferObject *fbo)
             renderable->requestSynchronize();
         }
     }
+
+    // context->doneCurrent();
+    defaultContext->makeCurrent(defaultSurface);
     visualizer->setFps(m_fps);
 }
 Camera *VisualizerRenderer::camera() const

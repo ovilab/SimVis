@@ -8,6 +8,7 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLTexture>
 #include <QColor>
+
 class Simulator;
 
 class Points;
@@ -45,12 +46,10 @@ public:
     QColor color() const;
 
 public slots:
-
     void setPointSize(float arg);
     void setColor(QColor arg);
 
 signals:
-
     void pointSizeChanged(float arg);
     void colorChanged(QColor arg);
 

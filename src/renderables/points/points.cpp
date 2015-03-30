@@ -105,7 +105,9 @@ void PointsRenderer::uploadVBO(Points *points)
     if(points->m_vertices.size() < 1) {
         return;
     }
+
     // Transfer vertex data to VBO 0
+
     m_vertexCount = points->m_vertices.size();
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
     glFunctions()->glBufferData(GL_ARRAY_BUFFER, m_vertexCount * sizeof(QVector3D), &points->m_vertices.front(), GL_STATIC_DRAW);
@@ -113,16 +115,16 @@ void PointsRenderer::uploadVBO(Points *points)
 
 void PointsRenderer::beforeLinkProgram()
 {
-    setShaderFromSourceFile(QOpenGLShader::Vertex,
+    setShaderFromSourceCode(QOpenGLShader::Vertex,
                                       "uniform highp mat4 modelViewProjectionMatrix;\n"
                                       "uniform highp float pointSize;\n"
                                       "attribute highp vec4 a_position;\n"
                                       "void main() {\n"
-                                      "    gl_PointSize = 10.0;\n"
+                                      // "    gl_PointSize = 10.0;\n"
                                       "    gl_Position = modelViewProjectionMatrix*a_position;\n"
                                       "}");
 
-    setShaderFromSourceFile(QOpenGLShader::Fragment,
+    setShaderFromSourceCode(QOpenGLShader::Fragment,
                                       "uniform highp vec4 color;"
                                       "void main() {\n"
                                       "    gl_FragColor = color;\n"

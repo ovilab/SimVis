@@ -1,7 +1,7 @@
 #include "renderable.h"
 #include "camera.h"
 #include <QFile>
-
+#include <QOpenGLContext>
 Renderable::Renderable(QQuickItem *parent) :
     QQuickItem(parent),
     m_renderer(0)
@@ -237,7 +237,6 @@ void RenderableRenderer::prepareAndRender()
                 addShaderCodeToBase(QOpenGLShader::Vertex, shaderEffect->vertexShaderLibrary());
             }
         }
-
         beforeLinkProgram();
         m_program.link();
         m_shadersDirty = false;
@@ -347,9 +346,14 @@ void RenderableRenderer::addShaderLibrary(QOpenGLShader::ShaderType type, CompPh
 }
 
 QOpenGLFunctions* RenderableRenderer::glFunctions() {
+//    if(m_funcs) delete m_funcs;
+//    m_funcs = new QOpenGLFunctions(QOpenGLContext::currentContext());
+//    return m_funcs;
+
     if(!m_funcs) {
         m_funcs = new QOpenGLFunctions(QOpenGLContext::currentContext());
     }
+
     return m_funcs;
 }
 

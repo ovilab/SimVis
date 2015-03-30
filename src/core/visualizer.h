@@ -1,19 +1,26 @@
 #ifndef VISUALIZER_H
 #define VISUALIZER_H
+#include "camera.h"
 
 #include <QQuickItem>
 #include <QQuickFramebufferObject>
 #include <QElapsedTimer>
 #include <QDateTime>
-#include "camera.h"
+#include <QQuickFramebufferObject>
+#include <QOpenGLContext>
+#include <QOffscreenSurface>
+#include <QScreen>
 
 class Renderable; class Simulator; class SimulatorWorker; class Camera; class Navigator;
 
-class VisualizerRenderer : public QQuickFramebufferObject::Renderer
+class VisualizerRenderer : public QObject, public QQuickFramebufferObject::Renderer
 {
+    Q_OBJECT
 public:
     Camera *camera() const;
     void setCamera(Camera *camera);
+    QOffscreenSurface *surface = 0;
+    QOpenGLContext *context = 0;
 
 protected:
     QOpenGLFramebufferObject *createFramebufferObject(const QSize &size);
@@ -27,6 +34,8 @@ private:
     float m_fps = 60;
     qint64 m_fpsCounterTimeZero = QDateTime::currentMSecsSinceEpoch();
     QColor m_backgroundColor = QColor(0,0,0,0);
+signals:
+    void moveContexToRenderThread(QThread *renderThread);
 };
 
 class Visualizer : public QQuickFramebufferObject
@@ -47,13 +56,15 @@ public:
     Navigator* navigator();
     float fps() const;
 
+    QOpenGLContext context;
+
 public slots:
     void setSimulator(Simulator* arg);
     void setCamera(Camera* arg);
     void setBackgroundColor(QColor arg);
     void setNavigator(Navigator* arg);
-
     void setFps(float arg);
+    void moveContexToRenderThread(QThread *renderThread);
 
 private slots:
     void synchronizeWorker(SimulatorWorker* worker);
@@ -64,7 +75,6 @@ signals:
     void cameraChanged(Camera* arg);
     void backgroundColorChanged(QColor arg);
     void navigatorChanged(Navigator* arg);
-
     void fpsChanged(float arg);
 
 private:

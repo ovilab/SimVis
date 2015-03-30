@@ -1,3 +1,5 @@
+#version 410
+
 #ifndef DEFAULTGLSL
 #define DEFAULTGLSL
 

@@ -302,7 +302,6 @@ void MarchingCubesRenderer::render()
         program().setUniformValue("normalVectorSign", 1.0f);
         glDrawElements(GL_LINES, m_lineIndexCount, GL_UNSIGNED_INT, 0);
     }
-
     program().disableAttributeArray(vertexLocation);
 }
 
