@@ -121,9 +121,9 @@ void MyWorker::reset()
     m_positions.resize(m_ballCount);
     m_velocities.resize(m_ballCount);
     for(auto i=0; i < m_ballCount; i++) {
-        float x =  2.0*(rand() / double(RAND_MAX)) - 1.0;
-        float y =  2.0*(rand() / double(RAND_MAX)) - 1.0;
-        float z =  2.0*(rand() / double(RAND_MAX)) - 1.0;
+        float x =  5*(2.0*(rand() / double(RAND_MAX)) - 1.0);
+        float y =  5*(2.0*(rand() / double(RAND_MAX)) - 1.0);
+        float z =  5*(2.0*(rand() / double(RAND_MAX)) - 1.0);
         float vx = 2.0*(rand() / double(RAND_MAX)) - 1.0;
         float vy = 2.0*(rand() / double(RAND_MAX)) - 1.0;
         float vz = 2.0*(rand() / double(RAND_MAX)) - 1.0;

@@ -51,6 +51,8 @@ protected:
     QMatrix4x4 m_modelViewMatrix;
     QMatrix4x4 m_projectionMatrix;
     QVector3D m_viewVector;
+    QVector3D m_upVector;
+    QVector3D m_rightVector;
     QVector3D m_cameraPosition;
     QVector<GLuint> m_vboIds;
     QString m_fragmentShaderBase;

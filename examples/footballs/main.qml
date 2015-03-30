@@ -11,7 +11,7 @@ ApplicationWindow {
     id: applicationRoot
     title: qsTr("Footballs in a harmonic oscillator - SimVis example")
     width: 1920
-    height: 1080
+    height: 960
     visible: true
 
     MySimulator {
@@ -19,6 +19,8 @@ ApplicationWindow {
         mass: 1.0
         springConstant: 0.5
         dt: 0.001
+        ballCount: 1000
+
     }
 
     Visualizer {
@@ -45,14 +47,38 @@ ApplicationWindow {
         Billboards {
             id: billboards
             visible: billboardsVisible.checked
-            texture: ":/football.png"
-            scale: 0.1
-            shadowColor: visualizer.backgroundColor
+            texture: ":/sphere.png"
+            normalMap: ":/sphereNormalMap.png"
+            scale: 0.3
+
+            DefaultLight {
+                id: light
+                ambient: true
+                diffuse: true
+                specular: true
+                ambientColor: "green"
+                specularColor: "white"
+                diffuseColor: "blue"
+                ambientIntensity: 0.0
+                diffuseIntensity: 1.0
+                specularIntensity: 1.0
+                shininess: 30.0
+                attenuation: 0.01
+                position: Qt.vector3d(0,1,0)
+            }
+
+            SimplexBump {
+                id: simplexBump
+                enabled: true
+                intensity: 0.1
+                scale: 6.0
+            }
         }
     }
 
     Camera {
         id: camera
+        nearPlane: 0.0001
     }
 
     FastBlur {

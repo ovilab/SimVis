@@ -5,6 +5,7 @@
 #include <QRgb>
 #include <cmath>
 #include <QThread>
+#include <QPainter>
 
 #include "../../core/camera.h"
 
@@ -19,18 +20,38 @@ Billboards::~Billboards()
 
 }
 
-void BillboardsRenderer::uploadTexture(QString filename)
+QOpenGLTexture *BillboardsRenderer::uploadTexture(QString texture, QString normalMap)
 {
-    QFileInfo info(filename);
+    QFileInfo info(texture);
     if(!info.exists()) {
-        qWarning() << "File " << filename << " does not exist. Aborting!";
-        return;
+        qWarning() << "File " << texture << " does not exist. Aborting!";
+        return 0;
     }
 
-    QImage img = QImage(filename).mirrored();
-    m_texture = new QOpenGLTexture(img);
+    if(normalMap.isEmpty()) {
+        return new QOpenGLTexture(QImage(texture).mirrored());
+    }
 
-    m_isTextureUploaded = true;
+    info = QFileInfo(normalMap);
+    if(!info.exists()) {
+        qWarning() << "File " << normalMap << " does not exist. Aborting!";
+        return 0;
+    }
+
+    QImage img1(texture);
+    QImage img2(normalMap);
+
+    QImage surface(QSize(img1.width()*2, img1.height()), img1.format());
+    QPainter p(&surface);
+    // p.setCompositionMode(QPainter::CompositionMode_Source);
+    // p.drawRect(0,0,surface.size().width(), surface.size().height());
+    // p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+    p.drawImage(QPoint(0,0), img1);
+    p.drawImage(QPoint(img1.width(), 0), img2);
+    p.end();
+    surface.save("/projects/finalPicture.png");
+
+    return new QOpenGLTexture(surface);
 }
 
 QVector3D Billboards::vectorFromColor(const QColor &color)
@@ -76,9 +97,9 @@ QString Billboards::texture() const
     return m_texture;
 }
 
-QColor Billboards::shadowColor() const
+QString Billboards::normalMap() const
 {
-    return m_shadowColor;
+    return m_normalMap;
 }
 
 void Billboards::setTexture(QString arg)
@@ -90,13 +111,13 @@ void Billboards::setTexture(QString arg)
     emit textureChanged(arg);
 }
 
-void Billboards::setShadowColor(QColor arg)
+void Billboards::setNormalMap(QString arg)
 {
-    if (m_shadowColor == arg)
+    if (m_normalMap == arg)
         return;
 
-    m_shadowColor = arg;
-    emit shadowColorChanged(arg);
+    m_normalMap = arg;
+    emit normalMapChanged(arg);
 }
 
 BillboardsRenderer::BillboardsRenderer()
@@ -111,15 +132,16 @@ void BillboardsRenderer::synchronize(Renderable* renderer)
     m_upVector = billboards->camera()->upVector().normalized();
     m_viewVector = billboards->camera()->viewVector().normalized();
     m_rightVector = QVector3D::crossProduct(m_viewVector, m_upVector);
-    m_shadowColor = billboards->shadowColor();
 
     if(!m_isInitialized) {
         generateVBOs();
         m_isInitialized = true;
     }
-    if(!m_isTextureUploaded) {
-        uploadTexture(billboards->texture());
+
+    if(m_texture == 0) {
+        m_texture = uploadTexture(billboards->texture(), billboards->normalMap());
     }
+
     uploadVBOs(billboards);
 
     m_vertexCount = billboards->m_vertices.size();
@@ -165,24 +187,28 @@ void BillboardsRenderer::uploadVBOs(Billboards* billboards)
         float cosTheta = cos(rotation);
         float sinTheta = sin(rotation);
 
+        vertices[4*i + 0].billboardId = i;
         vertices[4*i + 0].position = position;
         vertices[4*i + 0].position[0] += dl[0]*cosTheta - dl[1]*sinTheta;
         vertices[4*i + 0].position[1] += dl[0]*sinTheta + dl[1]*cosTheta;
         vertices[4*i + 0].position[2] += dl[2];
         vertices[4*i + 0].textureCoord= QVector2D(0,1);
 
+        vertices[4*i + 1].billboardId = i;
         vertices[4*i + 1].position = position;
         vertices[4*i + 1].position[0] += dr[0]*cosTheta - dr[1]*sinTheta;
         vertices[4*i + 1].position[1] += dr[0]*sinTheta + dr[1]*cosTheta;
         vertices[4*i + 1].position[2] += dr[2];
         vertices[4*i + 1].textureCoord= QVector2D(1,1);
 
+        vertices[4*i + 2].billboardId = i;
         vertices[4*i + 2].position = position;
         vertices[4*i + 2].position[0] += ur[0]*cosTheta - ur[1]*sinTheta;
         vertices[4*i + 2].position[1] += ur[0]*sinTheta + ur[1]*cosTheta;
         vertices[4*i + 2].position[2] += ur[2];
         vertices[4*i + 2].textureCoord= QVector2D(1,0);
 
+        vertices[4*i + 3].billboardId = i;
         vertices[4*i + 3].position = position;
         vertices[4*i + 3].position[0] += ul[0]*cosTheta - ul[1]*sinTheta;
         vertices[4*i + 3].position[1] += ul[0]*sinTheta + ul[1]*cosTheta;
@@ -220,8 +246,8 @@ void Billboards::setPositions(QVector<QVector3D> &positions)
 }
 
 void BillboardsRenderer::beforeLinkProgram() {
-    setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/billboards/billboards_lighted.vsh");
-    setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/billboards/billboards_lighted.fsh");
+    setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/billboards/billboards.vsh");
+    setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/billboards/billboards.fsh");
 }
 
 void BillboardsRenderer::render()
@@ -230,16 +256,19 @@ void BillboardsRenderer::render()
         return;
     }
 
-    QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
-    program().setUniformValue("modelViewProjectionMatrix", modelViewProjectionMatrix);
-    program().setUniformValue("shadowColor", m_shadowColor);
-
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
 
     // Offset for position
     quintptr offset = 0;
+
+    // Tell OpenGL programmable pipeline how to locate vertex position data
+    int billboardIdLocation = program().attributeLocation("a_billboardId");
+    program().enableAttributeArray(billboardIdLocation);
+    glFunctions()->glVertexAttribPointer(billboardIdLocation, 1, GL_FLOAT, GL_FALSE, sizeof(BillboardVBOData), (const void *)offset);
+
+    offset += sizeof(GLfloat);
 
     // Tell OpenGL programmable pipeline how to locate vertex position data
     int vertexLocation = program().attributeLocation("a_position");
@@ -262,10 +291,12 @@ void BillboardsRenderer::render()
     program().enableAttributeArray(texcoordLocation);
     glFunctions()->glVertexAttribPointer(texcoordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(BillboardVBOData), (const void *)offset);
 
-    // Draw cube geometry using indices from VBO 1
     m_texture->bind();
+
+    // Draw cube geometry using indices from VBO 1
     glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
 
+    m_texture->release();
     program().disableAttributeArray(vertexLocation);
     program().disableAttributeArray(colorLocation);
     program().disableAttributeArray(texcoordLocation);

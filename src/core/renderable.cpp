@@ -29,7 +29,9 @@ void Renderable::requestSynchronize()
     }
     m_renderer->m_modelViewMatrix = m_camera->matrix();
     m_renderer->m_projectionMatrix = m_camera->projectionMatrix();
-    m_renderer->m_viewVector = m_camera->viewVector();
+    m_renderer->m_viewVector = m_camera->viewVector().normalized();
+    m_renderer->m_upVector = m_camera->upVector().normalized();
+    m_renderer->m_rightVector = QVector3D::crossProduct(m_renderer->m_viewVector, m_renderer->m_upVector);
     m_renderer->m_cameraPosition = m_camera->position();
     m_renderer->m_ambient = m_ambient;
     m_renderer->m_diffuse = m_diffuse;
@@ -248,7 +250,9 @@ void RenderableRenderer::prepareAndRender()
     m_program.setUniformValue("cp_modelViewProjectionMatrix", modelViewProjectionMatrix);
     m_program.setUniformValue("cp_modelViewMatrix", m_modelViewMatrix);
     m_program.setUniformValue("cp_projectionMatrix", m_projectionMatrix);
-    m_program.setUniformValue("cp_viewVector", m_viewVector.normalized());
+    m_program.setUniformValue("cp_viewVector", m_viewVector);
+    m_program.setUniformValue("cp_rightVector", m_rightVector);
+    m_program.setUniformValue("cp_upVector", m_upVector);
     m_program.setUniformValue("cp_cameraPosition", m_cameraPosition);
     m_program.setUniformValue("cp_time", float(m_elapsedTime.elapsed()*1e-3));
 

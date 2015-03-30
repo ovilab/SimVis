@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>football.png</file>
+        <file>sphere.png</file>
+        <file>sphereNormalMap.png</file>
     </qresource>
 </RCC>
