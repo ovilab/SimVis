@@ -5,8 +5,9 @@ attribute highp float a_billboardId;
 varying highp vec2 coords;
 varying highp vec3 color;
 varying highp vec3 vertexPosition;
-varying float attenuationFactor;
-varying float billboardId;
+varying highp float attenuationFactor;
+varying highp float billboardId;
+
 void main() {
     gl_Position = cp_modelViewProjectionMatrix*a_position;
     vertexPosition = a_position.xyz;

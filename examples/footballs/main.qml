@@ -78,7 +78,7 @@ ApplicationWindow {
 
     Camera {
         id: camera
-        nearPlane: 0.0001
+        nearPlane: 0.1
     }
 
     FastBlur {
