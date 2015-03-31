@@ -86,7 +86,7 @@ private:
     float m_specularIntensity = 0.1;
     float m_shininess = 30.0;
     float m_attenuation = 0.01;
-    float m_gamma = 2.2;
+    float m_gamma = 2.0;
     bool m_ambient = true;
     bool m_diffuse = true;
     bool m_specular = true;
