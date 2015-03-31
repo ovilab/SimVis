@@ -22,7 +22,4 @@ void main() {
     color = a_color;
 
     gl_Position = cp_modelViewProjectionMatrix*scaledPosition;
-//    highp vec4 lightPositionProjected = cp_modelViewProjectionMatrix*vec4(cp_lightPosition, 1.0);
-//    highp float lightDistance = lightPositionProjected.z;
-//    light = clamp((lightFalloffDistance * 0.85 - lightDistance) / (lightFalloffDistance * 0.7), 0.4, 1.0);
 }
