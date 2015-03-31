@@ -20,7 +20,7 @@ void main() {
     normal = simplexbump(normal, normal+vec3(sphereId));
 #endif
 
-    light = vec3(ambient(cp_ambientColor) + attenuationFactor*(diffuse(normal, vertexPosition, cp_diffuseColor) + specular(normal, vertexPosition, cp_specularColor)));
+    light = defaultLight(normal, vertexPosition, color);
 #endif
 
     if(r2 > 0.9) {

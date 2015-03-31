@@ -62,4 +62,30 @@ highp float attenuation(highp vec3 vertexPosition) {
     return attenuationFactor;
 }
 
+highp vec3 defaultLight(highp vec3 normal, highp vec3 vertexPosition, highp vec3 color) {
+   /* SPECULAR */
+    highp vec3 surfaceToLight = normalize(cp_lightPosition - vertexPosition);
+    highp vec3 surfaceToCamera = normalize(cp_cameraPosition - vertexPosition);
+    highp vec3 reflectionVector = reflect(-surfaceToLight, normal);
+    highp float cosAngle = max(0.0, dot(surfaceToCamera, reflectionVector));
+    highp float specularCoefficient = pow(cosAngle, cp_shininess);
+
+    highp vec3 specularColor = cp_specularColor.rgb*specularCoefficient*cp_specularIntensity;
+
+   /* DIFFUSE */
+    highp float diffuseCoefficient1 = max(0.0, dot(normal, surfaceToLight));
+    highp vec3 diffuseColor = cp_diffuseColor.rgb*diffuseCoefficient1*cp_diffuseIntensity;
+
+   /* AMBIENTDIFFUSE */
+    highp float diffuseCoefficient2 = max(0.0, dot(normal, surfaceToCamera));
+    highp vec3 ambientDiffuseColor = cp_ambientColor.rgb*(vec3(diffuseCoefficient2) + vec3(1.0))*cp_ambientIntensity;
+
+   /* RETURN COMBINED */
+   return color*(specularColor + ambientDiffuseColor + diffuseColor);
+}
+
+highp vec3 defaultLight(highp vec3 normal, highp vec3 vertexPosition, highp vec4 color) {
+    return defaultLight(normal, vertexPosition, color.rgb);
+}
+
 #endif
