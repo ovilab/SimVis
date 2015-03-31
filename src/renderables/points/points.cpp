@@ -114,12 +114,15 @@ void PointsRenderer::uploadVBO(Points *points)
 void PointsRenderer::beforeLinkProgram()
 {
     setShaderFromSourceFile(QOpenGLShader::Vertex,
-                                      "uniform highp mat4 modelViewProjectionMatrix;\n"
+                        #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
                                       "uniform highp float pointSize;\n"
+                        #endif
                                       "attribute highp vec4 a_position;\n"
                                       "void main() {\n"
-                                      "    gl_PointSize = 10.0;\n"
-                                      "    gl_Position = modelViewProjectionMatrix*a_position;\n"
+                        #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+                            "    gl_PointSize = 10.0;\n"
+                        #endif
+                                      "    gl_Position = cp_modelViewProjectionMatrix*a_position;\n"
                                       "}");
 
     setShaderFromSourceFile(QOpenGLShader::Fragment,
