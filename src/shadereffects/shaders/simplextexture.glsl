@@ -1,16 +1,16 @@
 #ifndef SIMPLEXTEXTUREGLSL
 #define SIMPLEXTEXTUREGLSL
-uniform highp float cp_simplexTextureScale;
+uniform float cp_simplexTextureScale;
 
-lowp float surface(highp vec3 coord ) {
+float surface(vec3 coord ) {
 
-    highp float frequency = 4.0;
-    highp float n = 0.0;
+    float frequency = 4.0;
+    float n = 0.0;
 
 #ifdef TIMEDEPENDENTSIMPLEXTEXTURE
-    highp vec4 coord2 = vec4(coord, 0.1*cp_time);
+    vec4 coord2 = vec4(coord, 0.1*cp_time);
 #else
-    highp vec3 coord2 = coord;
+    vec3 coord2 = coord;
 #endif
     coord *= cp_simplexTextureScale;
 

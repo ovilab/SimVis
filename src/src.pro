@@ -15,6 +15,8 @@ uri = com.mycompany.qmlcomponents
 
 QT += qml quick widgets opengl openglextensions
 
+LIBS += -L/projects/SimVis/SimVis/external/ -lglcpp-library -lglsl_optimizer -lmesa
+
 SOURCES += \
     core/camera.cpp \
     core/navigator.cpp \

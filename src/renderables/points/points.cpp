@@ -115,9 +115,9 @@ void PointsRenderer::beforeLinkProgram()
 {
     setShaderFromSourceCode(QOpenGLShader::Vertex,
                         #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
-                                      "uniform highp float pointSize;\n"
+                                      "uniform float pointSize;\n"
                         #endif
-                                      "attribute highp vec4 a_position;\n"
+                                      "attribute vec4 a_position;\n"
                                       "void main() {\n"
                         #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
                             "    gl_PointSize = 10.0;\n"
@@ -126,7 +126,7 @@ void PointsRenderer::beforeLinkProgram()
                                       "}");
 
     setShaderFromSourceCode(QOpenGLShader::Fragment,
-                                      "uniform highp vec4 color;"
+                                      "uniform vec4 color;"
                                       "void main() {\n"
                                       "    gl_FragColor = color;\n"
                                       "}");

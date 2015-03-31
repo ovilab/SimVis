@@ -1,13 +1,13 @@
 #ifndef DEFAULTGLSL
 #define DEFAULTGLSL
 
-uniform highp mat4 cp_modelViewMatrix;
-uniform highp mat4 cp_projectionMatrix;
-uniform highp mat4 cp_modelViewProjectionMatrix;
-uniform highp vec3 cp_cameraPosition;
-uniform highp vec3 cp_viewVector;
-uniform highp vec3 cp_upVector;
-uniform highp vec3 cp_rightVector;
-uniform highp float cp_time;
+uniform mat4 cp_modelViewMatrix;
+uniform mat4 cp_projectionMatrix;
+uniform mat4 cp_modelViewProjectionMatrix;
+uniform vec3 cp_cameraPosition;
+uniform vec3 cp_viewVector;
+uniform vec3 cp_upVector;
+uniform vec3 cp_rightVector;
+uniform float cp_time;
 
 #endif

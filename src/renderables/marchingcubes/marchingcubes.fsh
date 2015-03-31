@@ -1,13 +1,13 @@
-varying highp vec3 normal;
-varying highp float light;
-varying highp vec3 color;
-varying highp vec3 vertexPosition;
-varying highp float attenuationFactor;
+varying vec3 normal;
+varying float light;
+varying vec3 color;
+varying vec3 vertexPosition;
+varying float attenuationFactor;
 
 void main() {
-    lowp float n = 1.0;
-    highp vec3 light = vec3(color);
-    highp vec3 normal2 = normal;
+    float n = 1.0;
+    vec3 light = vec3(color);
+    vec3 normal2 = normal;
 
 #ifdef SIMPLEXBUMP
     normal2 = simplexbump(normal, vertexPosition);

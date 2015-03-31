@@ -1,5 +1,6 @@
 #include "renderable.h"
 #include "camera.h"
+#include "../external/glsl_optimizer.h"
 #include <QFile>
 
 Renderable::Renderable(QQuickItem *parent) :
@@ -189,6 +190,22 @@ void RenderableRenderer::setShaderFromSourceCode(QOpenGLShader::ShaderType type,
 
     fullShaderCode.append(shaderCode);
     removeShader(type);
+
+    //kGlslTargetOpenGL
+    //kGlslTargetOpenGLES20
+    glslopt_ctx *ctx = glslopt_initialize(kGlslTargetOpenGL);
+    glslopt_shader_type shaderType = (type==QOpenGLShader::Fragment) ? kGlslOptShaderFragment : kGlslOptShaderVertex;
+    glslopt_shader* shader = glslopt_optimize (ctx, shaderType, fullShaderCode.toStdString().c_str(), 0);
+    if (glslopt_get_status (shader)) {
+        const char *newShader = glslopt_get_output (shader);
+        fullShaderCode.clear();
+        fullShaderCode = QString(newShader);
+    } else {
+        const char* errorLog = glslopt_get_log (shader);
+        qDebug() << errorLog;
+        qDebug() << fullShaderCode;
+    }
+
     m_program.addShaderFromSourceCode(type, fullShaderCode);
 }
 
