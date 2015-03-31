@@ -10,8 +10,8 @@ import SimVis 1.0
 ApplicationWindow {
     id: applicationRoot
     title: qsTr("Footballs in a harmonic oscillator - SimVis example")
-    width: 1920
-    height: 960
+    width: 1650
+    height: 900
     visible: true
 
     MySimulator {
@@ -62,14 +62,14 @@ ApplicationWindow {
                 specularIntensity: 1.0
                 shininess: 30.0
                 attenuation: 0.01
-                position: Qt.vector3d(0,0.5,0)
+                position: Qt.vector3d(0,0.75,0)
             }
 
             SimplexBump {
                 id: simplexBump
-                enabled: false
-                intensity: 0.1
-                scale: 6.0
+                enabled: true
+                intensity: 0.01
+                scale: 5.0
             }
         }
     }

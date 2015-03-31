@@ -10,7 +10,7 @@ void main() {
     highp float x = 2.0*coords.s - 1.0;
     highp float y = 2.0*coords.t - 1.0;
     highp float r2 = x*x + y*y;
-    highp float z = sqrt(1.0 - r2); // Equation for sphere
+    highp float z = sqrt(1.0 - r2); // Equation for sphere, x^2 + y^2 + z^2 = R^2
 
     highp vec3 normal = x*cp_rightVector - y*cp_upVector - z*cp_viewVector;
 
@@ -23,7 +23,8 @@ void main() {
     light = vec3(ambient(cp_ambientColor) + attenuationFactor*(diffuse(normal, vertexPosition, cp_diffuseColor) + specular(normal, vertexPosition, cp_specularColor)));
 #endif
 
-    if(r2 > 1.0) {
+    if(r2 > 0.9) {
+        // 0.9 so we don't get this light circle on the back of the spheres
         discard;
     }
 
