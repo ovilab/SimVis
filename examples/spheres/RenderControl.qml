@@ -73,7 +73,7 @@ Rectangle {
             anchors.left: strengthLabel.right
             anchors.leftMargin: 5
             minimumValue: 0.0
-            maximumValue: 0.5
+            maximumValue: 0.3
             value: simplexBump.intensity
             onValueChanged: simplexBump.intensity = value
         }

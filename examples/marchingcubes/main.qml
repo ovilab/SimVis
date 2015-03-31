@@ -55,9 +55,9 @@ ApplicationWindow {
                 ambient: true
                 diffuse: true
                 specular: true
-                ambientColor: "green"
+                ambientColor: color
                 specularColor: "white"
-                diffuseColor: "blue"
+                diffuseColor: color
                 ambientIntensity: 0.1
                 diffuseIntensity: 1.0
                 specularIntensity: 1.0

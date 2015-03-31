@@ -14,7 +14,7 @@ void main() {
 #endif
 
 #ifdef DEFAULTLIGHT
-    light = vec3(ambient(color) + attenuationFactor*(diffuse(normal2, vertexPosition, color) + specular(normal2, vertexPosition, cp_specularColor)));
+    light = defaultLight(normal2, vertexPosition, color);
 #endif
 
 #ifdef SIMPLEXTEXTURE
