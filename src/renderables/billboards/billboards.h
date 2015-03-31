@@ -34,8 +34,8 @@ private:
     QOpenGLTexture *uploadTexture(QString texture, QString normalMap);
     QOpenGLTexture *m_texture = 0;
     bool m_isInitialized = false;
-    int m_vertexCount;
-    int m_indexCount;
+    int m_vertexCount = 0;
+    int m_indexCount = 0;
     QVector3D m_upVector;
     QVector3D m_viewVector;
     QVector3D m_rightVector;
@@ -47,6 +47,7 @@ class Billboards : public Renderable
     Q_PROPERTY(float scale READ scale WRITE setScale NOTIFY scaleChanged)
     Q_PROPERTY(QString texture READ texture WRITE setTexture NOTIFY textureChanged)
     Q_PROPERTY(QString normalMap READ normalMap WRITE setNormalMap NOTIFY normalMapChanged)
+
 public:
     Billboards(QQuickItem *parent = 0);
     ~Billboards();
@@ -78,7 +79,7 @@ private:
     QVector<QVector3D> m_positions;
     QVector<float> m_rotations;
     float m_scale = 1.0;
-    QString m_texture = "NO TEXTURE CHOSEN";
+    QString m_texture;
     QString m_normalMap;
     friend class BillboardsRenderer;
 };

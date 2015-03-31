@@ -25,7 +25,7 @@ ApplicationWindow {
 
     Visualizer {
         id: visualizer
-        width: applicationRoot.width - 350
+        width: applicationRoot.width
         height: applicationRoot.height - row1.height
         simulator: simulator
         camera: camera
@@ -44,12 +44,10 @@ ApplicationWindow {
             pointSize: 10.0
         }
 
-        Billboards {
+        Spheres {
             id: billboards
             visible: billboardsVisible.checked
-            texture: ":/sphere.png"
-            normalMap: ":/sphereNormalMap.png"
-            scale: 0.3
+            scale: 0.1
 
             DefaultLight {
                 id: light
@@ -58,18 +56,18 @@ ApplicationWindow {
                 specular: true
                 ambientColor: "green"
                 specularColor: "white"
-                diffuseColor: "blue"
+                diffuseColor: "#ff17e6"
                 ambientIntensity: 0.0
                 diffuseIntensity: 1.0
                 specularIntensity: 1.0
                 shininess: 30.0
                 attenuation: 0.01
-                position: Qt.vector3d(0,1,0)
+                position: Qt.vector3d(0,0.5,0)
             }
 
             SimplexBump {
                 id: simplexBump
-                enabled: true
+                enabled: false
                 intensity: 0.1
                 scale: 6.0
             }

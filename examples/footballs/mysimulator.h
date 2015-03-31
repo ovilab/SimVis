@@ -17,7 +17,7 @@ private:
     void reset();
     float m_springConstant = 1.0;
     float m_mass = 1.0;
-    float m_dt = 0.01;
+    float m_dt = 0.001;
     int   m_ballCount = 100;
     QVector<QVector3D> m_velocities;
 };

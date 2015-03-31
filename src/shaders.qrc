@@ -4,8 +4,6 @@
         <file>renderables/marchingcubes/marchingcubes.fsh</file>
         <file>renderables/billboards/billboards.vsh</file>
         <file>renderables/billboards/billboards.fsh</file>
-        <file>renderables/billboards/billboards_lighted.fsh</file>
-        <file>renderables/billboards/billboards_lighted.vsh</file>
         <file>shadereffects/shaders/perlin3.glsl</file>
         <file>shadereffects/shaders/perlin4.glsl</file>
         <file>shadereffects/shaders/simplex3.glsl</file>
@@ -18,5 +16,7 @@
         <file>shadereffects/shaders/tools.glsl</file>
         <file>shadereffects/shaders/simplexbump.glsl</file>
         <file>shadereffects/shaders/simplextexture.glsl</file>
+        <file>renderables/spheres/spheres.fsh</file>
+        <file>renderables/spheres/spheres.vsh</file>
     </qresource>
 </RCC>

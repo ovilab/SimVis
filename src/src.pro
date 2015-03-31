@@ -33,7 +33,8 @@ SOURCES += \
     core/shadereffect.cpp \
     shadereffects/simplexbump.cpp \
     shadereffects/defaultlight.cpp \
-    shadereffects/simplextexture.cpp
+    shadereffects/simplextexture.cpp \
+    renderables/spheres/spheres.cpp
 
 HEADERS += \
     core/navigator.h \
@@ -59,10 +60,14 @@ HEADERS += \
     core/shadereffect.h \
     shadereffects/simplexbump.h \
     shadereffects/defaultlight.h \
-    shadereffects/simplextexture.h
+    shadereffects/simplextexture.h \
+    renderables/spheres/spheres.h \
+    SimVis/Spheres
 
 DISTFILES = qmldir \
-    core/simvisplugin.json
+    core/simvisplugin.json \
+    renderables/spheres/spheres.fsh \
+    renderables/spheres/spheres.vsh
 
 DESTDIR = $$OUT_PWD/../dist/SimVis
 HEADERS_DESTDIR = $$OUT_PWD/../dist/include

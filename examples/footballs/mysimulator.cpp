@@ -121,12 +121,14 @@ void MyWorker::reset()
     m_positions.resize(m_ballCount);
     m_velocities.resize(m_ballCount);
     for(auto i=0; i < m_ballCount; i++) {
-        float x =  5*(2.0*(rand() / double(RAND_MAX)) - 1.0);
-        float y =  5*(2.0*(rand() / double(RAND_MAX)) - 1.0);
-        float z =  5*(2.0*(rand() / double(RAND_MAX)) - 1.0);
+        float x =  2.0*(rand() / double(RAND_MAX)) - 1.0;
+        float y =  2.0*(rand() / double(RAND_MAX)) - 1.0;
+        float z =  2.0*(rand() / double(RAND_MAX)) - 1.0;
         float vx = 2.0*(rand() / double(RAND_MAX)) - 1.0;
         float vy = 2.0*(rand() / double(RAND_MAX)) - 1.0;
         float vz = 2.0*(rand() / double(RAND_MAX)) - 1.0;
+
+        // x *= 5; y *= 5; z *= 5; vx *= 5; vy *= 5; vz *= 5;
 
         m_positions[i] = 0.7 * QVector3D(x, y, z);
         m_velocities[i] = 0.4 * QVector3D(vx, vy, vz);

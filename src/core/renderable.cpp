@@ -33,15 +33,6 @@ void Renderable::requestSynchronize()
     m_renderer->m_upVector = m_camera->upVector().normalized();
     m_renderer->m_rightVector = QVector3D::crossProduct(m_renderer->m_viewVector, m_renderer->m_upVector);
     m_renderer->m_cameraPosition = m_camera->position();
-    m_renderer->m_ambient = m_ambient;
-    m_renderer->m_diffuse = m_diffuse;
-    m_renderer->m_specular = m_specular;
-    m_renderer->m_diffuseIntensity = m_diffuseIntensity;
-    m_renderer->m_ambientIntensity = m_ambientIntensity;
-    m_renderer->m_attenuation = m_attenuation;
-    m_renderer->m_shininess = m_shininess;
-    m_renderer->m_lightPosition = m_lightPosition;
-    m_renderer->m_specularIntensity = m_specularIntensity;
     m_renderer->copyShaderEffects(this);
 
     m_renderer->synchronize(this);
@@ -55,51 +46,6 @@ bool Renderable::visible() const
 Camera *Renderable::camera() const
 {
     return m_camera;
-}
-
-QColor Renderable::ambient() const
-{
-    return m_ambient;
-}
-
-QColor Renderable::diffuse() const
-{
-    return m_diffuse;
-}
-
-QVector3D Renderable::lightPosition() const
-{
-    return m_lightPosition;
-}
-
-float Renderable::diffuseIntensity() const
-{
-    return m_diffuseIntensity;
-}
-
-float Renderable::ambientIntensity() const
-{
-    return m_ambientIntensity;
-}
-
-float Renderable::shininess() const
-{
-    return m_shininess;
-}
-
-QColor Renderable::specular() const
-{
-    return m_specular;
-}
-
-float Renderable::attenuation() const
-{
-    return m_attenuation;
-}
-
-float Renderable::specularIntensity() const
-{
-    return m_specularIntensity;
 }
 
 void Renderable::setVisible(bool arg)
@@ -118,87 +64,6 @@ void Renderable::setCamera(Camera *arg)
 
     m_camera = arg;
     emit cameraChanged(arg);
-}
-
-void Renderable::setAmbient(QColor arg)
-{
-    if (m_ambient == arg)
-        return;
-
-    m_ambient = arg;
-    emit ambientChanged(arg);
-}
-
-void Renderable::setDiffuse(QColor arg)
-{
-    if (m_diffuse == arg)
-        return;
-
-    m_diffuse = arg;
-    emit diffuseChanged(arg);
-}
-
-void Renderable::setLightPosition(QVector3D arg)
-{
-    if (m_lightPosition == arg)
-        return;
-
-    m_lightPosition = arg;
-    emit lightPositionChanged(arg);
-}
-
-void Renderable::setDiffuseIntensity(float arg)
-{
-    if (m_diffuseIntensity == arg)
-        return;
-
-    m_diffuseIntensity = arg;
-    emit diffuseIntensityChanged(arg);
-}
-
-void Renderable::setAmbientIntensity(float arg)
-{
-    if (m_ambientIntensity == arg)
-        return;
-
-    m_ambientIntensity = arg;
-    emit ambientIntensityChanged(arg);
-}
-
-void Renderable::setShininess(float arg)
-{
-    if (m_shininess == arg)
-        return;
-
-    m_shininess = arg;
-    emit shininessChanged(arg);
-}
-
-void Renderable::setSpecular(QColor arg)
-{
-    if (m_specular == arg)
-        return;
-
-    m_specular = arg;
-    emit specularChanged(arg);
-}
-
-void Renderable::setAttenuation(float arg)
-{
-    if (m_attenuation == arg)
-        return;
-
-    m_attenuation = arg;
-    emit attenuationChanged(arg);
-}
-
-void Renderable::setSpecularIntensity(float arg)
-{
-    if (m_specularIntensity == arg)
-        return;
-
-    m_specularIntensity = arg;
-    emit specularIntensityChanged(arg);
 }
 
 RenderableRenderer::RenderableRenderer()

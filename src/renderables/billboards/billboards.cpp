@@ -22,6 +22,8 @@ Billboards::~Billboards()
 
 QOpenGLTexture *BillboardsRenderer::uploadTexture(QString texture, QString normalMap)
 {
+    if(texture.isEmpty() && normalMap.isEmpty()) return 0;
+
     QFileInfo info(texture);
     if(!info.exists()) {
         qWarning() << "File " << texture << " does not exist. Aborting!";
@@ -43,9 +45,6 @@ QOpenGLTexture *BillboardsRenderer::uploadTexture(QString texture, QString norma
 
     QImage surface(QSize(img1.width()*2, img1.height()), img1.format());
     QPainter p(&surface);
-    // p.setCompositionMode(QPainter::CompositionMode_Source);
-    // p.drawRect(0,0,surface.size().width(), surface.size().height());
-    // p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
     p.drawImage(QPoint(0,0), img1);
     p.drawImage(QPoint(img1.width(), 0), img2);
     p.end();
