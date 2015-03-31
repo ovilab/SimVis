@@ -78,7 +78,7 @@ highp vec3 defaultLight(highp vec3 normal, highp vec3 vertexPosition, highp vec3
 
    /* AMBIENTDIFFUSE */
     highp float diffuseCoefficient2 = max(0.0, dot(normal, surfaceToCamera));
-    highp vec3 ambientDiffuseColor = cp_ambientColor.rgb*(vec3(diffuseCoefficient2) + vec3(1.0))*cp_ambientIntensity;
+    highp vec3 ambientDiffuseColor = cp_ambientColor.rgb*(vec3(diffuseCoefficient2)*0.9 + 0.1*vec3(1.0))*cp_ambientIntensity;
 
    /* RETURN COMBINED */
    return color*(specularColor + ambientDiffuseColor + diffuseColor);

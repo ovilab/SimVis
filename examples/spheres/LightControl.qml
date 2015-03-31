@@ -34,7 +34,10 @@ Rectangle {
             maximumValue: 1
             minimumValue: 0
             value: light.ambientIntensity
-            onValueChanged: light.ambientIntensity = value
+            onValueChanged: {
+                light.ambientIntensity = value
+                console.log("Ambient intensity: "+value)
+            }
         }
 
         CheckBox {
@@ -54,7 +57,10 @@ Rectangle {
             maximumValue: 1.0
             minimumValue: 0.0
             value: light.diffuseIntensity
-            onValueChanged: light.diffuseIntensity = value
+            onValueChanged: {
+                light.diffuseIntensity = value
+                console.log("Diffuse intensity: "+value)
+            }
         }
 
         CheckBox {

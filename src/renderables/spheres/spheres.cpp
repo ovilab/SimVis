@@ -209,7 +209,10 @@ void SpheresRenderer::render()
     glFunctions()->glVertexAttribPointer(texcoordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(SphereVBOData), (const void *)offset);
 
     // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
+    glFunctions()->glEnable(GL_DEPTH_TEST);
+    glFunctions()->glDepthMask(GL_TRUE);
+    glFunctions()->glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
+    glFunctions()->glDisable(GL_DEPTH_TEST);
 
     program().disableAttributeArray(vertexLocation);
     program().disableAttributeArray(colorLocation);
