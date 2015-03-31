@@ -40,6 +40,7 @@ class Spheres : public Renderable
 {
     Q_OBJECT
     Q_PROPERTY(float scale READ scale WRITE setScale NOTIFY scaleChanged)
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 
 public:
     Spheres(QQuickItem *parent = 0);
@@ -48,17 +49,18 @@ public:
     QVector<QVector3D> &positions();
     float scale() const;
     void setScale(float scale);
-    QVector3D color() const;
+    QColor color() const;
     void setColor(const QColor &color);
     virtual SpheresRenderer *createRenderer();
 signals:
     void scaleChanged(bool arg);
+    void colorChanged(QColor arg);
 
 private:
     QVector3D vectorFromColor(const QColor &color);
     QVector<SphereVBOData> m_vertices;
     QVector<GLuint> m_indices;
-    QVector3D m_color = QVector3D(1.0, 1.0, 1.0);
+    QColor m_color = QColor(0.8, 0.7, 0.5, 1.0);
     QVector<QVector3D> m_positions;
     float m_scale = 1.0;
 

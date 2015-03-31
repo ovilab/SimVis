@@ -39,14 +39,15 @@ void Spheres::setScale(float scale)
 {
     m_scale = scale;
 }
-QVector3D Spheres::color() const
+
+QColor Spheres::color() const
 {
     return m_color;
 }
 
 void Spheres::setColor(const QColor &color)
 {
-    m_color = vectorFromColor(color);
+    m_color = color;
 }
 
 SpheresRenderer *Spheres::createRenderer()
@@ -71,6 +72,7 @@ void SpheresRenderer::synchronize(Renderable* renderer)
         generateVBOs();
         m_isInitialized = true;
     }
+
     uploadVBOs(spheres);
 
     m_vertexCount = spheres->m_vertices.size();
@@ -87,7 +89,7 @@ void SpheresRenderer::uploadVBOs(Spheres* spheres)
     QVector<QVector3D>& positions = spheres->m_positions;
     QVector<SphereVBOData>& vertices = spheres->m_vertices;
     QVector<GLuint>& indices = spheres->m_indices;
-    QVector3D& color = spheres->m_color;
+    QVector3D color = spheres->vectorFromColor(spheres->color());
 
     QVector3D right = m_rightVector;
     QVector3D up = m_upVector;

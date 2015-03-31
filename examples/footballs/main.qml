@@ -20,7 +20,6 @@ ApplicationWindow {
         springConstant: 0.5
         dt: 0.001
         ballCount: 1000
-
     }
 
     Visualizer {
@@ -38,29 +37,23 @@ ApplicationWindow {
             camera: camera
         }
 
-        Points {
-            id: points
-            visible: pointsVisible.checked
-            pointSize: 10.0
-        }
-
         Spheres {
-            id: billboards
-            visible: billboardsVisible.checked
+            id: spheres
             scale: 0.1
+            color: "#ff17e6"
 
             DefaultLight {
                 id: light
+                ambientColor: spheres.color
+                specularColor: "white"
+                diffuseColor: spheres.color
                 ambient: true
                 diffuse: true
                 specular: true
-                ambientColor: "green"
-                specularColor: "white"
-                diffuseColor: "#ff17e6"
-                ambientIntensity: 0.0
-                diffuseIntensity: 1.0
+                ambientIntensity: 0.1
+                diffuseIntensity: 0.9
                 specularIntensity: 1.0
-                shininess: 30.0
+                shininess: 40.0
                 attenuation: 0.01
                 position: Qt.vector3d(0,0.75,0)
             }
@@ -68,7 +61,7 @@ ApplicationWindow {
             SimplexBump {
                 id: simplexBump
                 enabled: true
-                intensity: 0.01
+                intensity: 0.03
                 scale: 5.0
             }
         }
@@ -102,74 +95,71 @@ ApplicationWindow {
         }
     }
 
-    Item {
-        anchors.left: visualizer.right
-        Row {
-            id: controlsRow1
-            Label {
-                text: "Mass: "
-            }
-            Slider {
-                id: massSlider
-                minimumValue: 0.1
-                maximumValue: 10.0
-                value: 1.0
-                onValueChanged: simulator.mass = value
-            }
-        }
+    Rectangle {
+        x: 0.5*(parent.width - width)
+        height: 50
+        width: lightButton.width + simulatorButton.width + renderButton.width + 10
+        opacity: 0.9
+        color: "white"
 
-        Row {
-            id: controlsRow2
-            anchors.top: controlsRow1.bottom
-
-            Label {
-                text: "Spring constant: "
-            }
-
-            Slider {
-                id: springSlider
-                minimumValue: 0.1
-                maximumValue: 10.0
-                value: 1.0
-                onValueChanged: simulator.springConstant = value
+        Button {
+            id: lightButton
+            anchors.left: parent.left
+            anchors.leftMargin: 3
+            text: "Light"
+            onClicked: {
+                lightControl.visible = !lightControl.visible
             }
         }
 
-        Row {
-            id: controlsRow3
-            anchors.top: controlsRow2.bottom
-
-            CheckBox {
-                id: billboardsVisible
-                text: "Billboards"
-                checked: true
-            }
-
-            CheckBox {
-                id: pointsVisible
-                text: "Points"
-                checked: false
-            }
+        Button {
+            id: simulatorButton
+            anchors.left: lightButton.right
+            anchors.leftMargin: 3
+            text: "Simulator"
+            onClicked: simulatorControl.visible = !simulatorControl.visible
         }
 
-        Row {
-            id: controlsRow4
-            anchors.top: controlsRow3.bottom
+        Button {
+            id: renderButton
+            anchors.left: simulatorButton.right
+            anchors.leftMargin: 3
+            text: "Rendering"
+            onClicked: renderControl.visible = !renderControl.visible
+        }
 
-            TextField {
-                text: simulator.ballCount
-                inputMethodHints: Qt.ImhFormattedNumbersOnly
-                onTextChanged: {
-                    var value = Math.round(parseInt(text))
-                    simulator.ballCount = value
-                    simulator.reset()
-                }
-            }
-
-            Button {
-                text: "Reset"
-                onClicked: simulator.reset();
-            }
+        Label {
+            anchors.top: lightButton.bottom
+            x: 0.5*(parent.width - width)
+            anchors.topMargin: 5
+            id: ballsCount
+            text: simulator.ballCount+" balls with "+visualizer.fps.toFixed(1) +" fps."
         }
     }
+
+    LightControl {
+        id: lightControl
+        light: light
+        x: applicationRoot.width*0.5 - width*0.5
+        y: applicationRoot.height*0.5 - height*0.5
+        visible: false
+    }
+
+    SimulatorControl {
+        id: simulatorControl
+        simulator: simulator
+        x: applicationRoot.width*0.5 - width*0.5
+        y: applicationRoot.height*0.5 - height*0.5
+        visible: false
+    }
+
+    RenderControl {
+        id: renderControl
+        simplexBump: simplexBump
+        spheres: spheres
+        x: applicationRoot.width*0.5 - width*0.5
+        y: applicationRoot.height*0.5 - height*0.5
+        visible: false
+    }
+
 }
