@@ -50,8 +50,8 @@ ApplicationWindow {
                 ambient: true
                 diffuse: true
                 specular: true
-                ambientIntensity: 0.25
-                diffuseIntensity: 0.75
+                ambientIntensity: 0.025
+                diffuseIntensity: 0.5
                 specularIntensity: 1.0
                 shininess: 40.0
                 attenuation: 0.01

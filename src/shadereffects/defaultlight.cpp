@@ -49,6 +49,8 @@ void DefaultLight::copyState(ShaderEffect *source) {
     m_ambient = defaultLight->ambient();
     m_diffuse = defaultLight->diffuse();
     m_specular = defaultLight->specular();
+    m_gamma = defaultLight->gamma();
+
     m_enabled = source->enabled();
     m_shadersDirty = source->shadersDirty();
 }
@@ -68,6 +70,7 @@ void DefaultLight::setUniformValues(QOpenGLShaderProgram &shaderProgram)
     shaderProgram.setUniformValue("cp_specularColor", m_specularColor);
     shaderProgram.setUniformValue("cp_shininess", m_shininess);
     shaderProgram.setUniformValue("cp_attenuation", m_attenuation);
+    shaderProgram.setUniformValue("cp_gamma", m_gamma);
     shaderProgram.setUniformValue("cp_diffuseIntensity", m_diffuseIntensity);
     shaderProgram.setUniformValue("cp_specularIntensity", m_specularIntensity);
     shaderProgram.setUniformValue("cp_ambientIntensity", m_ambientIntensity);
@@ -132,6 +135,11 @@ bool DefaultLight::diffuse() const
 bool DefaultLight::specular() const
 {
     return m_specular;
+}
+
+float DefaultLight::gamma() const
+{
+    return m_gamma;
 }
 
 void DefaultLight::setAmbientColor(QColor arg)
@@ -243,5 +251,14 @@ void DefaultLight::setSpecular(bool arg)
     m_specular = arg;
     m_shadersDirty = true;
     emit specularChanged(arg);
+}
+
+void DefaultLight::setGamma(float arg)
+{
+    if (m_gamma == arg)
+        return;
+
+    m_gamma = arg;
+    emit gammaChanged(arg);
 }
 

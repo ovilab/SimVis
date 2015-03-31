@@ -31,12 +31,11 @@ Rectangle {
             id: ambientIntensity
             anchors.left: ambient.right
             anchors.leftMargin: 5
-            maximumValue: 1
+            maximumValue: 0.3
             minimumValue: 0
             value: light.ambientIntensity
             onValueChanged: {
                 light.ambientIntensity = value
-                console.log("Ambient intensity: "+value)
             }
         }
 
@@ -59,7 +58,6 @@ Rectangle {
             value: light.diffuseIntensity
             onValueChanged: {
                 light.diffuseIntensity = value
-                console.log("Diffuse intensity: "+value)
             }
         }
 
@@ -119,6 +117,27 @@ Rectangle {
             minimumValue: 0.0
             value: 1000.0*light.attenuation
             onValueChanged: light.attenuation = 0.001*value
+        }
+
+        Label {
+            id: gamma
+            width: ambient.width
+            anchors.top: attenuation.bottom
+            text: "Gamma"
+        }
+
+        Slider {
+            id: gammaValue
+            anchors.top: gamma.top
+            anchors.left: gamma.right
+            anchors.leftMargin: 5
+            height: 22
+            maximumValue: 3.0
+            minimumValue: 0.0
+            value: light.gamma
+            onValueChanged: {
+                if(light != null) light.gamma = value
+            }
         }
     }
 

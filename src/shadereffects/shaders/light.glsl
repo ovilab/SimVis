@@ -8,9 +8,20 @@ uniform highp vec4 cp_specularColor;
 uniform highp vec3 cp_lightPosition;
 uniform highp float cp_attenuation;
 uniform highp float cp_shininess;
+uniform highp float cp_gamma;
 uniform highp float cp_diffuseIntensity;
 uniform highp float cp_ambientIntensity;
 uniform highp float cp_specularIntensity;
+
+highp float attenuation(highp vec3 vertexPosition) {
+    highp float distanceToLight = distance(vertexPosition, cp_lightPosition);
+    highp float attenuationFactor = 1.0 / (1.0 + cp_attenuation * distanceToLight * distanceToLight);
+    return attenuationFactor;
+}
+
+highp vec3 gamma(highp vec3 color) {
+    return pow(color, vec3(1.0/cp_gamma));
+}
 
 highp vec3 diffuse(highp vec3 normal, highp vec3 vertexPosition, highp vec3 color) {
 #ifdef DEFAULTLIGHTDIFFUSE
@@ -56,12 +67,6 @@ highp vec3 specular(highp vec3 normal, highp vec3 vertexPosition, highp vec4 col
     return specular(normal, vertexPosition, color.rgb);
 }
 
-highp float attenuation(highp vec3 vertexPosition) {
-    highp float distanceToLight = distance(vertexPosition, cp_lightPosition);
-    highp float attenuationFactor = 1.0 / (1.0 + cp_attenuation * distanceToLight * distanceToLight);
-    return attenuationFactor;
-}
-
 highp vec3 defaultLight(highp vec3 normal, highp vec3 vertexPosition, highp vec3 color) {
     highp vec3 light = vec3(0.0);
 
@@ -95,7 +100,7 @@ highp vec3 defaultLight(highp vec3 normal, highp vec3 vertexPosition, highp vec3
 #endif
 
    /* RETURN COMBINED */
-   return light;
+   return gamma(light);
 }
 
 highp vec3 defaultLight(highp vec3 normal, highp vec3 vertexPosition, highp vec4 color) {

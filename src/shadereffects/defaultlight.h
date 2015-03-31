@@ -20,6 +20,7 @@ class DefaultLight : public ShaderEffect
     Q_PROPERTY(float specularIntensity READ specularIntensity WRITE setSpecularIntensity NOTIFY specularIntensityChanged)
     Q_PROPERTY(float shininess READ shininess WRITE setShininess NOTIFY shininessChanged)
     Q_PROPERTY(float attenuation READ attenuation WRITE setAttenuation NOTIFY attenuationChanged)
+    Q_PROPERTY(float gamma READ gamma WRITE setGamma NOTIFY gammaChanged)
     Q_PROPERTY(QVector3D position READ position WRITE setPosition NOTIFY positionChanged)
 
 public:
@@ -43,6 +44,7 @@ public:
     bool ambient() const;
     bool diffuse() const;
     bool specular() const;
+    float gamma() const;
 
 public slots:
     void setAmbientColor(QColor arg);
@@ -57,6 +59,7 @@ public slots:
     void setAmbient(bool arg);
     void setDiffuse(bool arg);
     void setSpecular(bool arg);
+    void setGamma(float arg);
 
 signals:
     void ambientColorChanged(QColor arg);
@@ -71,6 +74,7 @@ signals:
     void ambientChanged(bool arg);
     void diffuseChanged(bool arg);
     void specularChanged(bool arg);
+    void gammaChanged(float arg);
 
 private:
     QColor m_ambientColor;
@@ -82,6 +86,7 @@ private:
     float m_specularIntensity = 0.1;
     float m_shininess = 30.0;
     float m_attenuation = 0.01;
+    float m_gamma = 2.2;
     bool m_ambient = true;
     bool m_diffuse = true;
     bool m_specular = true;
