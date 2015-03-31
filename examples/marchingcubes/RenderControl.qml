@@ -80,18 +80,28 @@ Rectangle {
         anchors.top: texture.bottom
         width: parent.width
         height: 82
-        title: qsTr("Bump map")
+        title: qsTr("Simplex bump")
 
+        CheckBox {
+            id: bumpEnabled
+            text: "Enabled"
+            checked: simplexBump.enabled
+            onCheckedChanged: {
+                if(simplexBump != null) {
+                    simplexBump.enabled = checked
+                }
+            }
+        }
 
         Label {
             id: strengthLabel
-            x: 0
-            y: -2
+            anchors.top: bumpEnabled.bottom
             text: qsTr("Strength")
         }
 
         Slider {
             id: bumpIntensity
+            anchors.top: strengthLabel.top
             anchors.left: strengthLabel.right
             anchors.leftMargin: 5
             minimumValue: 0.0
@@ -103,17 +113,16 @@ Rectangle {
 
         Label {
             id: scaleLabel
-            x: 0
-            y: 20
+            anchors.top: strengthLabel.bottom
             width: strengthLabel.width
             text: qsTr("Scale")
         }
 
         Slider {
             id: bumpScale
+            anchors.top: scaleLabel.top
             anchors.left: scaleLabel.right
             anchors.leftMargin: 5
-            y: 20
             minimumValue: 0.0
             maximumValue: 5.0
             value: simplexBump.scale
