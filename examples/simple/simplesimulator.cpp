@@ -1,5 +1,4 @@
 #include "simplesimulator.h"
-
 #include <QVector3D>
 #include <QVector2D>
 

@@ -113,7 +113,7 @@ void PointsRenderer::uploadVBO(Points *points)
 
 void PointsRenderer::beforeLinkProgram()
 {
-    setShaderFromSourceFile(QOpenGLShader::Vertex,
+    setShaderFromSourceCode(QOpenGLShader::Vertex,
                         #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
                                       "uniform highp float pointSize;\n"
                         #endif
@@ -125,7 +125,7 @@ void PointsRenderer::beforeLinkProgram()
                                       "    gl_Position = cp_modelViewProjectionMatrix*a_position;\n"
                                       "}");
 
-    setShaderFromSourceFile(QOpenGLShader::Fragment,
+    setShaderFromSourceCode(QOpenGLShader::Fragment,
                                       "uniform highp vec4 color;"
                                       "void main() {\n"
                                       "    gl_FragColor = color;\n"
