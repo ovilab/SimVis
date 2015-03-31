@@ -32,6 +32,11 @@ int MySimulator::ballCount() const
     return m_numberOfBalls;
 }
 
+QVector3D MySimulator::firstParticlePosition() const
+{
+    return m_firstParticlePosition;
+}
+
 void MySimulator::setSpringConstant(float arg)
 {
     if (m_springConstant == arg)
@@ -73,6 +78,15 @@ void MySimulator::setBallCount(int arg)
     emit ballCountChanged(arg);
 }
 
+void MySimulator::setFirstParticlePosition(QVector3D arg)
+{
+    if (m_firstParticlePosition == arg)
+        return;
+
+    m_firstParticlePosition = arg;
+    emit firstParticlePositionChanged(arg);
+}
+
 SimulatorWorker *MySimulator::createWorker()
 {
     return new MyWorker();
@@ -85,14 +99,17 @@ MyWorker::MyWorker()
 
 void MyWorker::synchronizeSimulator(Simulator *simulator)
 {
-    MySimulator *sim = static_cast<MySimulator *>(simulator);
-    m_dt = sim->dt();
-    m_springConstant = sim->springConstant();
-    m_mass = sim->mass();
-    m_ballCount = sim->ballCount();
-    if(sim->m_willReset) {
+    MySimulator *mySimulator = static_cast<MySimulator *>(simulator);
+    m_dt = mySimulator->dt();
+    m_springConstant = mySimulator->springConstant();
+    m_mass = mySimulator->mass();
+    m_ballCount = mySimulator->ballCount();
+    if(mySimulator->m_willReset) {
         reset();
-        sim->m_willReset = false;
+        mySimulator->m_willReset = false;
+    }
+    if(m_positions.size() > 0) {
+        mySimulator->setFirstParticlePosition(m_positions[0]);
     }
 }
 

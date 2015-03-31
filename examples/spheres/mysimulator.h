@@ -29,6 +29,7 @@ class MySimulator : public Simulator
     Q_PROPERTY(float mass READ mass WRITE setMass NOTIFY massChanged)
     Q_PROPERTY(float dt READ dt WRITE setDt NOTIFY dtChanged)
     Q_PROPERTY(int ballCount READ ballCount WRITE setBallCount NOTIFY ballCountChanged)
+    Q_PROPERTY(QVector3D firstParticlePosition READ firstParticlePosition WRITE setFirstParticlePosition NOTIFY firstParticlePositionChanged)
 public:
     explicit MySimulator();
     ~MySimulator();
@@ -37,6 +38,7 @@ public:
     float mass() const;
     float dt() const;
     int ballCount() const;
+    QVector3D firstParticlePosition() const;
 
 public slots:
     void setSpringConstant(float arg);
@@ -44,12 +46,14 @@ public slots:
     void setDt(float arg);
     void reset();
     void setBallCount(int arg);
+    void setFirstParticlePosition(QVector3D arg);
 
 signals:
     void springConstantChanged(float arg);
     void massChanged(float arg);
     void dtChanged(float arg);
     void ballCountChanged(int arg);
+    void firstParticlePositionChanged(QVector3D arg);
 
 protected:
     SimulatorWorker *createWorker();
@@ -59,6 +63,8 @@ private:
     float m_dt = 0.01;
     int m_numberOfBalls = 100;
     bool m_willReset = true;
+    QVector3D m_firstParticlePosition;
+
     friend class MyWorker;
 };
 
