@@ -37,17 +37,6 @@ protected:
     bool m_shadersDirty = true;
     QList<ShaderEffect*> m_shaderEffects;
     QElapsedTimer m_elapsedTime;
-    QColor m_ambient;
-    QColor m_diffuse;
-    QColor m_specular;
-    QVector3D m_lightPosition;
-    float m_diffuseIntensity;
-    float m_ambientIntensity;
-    float m_specularIntensity;
-    float m_shininess;
-    float m_attenuation;
-    float m_bumpIntensity;
-    float m_bumpScale;
     QMatrix4x4 m_modelViewMatrix;
     QMatrix4x4 m_projectionMatrix;
     QVector3D m_viewVector;
