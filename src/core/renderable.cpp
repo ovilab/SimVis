@@ -127,7 +127,8 @@ void RenderableRenderer::prepareAndRender()
         if(shaderEffect->enabled()) {
             DefaultLight* light = qobject_cast<DefaultLight*>(shaderEffect);
             if(light) {
-                light->setLightId(numberOfLights++);
+                light->setLightId(numberOfLights);
+                numberOfLights++;
             }
             shaderEffect->setUniformValues(m_program);
         }
