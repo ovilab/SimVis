@@ -28,7 +28,7 @@ ApplicationWindow {
         height: applicationRoot.height - row1.height
         simulator: simulator
         camera: camera
-        backgroundColor: "white"
+        backgroundColor: "#111111"
         navigator: navigator
 
         TrackballNavigator {
