@@ -6,7 +6,7 @@
 #include <QColor>
 #include <QVector3D>
 
-class DefaultLight : public ShaderEffect
+class Light : public ShaderEffect
 {
     Q_OBJECT
     Q_PROPERTY(bool ambient READ ambient WRITE setAmbient NOTIFY ambientChanged)
@@ -29,7 +29,7 @@ public:
     QString vertexShaderDefines() override;
     QString fragmentShaderLibrary() override;
     QString vertexShaderLibrary() override;
-    DefaultLight *clone() override;
+    Light *clone() override;
     void setUniformValues(QOpenGLShaderProgram &shaderProgram) override;
     void copyState(ShaderEffect *source) override;
     QColor ambientColor() const;

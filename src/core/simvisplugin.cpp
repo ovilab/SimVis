@@ -9,7 +9,7 @@
 #include "navigator.h"
 #include "navigators/trackballnavigator.h"
 #include "../shadereffects/simplexbump.h"
-#include "../shadereffects/defaultlight.h"
+#include "../shadereffects/light.h"
 #include "../shadereffects/simplextexture.h"
 #include <qqml.h>
 #include <QQmlEngine>
@@ -31,7 +31,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<TrackballNavigator>("SimVis", 1, 0, "TrackballNavigator");
     qmlRegisterType<SimplexBump>("SimVis", 1, 0, "SimplexBump");
     qmlRegisterType<SimplexTexture>("SimVis", 1, 0, "SimplexTexture");
-    qmlRegisterType<DefaultLight>("SimVis", 1, 0, "DefaultLight");
+    qmlRegisterType<Light>("SimVis", 1, 0, "Light");
 }
 
 void SimVisPlugin::initializeEngine(QQmlEngine *engine, const char *uri)

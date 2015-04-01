@@ -1,6 +1,6 @@
 #include "renderable.h"
 #include "camera.h"
-#include "../shadereffects/defaultlight.h"
+#include "../shadereffects/light.h"
 #include <QFile>
 
 Renderable::Renderable(QQuickItem *parent) :
@@ -125,7 +125,7 @@ void RenderableRenderer::prepareAndRender()
     GLint numberOfLights = 0;
     for(ShaderEffect *shaderEffect : m_shaderEffects) {
         if(shaderEffect->enabled()) {
-            DefaultLight* light = qobject_cast<DefaultLight*>(shaderEffect);
+            Light* light = qobject_cast<Light*>(shaderEffect);
             if(light) {
                 light->setLightId(numberOfLights);
                 numberOfLights++;
