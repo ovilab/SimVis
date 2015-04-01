@@ -1,5 +1,6 @@
 #include "renderable.h"
 #include "camera.h"
+#include "../shadereffects/defaultlight.h"
 #include <QFile>
 
 Renderable::Renderable(QQuickItem *parent) :
@@ -121,11 +122,17 @@ void RenderableRenderer::prepareAndRender()
     m_program.setUniformValue("cp_cameraPosition", m_cameraPosition);
     m_program.setUniformValue("cp_time", float(m_elapsedTime.elapsed()*1e-3));
 
+    GLint numberOfLights = 0;
     for(ShaderEffect *shaderEffect : m_shaderEffects) {
         if(shaderEffect->enabled()) {
+            DefaultLight* light = qobject_cast<DefaultLight*>(shaderEffect);
+            if(light) {
+                light->setLightId(numberOfLights++);
+            }
             shaderEffect->setUniformValues(m_program);
         }
     }
+    m_program.setUniformValue("cp_numberOfLights", numberOfLights);
 
     render();
     m_program.release();

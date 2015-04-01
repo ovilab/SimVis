@@ -1,78 +1,43 @@
 #ifndef LIGHTGLSL
 #define LIGHTGLSL
-
+// BEGIN light.glsl
 // Light based on http://www.tomdalling.com/blog/modern-opengl/07-more-lighting-ambient-specular-attenuation-gamma/
-uniform highp vec4 cp_ambientColor;
-uniform highp vec4 cp_diffuseColor;
-uniform highp vec4 cp_specularColor;
-uniform highp vec3 cp_lightPosition;
-uniform highp float cp_attenuation;
-uniform highp float cp_shininess;
-uniform highp float cp_gamma;
-uniform highp float cp_diffuseIntensity;
-uniform highp float cp_ambientIntensity;
-uniform highp float cp_specularIntensity;
+// and http://www.tomdalling.com/blog/modern-opengl/08-even-more-lighting-directional-lights-spotlights-multiple-lights/
 
-highp float attenuation(highp vec3 vertexPosition) {
-    highp float distanceToLight = distance(vertexPosition, cp_lightPosition);
-    highp float attenuationFactor = 1.0 / (1.0 + cp_attenuation * distanceToLight * distanceToLight);
+const int maxLights = 8;
+uniform int numLights;
+struct Light {
+    highp vec4 ambientColor;
+    highp vec4 diffuseColor;
+    highp vec4 specularColor;
+    highp vec3 position;
+    highp float attenuation;
+    highp float shininess;
+    highp float gamma;
+    highp float diffuseIntensity;
+    highp float ambientIntensity;
+    highp float specularIntensity;
+};
+
+uniform Light cp_lights[maxLights];
+uniform highp int cp_numberOfLights;
+
+highp float attenuation(Light light, highp vec3 vertexPosition) {
+    highp float distanceToLight = distance(vertexPosition, light.position);
+    highp float attenuationFactor = 1.0 / (1.0 + light.attenuation * distanceToLight * distanceToLight);
     return attenuationFactor;
 }
 
-highp vec3 gamma(highp vec3 color) {
-    return pow(color, vec3(1.0/cp_gamma));
+highp vec3 gamma(highp vec3 color, highp float gamma) {
+    return pow(color, vec3(1.0/gamma));
 }
 
-highp vec3 diffuse(highp vec3 normal, highp vec3 vertexPosition, highp vec3 color) {
-#ifdef DEFAULTLIGHTDIFFUSE
-    highp vec3 surfaceToLight = normalize(cp_lightPosition - vertexPosition);
-    highp float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
-    return color*diffuseCoefficient*cp_diffuseIntensity;
-#else
-    return vec3(0.0,0.0,0.0);
-#endif
-}
-
-highp vec3 diffuse(highp vec3 normal, highp vec3 vertexPosition, highp vec4 color) {
-    return diffuse(normal, vertexPosition, color.rgb);
-}
-
-highp vec3 ambient(highp vec3 color) {
-#ifdef DEFAULTLIGHTAMBIENT
-    return color*cp_ambientIntensity;
-#else
-    return vec3(0.0,0.0,0.0);
-#endif
-}
-
-highp vec3 ambient(highp vec4 color) {
-    return ambient(color.rgb);
-}
-
-highp vec3 specular(highp vec3 normal, highp vec3 vertexPosition, highp vec3 color) {
-#ifdef DEFAULTLIGHTSPECULAR
-    highp vec3 surfaceToLight = normalize(cp_lightPosition - vertexPosition);
-    highp vec3 reflectionVector = reflect(-surfaceToLight, normal);
-    highp vec3 surfaceToCamera = normalize(cp_cameraPosition - vertexPosition); //also a unit vector
-    highp float cosAngle = max(0.0, dot(surfaceToCamera, reflectionVector));
-    highp float specularCoefficient = pow(cosAngle, cp_shininess);
-
-    return color*specularCoefficient*cp_specularIntensity;
-#else
-    return vec3(0.0,0.0,0.0);
-#endif
-}
-
-highp vec3 specular(highp vec3 normal, highp vec3 vertexPosition, highp vec4 color) {
-    return specular(normal, vertexPosition, color.rgb);
-}
-
-highp vec3 defaultLight(highp vec3 normal, highp vec3 vertexPosition, highp vec3 color) {
-    highp vec3 light = vec3(0.0);
+highp vec3 applyLight(Light light, highp vec3 normal, highp vec3 vertexPosition, highp vec3 color) {
+    highp vec3 lightVector = vec3(0.0);
 
 #if defined(DEFAULTLIGHTSPECULAR) || defined(DEFAULTLIGHTDIFFUSE)
-    highp vec3 surfaceToLight = normalize(cp_lightPosition - vertexPosition);
-    highp float attenuationFactor = attenuation(vertexPosition);
+    highp vec3 surfaceToLight = normalize(light.position - vertexPosition);
+    highp float attenuationFactor = attenuation(light, vertexPosition);
 #endif
 
 #if defined(DEFAULTLIGHTSPECULAR) || defined(DEFAULTLIGHTAMBIENT)
@@ -82,29 +47,39 @@ highp vec3 defaultLight(highp vec3 normal, highp vec3 vertexPosition, highp vec3
    /* DIFFUSE */
 #ifdef DEFAULTLIGHTDIFFUSE
     highp float diffuseCoefficient1 = max(0.0, dot(normal, surfaceToLight));
-    light += color*cp_diffuseColor.rgb*diffuseCoefficient1*cp_diffuseIntensity*attenuationFactor;
+    lightVector += color*light.diffuseColor.rgb*diffuseCoefficient1*light.diffuseIntensity*attenuationFactor;
 #endif
 
    /* AMBIENTDIFFUSE */
 #ifdef DEFAULTLIGHTAMBIENT
     highp float diffuseCoefficient2 = max(0.0, dot(normal, surfaceToCamera));
-    light += color*cp_ambientColor.rgb*cp_ambientIntensity*(vec3(diffuseCoefficient2)*0.9 + 0.1*vec3(1.0));
+    lightVector += color*light.ambientColor.rgb*light.ambientIntensity*(vec3(diffuseCoefficient2)*0.9 + 0.1*vec3(1.0));
 #endif
 
     /* SPECULAR */
 #ifdef DEFAULTLIGHTSPECULAR
     highp vec3  reflectionVector = reflect(-surfaceToLight, normal);
     highp float cosAngle = max(0.0, dot(surfaceToCamera, reflectionVector));
-    highp float specularCoefficient = pow(cosAngle, cp_shininess);
-    light += cp_specularColor.rgb*specularCoefficient*cp_specularIntensity*attenuationFactor;
+    highp float specularCoefficient = pow(cosAngle, light.shininess);
+    lightVector += light.specularColor.rgb*specularCoefficient*light.specularIntensity*attenuationFactor;
 #endif
 
-   /* RETURN COMBINED */
-   return gamma(light);
+   /* RETURN GAMMA CORRECTED COMBINED */
+   return gamma(lightVector, light.gamma);
+}
+
+highp vec3 defaultLight(highp vec3 normal, highp vec3 vertexPosition, highp vec3 color) {
+    highp vec3 light = vec3(0.0);
+    highp float oneOverNumberOfLights = 1.0/max(float(cp_numberOfLights), 1.0);
+    for(int i=0; i<cp_numberOfLights; i++) {
+        light += oneOverNumberOfLights*applyLight(cp_lights[i], normal, vertexPosition, color);
+    }
+
+    return light;
 }
 
 highp vec3 defaultLight(highp vec3 normal, highp vec3 vertexPosition, highp vec4 color) {
     return defaultLight(normal, vertexPosition, color.rgb);
 }
-
+// END light.glsl
 #endif

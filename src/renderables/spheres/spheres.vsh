@@ -5,16 +5,12 @@ attribute highp float a_sphereId;
 varying highp vec2 coords;
 varying highp vec3 color;
 varying highp vec3 vertexPosition;
-varying highp float attenuationFactor;
 varying highp float sphereId;
 
 void main() {
     gl_Position = cp_modelViewProjectionMatrix*a_position;
     vertexPosition = a_position.xyz;
     sphereId = a_sphereId;
-#ifdef DEFAULTLIGHT
-    attenuationFactor = attenuation(vertexPosition);
-#endif
 
     coords = a_texcoord;
     color = a_color;

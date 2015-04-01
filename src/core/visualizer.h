@@ -37,6 +37,7 @@ class Visualizer : public QQuickFramebufferObject
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(Navigator* navigator READ navigator WRITE setNavigator NOTIFY navigatorChanged)
     Q_PROPERTY(float fps READ fps WRITE setFps NOTIFY fpsChanged)
+    Q_PROPERTY(float time READ time NOTIFY timeChanged)
 public:
     Visualizer();
     ~Visualizer();
@@ -46,36 +47,41 @@ public:
     QColor backgroundColor() const;
     Navigator* navigator();
     float fps() const;
+    float time() const;
 
 public slots:
     void setSimulator(Simulator* arg);
     void setCamera(Camera* arg);
     void setBackgroundColor(QColor arg);
     void setNavigator(Navigator* arg);
-
     void setFps(float arg);
 
 private slots:
     void synchronizeWorker(SimulatorWorker* worker);
     void resetAspectRatio();
+    void timerTicked();
 
 signals:
     void simulatorChanged(Simulator* arg);
     void cameraChanged(Camera* arg);
     void backgroundColorChanged(QColor arg);
     void navigatorChanged(Navigator* arg);
-
     void fpsChanged(float arg);
+    void timeChanged(float arg);
 
 private:
+    QTimer m_timer;
+    QElapsedTimer m_elapsedTimer;
     Simulator* m_simulator = 0;
     Camera* m_camera = 0;
     Camera m_defaultCamera;
     Navigator* m_navigator = 0;
     QColor m_backgroundColor = QColor(0,0,0,0);
     float m_fps = 60;
+    float m_time;
 
     friend class VisualizerRenderer;
+
 
 
 protected:

@@ -45,6 +45,7 @@ public:
     bool diffuse() const;
     bool specular() const;
     float gamma() const;
+    void setLightId(int id);
 
 public slots:
     void setAmbientColor(QColor arg);
@@ -87,6 +88,7 @@ private:
     float m_shininess = 30.0;
     float m_attenuation = 0.01;
     float m_gamma = 2.0;
+    int   m_lightId = -1;
     bool m_ambient = true;
     bool m_diffuse = true;
     bool m_specular = true;

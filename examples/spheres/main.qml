@@ -47,15 +47,25 @@ ApplicationWindow {
                 ambientColor: spheres.color
                 specularColor: "white"
                 diffuseColor: spheres.color
-                ambient: true
-                diffuse: true
-                specular: true
                 ambientIntensity: 0.025
                 diffuseIntensity: 0.5
                 specularIntensity: 1.0
                 shininess: 40.0
                 attenuation: 0.01
                 position: Qt.vector3d(0.5, 0.5, 0.5)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
+            }
+
+            DefaultLight {
+                id: light2
+                ambientColor: spheres.color
+                specularColor: "white"
+                diffuseColor: spheres.color
+                ambientIntensity: 0.025
+                diffuseIntensity: 0.5
+                specularIntensity: 1.0
+                shininess: 40.0
+                attenuation: 0.01
+                position: Qt.vector3d(Math.sin(0.1*6.28*visualizer.time), Math.cos(0.1*6.28*visualizer.time), 0)
             }
 
             SimplexBump {

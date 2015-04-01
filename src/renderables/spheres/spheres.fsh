@@ -1,7 +1,6 @@
 uniform sampler2D texture;
 varying highp vec2 coords;
 varying highp vec3 color;
-varying highp float attenuationFactor;
 varying highp vec3 vertexPosition;
 varying highp float sphereId;
 

@@ -13,6 +13,10 @@ Visualizer::Visualizer() :
     connect(this, &Visualizer::widthChanged, this, &Visualizer::resetAspectRatio);
     connect(this, &Visualizer::heightChanged, this, &Visualizer::resetAspectRatio);
     connect(this, &Visualizer::componentComplete, this, &Visualizer::resetAspectRatio);
+    connect(&m_timer, &QTimer::timeout, this, &Visualizer::timerTicked);
+    m_timer.start(16);
+    m_elapsedTimer.start();
+
 }
 
 Visualizer::~Visualizer()
@@ -54,6 +58,11 @@ Navigator *Visualizer::navigator()
 float Visualizer::fps() const
 {
     return m_fps;
+}
+
+float Visualizer::time() const
+{
+    return m_time;
 }
 
 void Visualizer::setSimulator(Simulator *arg)
@@ -121,9 +130,14 @@ void Visualizer::synchronizeWorker(SimulatorWorker *worker)
 void Visualizer::resetAspectRatio()
 {
     if(width() > 0 && height() > 0) {
-        qDebug() << "Setting aspect ratio to" << width() / height();
         camera()->setAspectRatio(width() / height());
     }
+}
+
+void Visualizer::timerTicked()
+{
+    m_time = m_elapsedTimer.elapsed()*1e-3;
+    emit timeChanged(m_time);
 }
 
 void VisualizerRenderer::render()

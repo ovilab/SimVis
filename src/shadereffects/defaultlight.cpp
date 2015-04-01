@@ -65,16 +65,22 @@ DefaultLight *DefaultLight::clone()
 
 void DefaultLight::setUniformValues(QOpenGLShaderProgram &shaderProgram)
 {
-    shaderProgram.setUniformValue("cp_ambientColor", m_ambientColor);
-    shaderProgram.setUniformValue("cp_diffuseColor", m_diffuseColor);
-    shaderProgram.setUniformValue("cp_specularColor", m_specularColor);
-    shaderProgram.setUniformValue("cp_shininess", m_shininess);
-    shaderProgram.setUniformValue("cp_attenuation", m_attenuation);
-    shaderProgram.setUniformValue("cp_gamma", m_gamma);
-    shaderProgram.setUniformValue("cp_diffuseIntensity", m_diffuseIntensity);
-    shaderProgram.setUniformValue("cp_specularIntensity", m_specularIntensity);
-    shaderProgram.setUniformValue("cp_ambientIntensity", m_ambientIntensity);
-    shaderProgram.setUniformValue("cp_lightPosition", m_position);
+    if(m_lightId == -1) {
+        qDebug() << "An error occured. A light had light id -1 which indicates that Anders is a bad programmer.";
+    }
+
+    shaderProgram.setUniformValue(shaderProgram.uniformLocation(QString("cp_lights[%1].ambientColor").arg(m_lightId)), m_ambientColor);
+    shaderProgram.setUniformValue(shaderProgram.uniformLocation(QString("cp_lights[%1].diffuseColor").arg(m_lightId)), m_diffuseColor);
+    shaderProgram.setUniformValue(shaderProgram.uniformLocation(QString("cp_lights[%1].specularColor").arg(m_lightId)), m_specularColor);
+    shaderProgram.setUniformValue(shaderProgram.uniformLocation(QString("cp_lights[%1].shininess").arg(m_lightId)), m_shininess);
+    shaderProgram.setUniformValue(shaderProgram.uniformLocation(QString("cp_lights[%1].attenuationColor").arg(m_lightId)), m_attenuation);
+    shaderProgram.setUniformValue(shaderProgram.uniformLocation(QString("cp_lights[%1].gamma").arg(m_lightId)), m_gamma);
+    shaderProgram.setUniformValue(shaderProgram.uniformLocation(QString("cp_lights[%1].diffuseIntensity").arg(m_lightId)), m_diffuseIntensity);
+    shaderProgram.setUniformValue(shaderProgram.uniformLocation(QString("cp_lights[%1].specularIntensity").arg(m_lightId)), m_specularIntensity);
+    shaderProgram.setUniformValue(shaderProgram.uniformLocation(QString("cp_lights[%1].ambientIntensity").arg(m_lightId)), m_ambientIntensity);
+    shaderProgram.setUniformValue(shaderProgram.uniformLocation(QString("cp_lights[%1].position").arg(m_lightId)), m_position);
+
+    m_lightId = -1;
 }
 
 QColor DefaultLight::ambientColor() const
@@ -140,6 +146,11 @@ bool DefaultLight::specular() const
 float DefaultLight::gamma() const
 {
     return m_gamma;
+}
+
+void DefaultLight::setLightId(int id)
+{
+    m_lightId = id;
 }
 
 void DefaultLight::setAmbientColor(QColor arg)
