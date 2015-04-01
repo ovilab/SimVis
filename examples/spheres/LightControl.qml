@@ -4,7 +4,7 @@ import SimVis 1.0
 
 Rectangle {
     id: lightControlRoot
-    property DefaultLight light
+    property Light light
     width: 320
     height: sliders.height + okButton.height + 10
     color: "#ffffff"

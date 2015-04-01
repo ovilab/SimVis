@@ -1,6 +1,6 @@
-#include "defaultlight.h"
+#include "light.h"
 
-QString DefaultLight::fragmentShaderDefines()
+QString Light::fragmentShaderDefines()
 {
     QString defines = "\n#define DEFAULTLIGHT \n";
     if(m_ambient) {
@@ -15,28 +15,28 @@ QString DefaultLight::fragmentShaderDefines()
     return defines;
 }
 
-QString DefaultLight::vertexShaderDefines()
+QString Light::vertexShaderDefines()
 {
     QString defines = "\n #define DEFAULTLIGHT \n";
     return defines;
 }
 
-QString DefaultLight::fragmentShaderLibrary()
+QString Light::fragmentShaderLibrary()
 {
     QString shaderLibrary;
     shaderLibrary.append(contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/light.glsl"));
     return shaderLibrary;
 }
 
-QString DefaultLight::vertexShaderLibrary()
+QString Light::vertexShaderLibrary()
 {
     QString shaderLibrary;
     shaderLibrary.append(contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/light.glsl"));
     return shaderLibrary;
 }
 
-void DefaultLight::copyState(ShaderEffect *source) {
-    DefaultLight *defaultLight = qobject_cast<DefaultLight*>(source);
+void Light::copyState(ShaderEffect *source) {
+    Light *defaultLight = qobject_cast<Light*>(source);
     m_ambientColor = defaultLight->ambientColor();
     m_diffuseColor = defaultLight->diffuseColor();
     m_specularColor = defaultLight->specularColor();
@@ -55,15 +55,15 @@ void DefaultLight::copyState(ShaderEffect *source) {
     m_shadersDirty = source->shadersDirty();
 }
 
-DefaultLight *DefaultLight::clone()
+Light *Light::clone()
 {
-    DefaultLight *clone = new DefaultLight();
+    Light *clone = new Light();
     clone->copyState(this);
 
     return clone;
 }
 
-void DefaultLight::setUniformValues(QOpenGLShaderProgram &shaderProgram)
+void Light::setUniformValues(QOpenGLShaderProgram &shaderProgram)
 {
     if(m_lightId == -1) {
         qDebug() << "An error occured. A light had light id -1 which indicates that Anders is a bad programmer.";
@@ -83,77 +83,77 @@ void DefaultLight::setUniformValues(QOpenGLShaderProgram &shaderProgram)
     m_lightId = -1;
 }
 
-QColor DefaultLight::ambientColor() const
+QColor Light::ambientColor() const
 {
     return m_ambientColor;
 }
 
-QColor DefaultLight::diffuseColor() const
+QColor Light::diffuseColor() const
 {
     return m_diffuseColor;
 }
 
-QColor DefaultLight::specularColor() const
+QColor Light::specularColor() const
 {
     return m_specularColor;
 }
 
-float DefaultLight::diffuseIntensity() const
+float Light::diffuseIntensity() const
 {
     return m_diffuseIntensity;
 }
 
-float DefaultLight::ambientIntensity() const
+float Light::ambientIntensity() const
 {
     return m_ambientIntensity;
 }
 
-float DefaultLight::specularIntensity() const
+float Light::specularIntensity() const
 {
     return m_specularIntensity;
 }
 
-float DefaultLight::shininess() const
+float Light::shininess() const
 {
     return m_shininess;
 }
 
-float DefaultLight::attenuation() const
+float Light::attenuation() const
 {
     return m_attenuation;
 }
 
-QVector3D DefaultLight::position() const
+QVector3D Light::position() const
 {
     return m_position;
 }
 
-bool DefaultLight::ambient() const
+bool Light::ambient() const
 {
     return m_ambient;
 }
 
-bool DefaultLight::diffuse() const
+bool Light::diffuse() const
 {
     return m_diffuse;
 }
 
-bool DefaultLight::specular() const
+bool Light::specular() const
 {
     return m_specular;
 }
 
-float DefaultLight::gamma() const
+float Light::gamma() const
 {
     return m_gamma;
 }
 
-void DefaultLight::setLightId(int id)
+void Light::setLightId(int id)
 {
     m_lightId = id;
 }
 
-void DefaultLight::setAmbientColor(QColor arg)
+void Light::setAmbientColor(QColor arg)
 {
     if (m_ambientColor == arg)
         return;
@@ -162,7 +162,7 @@ void DefaultLight::setAmbientColor(QColor arg)
     emit ambientColorChanged(arg);
 }
 
-void DefaultLight::setDiffuseColor(QColor arg)
+void Light::setDiffuseColor(QColor arg)
 {
     if (m_diffuseColor == arg)
         return;
@@ -171,7 +171,7 @@ void DefaultLight::setDiffuseColor(QColor arg)
     emit diffuseColorChanged(arg);
 }
 
-void DefaultLight::setSpecularColor(QColor arg)
+void Light::setSpecularColor(QColor arg)
 {
     if (m_specularColor == arg)
         return;
@@ -180,7 +180,7 @@ void DefaultLight::setSpecularColor(QColor arg)
     emit specularColorChanged(arg);
 }
 
-void DefaultLight::setDiffuseIntensity(float arg)
+void Light::setDiffuseIntensity(float arg)
 {
     if (m_diffuseIntensity == arg)
         return;
@@ -189,7 +189,7 @@ void DefaultLight::setDiffuseIntensity(float arg)
     emit diffuseIntensityChanged(arg);
 }
 
-void DefaultLight::setAmbientIntensity(float arg)
+void Light::setAmbientIntensity(float arg)
 {
     if (m_ambientIntensity == arg)
         return;
@@ -198,7 +198,7 @@ void DefaultLight::setAmbientIntensity(float arg)
     emit ambientIntensityChanged(arg);
 }
 
-void DefaultLight::setSpecularIntensity(float arg)
+void Light::setSpecularIntensity(float arg)
 {
     if (m_specularIntensity == arg)
         return;
@@ -207,7 +207,7 @@ void DefaultLight::setSpecularIntensity(float arg)
     emit specularIntensityChanged(arg);
 }
 
-void DefaultLight::setShininess(float arg)
+void Light::setShininess(float arg)
 {
     if (m_shininess == arg)
         return;
@@ -216,7 +216,7 @@ void DefaultLight::setShininess(float arg)
     emit shininessChanged(arg);
 }
 
-void DefaultLight::setAttenuation(float arg)
+void Light::setAttenuation(float arg)
 {
     if (m_attenuation == arg)
         return;
@@ -225,7 +225,7 @@ void DefaultLight::setAttenuation(float arg)
     emit attenuationChanged(arg);
 }
 
-void DefaultLight::setPosition(QVector3D arg)
+void Light::setPosition(QVector3D arg)
 {
     if (m_position == arg)
         return;
@@ -234,7 +234,7 @@ void DefaultLight::setPosition(QVector3D arg)
     emit positionChanged(arg);
 }
 
-void DefaultLight::setAmbient(bool arg)
+void Light::setAmbient(bool arg)
 {
     if (m_ambient == arg)
         return;
@@ -244,7 +244,7 @@ void DefaultLight::setAmbient(bool arg)
     emit ambientChanged(arg);
 }
 
-void DefaultLight::setDiffuse(bool arg)
+void Light::setDiffuse(bool arg)
 {
     if (m_diffuse == arg)
         return;
@@ -254,7 +254,7 @@ void DefaultLight::setDiffuse(bool arg)
     emit diffuseChanged(arg);
 }
 
-void DefaultLight::setSpecular(bool arg)
+void Light::setSpecular(bool arg)
 {
     if (m_specular == arg)
         return;
@@ -264,7 +264,7 @@ void DefaultLight::setSpecular(bool arg)
     emit specularChanged(arg);
 }
 
-void DefaultLight::setGamma(float arg)
+void Light::setGamma(float arg)
 {
     if (m_gamma == arg)
         return;

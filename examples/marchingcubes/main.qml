@@ -50,7 +50,7 @@ ApplicationWindow {
                 scale: 1.0
             }
 
-            DefaultLight {
+            Light {
                 id: light
                 ambient: true
                 diffuse: true

@@ -42,7 +42,7 @@ ApplicationWindow {
             scale: 0.1
             color: "#ff17e6"
 
-            DefaultLight {
+            Light {
                 id: light
                 ambientColor: spheres.color
                 specularColor: "white"
@@ -55,7 +55,7 @@ ApplicationWindow {
                 position: Qt.vector3d(0.5, 0.5, 0.5)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
             }
 
-            DefaultLight {
+            Light {
                 id: light2
                 ambientColor: spheres.color
                 specularColor: "white"
@@ -70,7 +70,7 @@ ApplicationWindow {
 
             SimplexBump {
                 id: simplexBump
-                enabled: true
+                enabled: false
                 intensity: 0.03
                 scale: 5.0
             }
