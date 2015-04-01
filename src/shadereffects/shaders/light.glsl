@@ -47,6 +47,8 @@ highp vec3 applyLight(Light light, highp vec3 normal, highp vec3 vertexPosition,
    /* DIFFUSE */
 #ifdef DEFAULTLIGHTDIFFUSE
     highp float diffuseCoefficient1 = max(0.0, dot(normal, surfaceToLight));
+    // smooths the edges of the light (for some reason)
+    diffuseCoefficient1 *= diffuseCoefficient1;
     lightVector += color*light.diffuseColor.rgb*diffuseCoefficient1*light.diffuseIntensity*attenuationFactor;
 #endif
 
