@@ -39,7 +39,7 @@ Rectangle {
             anchors.left: massLabel.right
             anchors.leftMargin: 5
             maximumValue: 5.0
-            minimumValue: 0.0
+            minimumValue: 0.1
             value: 1.0
             onValueChanged: {
                 if(simulator != null) simulator.mass = value
