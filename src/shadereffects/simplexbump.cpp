@@ -50,10 +50,15 @@ void SimplexBump::copyState(ShaderEffect *source)
     m_shadersDirty = source->shadersDirty();
 }
 
-void SimplexBump::setUniformValues(QOpenGLShaderProgram &shaderProgram)
+void SimplexBump::beforeRendering(QOpenGLShaderProgram &shaderProgram)
 {
     shaderProgram.setUniformValue("cp_bumpIntensity", m_intensity);
     shaderProgram.setUniformValue("cp_bumpScale", m_scale);
+}
+
+void SimplexBump::afterRendering(QOpenGLShaderProgram &shaderProgram)
+{
+
 }
 
 float SimplexBump::intensity() const

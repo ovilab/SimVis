@@ -96,6 +96,11 @@ QString SkyBox::texture() const
     return m_texture;
 }
 
+QOpenGLTexture *SkyBox::texturePointer()
+{
+    return m_texturePointer;
+}
+
 void SkyBox::setTexture(QString arg)
 {
     if (m_texture == arg)
@@ -133,16 +138,24 @@ void SkyBoxRenderer::synchronize(Renderable *renderable)
 
     if(!m_texture) {
         uploadTexture();
+        skybox->m_texturePointer = m_texture;
     }
 }
 
 void SkyBoxRenderer::render()
 {
+    QMatrix4x4 modelViewMatrixPrimeInverted;
+    modelViewMatrixPrimeInverted.setToIdentity();
+    modelViewMatrixPrimeInverted.lookAt(-m_viewCenter, -m_cameraPosition, m_upVector);
+    modelViewMatrixPrimeInverted = modelViewMatrixPrimeInverted.inverted();
+    program().setUniformValue("modelViewMatrixPrimeInverted", modelViewMatrixPrimeInverted);
+
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
 
     // Tell OpenGL programmable pipeline how to locate vertex position data
     int vertexLocation = program().attributeLocation("a_position");
+
     program().enableAttributeArray(vertexLocation);
     glFunctions()->glVertexAttribPointer(vertexLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
 

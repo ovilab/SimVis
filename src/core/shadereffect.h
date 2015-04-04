@@ -19,7 +19,8 @@ public:
     virtual QString vertexShaderLibrary() = 0;
     virtual ShaderEffect *clone() = 0;
     virtual void copyState(ShaderEffect *source) = 0;
-    virtual void setUniformValues(QOpenGLShaderProgram &shaderProgram) = 0;
+    virtual void beforeRendering(QOpenGLShaderProgram &shaderProgram) = 0;
+    virtual void afterRendering(QOpenGLShaderProgram &shaderProgram) = 0;
     bool enabled() const;
     bool shadersDirty() const;
     void setShadersDirty(bool shadersDirty);

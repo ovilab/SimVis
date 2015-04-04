@@ -63,7 +63,7 @@ Light *Light::clone()
     return clone;
 }
 
-void Light::setUniformValues(QOpenGLShaderProgram &shaderProgram)
+void Light::beforeRendering(QOpenGLShaderProgram &shaderProgram)
 {
     if(m_lightId == -1) {
         qDebug() << "An error occured. A light had light id -1 which indicates that Anders is a bad programmer.";
@@ -81,6 +81,10 @@ void Light::setUniformValues(QOpenGLShaderProgram &shaderProgram)
     shaderProgram.setUniformValue(shaderProgram.uniformLocation(QString("cp_lights[%1].position").arg(m_lightId)), m_position);
 
     m_lightId = -1;
+}
+
+void Light::afterRendering(QOpenGLShaderProgram &shaderProgram) {
+
 }
 
 QColor Light::ambientColor() const
@@ -272,4 +276,3 @@ void Light::setGamma(float arg)
     m_gamma = arg;
     emit gammaChanged(arg);
 }
-

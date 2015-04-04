@@ -32,12 +32,15 @@ class SkyBox : public Renderable
 public:
     virtual SkyBoxRenderer *createRenderer() override;
     QString texture() const;
+    QOpenGLTexture *texturePointer();
 public slots:
     void setTexture(QString arg);
 signals:
     void textureChanged(QString arg);
 private:
     QString m_texture;
+    QOpenGLTexture *m_texturePointer = 0;
+    friend class SkyBoxRenderer;
 };
 
 #endif // SKYBOX_H

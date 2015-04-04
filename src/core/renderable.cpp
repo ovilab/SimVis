@@ -31,23 +31,13 @@ void Renderable::requestSynchronize()
     m_renderer->m_modelViewMatrix = m_camera->matrix();
     m_renderer->m_projectionMatrix = m_camera->projectionMatrix();
     m_renderer->m_viewVector = m_camera->viewVector().normalized();
+    m_renderer->m_viewCenter = m_camera->viewCenter();
     m_renderer->m_upVector = m_camera->upVector().normalized();
     m_renderer->m_rightVector = QVector3D::crossProduct(m_renderer->m_viewVector, m_renderer->m_upVector);
     m_renderer->m_cameraPosition = m_camera->position();
-    m_renderer->copyShaderEffects(this);
-
-    QMatrix4x4 omfg;
-
-    omfg.setToIdentity();
-    QVector3D viewCenter = m_camera->viewCenter();
-    // viewCenter.setX(-viewCenter.x());
-    QVector3D position = m_camera->position();
-    // position.setX(-position.x());
-    omfg.lookAt(-viewCenter, -position, m_camera->upVector());
-
     m_renderer->m_modelViewMatrixInverse = m_renderer->m_modelViewMatrix.inverted();
-    m_renderer->m_modelViewMatrixInverse = omfg.inverted();
     m_renderer->m_projectionMatrixInverse = m_renderer->m_projectionMatrix.inverted();
+    m_renderer->copyShaderEffects(this);
 
     m_renderer->synchronize(this);
 }
@@ -145,7 +135,7 @@ void RenderableRenderer::prepareAndRender()
                 light->setLightId(numberOfLights);
                 numberOfLights++;
             }
-            shaderEffect->setUniformValues(m_program);
+            shaderEffect->beforeRendering(m_program);
         }
     }
     m_program.setUniformValue("cp_numberOfLights", numberOfLights);

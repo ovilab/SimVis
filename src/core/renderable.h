@@ -42,6 +42,7 @@ protected:
     QMatrix4x4 m_modelViewMatrixInverse;
     QMatrix4x4 m_projectionMatrixInverse;
     QVector3D m_viewVector;
+    QVector3D m_viewCenter;
     QVector3D m_upVector;
     QVector3D m_rightVector;
     QVector3D m_cameraPosition;

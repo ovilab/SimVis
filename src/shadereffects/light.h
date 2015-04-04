@@ -30,7 +30,8 @@ public:
     QString fragmentShaderLibrary() override;
     QString vertexShaderLibrary() override;
     Light *clone() override;
-    void setUniformValues(QOpenGLShaderProgram &shaderProgram) override;
+    void beforeRendering(QOpenGLShaderProgram &shaderProgram) override;
+    void afterRendering(QOpenGLShaderProgram &shaderProgram) override;
     void copyState(ShaderEffect *source) override;
     QColor ambientColor() const;
     QColor diffuseColor() const;
