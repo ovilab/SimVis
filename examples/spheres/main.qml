@@ -28,7 +28,7 @@ ApplicationWindow {
         height: applicationRoot.height - row1.height
         simulator: simulator
         camera: camera
-        backgroundColor: "#111111"
+        backgroundColor: "#fff"
         navigator: navigator
 
         TrackballNavigator {
@@ -37,8 +37,15 @@ ApplicationWindow {
             camera: camera
         }
 
+        SkyBox {
+            id: skybox
+            camera: camera
+            texture: ":/cubemap.jpg"
+        }
+
         Spheres {
             id: spheres
+            visible: true
             scale: 0.1
             color: "#ff17e6"
 
@@ -75,6 +82,8 @@ ApplicationWindow {
                 scale: 5.0
             }
         }
+
+
     }
 
     Camera {

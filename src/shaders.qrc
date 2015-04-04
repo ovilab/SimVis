@@ -18,5 +18,7 @@
         <file>shadereffects/shaders/simplextexture.glsl</file>
         <file>renderables/spheres/spheres.fsh</file>
         <file>renderables/spheres/spheres.vsh</file>
+        <file>renderables/skybox/skybox.fsh</file>
+        <file>renderables/skybox/skybox.vsh</file>
     </qresource>
 </RCC>

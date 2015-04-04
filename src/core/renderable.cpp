@@ -36,6 +36,19 @@ void Renderable::requestSynchronize()
     m_renderer->m_cameraPosition = m_camera->position();
     m_renderer->copyShaderEffects(this);
 
+    QMatrix4x4 omfg;
+
+    omfg.setToIdentity();
+    QVector3D viewCenter = m_camera->viewCenter();
+    // viewCenter.setX(-viewCenter.x());
+    QVector3D position = m_camera->position();
+    // position.setX(-position.x());
+    omfg.lookAt(-viewCenter, -position, m_camera->upVector());
+
+    m_renderer->m_modelViewMatrixInverse = m_renderer->m_modelViewMatrix.inverted();
+    m_renderer->m_modelViewMatrixInverse = omfg.inverted();
+    m_renderer->m_projectionMatrixInverse = m_renderer->m_projectionMatrix.inverted();
+
     m_renderer->synchronize(this);
 }
 
@@ -116,6 +129,8 @@ void RenderableRenderer::prepareAndRender()
     m_program.setUniformValue("cp_modelViewProjectionMatrix", modelViewProjectionMatrix);
     m_program.setUniformValue("cp_modelViewMatrix", m_modelViewMatrix);
     m_program.setUniformValue("cp_projectionMatrix", m_projectionMatrix);
+    m_program.setUniformValue("cp_modelViewMatrixInverse", m_modelViewMatrixInverse);
+    m_program.setUniformValue("cp_projectionMatrixInverse", m_projectionMatrixInverse);
     m_program.setUniformValue("cp_viewVector", m_viewVector);
     m_program.setUniformValue("cp_rightVector", m_rightVector);
     m_program.setUniformValue("cp_upVector", m_upVector);

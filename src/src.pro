@@ -34,7 +34,8 @@ SOURCES += \
     shadereffects/simplexbump.cpp \
     shadereffects/simplextexture.cpp \
     renderables/spheres/spheres.cpp \
-    shadereffects/light.cpp
+    shadereffects/light.cpp \
+    renderables/skybox/skybox.cpp
 
 HEADERS += \
     core/navigator.h \
@@ -62,7 +63,8 @@ HEADERS += \
     shadereffects/simplextexture.h \
     renderables/spheres/spheres.h \
     SimVis/Spheres \
-    shadereffects/light.h
+    shadereffects/light.h \
+    renderables/skybox/skybox.h
 
 DISTFILES = qmldir \
     core/simvisplugin.json
