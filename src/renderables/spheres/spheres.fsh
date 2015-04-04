@@ -13,13 +13,16 @@ void main() {
 
     highp vec3 normal = x*cp_rightVector - y*cp_upVector - z*cp_viewVector;
 
-#ifdef DEFAULTLIGHT
-
 #ifdef SIMPLEXBUMP
     normal = simplexbump(normal, normal+vec3(sphereId));
 #endif
 
+#ifdef DEFAULTLIGHT
     light = defaultLight(normal, vertexPosition, color);
+#endif
+
+#ifdef SKYBOXREFLECTION
+    light += skyboxReflection(normal, vertexPosition);
 #endif
 
     if(r2 > 0.9) {

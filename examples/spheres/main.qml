@@ -75,6 +75,12 @@ ApplicationWindow {
                 position: Qt.vector3d(Math.sin(0.1*6.28*visualizer.time), Math.cos(0.1*6.28*visualizer.time), 0)
             }
 
+            SkyBoxReflection {
+                id: reflection
+                skybox: skybox
+                reflectivity: 0.2
+            }
+
             SimplexBump {
                 id: simplexBump
                 enabled: false
@@ -82,8 +88,6 @@ ApplicationWindow {
                 scale: 5.0
             }
         }
-
-
     }
 
     Camera {

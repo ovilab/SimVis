@@ -12,6 +12,7 @@
 #include "../shadereffects/simplexbump.h"
 #include "../shadereffects/light.h"
 #include "../shadereffects/simplextexture.h"
+#include "../shadereffects/skyboxreflection.h"
 #include <qqml.h>
 #include <QQmlEngine>
 
@@ -34,6 +35,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<SimplexTexture>("SimVis", 1, 0, "SimplexTexture");
     qmlRegisterType<Light>("SimVis", 1, 0, "Light");
     qmlRegisterType<SkyBox>("SimVis", 1, 0, "SkyBox");
+    qmlRegisterType<SkyBoxReflection>("SimVis", 1, 0, "SkyBoxReflection");
 }
 
 void SimVisPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
