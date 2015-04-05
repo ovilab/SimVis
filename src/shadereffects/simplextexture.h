@@ -15,7 +15,8 @@ public:
     QString vertexShaderLibrary() override;
     SimplexTexture *clone() override;
     void copyState(ShaderEffect *source) override;
-    void setUniformValues(QOpenGLShaderProgram &shaderProgram) override;
+    void beforeRendering(QOpenGLShaderProgram &shaderProgram) override;
+    void afterRendering(QOpenGLShaderProgram &shaderProgram) override;
 
     float scale() const;
     bool timeDependent() const;

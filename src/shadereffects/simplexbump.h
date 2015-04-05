@@ -16,7 +16,8 @@ public:
     QString vertexShaderLibrary() override;
     SimplexBump *clone() override;
     void copyState(ShaderEffect *source) override;
-    void setUniformValues(QOpenGLShaderProgram &shaderProgram) override;
+    void beforeRendering(QOpenGLShaderProgram &shaderProgram) override;
+    void afterRendering(QOpenGLShaderProgram &shaderProgram) override;
 
     float intensity() const;
     float scale() const;

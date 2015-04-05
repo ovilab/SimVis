@@ -37,23 +37,13 @@ void TrackballNavigator::moved(QVector2D delta)
     float deltaPan = -delta.x() * 200;
     float deltaTilt = -delta.y() * 200;
 
+    double currentTilt = 180/M_PI*asin(double(m_camera->position().y()) / double(m_camera->position().length())); // sin(x) = a/b
+    // First remove all tilt so panning is not biased. Note that y is flipped
+    m_camera->tiltAboutViewCenter(currentTilt);
     m_camera->panAboutViewCenter(deltaPan);
+    // Tilt back before we add the delta tilt from touch/mouse move
+    m_camera->tiltAboutViewCenter(-currentTilt);
     m_camera->tiltAboutViewCenter(deltaTilt);
-}
-
-void TrackballNavigator::keyPressEvent(QKeyEvent *event)
-{
-
-}
-
-void TrackballNavigator::keyReleaseEvent(QKeyEvent *event)
-{
-
-}
-
-void TrackballNavigator::mouseReleaseEvent(QMouseEvent *event)
-{
-
 }
 
 void TrackballNavigator::mousePressEvent(QMouseEvent *event)

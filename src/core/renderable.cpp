@@ -31,9 +31,12 @@ void Renderable::requestSynchronize()
     m_renderer->m_modelViewMatrix = m_camera->matrix();
     m_renderer->m_projectionMatrix = m_camera->projectionMatrix();
     m_renderer->m_viewVector = m_camera->viewVector().normalized();
+    m_renderer->m_viewCenter = m_camera->viewCenter();
     m_renderer->m_upVector = m_camera->upVector().normalized();
     m_renderer->m_rightVector = QVector3D::crossProduct(m_renderer->m_viewVector, m_renderer->m_upVector);
     m_renderer->m_cameraPosition = m_camera->position();
+    m_renderer->m_modelViewMatrixInverse = m_renderer->m_modelViewMatrix.inverted();
+    m_renderer->m_projectionMatrixInverse = m_renderer->m_projectionMatrix.inverted();
     m_renderer->copyShaderEffects(this);
 
     m_renderer->synchronize(this);
@@ -116,6 +119,8 @@ void RenderableRenderer::prepareAndRender()
     m_program.setUniformValue("cp_modelViewProjectionMatrix", modelViewProjectionMatrix);
     m_program.setUniformValue("cp_modelViewMatrix", m_modelViewMatrix);
     m_program.setUniformValue("cp_projectionMatrix", m_projectionMatrix);
+    m_program.setUniformValue("cp_modelViewMatrixInverse", m_modelViewMatrixInverse);
+    m_program.setUniformValue("cp_projectionMatrixInverse", m_projectionMatrixInverse);
     m_program.setUniformValue("cp_viewVector", m_viewVector);
     m_program.setUniformValue("cp_rightVector", m_rightVector);
     m_program.setUniformValue("cp_upVector", m_upVector);
@@ -130,7 +135,7 @@ void RenderableRenderer::prepareAndRender()
                 light->setLightId(numberOfLights);
                 numberOfLights++;
             }
-            shaderEffect->setUniformValues(m_program);
+            shaderEffect->beforeRendering(m_program);
         }
     }
     m_program.setUniformValue("cp_numberOfLights", numberOfLights);

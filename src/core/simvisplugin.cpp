@@ -4,6 +4,7 @@
 #include "../renderables/points/points.h"
 #include "../renderables/spheres/spheres.h"
 #include "../renderables/marchingcubes/marchingcubes.h"
+#include "../renderables/skybox/skybox.h"
 #include "visualizer.h"
 #include "camera.h"
 #include "navigator.h"
@@ -11,6 +12,7 @@
 #include "../shadereffects/simplexbump.h"
 #include "../shadereffects/light.h"
 #include "../shadereffects/simplextexture.h"
+#include "../shadereffects/skyboxreflection.h"
 #include <qqml.h>
 #include <QQmlEngine>
 
@@ -32,6 +34,8 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<SimplexBump>("SimVis", 1, 0, "SimplexBump");
     qmlRegisterType<SimplexTexture>("SimVis", 1, 0, "SimplexTexture");
     qmlRegisterType<Light>("SimVis", 1, 0, "Light");
+    qmlRegisterType<SkyBox>("SimVis", 1, 0, "SkyBox");
+    qmlRegisterType<SkyBoxReflection>("SimVis", 1, 0, "SkyBoxReflection");
 }
 
 void SimVisPlugin::initializeEngine(QQmlEngine *engine, const char *uri)

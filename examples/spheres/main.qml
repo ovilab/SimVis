@@ -28,7 +28,7 @@ ApplicationWindow {
         height: applicationRoot.height - row1.height
         simulator: simulator
         camera: camera
-        backgroundColor: "#111111"
+        backgroundColor: "#fff"
         navigator: navigator
 
         TrackballNavigator {
@@ -37,8 +37,15 @@ ApplicationWindow {
             camera: camera
         }
 
+        SkyBox {
+            id: skybox
+            camera: camera
+            texture: ":/cubemap.jpg"
+        }
+
         Spheres {
             id: spheres
+            visible: true
             scale: 0.1
             color: "#ff17e6"
 
@@ -66,6 +73,12 @@ ApplicationWindow {
                 shininess: 40.0
                 attenuation: 0.01
                 position: Qt.vector3d(Math.sin(0.1*6.28*visualizer.time), Math.cos(0.1*6.28*visualizer.time), 0)
+            }
+
+            SkyBoxReflection {
+                id: reflection
+                skybox: skybox
+                reflectivity: 0.2
             }
 
             SimplexBump {
