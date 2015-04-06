@@ -1,3 +1,4 @@
+// BEGIN default.glsl
 #ifndef DEFAULTGLSL
 #define DEFAULTGLSL
 
@@ -13,3 +14,4 @@ uniform highp vec3 cp_rightVector;
 uniform highp float cp_time;
 
 #endif
+// END default.glsl

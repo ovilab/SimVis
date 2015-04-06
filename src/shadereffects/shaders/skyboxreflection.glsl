@@ -1,6 +1,6 @@
+// BEGIN skyboxreflection.glsl
 #ifndef SKYBOXREFLECTIONGLSL
 #define SKYBOXREFLECTIONGLSL
-// BEGIN skyboxreflection.glsl
 uniform samplerCube skyMapTexture;
 uniform highp float cp_skyboxReflectivity;
 
@@ -11,5 +11,5 @@ highp vec3 skyboxReflection(highp vec3 normal, highp vec3 vertexPosition) {
     return color.xyz*cp_skyboxReflectivity;
 }
 
-// END skyboxreflection.glsl
 #endif
+// END skyboxreflection.glsl

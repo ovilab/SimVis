@@ -1,6 +1,6 @@
+// BEGIN light.glsl
 #ifndef LIGHTGLSL
 #define LIGHTGLSL
-// BEGIN light.glsl
 // Light based on http://www.tomdalling.com/blog/modern-opengl/07-more-lighting-ambient-specular-attenuation-gamma/
 // and http://www.tomdalling.com/blog/modern-opengl/08-even-more-lighting-directional-lights-spotlights-multiple-lights/
 
@@ -83,5 +83,5 @@ highp vec3 defaultLight(highp vec3 normal, highp vec3 vertexPosition, highp vec3
 highp vec3 defaultLight(highp vec3 normal, highp vec3 vertexPosition, highp vec4 color) {
     return defaultLight(normal, vertexPosition, color.rgb);
 }
-// END light.glsl
 #endif
+// END light.glsl

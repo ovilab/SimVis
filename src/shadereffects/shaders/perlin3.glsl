@@ -1,3 +1,4 @@
+// BEGIN perlin3.glsl
 //
 // GLSL textureless classic 3D noise "cnoise",
 // with an RSL-style periodic variant "pnoise".
@@ -123,3 +124,4 @@ highp float cnoise(highp vec3 P)
     return 2.2 * n_xyz;
 }
 #endif
+// END perlin2.glsl

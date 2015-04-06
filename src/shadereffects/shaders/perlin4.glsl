@@ -1,3 +1,4 @@
+// BEGIN perlin4.glsl
 //
 // GLSL textureless classic 4D noise "cnoise",
 // with an RSL-style periodic variant "pnoise".
@@ -316,3 +317,4 @@ highp float pnoise(highp vec4 P, highp vec4 rep)
   return 2.2 * n_xyzw;
 }
 #endif
+// END perlin4.glsl

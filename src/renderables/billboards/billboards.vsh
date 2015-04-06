@@ -1,3 +1,4 @@
+// BEGIN billboards.vsh
 attribute highp vec4 a_position;
 attribute highp vec3 a_color;
 attribute highp vec2 a_texcoord;
@@ -19,3 +20,4 @@ void main() {
     coords = a_texcoord;
     color = a_color;
 }
+// END billboards.vsh

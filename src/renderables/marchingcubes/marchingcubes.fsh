@@ -1,3 +1,4 @@
+// BEGIN marchingcubes.fsh
 varying highp vec3 normal;
 varying highp vec3 color;
 varying highp vec3 vertexPosition;
@@ -25,3 +26,4 @@ void main() {
 
     gl_FragColor = vec4(light*n, 1.0);
 }
+// END marchingcubes.fsh

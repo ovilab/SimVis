@@ -1,3 +1,4 @@
+// BEGIN billboards.fsh
 uniform sampler2D texture;
 varying highp vec2 coords;
 varying highp vec3 color;
@@ -30,3 +31,4 @@ void main() {
 
     gl_FragColor = picture*vec4(color*light, 1.0);
 }
+// END billboards.fsh

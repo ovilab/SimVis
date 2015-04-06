@@ -1,3 +1,4 @@
+// BEGIN marchingcubes.vsh
 uniform highp float lightFalloffDistance;
 uniform highp float normalVectorSign;
 uniform highp float scale;
@@ -19,3 +20,4 @@ void main() {
 
     gl_Position = cp_modelViewProjectionMatrix*scaledPosition;
 }
+// END marchingcubes.vsh

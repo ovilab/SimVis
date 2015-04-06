@@ -1,3 +1,4 @@
+// BEGIN spheres.fsh
 uniform sampler2D texture;
 varying highp vec2 coords;
 varying highp vec3 color;
@@ -32,3 +33,4 @@ void main() {
         gl_FragColor = vec4(color*light, 1.0);
     }
 }
+// END spheres.fsh

@@ -1,3 +1,4 @@
+// BEGIN simplexbump.glsl
 #ifndef SIMPLEXBUMPGLSL
 #define SIMPLEXBUMPGLSL
 uniform highp float cp_bumpIntensity;
@@ -11,3 +12,4 @@ highp vec3 simplexbump(highp vec3 normal, highp vec3 vertexPosition) {
 }
 
 #endif
+// END simplexbump.glsl

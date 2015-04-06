@@ -1,3 +1,4 @@
+// BEGIN coloreffects.glsl
 #ifndef COLOREFFECTSGLSL
 #define COLOREFFECTSGLSL
 
@@ -17,3 +18,4 @@ highp vec3 applySepia(highp vec3 color) {
     return color;
 }
 #endif
+// END coloreffects.glsl
