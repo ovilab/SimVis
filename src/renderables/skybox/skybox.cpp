@@ -44,7 +44,7 @@ void SkyBoxRenderer::uploadTexture()
     QString baseName = f.absolutePath()+f.baseName();
     QString suffix = f.suffix();
     m_texture = new QOpenGLTexture(QOpenGLTexture::TargetCubeMap);
-    m_texture->setFormat(QOpenGLTexture::RGB8_UNorm);
+    m_texture->setFormat(QOpenGLTexture::RGBAFormat);
 
     for(int i=0; i<6; i++) {
         QString imageFileName = QString("%1%2.%3").arg(baseName, fileAppendNames[i], suffix);
@@ -61,8 +61,7 @@ void SkyBoxRenderer::uploadTexture()
             m_texture->bind();
         }
 
-        glFunctions()->glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, image.width(), image.height(), 0,
-                      GL_RGBA, GL_UNSIGNED_BYTE, image.bits());
+        m_texture->setData(0,0,QOpenGLTexture::CubeMapFace(QOpenGLTexture::CubeMapPositiveX + i), QOpenGLTexture::RGBA, QOpenGLTexture::UInt8, image.bits());
 
     }
 
