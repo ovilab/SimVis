@@ -1,8 +1,7 @@
+// BEGIN marchingcubes.fsh
 varying highp vec3 normal;
-varying highp float light;
 varying highp vec3 color;
 varying highp vec3 vertexPosition;
-varying highp float attenuationFactor;
 
 void main() {
     lowp float n = 1.0;
@@ -14,7 +13,11 @@ void main() {
 #endif
 
 #ifdef DEFAULTLIGHT
-    light = vec3(ambient(color) + attenuationFactor*(diffuse(normal2, vertexPosition, color) + specular(normal2, vertexPosition, cp_specularColor)));
+    light = defaultLight(normal2, vertexPosition, color);
+#endif
+
+#ifdef SKYBOXREFLECTION
+    light += skyboxReflection(normal2, vertexPosition);
 #endif
 
 #ifdef SIMPLEXTEXTURE
@@ -23,3 +26,4 @@ void main() {
 
     gl_FragColor = vec4(light*n, 1.0);
 }
+// END marchingcubes.fsh

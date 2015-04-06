@@ -1,3 +1,4 @@
+// BEGIN tools.glsl
 #ifndef TOOLSGLSL
 #define TOOLSGLSL
 
@@ -74,3 +75,4 @@ highp float unpack (highp vec4 colour)
 
 
 #endif // TOOLSGLSL
+// END tools.glsl

@@ -1,3 +1,4 @@
+// BEGIN simplextexture.glsl
 #ifndef SIMPLEXTEXTUREGLSL
 #define SIMPLEXTEXTUREGLSL
 uniform highp float cp_simplexTextureScale;
@@ -22,3 +23,4 @@ lowp float surface(highp vec3 coord ) {
 }
 
 #endif
+// END simplextexture.glsl

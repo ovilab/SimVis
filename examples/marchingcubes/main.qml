@@ -35,6 +35,12 @@ ApplicationWindow {
             camera: camera
         }
 
+        SkyBox {
+            id: skybox
+            camera: camera
+            texture: ":/cubemap.jpg"
+        }
+
         MarchingCubes {
             id: marchingCubes
             numVoxels: Qt.vector3d(100, 100, 100)
@@ -45,25 +51,31 @@ ApplicationWindow {
 
             SimplexBump {
                 id: simplexBump
-                enabled: true
+                enabled: false
                 intensity: 0.1
                 scale: 1.0
             }
 
-            DefaultLight {
+            Light {
                 id: light
                 ambient: true
                 diffuse: true
                 specular: true
-                ambientColor: "green"
+                ambientColor: color
                 specularColor: "white"
-                diffuseColor: "blue"
+                diffuseColor: color
                 ambientIntensity: 0.1
                 diffuseIntensity: 1.0
                 specularIntensity: 1.0
                 shininess: 30.0
                 attenuation: 0.01
                 position: camera.position
+            }
+
+            SkyBoxReflection {
+                id: reflection
+                skybox: skybox
+                reflectivity: 0.2
             }
 
             SimplexTexture {

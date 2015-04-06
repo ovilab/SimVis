@@ -54,9 +54,14 @@ void SimplexTexture::copyState(ShaderEffect *source)
     m_shadersDirty = source->shadersDirty();
 }
 
-void SimplexTexture::setUniformValues(QOpenGLShaderProgram &shaderProgram)
+void SimplexTexture::beforeRendering(QOpenGLShaderProgram &shaderProgram)
 {
     shaderProgram.setUniformValue("cp_simplexTextureScale", m_scale);
+}
+
+void SimplexTexture::afterRendering(QOpenGLShaderProgram &shaderProgram)
+{
+
 }
 
 float SimplexTexture::scale() const

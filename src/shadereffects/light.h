@@ -6,7 +6,7 @@
 #include <QColor>
 #include <QVector3D>
 
-class DefaultLight : public ShaderEffect
+class Light : public ShaderEffect
 {
     Q_OBJECT
     Q_PROPERTY(bool ambient READ ambient WRITE setAmbient NOTIFY ambientChanged)
@@ -20,6 +20,7 @@ class DefaultLight : public ShaderEffect
     Q_PROPERTY(float specularIntensity READ specularIntensity WRITE setSpecularIntensity NOTIFY specularIntensityChanged)
     Q_PROPERTY(float shininess READ shininess WRITE setShininess NOTIFY shininessChanged)
     Q_PROPERTY(float attenuation READ attenuation WRITE setAttenuation NOTIFY attenuationChanged)
+    Q_PROPERTY(float gamma READ gamma WRITE setGamma NOTIFY gammaChanged)
     Q_PROPERTY(QVector3D position READ position WRITE setPosition NOTIFY positionChanged)
 
 public:
@@ -28,8 +29,9 @@ public:
     QString vertexShaderDefines() override;
     QString fragmentShaderLibrary() override;
     QString vertexShaderLibrary() override;
-    DefaultLight *clone() override;
-    void setUniformValues(QOpenGLShaderProgram &shaderProgram) override;
+    Light *clone() override;
+    void beforeRendering(QOpenGLShaderProgram &shaderProgram) override;
+    void afterRendering(QOpenGLShaderProgram &shaderProgram) override;
     void copyState(ShaderEffect *source) override;
     QColor ambientColor() const;
     QColor diffuseColor() const;
@@ -43,6 +45,8 @@ public:
     bool ambient() const;
     bool diffuse() const;
     bool specular() const;
+    float gamma() const;
+    void setLightId(int id);
 
 public slots:
     void setAmbientColor(QColor arg);
@@ -57,6 +61,7 @@ public slots:
     void setAmbient(bool arg);
     void setDiffuse(bool arg);
     void setSpecular(bool arg);
+    void setGamma(float arg);
 
 signals:
     void ambientColorChanged(QColor arg);
@@ -71,6 +76,7 @@ signals:
     void ambientChanged(bool arg);
     void diffuseChanged(bool arg);
     void specularChanged(bool arg);
+    void gammaChanged(float arg);
 
 private:
     QColor m_ambientColor;
@@ -82,6 +88,8 @@ private:
     float m_specularIntensity = 0.1;
     float m_shininess = 30.0;
     float m_attenuation = 0.01;
+    float m_gamma = 2.0;
+    int   m_lightId = -1;
     bool m_ambient = true;
     bool m_diffuse = true;
     bool m_specular = true;

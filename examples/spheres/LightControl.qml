@@ -4,7 +4,7 @@ import SimVis 1.0
 
 Rectangle {
     id: lightControlRoot
-    property DefaultLight light
+    property Light light
     width: 320
     height: sliders.height + okButton.height + 10
     color: "#ffffff"
@@ -31,10 +31,12 @@ Rectangle {
             id: ambientIntensity
             anchors.left: ambient.right
             anchors.leftMargin: 5
-            maximumValue: 1
+            maximumValue: 0.3
             minimumValue: 0
             value: light.ambientIntensity
-            onValueChanged: light.ambientIntensity = value
+            onValueChanged: {
+                light.ambientIntensity = value
+            }
         }
 
         CheckBox {
@@ -54,7 +56,9 @@ Rectangle {
             maximumValue: 1.0
             minimumValue: 0.0
             value: light.diffuseIntensity
-            onValueChanged: light.diffuseIntensity = value
+            onValueChanged: {
+                light.diffuseIntensity = value
+            }
         }
 
         CheckBox {
@@ -113,6 +117,27 @@ Rectangle {
             minimumValue: 0.0
             value: 1000.0*light.attenuation
             onValueChanged: light.attenuation = 0.001*value
+        }
+
+        Label {
+            id: gamma
+            width: ambient.width
+            anchors.top: attenuation.bottom
+            text: "Gamma"
+        }
+
+        Slider {
+            id: gammaValue
+            anchors.top: gamma.top
+            anchors.left: gamma.right
+            anchors.leftMargin: 5
+            height: 22
+            maximumValue: 3.0
+            minimumValue: 0.0
+            value: light.gamma
+            onValueChanged: {
+                if(light != null) light.gamma = value
+            }
         }
     }
 

@@ -1,3 +1,4 @@
+// BEGIN simplex2.glsl
 //
 // GLSL textureless classic 4D noise "cnoise",
 // with an RSL-style periodic variant "pnoise".
@@ -88,3 +89,4 @@ highp float snoise(highp vec2 v)
   return 130.0 * dot(m, g);
 }
 #endif
+// END simplex2.glsl

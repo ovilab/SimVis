@@ -93,7 +93,7 @@ void PointsRenderer::render()
 
     // Draw cube geometry using indices from VBO 1
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
-    glPointSize(m_pointSize);
+    glEnable(GL_PROGRAM_POINT_SIZE);
 #endif
     glDrawArrays(GL_POINTS, 0, m_vertexCount);
 
@@ -114,20 +114,16 @@ void PointsRenderer::uploadVBO(Points *points)
 void PointsRenderer::beforeLinkProgram()
 {
     setShaderFromSourceCode(QOpenGLShader::Vertex,
-                        #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
-                                      "uniform highp float pointSize;\n"
-                        #endif
-                                      "attribute highp vec4 a_position;\n"
-                                      "void main() {\n"
-                        #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+                            "uniform highp float pointSize;\n"
+                            "attribute highp vec4 a_position;\n"
+                            "void main() {\n"
                             "    gl_PointSize = 10.0;\n"
-                        #endif
-                                      "    gl_Position = cp_modelViewProjectionMatrix*a_position;\n"
-                                      "}");
+                            "    gl_Position = cp_modelViewProjectionMatrix*a_position;\n"
+                            "}");
 
     setShaderFromSourceCode(QOpenGLShader::Fragment,
-                                      "uniform highp vec4 color;"
-                                      "void main() {\n"
-                                      "    gl_FragColor = color;\n"
-                                      "}");
+                            "uniform highp vec4 color;"
+                            "void main() {\n"
+                            "    gl_FragColor = color;\n"
+                            "}");
 }
