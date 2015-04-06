@@ -36,9 +36,14 @@ void SkyBoxRenderer::uploadTexture()
         m_texture = 0;
     }
     QStringList fileAppendNames;
-    fileAppendNames << "_positiveX" << "_negativeX" << "_positiveY" << "_negativeY" << "_positiveZ" << "_negativeZ";
+    fileAppendNames << "_positiveX" << "_negativeX"
+                    << "_positiveY" << "_negativeY"
+                    << "_positiveZ" << "_negativeZ";
+
     QList<QOpenGLTexture::CubeMapFace> faces;
-    faces << QOpenGLTexture::CubeMapPositiveX << QOpenGLTexture::CubeMapNegativeX << QOpenGLTexture::CubeMapPositiveY << QOpenGLTexture::CubeMapNegativeY << QOpenGLTexture::CubeMapPositiveZ << QOpenGLTexture::CubeMapNegativeZ;
+    faces << QOpenGLTexture::CubeMapPositiveX << QOpenGLTexture::CubeMapNegativeX
+          << QOpenGLTexture::CubeMapPositiveY << QOpenGLTexture::CubeMapNegativeY
+          << QOpenGLTexture::CubeMapPositiveZ << QOpenGLTexture::CubeMapNegativeZ;
 
     QFileInfo f(m_textureFileBase);
     QString baseName = f.absolutePath()+f.baseName();
