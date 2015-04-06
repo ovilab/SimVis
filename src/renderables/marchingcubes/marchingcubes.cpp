@@ -283,6 +283,7 @@ void MarchingCubesRenderer::render()
     glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(MarchingCubesVBOData), (const void *)offset);
 
     glFunctions()->glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
     // Draw cube geometry using indices from VBO 1
     if(m_mode == MarchingCubes::FRONT_AND_BACK || m_mode == MarchingCubes::FRONT) {
         glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
