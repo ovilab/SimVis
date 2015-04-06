@@ -11,26 +11,6 @@ SkyBoxRenderer *SkyBox::createRenderer()
 
 void SkyBoxRenderer::uploadTexture()
 {
-//    glGenTextures(1, &m_textureId);
-//    glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureObj);
-//    QStringList fileAppendNames;
-//    fileAppendNames << "_positiveX" << "_negativeX" << "_positiveY" << "_negativeY" << "_positiveZ" << "_negativeZ";
-
-//    for(int i=0; i<6; i++) {
-//        QString imageFileName = QString("%1%2.%3").arg(baseName, fileAppendNames[i], suffix);
-
-//        QImage image(imageFileName);
-
-//        if(image.isNull()) {
-//            qDebug() << "Error, file " << imageFileName << " does not exist, aborting!";
-//            exit(1);
-//        }
-//        image = image.convertToFormat(QImage::Format_RGBA8888);
-//        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, 4, image.width(), image.height(), 0,
-//                    GL_RGBA, GL_UNSIGNED_BYTE, image.bits());
-//    }
-
-//    return;
     if(m_texture) {
         m_texture->destroy();
         m_texture = 0;
