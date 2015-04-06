@@ -61,8 +61,8 @@ void SkyBoxRenderer::uploadTexture()
             m_texture->bind();
         }
 
-        glFunctions()->glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, image.width(), image.height(), 0,
-                      GL_RGBA, GL_UNSIGNED_BYTE, image.bits());
+        m_texture->setData(0,0,QOpenGLTexture::CubeMapFace(QOpenGLTexture::CubeMapPositiveX + i),
+                           QOpenGLTexture::RGBA, QOpenGLTexture::UInt8, image.bits());
 
     }
 
