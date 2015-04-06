@@ -207,8 +207,8 @@ void SpheresRenderer::render()
     int texcoordLocation = program().attributeLocation("a_texcoord");
     program().enableAttributeArray(texcoordLocation);
     glFunctions()->glVertexAttribPointer(texcoordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(SphereVBOData), (const void *)offset);
-
     // Draw cube geometry using indices from VBO 1
+
     glFunctions()->glEnable(GL_DEPTH_TEST);
     glFunctions()->glDepthMask(GL_TRUE);
     glFunctions()->glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
