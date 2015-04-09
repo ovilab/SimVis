@@ -2,6 +2,12 @@
 #include "library.h"
 #include "input.h"
 #include "atom.h"
+#include "domain.h"
+#include "update.h"
+#include "integrate.h"
+#include "comm.h"
+#include "neighbor.h"
+#include "modify.h"
 #include <string>
 #include <sstream>
 #include <SimVis/Spheres>
@@ -25,7 +31,7 @@ MyWorker::MyWorker() {
                  "atom_modify	map hash\n"
                  "\n"
                  "lattice		fcc 0.8442\n"
-                 "region		box block 0 10 0 10 0 10\n"
+                 "region		box block 0 20 0 20 0 20\n"
                  "create_box	1 box\n"
                  "create_atoms	1 box\n"
                  "mass		1 1.0\n"
@@ -66,11 +72,16 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
     if(billboards) {
         billboards->positions().resize(lammps->atom->natoms);
         QVector<QVector3D> &positions = billboards->positions();
-
+        double position[3];
         for(unsigned int i=0; i<lammps->atom->natoms; i++) {
-            positions[i][0] = lammps->atom->x[i][0];
-            positions[i][1] = lammps->atom->x[i][1];
-            positions[i][2] = lammps->atom->x[i][2];
+            position[0] = lammps->atom->x[i][0];
+            position[1] = lammps->atom->x[i][1];
+            position[2] = lammps->atom->x[i][2];
+            lammps->domain->remap(position);
+
+            positions[i][0] = position[0];
+            positions[i][1] = position[1];
+            positions[i][2] = position[2];
         }
         return;
     }
@@ -78,7 +89,7 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
 
 void MyWorker::work()
 {
-    lammps->input->one("run 1");
+    lammps->input->one("run 1 pre no post no");
 }
 
 MyWorker *MySimulator::createWorker()
