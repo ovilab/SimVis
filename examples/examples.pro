@@ -1,5 +1,6 @@
 TEMPLATE = subdirs
 SUBDIRS += spheres \
     simple \
-    marchingcubes
+    marchingcubes \
+    lammps
 CONFIG += ordered

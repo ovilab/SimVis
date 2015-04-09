@@ -29,12 +29,11 @@ void SkyBoxRenderer::uploadTexture()
     QString baseName = f.absolutePath()+f.baseName();
     QString suffix = f.suffix();
     m_texture = new QOpenGLTexture(QOpenGLTexture::TargetCubeMap);
-    if(defined(Q_OS_IOS)) {
+#if defined(Q_OS_IOS)
         m_texture->setFormat(QOpenGLTexture::RGBAFormat);
-    } else {
+#else
         m_texture->setFormat(QOpenGLTexture::RGBA8_UNorm);
-    }
-
+#endif
 
     for(int i=0; i<6; i++) {
         QString imageFileName = QString("%1%2.%3").arg(baseName, fileAppendNames[i], suffix);
