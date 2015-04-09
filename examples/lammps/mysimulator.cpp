@@ -31,7 +31,7 @@ MyWorker::MyWorker() {
                  "atom_modify	map hash\n"
                  "\n"
                  "lattice		fcc 0.8442\n"
-                 "region		box block 0 20 0 20 0 20\n"
+                 "region		box block 0 12 0 12 0 12\n"
                  "create_box	1 box\n"
                  "create_atoms	1 box\n"
                  "mass		1 1.0\n"
@@ -79,9 +79,9 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
             position[2] = lammps->atom->x[i][2];
             lammps->domain->remap(position);
 
-            positions[i][0] = position[0];
-            positions[i][1] = position[1];
-            positions[i][2] = position[2];
+            positions[i][0] = position[0] - lammps->domain->prd_half[0];
+            positions[i][1] = position[1] - lammps->domain->prd_half[0];
+            positions[i][2] = position[2] - lammps->domain->prd_half[0];
         }
         return;
     }
