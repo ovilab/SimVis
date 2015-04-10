@@ -24,6 +24,16 @@ QVector3D Spheres::vectorFromColor(const QColor &color)
 {
     return QVector3D(color.redF(), color.greenF(), color.blueF());
 }
+QVector<QColor> &Spheres::colors()
+{
+    return m_colors;
+}
+
+void Spheres::setColors(const QVector<QColor> &colors)
+{
+    m_colors = colors;
+}
+
 
 QVector<QVector3D> &Spheres::positions()
 {
@@ -87,6 +97,7 @@ void SpheresRenderer::uploadVBOs(Spheres* spheres)
 
     double scale = spheres->scale();
     QVector<QVector3D>& positions = spheres->m_positions;
+    QVector<QColor>& colors = spheres->m_colors;
     QVector<SphereVBOData>& vertices = spheres->m_vertices;
     QVector<GLuint>& indices = spheres->m_indices;
     QVector3D color = spheres->vectorFromColor(spheres->color());
@@ -102,7 +113,7 @@ void SpheresRenderer::uploadVBOs(Spheres* spheres)
     int numberOfVertices = positions.size()*4;
     vertices.resize(numberOfVertices);
     indices.resize(6*positions.size());
-
+    bool individualColors = colors.size() == positions.size();
     for(auto i=0; i<positions.size(); i++) {
         QVector3D &position = positions[i];
 
@@ -133,7 +144,9 @@ void SpheresRenderer::uploadVBOs(Spheres* spheres)
         vertices[4*i + 3].position[1] += ul[1];
         vertices[4*i + 3].position[2] += ul[2];
         vertices[4*i + 3].textureCoord= QVector2D(0,0);
-
+        if(individualColors) {
+            color = QVector3D(colors[i].redF(), colors[i].greenF(), colors[i].blueF());
+        }
         vertices[4*i + 0].color = color;
         vertices[4*i + 1].color = color;
         vertices[4*i + 2].color = color;
