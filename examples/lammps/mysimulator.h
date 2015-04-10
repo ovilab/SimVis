@@ -20,6 +20,8 @@ private:
     virtual void work() override;
     unsigned int m_timestepsSinceLastPreRun = 0;
     unsigned int m_lastPreRun = 0;
+    bool m_discoMode = false;
+
     QVector<QString> m_queuedCommands;
     void runCommands(const char *commands);
     void runCommand(const char *command);
@@ -27,12 +29,35 @@ private:
 
 class MySimulator : public Simulator
 {
+    Q_OBJECT
+    Q_PROPERTY(bool discoMode READ discoMode WRITE setDiscoMode NOTIFY discoModeChanged)
+
 public:
     MySimulator();
     ~MySimulator();
 
     // Simulator interface
+    bool discoMode() const
+    {
+        return m_discoMode;
+    }
+
+public slots:
+    void setDiscoMode(bool arg)
+    {
+        if (m_discoMode == arg)
+            return;
+
+        m_discoMode = arg;
+        emit discoModeChanged(arg);
+    }
+
+signals:
+    void discoModeChanged(bool arg);
+
 protected:
+    bool m_discoMode = false;
+
     virtual MyWorker *createWorker() override;
 };
 

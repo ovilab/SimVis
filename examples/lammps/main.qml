@@ -9,7 +9,7 @@ import SimVis 1.0
 
 ApplicationWindow {
     id: applicationRoot
-    title: qsTr("Footballs in a harmonic oscillator - SimVis example")
+    title: qsTr("Lammps diffusion demo")
     width: 1650
     height: 900
     visible: true
@@ -17,6 +17,8 @@ ApplicationWindow {
     MySimulator {
         id: simulator
     }
+
+
 
     Visualizer {
         id: visualizer
@@ -92,6 +94,27 @@ ApplicationWindow {
         }
         Label {
             text: qsTr("Blur radius: %1").arg(blurRadiusSlider.value.toFixed(2))
+        }
+    }
+
+    Item {
+        x: 0.5*(parent.width - width)
+        width: discoMode.width
+        opacity: 0.9
+
+        Button {
+            id: discoMode
+            anchors.left: parent.left
+            anchors.leftMargin: 3
+            text: "Disco"
+            onClicked: {
+                simulator.discoMode = !simulator.discoMode
+                if(simulator.discoMode) {
+                    text = "Diffusion"
+                } else {
+                    text = "Disco"
+                }
+            }
         }
     }
 
