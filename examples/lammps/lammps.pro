@@ -571,4 +571,7 @@ HEADERS += \
     write_dump.h \
     write_restart.h
 
-DISTFILES +=
+DISTFILES += \
+    LightControl.qml \
+    RenderControl.qml \
+    SimulatorControl.qml

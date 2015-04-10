@@ -1,16 +1,15 @@
 #include "mysimulator.h"
 #include "library.h"
-#include "input.h"
 #include "atom.h"
 #include "domain.h"
 #include "update.h"
-#include "integrate.h"
-#include "comm.h"
-#include "neighbor.h"
-#include "modify.h"
 #include <string>
 #include <sstream>
 #include <SimVis/Spheres>
+#include <QUrl>
+#include <QString>
+#include <QQmlFile>
+
 using std::string;
 
 MySimulator::MySimulator()
@@ -26,27 +25,13 @@ MySimulator::~MySimulator()
 MyWorker::MyWorker() {
     lammps_open_no_mpi(0, 0, (void**)&lammps);
 
-    string cmd = "units		lj\n"
-                 "atom_style	atomic\n"
-                 "atom_modify	map hash\n"
-                 "\n"
-                 "lattice		fcc 0.8442\n"
-                 "region		box block 0 12 0 12 0 12\n"
-                 "create_box	1 box\n"
-                 "create_atoms	1 box\n"
-                 "mass		1 1.0\n"
-                 "\n"
-                 "velocity	all create 1.44 87287 loop geom\n"
-                 "\n"
-                 "pair_style	lj/cut 2.5\n"
-                 "pair_coeff	1 1 1.0 1.0 2.5\n"
-                 "\n"
-                 "neighbor	0.3 bin\n"
-                 "neigh_modify	delay 0 every 20 check no\n"
-                 "\n"
-                 "fix		1 all nve\n";
-    runCommands(cmd.c_str());
-    lammps->input->one("run 1");
+    QFile file(":/in.lj");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "Could not open file: " << file.fileName();
+    }
+    QString content = file.readAll();
+    runCommands(content.toStdString().c_str());
+    // runCommand("run 1");
 }
 
 void MyWorker::runCommands(const char *commands) {
@@ -56,9 +41,15 @@ void MyWorker::runCommands(const char *commands) {
     if (commands != NULL)
     {
         while(std::getline(ss,to,'\n')){
-            lammps->input->one(to.c_str());
+            runCommand(to.c_str());
         }
     }
+}
+
+void MyWorker::runCommand(const char *command)
+{
+    // qDebug() << command;
+    lammps_command((void*)lammps, (char*) command);
 }
 
 void MyWorker::synchronizeSimulator(Simulator *simulator)
@@ -68,10 +59,10 @@ void MyWorker::synchronizeSimulator(Simulator *simulator)
 
 void MyWorker::synchronizeRenderer(Renderable *renderableObject)
 {
-    Spheres* billboards = qobject_cast<Spheres*>(renderableObject);
-    if(billboards) {
-        billboards->positions().resize(lammps->atom->natoms);
-        QVector<QVector3D> &positions = billboards->positions();
+    Spheres* spheres = qobject_cast<Spheres*>(renderableObject);
+    if(spheres) {
+        spheres->positions().resize(lammps->atom->natoms);
+        QVector<QVector3D> &positions = spheres->positions();
         double position[3];
         for(unsigned int i=0; i<lammps->atom->natoms; i++) {
             position[0] = lammps->atom->x[i][0];
@@ -89,7 +80,20 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
 
 void MyWorker::work()
 {
-    lammps->input->one("run 1 pre no post no");
+//    if( (m_timestepsSinceLastPreRun % 100) == 0) {
+//        for(QString &command : m_queuedCommands) {
+//            lammps_command((void*)lammps, (char*)command.toStdString().c_str());
+//        }
+
+//        m_lastPreRun = lammps->update->ntimestep;
+//        QString cmd = QString("run 1 start %1 stop %2").arg(m_lastPreRun).arg(m_lastPreRun+100);
+
+//        runCommand(cmd.toStdString().c_str());
+//    } else {
+//        QString cmd = QString("run 1 pre no post no start %1 stop %2").arg(m_lastPreRun).arg(m_lastPreRun+100);
+//        runCommand(cmd.toStdString().c_str());
+//    }
+    runCommand("run 1 pre no post no");
 }
 
 MyWorker *MySimulator::createWorker()

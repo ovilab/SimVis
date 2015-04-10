@@ -24,7 +24,7 @@ ApplicationWindow {
         height: applicationRoot.height - row1.height
         simulator: simulator
         camera: camera
-        backgroundColor: "#fff"
+        backgroundColor: "#111"
         navigator: navigator
 
         TrackballNavigator {
@@ -36,8 +36,8 @@ ApplicationWindow {
         Spheres {
             id: spheres
             visible: true
-            scale: 0.1
-            color: "#ff17e6"
+            scale: 0.5
+            color: "pink"
 
             Light {
                 id: light
@@ -94,4 +94,29 @@ ApplicationWindow {
             text: qsTr("Blur radius: %1").arg(blurRadiusSlider.value.toFixed(2))
         }
     }
+
+//    LightControl {
+//        id: lightControl
+//        light: light
+//        x: applicationRoot.width*0.5 - width*0.5
+//        y: applicationRoot.height*0.5 - height*0.5
+//        visible: false
+//    }
+
+//    SimulatorControl {
+//        id: simulatorControl
+//        simulator: simulator
+//        x: applicationRoot.width*0.5 - width*0.5
+//        y: applicationRoot.height*0.5 - height*0.5
+//        visible: false
+//    }
+
+//    RenderControl {
+//        id: renderControl
+//        simplexBump: simplexBump
+//        spheres: spheres
+//        x: applicationRoot.width*0.5 - width*0.5
+//        y: applicationRoot.height*0.5 - height*0.5
+//        visible: false
+//    }
 }
