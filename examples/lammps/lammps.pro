@@ -268,7 +268,9 @@ SOURCES += \
     lammps/write_data.cpp \
     lammps/write_dump.cpp \
     lammps/write_restart.cpp \
-    lammps/mpi.c
+    lammps/mpi.c \
+    simulations/simulation.cpp \
+    simulations/lennardjonescrystal.cpp
 
 RESOURCES += qml.qrc
 
@@ -569,7 +571,10 @@ HEADERS += \
     lammps/version.h \
     lammps/write_data.h \
     lammps/write_dump.h \
-    lammps/write_restart.h
+    lammps/write_restart.h \
+    simulations/simulation.h \
+    simulations/lennardjonescrystal.h \
+    simulations/simulations.h
 
 DISTFILES += \
     LightControl.qml \

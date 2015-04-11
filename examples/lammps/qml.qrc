@@ -3,6 +3,7 @@
         <file>main.qml</file>
         <file>in.bulkWater</file>
         <file>water.data</file>
-        <file>in.lj</file>
+        <file>in.lennardjonesdiffusion</file>
+        <file>in.lennardjonescrystal</file>
     </qresource>
 </RCC>

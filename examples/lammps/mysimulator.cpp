@@ -27,6 +27,11 @@ bool MySimulator::discoMode() const
     return m_discoMode;
 }
 
+int MySimulator::simulationSpeed() const
+{
+    return m_simulationSpeed;
+}
+
 void MySimulator::setDiscoMode(bool arg)
 {
     if (m_discoMode == arg)
@@ -39,6 +44,15 @@ void MySimulator::setDiscoMode(bool arg)
 void MySimulator::loadSimulation(QString simulation)
 {
 
+}
+
+void MySimulator::setSimulationSpeed(int arg)
+{
+    if (m_simulationSpeed == arg)
+        return;
+
+    m_simulationSpeed = arg;
+    emit simulationSpeedChanged(arg);
 }
 
 void MyWorker::loadSimulation(QString inputScript) {
@@ -57,7 +71,7 @@ void MyWorker::loadSimulation(QString inputScript) {
 }
 
 MyWorker::MyWorker() {
-    loadSimulation(":/in.lj");
+    loadSimulation(":/in.lennardjonesdiffusion");
 }
 
 void MyWorker::runCommands(const char *commands) {
@@ -87,6 +101,7 @@ void MyWorker::synchronizeSimulator(Simulator *simulator)
 {
     MySimulator *mySimulator = qobject_cast<MySimulator*>(simulator);
     m_discoMode = mySimulator->discoMode();
+    m_simulationSpeed = mySimulator->simulationSpeed();
 }
 
 void MyWorker::synchronizeRenderer(Renderable *renderableObject)
@@ -138,8 +153,7 @@ void MyWorker::work()
     //        QString cmd = QString("run 1 pre no post no start %1 stop %2").arg(m_lastPreRun).arg(m_lastPreRun+100);
     //        runCommand(cmd.toStdString().c_str());
     //    }
-
-    runCommand("run 1 pre no post no");
+    runCommand(QString("run %1 pre no post no").arg(m_simulationSpeed).toStdString().c_str());
 }
 
 MyWorker *MySimulator::createWorker()

@@ -84,14 +84,15 @@ ApplicationWindow {
         spacing: 10
 
         Slider {
-            id: blurRadiusSlider
-            minimumValue: 0.0
-            maximumValue: 100.0
-            value: 0.0
-            onValueChanged: blurEffect.radius = value
+            id: simulationSpeedSlider
+            minimumValue: 1
+            maximumValue: 10
+            stepSize: 1
+            value: 1
+            onValueChanged: simulator.simulationSpeed = value
         }
         Label {
-            text: qsTr("Blur radius: %1").arg(blurRadiusSlider.value.toFixed(2))
+            text: qsTr("Simulation speed: %1").arg(simulator.simulationSpeed.toFixed(0))
         }
     }
 
