@@ -1,9 +1,8 @@
 #include "mysimulator.h"
-#include "library.h"
-#include "atom.h"
-#include "domain.h"
-#include "update.h"
-#include "group.h"
+#include "lammps/library.h"
+#include "lammps/atom.h"
+#include "lammps/domain.h"
+#include "lammps/update.h"
 #include <string>
 #include <sstream>
 #include <SimVis/Spheres>
@@ -19,6 +18,25 @@ MySimulator::MySimulator()
 }
 
 MySimulator::~MySimulator()
+{
+
+}
+
+bool MySimulator::discoMode() const
+{
+    return m_discoMode;
+}
+
+void MySimulator::setDiscoMode(bool arg)
+{
+    if (m_discoMode == arg)
+        return;
+
+    m_discoMode = arg;
+    emit discoModeChanged(arg);
+}
+
+void MySimulator::loadSimulation(QString simulation)
 {
 
 }

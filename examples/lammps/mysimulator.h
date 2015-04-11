@@ -1,9 +1,10 @@
 #ifndef MYSIMULATOR_H
 #define MYSIMULATOR_H
 #include <SimVis/Simulator>
-#include "mpi.h"
-#include "lammps.h"
-
+#include <functional>
+#include "lammps/mpi.h"
+#include "lammps/lammps.h"
+using std::function;
 using namespace LAMMPS_NS;
 
 class MyWorker : public SimulatorWorker
@@ -13,11 +14,12 @@ public:
     MyWorker();
 private:
     LAMMPS *lammps = 0;
+
     // SimulatorWorker interface
-private:
     virtual void synchronizeSimulator(Simulator *simulator) override;
     virtual void synchronizeRenderer(Renderable *renderableObject) override;
     virtual void work() override;
+    function<void(QVector<QColor> &colors, LAMMPS *lammps)> m_colorPicker = 0;
     unsigned int m_timestepsSinceLastPreRun = 0;
     unsigned int m_lastPreRun = 0;
     bool m_discoMode = false;
@@ -38,26 +40,18 @@ public:
     ~MySimulator();
 
     // Simulator interface
-    bool discoMode() const
-    {
-        return m_discoMode;
-    }
+    bool discoMode() const;
 
 public slots:
-    void setDiscoMode(bool arg)
-    {
-        if (m_discoMode == arg)
-            return;
-
-        m_discoMode = arg;
-        emit discoModeChanged(arg);
-    }
+    void setDiscoMode(bool arg);
+    void loadSimulation(QString simulation);
 
 signals:
     void discoModeChanged(bool arg);
 
 protected:
     bool m_discoMode = false;
+    bool m_willLoadSimulation = false;
 
     virtual MyWorker *createWorker() override;
 };
