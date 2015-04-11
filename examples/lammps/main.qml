@@ -18,8 +18,6 @@ ApplicationWindow {
         id: simulator
     }
 
-
-
     Visualizer {
         id: visualizer
         width: applicationRoot.width

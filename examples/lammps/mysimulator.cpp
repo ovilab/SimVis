@@ -23,16 +23,23 @@ MySimulator::~MySimulator()
 
 }
 
-MyWorker::MyWorker() {
-    lammps_open_no_mpi(0, 0, (void**)&lammps);
+void MyWorker::loadSimulation(QString inputScript) {
+    if(lammps) {
+        lammps_close((void*)lammps);
+        lammps = 0;
+    }
 
-    QFile file(":/in.lj");
+    lammps_open_no_mpi(0, 0, (void**)&lammps);
+    QFile file(inputScript);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Could not open file: " << file.fileName();
     }
     QString content = file.readAll();
     runCommands(content.toStdString().c_str());
-    // runCommand("run 1");
+}
+
+MyWorker::MyWorker() {
+    loadSimulation(":/in.lj");
 }
 
 void MyWorker::runCommands(const char *commands) {
@@ -49,7 +56,12 @@ void MyWorker::runCommands(const char *commands) {
 
 void MyWorker::runCommand(const char *command)
 {
-    // qDebug() << command;
+    if(lammps == 0) {
+        qDebug() << "Warning, trying to run a LAMMPS command with no LAMMPS object. You need to load a simulation first.";
+        qDebug() << "Command: " << command;
+        return;
+    }
+
     lammps_command((void*)lammps, (char*) command);
 }
 
@@ -108,6 +120,7 @@ void MyWorker::work()
     //        QString cmd = QString("run 1 pre no post no start %1 stop %2").arg(m_lastPreRun).arg(m_lastPreRun+100);
     //        runCommand(cmd.toStdString().c_str());
     //    }
+
     runCommand("run 1 pre no post no");
 }
 

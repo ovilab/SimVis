@@ -25,6 +25,7 @@ private:
     QVector<QString> m_queuedCommands;
     void runCommands(const char *commands);
     void runCommand(const char *command);
+    void loadSimulation(QString inputScript);
 };
 
 class MySimulator : public Simulator
