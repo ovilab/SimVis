@@ -3,7 +3,8 @@
 LennardJonesCrystal::LennardJonesCrystal()
 {
     m_simulationId = "lennardjonescrystal";
-    m_inputScriptFile = "in.lennardjonescrystal";
+    m_inputScriptFile = ":/in.lennardjonescrystal";
+    setColorEvaluator();
 }
 
 LennardJonesCrystal::~LennardJonesCrystal()

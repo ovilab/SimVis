@@ -270,7 +270,8 @@ SOURCES += \
     lammps/write_restart.cpp \
     lammps/mpi.c \
     simulations/simulation.cpp \
-    simulations/lennardjonescrystal.cpp
+    simulations/lennardjonescrystal.cpp \
+    simulations/lennardjonesdiffusion.cpp
 
 RESOURCES += qml.qrc
 
@@ -574,9 +575,7 @@ HEADERS += \
     lammps/write_restart.h \
     simulations/simulation.h \
     simulations/lennardjonescrystal.h \
-    simulations/simulations.h
+    simulations/simulations.h \
+    simulations/lennardjonesdiffusion.h
 
-DISTFILES += \
-    LightControl.qml \
-    RenderControl.qml \
-    SimulatorControl.qml
+DISTFILES +=

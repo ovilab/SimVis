@@ -98,22 +98,23 @@ ApplicationWindow {
 
     Item {
         x: 0.5*(parent.width - width)
-        width: discoMode.width
+        width: buttonDiffusion.width + buttonCrystal.width
         opacity: 0.9
 
         Button {
-            id: discoMode
+            id: buttonDiffusion
             anchors.left: parent.left
             anchors.leftMargin: 3
-            text: "Disco"
-            onClicked: {
-                simulator.discoMode = !simulator.discoMode
-                if(simulator.discoMode) {
-                    text = "Diffusion"
-                } else {
-                    text = "Disco"
-                }
-            }
+            text: "Diffusion"
+            onClicked: simulator.loadSimulation("lennardjonesdiffusion")
+        }
+
+        Button {
+            id: buttonCrystal
+            anchors.left: buttonDiffusion.right
+            anchors.leftMargin: 3
+            text: "Crystal"
+            onClicked: simulator.loadSimulation("lennardjonescrystal")
         }
     }
 

@@ -22,7 +22,7 @@ private:
     virtual void synchronizeSimulator(Simulator *simulator) override;
     virtual void synchronizeRenderer(Renderable *renderableObject) override;
     virtual void work() override;
-    function<void(QVector<QColor> &colors, LAMMPS *lammps)> m_colorPicker = 0;
+    Simulation *m_currentSimulation = 0;
     unsigned int m_timestepsSinceLastPreRun = 0;
     unsigned int m_lastPreRun = 0;
     unsigned int m_simulationSpeed = 1;
@@ -31,7 +31,8 @@ private:
     QVector<QString> m_queuedCommands;
     void runCommands(const char *commands);
     void runCommand(const char *command);
-    void loadSimulation(QString inputScript);
+    void loadSimulations();
+    void loadSimulation(QString simulationId);
 };
 
 class MySimulator : public Simulator
@@ -50,7 +51,7 @@ public:
 
 public slots:
     void setDiscoMode(bool arg);
-    void loadSimulation(QString simulation);
+    void loadSimulation(QString simulationId);
     void setSimulationSpeed(int arg);
 
 signals:
@@ -61,8 +62,11 @@ protected:
     bool m_discoMode = false;
     bool m_willLoadSimulation = false;
     int m_simulationSpeed = 1;
+    QString m_simulationIdToLoad;
 
     virtual MyWorker *createWorker() override;
+private:
+    friend class MyWorker;
 };
 
 #endif // MYSIMULATOR_H

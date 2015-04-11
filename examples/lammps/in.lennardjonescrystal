@@ -1,10 +1,11 @@
 units		lj
 atom_style	atomic
+atom_modify	map hash
 
 lattice		fcc 0.8442
 region		box block 0 12 0 12 0 12
 
-create_box	1 system
+create_box	1 box
 create_atoms	1 box
 mass		1 1.0
 
