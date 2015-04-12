@@ -7,6 +7,7 @@
 #include "gashydrates.h"
 #include <QMap>
 #include <QString>
+
 class Crack : public Simulation
 {
 public:

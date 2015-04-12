@@ -79,9 +79,10 @@ void Simulation::setColorEvaluator()
     };
 }
 
-void Simulation::initialize(QString inputScriptFile)
+void Simulation::initialize(QString inputScriptFile, QVector3D deltaPosition)
 {
     m_inputScriptFile = inputScriptFile;
+    m_positionOffset = deltaPosition;
     m_isInitialized = true;
 }
 
@@ -90,9 +91,9 @@ function<void (QVector<QColor> &colors, LAMMPS *lammps)> Simulation::colorEvalua
     return m_colorEvaluator;
 }
 
-QString Simulation::inputScriptFile()
+QVector3D Simulation::positionOffset()
 {
-    return m_inputScriptFile;
+    return m_positionOffset;
 }
 
 void Simulation::runLammpsScript(LAMMPS *lammps)

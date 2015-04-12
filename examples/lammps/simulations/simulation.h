@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <QVector>
+#include <QVector3D>
 #include <QColor>
 #include <QMap>
 #include "lammps/mpi.h"
@@ -22,15 +23,17 @@ protected:
 
     function<void(QVector<QColor> &colors, LAMMPS *lammps)> m_colorEvaluator;
     bool m_isInitialized = false;
+    QVector3D m_positionOffset;
     QString m_inputScriptFile;
     virtual void setColorEvaluator();
-    void initialize(QString inputScriptFile);
+    void initialize(QString inputScriptFile, QVector3D positionOffset = QVector3D(0,0,0));
+
 public:
     Simulation();
     ~Simulation();
     function<void(QVector<QColor> &colors, LAMMPS *lammps)> colorEvaluator();
     QString simulationId();
-    QString inputScriptFile();
+    QVector3D positionOffset();
     void runLammpsScript(LAMMPS *lammps);
 };
 

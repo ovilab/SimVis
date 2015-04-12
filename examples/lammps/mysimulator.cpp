@@ -83,16 +83,16 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
         colors.resize(lammps->atom->natoms);
         positions.resize(lammps->atom->natoms);
         double position[3];
-
+        QVector3D deltaPosition = m_currentSimulation->positionOffset();
         for(unsigned int i=0; i<lammps->atom->natoms; i++) {
             position[0] = lammps->atom->x[i][0];
             position[1] = lammps->atom->x[i][1];
             position[2] = lammps->atom->x[i][2];
             lammps->domain->remap(position);
 
-            positions[i][0] = position[0] - lammps->domain->prd_half[0];
-            positions[i][1] = position[1] - lammps->domain->prd_half[0];
-            positions[i][2] = position[2] - lammps->domain->prd_half[0];
+            positions[i][0] = position[0] - lammps->domain->prd_half[0] + deltaPosition[0];
+            positions[i][1] = position[1] - lammps->domain->prd_half[1] + deltaPosition[1];
+            positions[i][2] = position[2] - lammps->domain->prd_half[2] + deltaPosition[2];
         }
 
         m_currentSimulation->colorEvaluator()(colors, lammps);
