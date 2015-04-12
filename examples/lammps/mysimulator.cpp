@@ -67,6 +67,7 @@ void MyWorker::loadSimulations()
     m_simulations["lennardjonescrystal"] = new LennardJonesCrystal();
     m_simulations["lennardjonesdiffusion"] = new LennardJonesDiffusion();
     m_simulations["bulkwater"] = new BulkWater();
+    m_simulations["gashydrates"] = new GasHydrates();
 }
 
 void MyWorker::synchronizeSimulator(Simulator *simulator)

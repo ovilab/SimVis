@@ -8,5 +8,7 @@
         <file>SimulatorControl.qml</file>
         <file>bulkwater.data</file>
         <file>in.bulkwater</file>
+        <file>gashydrate.data</file>
+        <file>in.gashydrates</file>
     </qresource>
 </RCC>

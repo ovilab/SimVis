@@ -31,7 +31,7 @@ public:
     function<void(QVector<QColor> &colors, LAMMPS *lammps)> colorEvaluator();
     QString simulationId();
     QString inputScriptFile();
-    virtual void runLammpsScript(LAMMPS *lammps);
+    void runLammpsScript(LAMMPS *lammps);
 };
 
 #endif // SIMULATION_H
