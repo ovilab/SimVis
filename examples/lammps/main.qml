@@ -101,37 +101,55 @@ ApplicationWindow {
         width: buttonDiffusion.width + buttonCrystal.width + buttonWater.width + buttonGashydrates.width
         opacity: 0.9
 
-        Button {
-            id: buttonDiffusion
+        Row {
+            id: simulationRow1
             anchors.left: parent.left
-            anchors.leftMargin: 3
-            text: "Diffusion"
-            onClicked: simulator.loadSimulation("lennardjonesdiffusion")
+            anchors.top: parent.top
+            Button {
+                id: buttonDiffusion
+                anchors.leftMargin: 3
+                text: "Diffusion"
+                onClicked: simulator.loadSimulation("lennardjonesdiffusion")
+            }
+
+            Button {
+                id: buttonCrystal
+                anchors.leftMargin: 3
+                text: "Crystal"
+                onClicked: simulator.loadSimulation("lennardjonescrystal")
+            }
+
+            Button {
+                id: buttonWater
+                anchors.leftMargin: 3
+                text: "Water"
+                onClicked: simulator.loadSimulation("bulkwater")
+            }
         }
 
-        Button {
-            id: buttonCrystal
-            anchors.left: buttonDiffusion.right
-            anchors.leftMargin: 3
-            text: "Crystal"
-            onClicked: simulator.loadSimulation("lennardjonescrystal")
+        Row {
+            id: simulationRow2
+            anchors.left: parent.left
+            anchors.top: simulationRow1.bottom
+
+            Button {
+                id: buttonGashydrates
+                anchors.leftMargin: 3
+                text: "Gas hydrates"
+                onClicked: simulator.loadSimulation("gashydrates")
+            }
+
+            Button {
+                id: buttonCrack
+                anchors.leftMargin: 3
+                text: "Crack"
+                onClicked: simulator.loadSimulation("crack")
+            }
         }
 
-        Button {
-            id: buttonWater
-            anchors.left: buttonCrystal.right
-            anchors.leftMargin: 3
-            text: "Water"
-            onClicked: simulator.loadSimulation("bulkwater")
-        }
 
-        Button {
-            id: buttonGashydrates
-            anchors.left: buttonWater.right
-            anchors.leftMargin: 3
-            text: "Gas hydrates"
-            onClicked: simulator.loadSimulation("gashydrates")
-        }
+
+
     }
 
 //    LightControl {

@@ -2,3 +2,4 @@
 #include "lennardjonesdiffusion.h"
 #include "bulkwater.h"
 #include "gashydrates.h"
+#include "crack.h"
