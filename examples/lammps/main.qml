@@ -17,9 +17,16 @@ ApplicationWindow {
     MySimulator {
         id: simulator
         onNewCameraPositionChanged: {
+            upVectorAnimation.from = camera.upVector
             positionAnimation.to = newCameraPosition
             positionAnimation.from = camera.position
+            console.log("Starting animation, old pos: "+positionAnimation.from)
+            console.log("new pos: "+newCameraPosition)
+            console.log("old up: "+upVectorAnimation.from)
+            console.log("new up: "+upVectorAnimation.to)
+
             positionAnimation.start()
+            upVectorAnimation.start()
         }
     }
 
@@ -85,6 +92,16 @@ ApplicationWindow {
         property: "position"
         from: camera.position
         to: simulator.newCameraPosition
+        duration: 700
+        easing.type: Easing.InOutQuad
+    }
+
+    PropertyAnimation {
+        id: upVectorAnimation
+        target: camera
+        property: "upVector"
+        from: camera.upVector
+        to: Qt.vector3d(0, -1, 0)
         duration: 700
         easing.type: Easing.InOutQuad
     }

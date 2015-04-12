@@ -37,9 +37,6 @@ class Camera : public QObject
     Q_PROPERTY(QVector3D viewVector READ viewVector NOTIFY viewVectorChanged)
     Q_PROPERTY(QMatrix4x4 matrix READ matrix NOTIFY matrixChanged)
 
-public slots:
-    void moveCamera(QVector3D position, bool fixedViewCenter);
-
 public:
     //    explicit Camera(QNode *parent = 0);
     explicit Camera(QObject *parent = 0);

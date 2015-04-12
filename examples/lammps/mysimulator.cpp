@@ -102,6 +102,11 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
 
         m_currentSimulation->scaleAndColorEvaluator()(colors, scales, lammps);
 
+//        qDebug() << "Camera position: " << spheres->camera()->position();
+//        qDebug() << "Camera view vector: " << spheres->camera()->viewVector();
+//        qDebug() << "Camera view center: " << spheres->camera()->viewCenter();
+//        qDebug() << "Camera upvector: " << spheres->camera()->upVector();
+
         return;
     }
 }
@@ -166,9 +171,6 @@ void MySimulator::setSimulationSpeed(int arg)
 
 void MySimulator::setNewCameraPosition(QVector3D arg)
 {
-    if (m_newCameraPosition == arg)
-        return;
-
     m_newCameraPosition = arg;
     emit newCameraPositionChanged(arg);
 }
