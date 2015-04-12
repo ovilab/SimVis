@@ -280,9 +280,9 @@ LAMMPS::LAMMPS(int narg, char **arg, MPI_Comm communicator)
     }
     if (logflag == 0) {
       if (helpflag == 0) {
-        universe->ulogfile = 0;//fopen("log.lammps","w");
-        // if (universe->ulogfile == NULL)
-          // error->universe_warn(FLERR,"Cannot open log.lammps for writing");
+        universe->ulogfile = fopen("log.lammps","w");
+        if (universe->ulogfile == NULL)
+          error->universe_warn(FLERR,"Cannot open log.lammps for writing");
       }
     } else if (strcmp(arg[logflag],"none") == 0)
       universe->ulogfile = NULL;

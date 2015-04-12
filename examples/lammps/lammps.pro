@@ -271,7 +271,8 @@ SOURCES += \
     lammps/mpi.c \
     simulations/simulation.cpp \
     simulations/lennardjonescrystal.cpp \
-    simulations/lennardjonesdiffusion.cpp
+    simulations/lennardjonesdiffusion.cpp \
+    simulations/bulkwater.cpp
 
 RESOURCES += qml.qrc
 
@@ -576,6 +577,7 @@ HEADERS += \
     simulations/simulation.h \
     simulations/lennardjonescrystal.h \
     simulations/simulations.h \
-    simulations/lennardjonesdiffusion.h
+    simulations/lennardjonesdiffusion.h \
+    simulations/bulkwater.h
 
 DISTFILES +=

@@ -27,7 +27,7 @@ class Universe : protected Pointers {
   int me,nprocs;          // my place in universe
 
   FILE *uscreen;          // universe screen output
-  FILE *ulogfile = 0;         // universe logfile
+  FILE *ulogfile;         // universe logfile
 
   int existflag;          // 1 if universe exists due to -partition flag
   int nworlds;            // # of worlds in universe

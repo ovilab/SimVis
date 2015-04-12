@@ -9,8 +9,36 @@
 #include <QUrl>
 #include <QString>
 #include <QQmlFile>
+#include <QDir>
+#include <iostream>
+#include <fstream>
+#include <QStandardPaths>
 
 using std::string;
+
+void MyWorker::test() {
+    QString documentsLocation = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory);
+    QString filename=documentsLocation+"test.txt";
+
+    QFile file(filename);
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qDebug() << "Faen...fikk ikke åpnet: "+file.fileName();
+        file.write("hore");
+    } else {
+        qDebug() << "Virket :D :D ";
+        file.write("hore");
+    }
+
+    std::ofstream fil(filename.toStdString(), std::ofstream::out);
+    if(fil.is_open()) {
+        qDebug() << "Filen finnes.";
+    } else {
+        qDebug() << "Filen finnes ikke.";
+    }
+    fil << "yesda";
+    fil.close();
+    exit(1);
+}
 
 void MyWorker::loadSimulation(QString simulationId) {
     auto simulation = m_simulations.find(simulationId);
@@ -18,7 +46,6 @@ void MyWorker::loadSimulation(QString simulationId) {
         qDebug() << "Warning, tried to load simulation "+simulationId+" which does not exist in simulation list.";
         return;
     }
-
     m_currentSimulation = simulation.value();
 
     // Remove old LAMMPS simulator and prepare new, clean simulator
@@ -28,19 +55,12 @@ void MyWorker::loadSimulation(QString simulationId) {
     }
     lammps_open_no_mpi(0, 0, (void**)&lammps);
 
-
-    QFile file(m_currentSimulation->inputScriptFile());
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Could not open file: " << file.fileName();
-        return;
-    }
-    QString content = file.readAll();
-    runCommands(content.toStdString().c_str());
+    m_currentSimulation->runLammpsScript(lammps);
 }
 
 MyWorker::MyWorker() {
     loadSimulations();
-    loadSimulation("lennardjonesdiffusion");
+    loadSimulation("bulkwater");
 }
 
 void MyWorker::runCommands(const char *commands) {
@@ -70,6 +90,7 @@ void MyWorker::loadSimulations()
 {
     m_simulations["lennardjonescrystal"] = new LennardJonesCrystal();
     m_simulations["lennardjonesdiffusion"] = new LennardJonesDiffusion();
+    m_simulations["bulkwater"] = new BulkWater();
 }
 
 void MyWorker::synchronizeSimulator(Simulator *simulator)

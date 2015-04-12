@@ -8,10 +8,11 @@ class LennardJonesDiffusion : public Simulation
 public:
     LennardJonesDiffusion();
     ~LennardJonesDiffusion();
+    virtual void runLammpsScript(LAMMPS *lammps) override;
 
     // Simulation interface
 protected:
-    virtual void setColorEvaluator();
+    virtual void setColorEvaluator() override;
 };
 
 #endif // LENNARDJONESDIFFUSION_H

@@ -6,5 +6,7 @@
         <file>LightControl.qml</file>
         <file>RenderControl.qml</file>
         <file>SimulatorControl.qml</file>
+        <file>bulkwater.data</file>
+        <file>in.bulkwater</file>
     </qresource>
 </RCC>

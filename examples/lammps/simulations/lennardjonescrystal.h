@@ -7,10 +7,11 @@ class LennardJonesCrystal : public Simulation
 public:
     LennardJonesCrystal();
     ~LennardJonesCrystal();
+    virtual void runLammpsScript(LAMMPS *lammps) override;
 
     // Simulation interface
 protected:
-    virtual void setColorEvaluator();
+    virtual void setColorEvaluator() override;
 };
 
 #endif // LENNARDJONESCRYSTAL_H

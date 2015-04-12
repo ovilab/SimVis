@@ -15,6 +15,7 @@ class MyWorker : public SimulatorWorker
     Q_OBJECT
 public:
     MyWorker();
+    void test();
 private:
     LAMMPS *lammps = 0;
 
