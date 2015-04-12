@@ -21,10 +21,10 @@ protected:
     QString copyDataFileToReadablePath(QString filename);
 
     function<void(QVector<QColor> &colors, LAMMPS *lammps)> m_colorEvaluator;
-    QString m_simulationId;
+    bool m_isInitialized = false;
     QString m_inputScriptFile;
-    QMap<QString, QString> m_additionalFiles;
-    virtual void setColorEvaluator() = 0;
+    virtual void setColorEvaluator();
+    void initialize(QString inputScriptFile);
 public:
     Simulation();
     ~Simulation();

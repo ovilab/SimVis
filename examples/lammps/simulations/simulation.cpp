@@ -3,6 +3,16 @@
 #include <QDebug>
 #include <QStandardPaths>
 
+Simulation::Simulation()
+{
+    setColorEvaluator();
+}
+
+Simulation::~Simulation()
+{
+
+}
+
 QString Simulation::readFile(QString filename)
 {
     QFile file(filename);
@@ -17,7 +27,7 @@ QString Simulation::readFile(QString filename)
 void Simulation::runCommand(LAMMPS *lammps, const char *command)
 {
     if(lammps == 0) {
-        qDebug() << "Warning, trying to run a LAMMPS command with no LAMMPS object. You need to load a simulation first.";
+        qDebug() << "Warning, trying to run a LAMMPS command with no LAMMPS object.";
         qDebug() << "Command: " << command;
         return;
     }
@@ -49,24 +59,35 @@ QString Simulation::copyDataFileToReadablePath(QString filename)
     return newFilename;
 }
 
-Simulation::Simulation()
+void Simulation::setColorEvaluator()
 {
+    m_colorEvaluator = [](QVector<QColor> &colors, LAMMPS *lammps) {
+        QColor color1(255.0, 0.0, 0.0);
+        QColor color2(0.0, 255.0, 0.0);
+        QColor color3(0.0, 0.0, 255.0);
+        QColor color4(0.0, 255.0, 255.0);
+        QColor color5(255.0, 255.0, 0.0);
 
+
+        for(unsigned int i=0; i<lammps->atom->natoms; i++) {
+            if(lammps->atom->type[i] == 1) colors[i] = color1;
+            else if(lammps->atom->type[i] == 2) colors[i] = color2;
+            else if(lammps->atom->type[i] == 3) colors[i] = color3;
+            else if(lammps->atom->type[i] == 4) colors[i] = color4;
+            else if(lammps->atom->type[i] == 5) colors[i] = color5;
+        }
+    };
 }
 
-Simulation::~Simulation()
+void Simulation::initialize(QString inputScriptFile)
 {
-
+    m_inputScriptFile = inputScriptFile;
+    m_isInitialized = true;
 }
 
 function<void (QVector<QColor> &colors, LAMMPS *lammps)> Simulation::colorEvaluator()
 {
     return m_colorEvaluator;
-}
-
-QString Simulation::simulationId()
-{
-    return m_simulationId;
 }
 
 QString Simulation::inputScriptFile()
@@ -76,6 +97,11 @@ QString Simulation::inputScriptFile()
 
 void Simulation::runLammpsScript(LAMMPS *lammps)
 {
+    if(!m_isInitialized) {
+        qDebug() << "Warning, trying to run lammps script for a simulation that is not initialized. Remember to call initialize() function in Simulation constructor.";
+        return;
+    }
+
     QString lammpsScript = readFile(m_inputScriptFile);
     std::stringstream ss(lammpsScript.toStdString());
     std::string to;
@@ -99,4 +125,5 @@ void Simulation::runLammpsScript(LAMMPS *lammps)
         }
     }
 }
+
 

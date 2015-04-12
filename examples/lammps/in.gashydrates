@@ -12,9 +12,9 @@ atom_style		full
 
 read_data		gashydrate.data
 
-variable                nx equal 3
-variable                ny equal 3
-variable                nz equal 3
+variable                nx equal 2
+variable                ny equal 2
+variable                nz equal 2
 replicate		${nx} ${ny} ${nz}			
 variable 		Mass equal ${nx}*${ny}*${nz}*18.0154
 variable		Dens equal 10*v_Mass/(vol*6.022)

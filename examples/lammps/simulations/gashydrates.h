@@ -6,7 +6,6 @@ class GasHydrates : public Simulation
 {
 public:
     GasHydrates();
-    ~GasHydrates();
 
     // Simulation interface
 protected:

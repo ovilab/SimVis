@@ -91,8 +91,6 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
         colors.resize(lammps->atom->natoms);
         positions.resize(lammps->atom->natoms);
         double position[3];
-        QColor color1(255.0, 0.0, 0.0);
-        QColor color2(0.0, 255.0, 0.0);
 
         for(unsigned int i=0; i<lammps->atom->natoms; i++) {
             position[0] = lammps->atom->x[i][0];

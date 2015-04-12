@@ -10,5 +10,6 @@
         <file>in.bulkwater</file>
         <file>gashydrate.data</file>
         <file>in.gashydrates</file>
+        <file>in.crack</file>
     </qresource>
 </RCC>

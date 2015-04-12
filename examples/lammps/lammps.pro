@@ -321,7 +321,8 @@ SOURCES += \
     lammps/fix_rigid_nvt_small.cpp \
     lammps/fix_rigid_small.cpp \
     lammps/fix_shake.cpp \
-    simulations/gashydrates.cpp
+    simulations/gashydrates.cpp \
+    simulations/crack.cpp
 
 RESOURCES += qml.qrc
 
@@ -676,6 +677,7 @@ HEADERS += \
     lammps/fix_rigid_nvt_small.h \
     lammps/fix_rigid_small.h \
     lammps/fix_shake.h \
-    simulations/gashydrates.h
+    simulations/gashydrates.h \
+    simulations/crack.h
 
 DISTFILES +=

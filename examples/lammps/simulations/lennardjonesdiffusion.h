@@ -7,11 +7,6 @@ class LennardJonesDiffusion : public Simulation
 {
 public:
     LennardJonesDiffusion();
-    ~LennardJonesDiffusion();
-
-    // Simulation interface
-protected:
-    virtual void setColorEvaluator() override;
 };
 
 #endif // LENNARDJONESDIFFUSION_H

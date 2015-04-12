@@ -6,7 +6,6 @@ class BulkWater : public Simulation
 {
 public:
     BulkWater();
-    ~BulkWater();
 
     // Simulation interface
 protected:

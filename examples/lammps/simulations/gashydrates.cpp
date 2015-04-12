@@ -2,22 +2,13 @@
 
 GasHydrates::GasHydrates()
 {
-    m_simulationId = "gashydrates";
-    m_inputScriptFile = ":/in.gashydrates";
     setColorEvaluator();
+    initialize(":/in.gashydrates");
 }
-
-GasHydrates::~GasHydrates()
-{
-
-}
-
-
 
 void GasHydrates::setColorEvaluator()
 {
     m_colorEvaluator = [](QVector<QColor> &colors, LAMMPS *lammps) {
-        colors.resize(lammps->atom->natoms);
         QColor color1(255.0, 0.0, 0.0);
         QColor color2(255.0, 255.0, 255.0);
         QColor color3(110, 212, 219);

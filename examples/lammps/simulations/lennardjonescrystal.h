@@ -6,7 +6,6 @@ class LennardJonesCrystal : public Simulation
 {
 public:
     LennardJonesCrystal();
-    ~LennardJonesCrystal();
 
     // Simulation interface
 protected:

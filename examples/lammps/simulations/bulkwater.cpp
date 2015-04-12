@@ -7,17 +7,9 @@ using namespace std;
 
 BulkWater::BulkWater()
 {
-    m_simulationId = "bulkwater";
-    m_inputScriptFile = ":/in.bulkwater";
     setColorEvaluator();
+    initialize(":/in.bulkwater");
 }
-
-BulkWater::~BulkWater()
-{
-
-}
-
-
 
 void BulkWater::setColorEvaluator()
 {
