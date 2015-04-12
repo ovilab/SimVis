@@ -37,7 +37,7 @@ void Simulation::runCommand(LAMMPS *lammps, const char *command)
 
 QString Simulation::copyDataFileToReadablePath(QString filename)
 {
-    QFile inFile(":/"+filename);
+    QFile inFile(":/scripts/"+filename);
     if(!inFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Error: could not open file "+inFile.fileName();
         return "";

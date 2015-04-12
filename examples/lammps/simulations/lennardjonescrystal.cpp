@@ -3,7 +3,7 @@
 LennardJonesCrystal::LennardJonesCrystal()
 {
     setScaleAndColorEvaluator();
-    initialize(":/in.lennardjonescrystal");
+    initialize(":/scripts/in.lennardjonescrystal");
 }
 
 void LennardJonesCrystal::setScaleAndColorEvaluator()

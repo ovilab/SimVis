@@ -8,7 +8,7 @@ using namespace std;
 BulkWater::BulkWater()
 {
     setScaleAndColorEvaluator();
-    initialize(":/in.bulkwater");
+    initialize(":/scripts/in.bulkwater");
 }
 
 void BulkWater::setScaleAndColorEvaluator()

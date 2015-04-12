@@ -11,31 +11,31 @@
 class Crack : public Simulation
 {
 public:
-    Crack() { initialize(":/in.crack"); }
+    Crack() { initialize(":/scripts/in.crack"); }
 };
 
 class FlowPoiseuille : public Simulation
 {
 public:
-    FlowPoiseuille() { initialize(":/in.flow.poiseuille"); }
+    FlowPoiseuille() { initialize(":/scripts/in.flow.poiseuille"); }
 };
 
 class FlowCouette : public Simulation
 {
 public:
-    FlowCouette() { initialize(":/in.flow.couette"); }
+    FlowCouette() { initialize(":/scripts/in.flow.couette"); }
 };
 
 class Friction : public Simulation
 {
 public:
-    Friction() { initialize(":/in.friction"); }
+    Friction() { initialize(":/scripts/in.friction"); }
 };
 
 class Obstacle : public Simulation
 {
 public:
-    Obstacle() { initialize(":/in.obstacle"); }
+    Obstacle() { initialize(":/scripts/in.obstacle"); }
 };
 
 QMap<QString, Simulation*> createSimulationObjects();

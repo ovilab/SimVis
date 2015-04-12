@@ -3,7 +3,7 @@
 GasHydrates::GasHydrates()
 {
     setScaleAndColorEvaluator();
-    initialize(":/in.gashydrates");
+    initialize(":/scripts/in.gashydrates");
 }
 
 void GasHydrates::setScaleAndColorEvaluator()

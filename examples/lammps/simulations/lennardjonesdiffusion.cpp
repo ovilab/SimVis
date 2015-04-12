@@ -3,5 +3,5 @@
 LennardJonesDiffusion::LennardJonesDiffusion()
 {
     setScaleAndColorEvaluator();
-    initialize(":/in.lennardjonesdiffusion");
+    initialize(":/scripts/in.lennardjonesdiffusion");
 }
