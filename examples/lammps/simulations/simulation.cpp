@@ -36,7 +36,7 @@ QString Simulation::copyDataFileToReadablePath(QString filename)
     QString content = inFile.readAll();
     inFile.close();
 
-    QString documentsLocation = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory);
+    QString documentsLocation = QStandardPaths::locate(QStandardPaths::TempLocation, QString(), QStandardPaths::LocateDirectory);
     QString newFilename=documentsLocation+filename;
     QFile outFile(newFilename);
     if(!outFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
