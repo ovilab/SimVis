@@ -21,17 +21,17 @@ protected:
     void runCommand(LAMMPS *lammps, const char *command);
     QString copyDataFileToReadablePath(QString filename);
 
-    function<void(QVector<QColor> &colors, LAMMPS *lammps)> m_colorEvaluator;
+    function<void (QVector<QColor> &colors, QVector<float> &scales, LAMMPS *lammps)> m_scaleAndColorEvaluator;
     bool m_isInitialized = false;
     QVector3D m_positionOffset;
     QString m_inputScriptFile;
-    virtual void setColorEvaluator();
+    virtual void setScaleAndColorEvaluator();
     void initialize(QString inputScriptFile, QVector3D positionOffset = QVector3D(0,0,0));
 
 public:
     Simulation();
     ~Simulation();
-    function<void(QVector<QColor> &colors, LAMMPS *lammps)> colorEvaluator();
+    function<void (QVector<QColor> &colors, QVector<float> &scales, LAMMPS *lammps)> scaleAndColorEvaluator();
     QString simulationId();
     QVector3D positionOffset();
     void runLammpsScript(LAMMPS *lammps);

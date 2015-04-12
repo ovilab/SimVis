@@ -79,8 +79,10 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
     Spheres* spheres = qobject_cast<Spheres*>(renderableObject);
     if(spheres) {
         QVector<QVector3D> &positions = spheres->positions();
+        QVector<float> &scales = spheres->scales();
         QVector<QColor> &colors = spheres->colors();
         colors.resize(lammps->atom->natoms);
+
         positions.resize(lammps->atom->natoms);
         double position[3];
         QVector3D deltaPosition = m_currentSimulation->positionOffset();
@@ -95,7 +97,7 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
             positions[i][2] = position[2] - lammps->domain->prd_half[2] + deltaPosition[2];
         }
 
-        m_currentSimulation->colorEvaluator()(colors, lammps);
+        m_currentSimulation->scaleAndColorEvaluator()(colors, scales, lammps);
 
         return;
     }

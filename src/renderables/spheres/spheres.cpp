@@ -24,6 +24,16 @@ QVector3D Spheres::vectorFromColor(const QColor &color)
 {
     return QVector3D(color.redF(), color.greenF(), color.blueF());
 }
+QVector<float> &Spheres::scales()
+{
+    return m_scales;
+}
+
+void Spheres::setScales(const QVector<float> &scales)
+{
+    m_scales = scales;
+}
+
 QVector<QColor> &Spheres::colors()
 {
     return m_colors;
@@ -98,6 +108,7 @@ void SpheresRenderer::uploadVBOs(Spheres* spheres)
     double scale = spheres->scale();
     QVector<QVector3D>& positions = spheres->m_positions;
     QVector<QColor>& colors = spheres->m_colors;
+    QVector<float>& scales = spheres->m_scales;
     QVector<SphereVBOData>& vertices = spheres->m_vertices;
     QVector<GLuint>& indices = spheres->m_indices;
     QVector3D color = spheres->vectorFromColor(spheres->color());
@@ -114,35 +125,40 @@ void SpheresRenderer::uploadVBOs(Spheres* spheres)
     vertices.resize(numberOfVertices);
     indices.resize(6*positions.size());
     bool individualColors = colors.size() == positions.size();
+    bool individualScales = scales.size() == positions.size();
     for(auto i=0; i<positions.size(); i++) {
         QVector3D &position = positions[i];
+        float additionalScale = 1.0;
+        if(individualScales) {
+            additionalScale = scales[i];
+        }
 
         vertices[4*i + 0].sphereId = i;
         vertices[4*i + 0].position = position;
-        vertices[4*i + 0].position[0] += dl[0];
-        vertices[4*i + 0].position[1] += dl[1];
-        vertices[4*i + 0].position[2] += dl[2];
+        vertices[4*i + 0].position[0] += dl[0]*additionalScale;
+        vertices[4*i + 0].position[1] += dl[1]*additionalScale;
+        vertices[4*i + 0].position[2] += dl[2]*additionalScale;
         vertices[4*i + 0].textureCoord= QVector2D(0,1);
 
         vertices[4*i + 1].sphereId = i;
         vertices[4*i + 1].position = position;
-        vertices[4*i + 1].position[0] += dr[0];
-        vertices[4*i + 1].position[1] += dr[1];
-        vertices[4*i + 1].position[2] += dr[2];
+        vertices[4*i + 1].position[0] += dr[0]*additionalScale;
+        vertices[4*i + 1].position[1] += dr[1]*additionalScale;
+        vertices[4*i + 1].position[2] += dr[2]*additionalScale;
         vertices[4*i + 1].textureCoord= QVector2D(1,1);
 
         vertices[4*i + 2].sphereId = i;
         vertices[4*i + 2].position = position;
-        vertices[4*i + 2].position[0] += ur[0];
-        vertices[4*i + 2].position[1] += ur[1];
-        vertices[4*i + 2].position[2] += ur[2];
+        vertices[4*i + 2].position[0] += ur[0]*additionalScale;
+        vertices[4*i + 2].position[1] += ur[1]*additionalScale;
+        vertices[4*i + 2].position[2] += ur[2]*additionalScale;
         vertices[4*i + 2].textureCoord= QVector2D(1,0);
 
         vertices[4*i + 3].sphereId = i;
         vertices[4*i + 3].position = position;
-        vertices[4*i + 3].position[0] += ul[0];
-        vertices[4*i + 3].position[1] += ul[1];
-        vertices[4*i + 3].position[2] += ul[2];
+        vertices[4*i + 3].position[0] += ul[0]*additionalScale;
+        vertices[4*i + 3].position[1] += ul[1]*additionalScale;
+        vertices[4*i + 3].position[2] += ul[2]*additionalScale;
         vertices[4*i + 3].textureCoord= QVector2D(0,0);
         if(individualColors) {
             color = QVector3D(colors[i].redF(), colors[i].greenF(), colors[i].blueF());

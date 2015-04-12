@@ -54,6 +54,8 @@ public:
     virtual SpheresRenderer *createRenderer();
     QVector<QColor> &colors();
     void setColors(const QVector<QColor> &colors);
+    QVector<float> &scales();
+    void setScales(const QVector<float> &scales);
 
 signals:
     void scaleChanged(bool arg);
@@ -63,9 +65,10 @@ private:
     QVector3D vectorFromColor(const QColor &color);
     QVector<SphereVBOData> m_vertices;
     QVector<GLuint> m_indices;
-    QColor m_color = QColor(0.8, 0.7, 0.5, 1.0);
     QVector<QVector3D> m_positions;
     QVector<QColor> m_colors;
+    QVector<float> m_scales;
+    QColor m_color = QColor(0.8, 0.7, 0.5, 1.0);
     float m_scale = 1.0;
 
     friend class SpheresRenderer;

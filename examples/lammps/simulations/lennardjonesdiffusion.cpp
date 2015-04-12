@@ -2,6 +2,6 @@
 
 LennardJonesDiffusion::LennardJonesDiffusion()
 {
-    setColorEvaluator();
+    setScaleAndColorEvaluator();
     initialize(":/in.lennardjonesdiffusion");
 }

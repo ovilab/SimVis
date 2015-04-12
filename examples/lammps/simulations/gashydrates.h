@@ -9,7 +9,7 @@ public:
 
     // Simulation interface
 protected:
-    virtual void setColorEvaluator();
+    virtual void setScaleAndColorEvaluator();
 };
 
 #endif // GASHYDRATES_H

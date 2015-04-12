@@ -9,7 +9,7 @@ public:
 
     // Simulation interface
 protected:
-    virtual void setColorEvaluator() override;
+    virtual void setScaleAndColorEvaluator() override;
 };
 
 #endif // LENNARDJONESCRYSTAL_H

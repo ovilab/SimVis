@@ -5,7 +5,7 @@
 
 Simulation::Simulation()
 {
-    setColorEvaluator();
+    setScaleAndColorEvaluator();
 }
 
 Simulation::~Simulation()
@@ -59,9 +59,9 @@ QString Simulation::copyDataFileToReadablePath(QString filename)
     return newFilename;
 }
 
-void Simulation::setColorEvaluator()
+void Simulation::setScaleAndColorEvaluator()
 {
-    m_colorEvaluator = [](QVector<QColor> &colors, LAMMPS *lammps) {
+    m_scaleAndColorEvaluator = [](QVector<QColor> &colors, QVector<float> &scales, LAMMPS *lammps) {
         QColor color1(255.0, 0.0, 0.0);
         QColor color2(0.0, 255.0, 0.0);
         QColor color3(0.0, 0.0, 255.0);
@@ -86,9 +86,9 @@ void Simulation::initialize(QString inputScriptFile, QVector3D deltaPosition)
     m_isInitialized = true;
 }
 
-function<void (QVector<QColor> &colors, LAMMPS *lammps)> Simulation::colorEvaluator()
+function<void (QVector<QColor> &colors, QVector<float> &scales, LAMMPS *lammps)> Simulation::scaleAndColorEvaluator()
 {
-    return m_colorEvaluator;
+    return m_scaleAndColorEvaluator;
 }
 
 QVector3D Simulation::positionOffset()
