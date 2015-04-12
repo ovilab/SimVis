@@ -145,6 +145,40 @@ ApplicationWindow {
                 text: "Crack"
                 onClicked: simulator.loadSimulation("crack")
             }
+
+            Button {
+                id: buttonFriction
+                anchors.leftMargin: 3
+                text: "Friction"
+                onClicked: simulator.loadSimulation("friction")
+            }
+        }
+
+        Row {
+            id: simulationRow3
+            anchors.left: parent.left
+            anchors.top: simulationRow2.bottom
+
+            Button {
+                id: buttonFlowPoiseuille
+                anchors.leftMargin: 3
+                text: "Poiseuille flow"
+                onClicked: simulator.loadSimulation("flowpoiseuille")
+            }
+
+            Button {
+                id: buttonFlowCouette
+                anchors.leftMargin: 3
+                text: "Couette flow"
+                onClicked: simulator.loadSimulation("flowcouette")
+            }
+
+            Button {
+                id: buttonObstacle
+                anchors.leftMargin: 3
+                text: "Obstacle"
+                onClicked: simulator.loadSimulation("obstacle")
+            }
         }
 
 

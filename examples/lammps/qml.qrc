@@ -11,5 +11,9 @@
         <file>gashydrate.data</file>
         <file>in.gashydrates</file>
         <file>in.crack</file>
+        <file>in.flow.couette</file>
+        <file>in.flow.poiseuille</file>
+        <file>in.friction</file>
+        <file>in.obstacle</file>
     </qresource>
 </RCC>
