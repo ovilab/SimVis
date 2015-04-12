@@ -31,7 +31,6 @@ private:
     QVector<QString> m_queuedCommands;
     void runCommands(const char *commands);
     void runCommand(const char *command);
-    void loadSimulations();
     void loadSimulation(QString simulationId);
 };
 

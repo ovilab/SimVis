@@ -35,7 +35,7 @@ void MyWorker::loadSimulation(QString simulationId) {
 }
 
 MyWorker::MyWorker() {
-    loadSimulations();
+    m_simulations = createSimulationObjects();
     loadSimulation("lennardjonesdiffusion");
 }
 
@@ -60,19 +60,6 @@ void MyWorker::runCommand(const char *command)
     }
 
     lammps_command((void*)lammps, (char*) command);
-}
-
-void MyWorker::loadSimulations()
-{
-    m_simulations["lennardjonescrystal"] = new LennardJonesCrystal();
-    m_simulations["lennardjonesdiffusion"] = new LennardJonesDiffusion();
-    m_simulations["bulkwater"] = new BulkWater();
-    m_simulations["gashydrates"] = new GasHydrates();
-    m_simulations["crack"] = new Crack();
-    m_simulations["flowcouette"] = new FlowCouette();
-    m_simulations["flowpoiseuille"] = new FlowPoiseuille();
-    m_simulations["friction"] = new Friction();
-    m_simulations["obstacle"] = new Obstacle();
 }
 
 void MyWorker::synchronizeSimulator(Simulator *simulator)

@@ -321,7 +321,8 @@ SOURCES += \
     lammps/fix_rigid_nvt_small.cpp \
     lammps/fix_rigid_small.cpp \
     lammps/fix_shake.cpp \
-    simulations/gashydrates.cpp
+    simulations/gashydrates.cpp \
+    simulations/simulations.cpp
 
 RESOURCES += qml.qrc
 
