@@ -16,30 +16,6 @@
 
 using std::string;
 
-void MyWorker::test() {
-    QString documentsLocation = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory);
-    QString filename=documentsLocation+"test.txt";
-
-    QFile file(filename);
-    if(!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qDebug() << "Faen...fikk ikke åpnet: "+file.fileName();
-        file.write("hore");
-    } else {
-        qDebug() << "Virket :D :D ";
-        file.write("hore");
-    }
-
-    std::ofstream fil(filename.toStdString(), std::ofstream::out);
-    if(fil.is_open()) {
-        qDebug() << "Filen finnes.";
-    } else {
-        qDebug() << "Filen finnes ikke.";
-    }
-    fil << "yesda";
-    fil.close();
-    exit(1);
-}
-
 void MyWorker::loadSimulation(QString simulationId) {
     auto simulation = m_simulations.find(simulationId);
     if(simulation == m_simulations.end()) {
@@ -60,7 +36,7 @@ void MyWorker::loadSimulation(QString simulationId) {
 
 MyWorker::MyWorker() {
     loadSimulations();
-    loadSimulation("bulkwater");
+    loadSimulation("lennardjonesdiffusion");
 }
 
 void MyWorker::runCommands(const char *commands) {

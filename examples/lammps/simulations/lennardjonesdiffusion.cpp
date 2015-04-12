@@ -26,18 +26,3 @@ void LennardJonesDiffusion::setColorEvaluator()
         }
     };
 }
-
-
-void LennardJonesDiffusion::runLammpsScript(LAMMPS *lammps)
-{
-    QString lammpsScript = readFile(m_inputScriptFile);
-    std::stringstream ss(lammpsScript.toStdString());
-    std::string to;
-
-    if (!lammpsScript.isEmpty())
-    {
-        while(std::getline(ss,to,'\n')){
-            runCommand(lammps, to.c_str());
-        }
-    }
-}

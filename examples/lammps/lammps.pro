@@ -305,7 +305,22 @@ SOURCES += \
     lammps/pair_lj_charmm_coul_charmm.cpp \
     lammps/pair_lj_charmm_coul_charmm_implicit.cpp \
     lammps/pair_lj_cut_tip4p_cut.cpp \
-    lammps/pair_tip4p_cut.cpp
+    lammps/pair_tip4p_cut.cpp \
+    lammps/compute_erotate_rigid.cpp \
+    lammps/compute_ke_rigid.cpp \
+    lammps/fix_rigid.cpp \
+    lammps/fix_rigid_nh.cpp \
+    lammps/fix_rigid_nh_small.cpp \
+    lammps/fix_rigid_nph.cpp \
+    lammps/fix_rigid_nph_small.cpp \
+    lammps/fix_rigid_npt.cpp \
+    lammps/fix_rigid_npt_small.cpp \
+    lammps/fix_rigid_nve.cpp \
+    lammps/fix_rigid_nve_small.cpp \
+    lammps/fix_rigid_nvt.cpp \
+    lammps/fix_rigid_nvt_small.cpp \
+    lammps/fix_rigid_small.cpp \
+    lammps/fix_shake.cpp
 
 RESOURCES += qml.qrc
 
@@ -644,6 +659,21 @@ HEADERS += \
     lammps/pair_lj_charmm_coul_charmm.h \
     lammps/pair_lj_charmm_coul_charmm_implicit.h \
     lammps/pair_lj_cut_tip4p_cut.h \
-    lammps/pair_tip4p_cut.h
+    lammps/pair_tip4p_cut.h \
+    lammps/compute_erotate_rigid.h \
+    lammps/compute_ke_rigid.h \
+    lammps/fix_rigid.h \
+    lammps/fix_rigid_nh.h \
+    lammps/fix_rigid_nh_small.h \
+    lammps/fix_rigid_nph.h \
+    lammps/fix_rigid_nph_small.h \
+    lammps/fix_rigid_npt.h \
+    lammps/fix_rigid_npt_small.h \
+    lammps/fix_rigid_nve.h \
+    lammps/fix_rigid_nve_small.h \
+    lammps/fix_rigid_nvt.h \
+    lammps/fix_rigid_nvt_small.h \
+    lammps/fix_rigid_small.h \
+    lammps/fix_shake.h
 
 DISTFILES +=

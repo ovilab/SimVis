@@ -11,9 +11,6 @@ public:
     // Simulation interface
 protected:
     virtual void setColorEvaluator();
-
-public:
-    virtual void runLammpsScript(LAMMPS *lammps);
 };
 
 #endif // BULKWATER_H

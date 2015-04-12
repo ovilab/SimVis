@@ -1,5 +1,7 @@
 #include "bulkwater.h"
 #include <iostream>
+#include <QString>
+#include <QDebug>
 using namespace std;
 
 
@@ -28,25 +30,4 @@ void BulkWater::setColorEvaluator()
             colors[i] = (lammps->atom->type[i] == 1) ? color1 : color2;
         }
     };
-}
-
-void BulkWater::runLammpsScript(LAMMPS *lammps)
-{
-    QString lammpsScript = readFile(m_inputScriptFile);
-    std::stringstream ss(lammpsScript.toStdString());
-    std::string to;
-
-    if (!lammpsScript.isEmpty())
-    {
-        while(std::getline(ss,to,'\n')){
-            std::stringstream commandLine(to);
-            std::string command;
-            commandLine >> command;
-            if(command.compare("read_data") == 0) {
-                cout << "Found read_data: " << to << endl;
-            }
-            cout << "Command: " << to << endl;
-            runCommand(lammps, to.c_str());
-        }
-    }
 }

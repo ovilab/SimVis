@@ -98,7 +98,7 @@ ApplicationWindow {
 
     Item {
         x: 0.5*(parent.width - width)
-        width: buttonDiffusion.width + buttonCrystal.width
+        width: buttonDiffusion.width + buttonCrystal.width + waterCrystal.width
         opacity: 0.9
 
         Button {
@@ -115,6 +115,14 @@ ApplicationWindow {
             anchors.leftMargin: 3
             text: "Crystal"
             onClicked: simulator.loadSimulation("lennardjonescrystal")
+        }
+
+        Button {
+            id: waterCrystal
+            anchors.left: buttonCrystal.right
+            anchors.leftMargin: 3
+            text: "Water"
+            onClicked: simulator.loadSimulation("bulkwater")
         }
     }
 

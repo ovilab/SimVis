@@ -18,6 +18,7 @@ class Simulation
 protected:
     QString readFile(QString filename);
     void runCommand(LAMMPS *lammps, const char *command);
+    QString copyDataFileToReadablePath(QString filename);
 
     function<void(QVector<QColor> &colors, LAMMPS *lammps)> m_colorEvaluator;
     QString m_simulationId;
@@ -30,7 +31,7 @@ public:
     function<void(QVector<QColor> &colors, LAMMPS *lammps)> colorEvaluator();
     QString simulationId();
     QString inputScriptFile();
-    virtual void runLammpsScript(LAMMPS *lammps) = 0;
+    virtual void runLammpsScript(LAMMPS *lammps);
 };
 
 #endif // SIMULATION_H

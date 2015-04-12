@@ -11,17 +11,14 @@ boundary 		p p p
 
 atom_style		full
 
-kspace_style		pppm 1.0e-4			
-
 ################################################
 ############# Read input file ##################
 
 read_data		bulkwater.data
-#read_restart		bulkWater-500000.restart
 
-variable                nx equal 6
-variable                ny equal 6
-variable                nz equal 6
+variable                nx equal 8
+variable                ny equal 8
+variable                nz equal 8
 replicate		${nx} ${ny} ${nz}			
 variable 		Mass equal ${nx}*${ny}*${nz}*18.0154
 variable		Dens equal 10*v_Mass/(vol*6.022)
@@ -36,7 +33,7 @@ group     		spc type 1 2
 ################################################
 ############# Force field settings #############
 
-pair_style	 	lj/cut/coul/long 10 
+pair_style	 	lj/cut/coul/cut 10
 pair_coeff   		1 1 0.1553 3.166 		# o-o water
 pair_coeff   	        1 2 0.0 0.0			# h-o water
 pair_coeff		2 2 0.0 0.0			# h-h water
@@ -60,16 +57,6 @@ thermo_modify 	 	norm no flush yes
 neighbor 	 	2.0 bin
 neigh_modify 	 	every 1 delay 0 check yes one 3000
 
-
-################################################
-############### Computes #######################
-
-compute			5 all ke						# Kinetic energy for all the atoms
-compute			6 all pe						# Potential energy for all the atoms
-compute			7 all temp						# Temperature of all the atoms
-compute			8 all pressure 7
-
-
 ################################################
 ############### Regions #######################
 
@@ -78,25 +65,8 @@ compute			8 all pressure 7
 ################################################
 ################ Fixes #########################
 
-fix 			constrain all shake 1.0e-4 20 0 b 1 a 1
+#fix 			constrain all shake 1.0e-4 20 0 b 1 a 1
 fix 			1 all npt temp 300.0 300.0 100 iso 1 1 1000.0
-#fix			1 all nvt temp 300.0 300.0 100
-fix			5 all ave/time 2 10 200 c_5 file kineticEnergy-3-3-15.txt
-fix 			6 all ave/time 2 10 200 c_6 file potentialEnergy-3-3-15.txt
-fix 			7 all ave/time 2 10 200 c_7 file temperature-3-3-15.txt
-fix			8 all ave/time 2 10 200 c_8 file pressure-3-3-15.txt
-
-
-################################################
-############  Sampling run  #################
-
-#dump		NPTDump all custom 50 bulkWater-*.txt id type mol x y z vx vy vz 
-#restart		100000 bulkWater-*.restart  						
 
 timestep 	1 				# fs
-#run		50000				
-run 		100
-
-################################################
-
 

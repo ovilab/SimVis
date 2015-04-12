@@ -8,7 +8,6 @@ class LennardJonesDiffusion : public Simulation
 public:
     LennardJonesDiffusion();
     ~LennardJonesDiffusion();
-    virtual void runLammpsScript(LAMMPS *lammps) override;
 
     // Simulation interface
 protected:
