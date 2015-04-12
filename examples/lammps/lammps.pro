@@ -272,7 +272,40 @@ SOURCES += \
     simulations/simulation.cpp \
     simulations/lennardjonescrystal.cpp \
     simulations/lennardjonesdiffusion.cpp \
-    simulations/bulkwater.cpp
+    simulations/bulkwater.cpp \
+    lammps/angle_charmm.cpp \
+    lammps/angle_cosine.cpp \
+    lammps/angle_cosine_delta.cpp \
+    lammps/angle_cosine_periodic.cpp \
+    lammps/angle_cosine_squared.cpp \
+    lammps/angle_harmonic.cpp \
+    lammps/angle_table.cpp \
+    lammps/atom_vec_angle.cpp \
+    lammps/atom_vec_bond.cpp \
+    lammps/atom_vec_full.cpp \
+    lammps/atom_vec_molecular.cpp \
+    lammps/atom_vec_template.cpp \
+    lammps/bond_fene.cpp \
+    lammps/bond_fene_expand.cpp \
+    lammps/bond_harmonic.cpp \
+    lammps/bond_morse.cpp \
+    lammps/bond_nonlinear.cpp \
+    lammps/bond_quartic.cpp \
+    lammps/bond_table.cpp \
+    lammps/dihedral_charmm.cpp \
+    lammps/dihedral_harmonic.cpp \
+    lammps/dihedral_helix.cpp \
+    lammps/dihedral_multi_harmonic.cpp \
+    lammps/dihedral_opls.cpp \
+    lammps/improper_cvff.cpp \
+    lammps/improper_harmonic.cpp \
+    lammps/improper_umbrella.cpp \
+    lammps/pair_hbond_dreiding_lj.cpp \
+    lammps/pair_hbond_dreiding_morse.cpp \
+    lammps/pair_lj_charmm_coul_charmm.cpp \
+    lammps/pair_lj_charmm_coul_charmm_implicit.cpp \
+    lammps/pair_lj_cut_tip4p_cut.cpp \
+    lammps/pair_tip4p_cut.cpp
 
 RESOURCES += qml.qrc
 
@@ -578,6 +611,39 @@ HEADERS += \
     simulations/lennardjonescrystal.h \
     simulations/simulations.h \
     simulations/lennardjonesdiffusion.h \
-    simulations/bulkwater.h
+    simulations/bulkwater.h \
+    lammps/angle_charmm.h \
+    lammps/angle_cosine.h \
+    lammps/angle_cosine_delta.h \
+    lammps/angle_cosine_periodic.h \
+    lammps/angle_cosine_squared.h \
+    lammps/angle_harmonic.h \
+    lammps/angle_table.h \
+    lammps/atom_vec_angle.h \
+    lammps/atom_vec_bond.h \
+    lammps/atom_vec_full.h \
+    lammps/atom_vec_molecular.h \
+    lammps/atom_vec_template.h \
+    lammps/bond_fene.h \
+    lammps/bond_fene_expand.h \
+    lammps/bond_harmonic.h \
+    lammps/bond_morse.h \
+    lammps/bond_nonlinear.h \
+    lammps/bond_quartic.h \
+    lammps/bond_table.h \
+    lammps/dihedral_charmm.h \
+    lammps/dihedral_harmonic.h \
+    lammps/dihedral_helix.h \
+    lammps/dihedral_multi_harmonic.h \
+    lammps/dihedral_opls.h \
+    lammps/improper_cvff.h \
+    lammps/improper_harmonic.h \
+    lammps/improper_umbrella.h \
+    lammps/pair_hbond_dreiding_lj.h \
+    lammps/pair_hbond_dreiding_morse.h \
+    lammps/pair_lj_charmm_coul_charmm.h \
+    lammps/pair_lj_charmm_coul_charmm_implicit.h \
+    lammps/pair_lj_cut_tip4p_cut.h \
+    lammps/pair_tip4p_cut.h
 
 DISTFILES +=
