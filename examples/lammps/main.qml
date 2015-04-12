@@ -159,12 +159,6 @@ ApplicationWindow {
                 text: "Water"
                 onClicked: simulator.loadSimulation("bulkwater")
             }
-        }
-
-        Row {
-            id: simulationRow2
-            anchors.left: parent.left
-            anchors.top: simulationRow1.bottom
 
             Button {
                 id: buttonGashydrates
@@ -179,6 +173,12 @@ ApplicationWindow {
                 text: "Crack"
                 onClicked: simulator.loadSimulation("crack")
             }
+        }
+
+        Row {
+            id: simulationRow2
+            anchors.left: parent.left
+            anchors.top: simulationRow1.bottom
 
             Button {
                 id: buttonFriction
@@ -186,12 +186,6 @@ ApplicationWindow {
                 text: "Friction"
                 onClicked: simulator.loadSimulation("friction")
             }
-        }
-
-        Row {
-            id: simulationRow3
-            anchors.left: parent.left
-            anchors.top: simulationRow2.bottom
 
             Button {
                 id: buttonFlowPoiseuille
@@ -214,10 +208,6 @@ ApplicationWindow {
                 onClicked: simulator.loadSimulation("obstacle")
             }
         }
-
-
-
-
     }
 
 //    LightControl {

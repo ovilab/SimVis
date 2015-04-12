@@ -5,6 +5,10 @@ QT += qml quick widgets opengl openglextensions
 QMAKE_CXXFLAGS += -Wno-unused-parameter -Wno-unused-variable
 CONFIG += warn_off
 
+ios {
+    QMAKE_INFO_PLIST = iOS.plist
+}
+
 SOURCES += \
     main.cpp \
     mysimulator.cpp \
@@ -679,4 +683,5 @@ HEADERS += \
     lammps/fix_shake.h \
     simulations/gashydrates.h
 
-DISTFILES +=
+DISTFILES += \
+    iOS.plist
