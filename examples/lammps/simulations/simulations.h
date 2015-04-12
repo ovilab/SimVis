@@ -11,31 +11,31 @@
 class Crack : public Simulation
 {
 public:
-    Crack() { initialize(":/scripts/in.crack"); }
+    Crack() { initialize(":/scripts/in.crack", QVector3D(0, 0, 60)); }
 };
 
 class FlowPoiseuille : public Simulation
 {
 public:
-    FlowPoiseuille() { initialize(":/scripts/in.flow.poiseuille"); }
+    FlowPoiseuille() { initialize(":/scripts/in.flow.poiseuille", QVector3D(0, 0, 20)); }
 };
 
 class FlowCouette : public Simulation
 {
 public:
-    FlowCouette() { initialize(":/scripts/in.flow.couette"); }
+    FlowCouette() { initialize(":/scripts/in.flow.couette", QVector3D(0, 0, 20)); }
 };
 
 class Friction : public Simulation
 {
 public:
-    Friction() { initialize(":/scripts/in.friction"); }
+    Friction() { initialize(":/scripts/in.friction", QVector3D(0, 0, 30)); }
 };
 
 class Obstacle : public Simulation
 {
 public:
-    Obstacle() { initialize(":/scripts/in.obstacle"); }
+    Obstacle() { initialize(":/scripts/in.obstacle", QVector3D(0, 0, 25)); }
 };
 
 QMap<QString, Simulation*> createSimulationObjects();

@@ -16,7 +16,14 @@ ApplicationWindow {
 
     MySimulator {
         id: simulator
+        onNewCameraPositionChanged: {
+            positionAnimation.to = newCameraPosition
+            positionAnimation.from = camera.position
+            positionAnimation.start()
+        }
     }
+
+
 
     Visualizer {
         id: visualizer
@@ -70,6 +77,16 @@ ApplicationWindow {
     Camera {
         id: camera
         nearPlane: 0.1
+    }
+
+    PropertyAnimation {
+        id: positionAnimation
+        target: camera
+        property: "position"
+        from: camera.position
+        to: simulator.newCameraPosition
+        duration: 700
+        easing.type: Easing.InOutQuad
     }
 
     FastBlur {

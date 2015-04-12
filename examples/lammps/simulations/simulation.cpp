@@ -2,15 +2,11 @@
 #include <QFile>
 #include <QDebug>
 #include <QStandardPaths>
+using std::function;
 
 Simulation::Simulation()
 {
     setScaleAndColorEvaluator();
-}
-
-Simulation::~Simulation()
-{
-
 }
 
 QString Simulation::readFile(QString filename)
@@ -79,10 +75,11 @@ void Simulation::setScaleAndColorEvaluator()
     };
 }
 
-void Simulation::initialize(QString inputScriptFile, QVector3D deltaPosition)
+void Simulation::initialize(QString inputScriptFile, QVector3D initialCameraPosition, QVector3D deltaPosition)
 {
     m_inputScriptFile = inputScriptFile;
     m_positionOffset = deltaPosition;
+    m_initialCameraPosition = initialCameraPosition;
     m_isInitialized = true;
 }
 
@@ -127,4 +124,7 @@ void Simulation::runLammpsScript(LAMMPS *lammps)
     }
 }
 
-
+QVector3D Simulation::initialCameraPosition() const
+{
+    return m_initialCameraPosition;
+}

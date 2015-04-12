@@ -3,6 +3,7 @@
 #include "lammps/atom.h"
 #include "lammps/domain.h"
 #include "lammps/update.h"
+#include <core/camera.h>
 #include <string>
 #include <sstream>
 #include <SimVis/Spheres>
@@ -36,6 +37,7 @@ void MyWorker::loadSimulation(QString simulationId) {
 
 MyWorker::MyWorker() {
     m_simulations = createSimulationObjects();
+
     loadSimulation("lennardjonesdiffusion");
 }
 
@@ -71,6 +73,7 @@ void MyWorker::synchronizeSimulator(Simulator *simulator)
     if(!mySimulator->m_simulationIdToLoad.isEmpty()) {
         loadSimulation(mySimulator->m_simulationIdToLoad);
         mySimulator->m_simulationIdToLoad.clear();
+        mySimulator->setNewCameraPosition(m_currentSimulation->initialCameraPosition());
     }
 }
 
@@ -133,6 +136,11 @@ int MySimulator::simulationSpeed() const
     return m_simulationSpeed;
 }
 
+QVector3D MySimulator::newCameraPosition() const
+{
+    return m_newCameraPosition;
+}
+
 void MySimulator::setDiscoMode(bool arg)
 {
     if (m_discoMode == arg)
@@ -154,4 +162,13 @@ void MySimulator::setSimulationSpeed(int arg)
 
     m_simulationSpeed = arg;
     emit simulationSpeedChanged(arg);
+}
+
+void MySimulator::setNewCameraPosition(QVector3D arg)
+{
+    if (m_newCameraPosition == arg)
+        return;
+
+    m_newCameraPosition = arg;
+    emit newCameraPositionChanged(arg);
 }

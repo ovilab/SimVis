@@ -3,7 +3,7 @@
 GasHydrates::GasHydrates()
 {
     setScaleAndColorEvaluator();
-    initialize(":/scripts/in.gashydrates");
+    initialize(":/scripts/in.gashydrates", QVector3D(0, 0, 30));
 }
 
 void GasHydrates::setScaleAndColorEvaluator()

@@ -14,6 +14,15 @@ CameraPrivate::CameraPrivate(Camera *qq)
 
 //Camera::Camera(QNode *parent) :
 //    QEntity(*new CameraPrivate(this), parent)
+void Camera::moveCamera(QVector3D position, bool fixedViewCenter)
+{
+    QVector3D viewVec = viewVector();
+    setPosition(position);
+    if(!fixedViewCenter) {
+        setViewCenter(position + viewVec);
+    }
+}
+
 Camera::Camera(QObject *parent) :
     QObject(parent),
     d_ptr(new CameraPrivate(this))

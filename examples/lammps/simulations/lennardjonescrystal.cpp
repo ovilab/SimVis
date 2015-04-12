@@ -3,7 +3,7 @@
 LennardJonesCrystal::LennardJonesCrystal()
 {
     setScaleAndColorEvaluator();
-    initialize(":/scripts/in.lennardjonescrystal");
+    initialize(":/scripts/in.lennardjonescrystal", QVector3D(0, 0, 25));
 }
 
 void LennardJonesCrystal::setScaleAndColorEvaluator()
