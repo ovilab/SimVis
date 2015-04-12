@@ -105,19 +105,6 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
 
 void MyWorker::work()
 {
-    //    if( (m_timestepsSinceLastPreRun % 100) == 0) {
-    //        for(QString &command : m_queuedCommands) {
-    //            lammps_command((void*)lammps, (char*)command.toStdString().c_str());
-    //        }
-
-    //        m_lastPreRun = lammps->update->ntimestep;
-    //        QString cmd = QString("run 1 start %1 stop %2").arg(m_lastPreRun).arg(m_lastPreRun+100);
-
-    //        runCommand(cmd.toStdString().c_str());
-    //    } else {
-    //        QString cmd = QString("run 1 pre no post no start %1 stop %2").arg(m_lastPreRun).arg(m_lastPreRun+100);
-    //        runCommand(cmd.toStdString().c_str());
-    //    }
     runCommand(QString("run %1 pre no post no").arg(m_simulationSpeed).toStdString().c_str());
 }
 
