@@ -5,4 +5,5 @@
 #include "dump_image.h"
 #include "dump_local.h"
 #include "dump_movie.h"
+#include "dump_xtc.h"
 #include "dump_xyz.h"

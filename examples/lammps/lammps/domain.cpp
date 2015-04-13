@@ -451,9 +451,13 @@ void Domain::reset_box()
   set_global_box();
   set_local_box();
 
-  // if shrink-wrapped & kspace is defined (i.e. using MSM) call setup()
+  // if shrink-wrapped & kspace is defined (i.e. using MSM), call setup()
+  // also call init() (to test for compatibility) ?
   
-  if (nonperiodic == 2 && force->kspace) force->kspace->setup();
+  if (nonperiodic == 2 && force->kspace) {
+    //force->kspace->init();
+    force->kspace->setup();
+  }
 
   // if shrink-wrapped & triclinic, re-convert to lamda coords for new box
   // re-invoke pbc() b/c x2lamda result can be outside [0,1] due to roundoff
@@ -471,7 +475,7 @@ void Domain::reset_box()
    MAX is important since coord - prd < lo can happen when coord = hi
    if fix deform, remap velocity of fix group atoms by box edge velocities
    for triclinic, atoms must be in lamda coords (0-1) before pbc is called
-   image = 10 bits for each dimension
+   image = 10 or 20 bits for each dimension depending on sizeof(imageint)
    increment/decrement in wrap-around fashion
 ------------------------------------------------------------------------- */
 

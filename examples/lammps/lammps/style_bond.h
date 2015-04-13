@@ -1,3 +1,4 @@
+#include "bond_class2.h"
 #include "bond_fene.h"
 #include "bond_fene_expand.h"
 #include "bond_harmonic.h"

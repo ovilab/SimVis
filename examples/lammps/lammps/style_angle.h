@@ -1,4 +1,5 @@
 #include "angle_charmm.h"
+#include "angle_class2.h"
 #include "angle_cosine.h"
 #include "angle_cosine_delta.h"
 #include "angle_cosine_periodic.h"

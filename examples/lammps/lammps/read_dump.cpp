@@ -31,9 +31,13 @@
 #include "update.h"
 #include "modify.h"
 #include "fix.h"
+#include "compute.h"
 #include "domain.h"
 #include "comm.h"
+#include "force.h"
 #include "irregular.h"
+#include "input.h"
+#include "variable.h"
 #include "error.h"
 #include "memory.h"
 
@@ -98,7 +102,7 @@ void ReadDump::command(int narg, char **arg)
   if (narg < 2) error->all(FLERR,"Illegal read_dump command");
 
   store_files(1,&arg[0]);
-  bigint nstep = ATOBIGINT(arg[1]);
+  bigint nstep = force->bnumeric(FLERR,arg[1]);
 
   int nremain = narg - 2;
   if (nremain) nremain = fields_and_keywords(nremain,&arg[narg-nremain]);
@@ -901,16 +905,27 @@ void ReadDump::process_atoms(int n)
     }
   }
 
-  // invoke set_arrays() for fixes that need initialization of new atoms
+  // invoke set_arrays() for fixes/computes/variables
+  //   that need initialization of attributes of new atoms
   // same as in CreateAtoms
+  // don't use modify->create_attributes() since would be inefficient
+  //   for large number of atoms
 
   nlocal = atom->nlocal;
-  for (m = 0; m < modify->nfix; m++) {
+  for (int m = 0; m < modify->nfix; m++) {
     Fix *fix = modify->fix[m];
     if (fix->create_attribute)
       for (i = nlocal_previous; i < nlocal; i++)
         fix->set_arrays(i);
   }
+  for (int m = 0; m < modify->ncompute; m++) {
+    Compute *compute = modify->compute[m];
+    if (compute->create_attribute)
+      for (i = nlocal_previous; i < nlocal; i++)
+        compute->set_arrays(i);
+  }
+  for (int i = nlocal_previous; i < nlocal; i++)
+    input->variable->set_arrays(i);
 }
 
 /* ----------------------------------------------------------------------
