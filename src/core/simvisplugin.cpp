@@ -3,6 +3,7 @@
 #include "../renderables/billboards/billboards.h"
 #include "../renderables/points/points.h"
 #include "../renderables/spheres/spheres.h"
+#include "../renderables/plotting/plotting.h"
 #include "../renderables/marchingcubes/marchingcubes.h"
 #include "../renderables/skybox/skybox.h"
 #include "visualizer.h"
@@ -36,6 +37,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<Light>("SimVis", 1, 0, "Light");
     qmlRegisterType<SkyBox>("SimVis", 1, 0, "SkyBox");
     qmlRegisterType<SkyBoxReflection>("SimVis", 1, 0, "SkyBoxReflection");
+    qmlRegisterType<Plotting>("SimVis", 1, 0, "Plotting");
 }
 
 void SimVisPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
