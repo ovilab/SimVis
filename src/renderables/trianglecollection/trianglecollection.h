@@ -38,7 +38,7 @@ class TriangleCollectionRenderer : public RenderableRenderer {
     Q_OBJECT
     // RenderableRenderer interface
 public:
-    TriangleCollectionRenderer() { m_numberOfVBOs = 3; }
+    TriangleCollectionRenderer() { m_vboCount = 3; }
 private:
     bool m_isInitialized = false;
     int numberOfTriangles = 0;

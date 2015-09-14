@@ -35,9 +35,9 @@ void MyWorker::work() {
 
 }
 
-void MyWorker::synchronizeRenderer(Renderable *renderableObject)
+void MyWorker::synchronizeRenderer(Renderable *renderable)
 {
-    MarchingCubes* marchingCubes = qobject_cast<MarchingCubes*>(renderableObject);
+    MarchingCubes* marchingCubes = qobject_cast<MarchingCubes*>(renderable);
     if(marchingCubes) {
         if(m_willSetScalarField) {
             marchingCubes->setHasContinuousScalarField(true);

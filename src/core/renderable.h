@@ -34,7 +34,7 @@ public:
     RenderableRenderer();
 protected:
     void generateVBOs();
-    unsigned int m_numberOfVBOs = 0;
+    unsigned int m_vboCount = 0;
     bool m_shadersDirty = true;
     QList<ShaderEffect*> m_shaderEffects;
     QElapsedTimer m_elapsedTime;

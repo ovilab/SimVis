@@ -16,7 +16,6 @@ ApplicationWindow {
 
     MySimulator {
         id: simulator
-        dt: dt.value
     }
 
     Visualizer {
@@ -93,8 +92,8 @@ ApplicationWindow {
             SimplexBump {
                 id: simplexBump
                 enabled: true
-                intensity: 0.1
-                scale: 1.0
+                intensity: 0.03
+                scale: 5.0
             }
         }
     }
