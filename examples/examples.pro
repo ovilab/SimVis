@@ -4,6 +4,7 @@ SUBDIRS += \
     simple \
     marchingcubes \
     qmatplotpp \
-    Triangles
+    Triangles \
+    neuron
 
 CONFIG += ordered

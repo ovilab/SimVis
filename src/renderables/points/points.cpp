@@ -55,7 +55,7 @@ void Points::setColor(QColor arg)
 
 PointsRenderer::PointsRenderer()
 {
-    m_numberOfVBOs = 1;
+    m_vboCount = 1;
 }
 
 void PointsRenderer::synchronize(Renderable *renderable)

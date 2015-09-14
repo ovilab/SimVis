@@ -91,7 +91,7 @@ SpheresRenderer *Spheres::createRenderer()
 
 SpheresRenderer::SpheresRenderer()
 {
-
+    m_vboCount = 2;
 }
 
 void SpheresRenderer::synchronize(Renderable* renderer)
@@ -103,8 +103,8 @@ void SpheresRenderer::synchronize(Renderable* renderer)
     m_rightVector = QVector3D::crossProduct(m_viewVector, m_upVector);
 
     if(!m_isInitialized) {
-        if(geometryShaderIsSupported()) m_numberOfVBOs = 1;
-        else m_numberOfVBOs = 2;
+        if(geometryShaderIsSupported()) m_vboCount = 1;
+        else m_vboCount = 2;
         generateVBOs();
         m_isInitialized = true;
     }

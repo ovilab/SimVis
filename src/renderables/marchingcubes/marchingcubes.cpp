@@ -205,7 +205,7 @@ int MarchingCubes::numberOfLines() const
 
 MarchingCubesRenderer::MarchingCubesRenderer()
 {
-    m_numberOfVBOs = 4;
+    m_vboCount = 4;
 }
 
 void MarchingCubesRenderer::synchronize(Renderable *renderable)

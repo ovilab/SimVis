@@ -32,7 +32,7 @@ void Cylinders::setDirty(bool dirty)
 
 CylindersRenderer::CylindersRenderer()
 {
-    m_numberOfVBOs = 1;
+    m_vboCount = 1;
 }
 
 void CylindersRenderer::synchronize(Renderable* renderer)

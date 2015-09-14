@@ -121,7 +121,7 @@ void Billboards::setNormalMap(QString arg)
 
 BillboardsRenderer::BillboardsRenderer()
 {
-    m_numberOfVBOs = 2;
+    m_vboCount = 2;
 }
 
 void BillboardsRenderer::synchronize(Renderable* renderer)
