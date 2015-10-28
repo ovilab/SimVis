@@ -1,24 +1,28 @@
+message(Library Deployment)
+message(simvis_srcdir: $$simvis_srcdir)
+message(simvis_builddir: $$simvis_builddir)
+
 LIB_NAME = SimVis
 
 LIB_TARGET = $$qtLibraryTarget($$LIB_NAME)
-LIBS += -L$$OUT_PWD/../../dist/$${LIB_NAME} -l$${LIB_TARGET}
+LIBS += -L$$simvis_builddir/dist/$${LIB_NAME} -l$${LIB_TARGET}
 
-QML_IMPORT_PATH += $$OUT_PWD/../../dist/
+QML_IMPORT_PATH += $$simvis_builddir/dist/
 QML2_IMPORT_PATH += $$QML_IMPORT_PATH
-INCLUDEPATH += $$_PRO_FILE_PWD_/../../src
+INCLUDEPATH += $$simvis_srcdir/src/
 
 # Deployment of library
 ios {
-    simvis_lib.files = $$_PRO_FILE_PWD_/../../src/imports/SimVis
+    simvis_lib.files = $$simvis_srcdir/src/imports/SimVis
     simvis_lib.path = qt_qml
     QMAKE_BUNDLE_DATA += simvis_lib
     # undocumented Qmake property used to autogenerate Q_IMPORT_PLUGIN
-    QMLPATHS += $$_PRO_FILE_PWD_/../../src/imports
+    QMLPATHS += $$simvis_srcdir/src/imports
 } macx {
-    copy_lib.commands = $(COPY_DIR) $$OUT_PWD/../../dist/$${LIB_NAME} $$OUT_PWD/$${TARGET}.app/Contents/MacOS
+    copy_lib.commands = $(COPY_DIR) $$simvis_builddir/dist/$${LIB_NAME} $$OUT_PWD/$${TARGET}.app/Contents/MacOS
     copy_lib.commands += && install_name_tool -change lib$${LIB_TARGET}.dylib @executable_path/$${LIB_NAME}/lib$${LIB_TARGET}.dylib $$OUT_PWD/$${TARGET}.app/Contents/MacOS/$${TARGET}
 } unix:!macx {
-    copy_lib.commands = $(COPY_DIR) $$OUT_PWD/../../dist/$${LIB_NAME} $$OUT_PWD
+    copy_lib.commands = $(COPY_DIR) $$simvis_builddir/dist/$${LIB_NAME} $$OUT_PWD
 }
 
 first.depends = $(first) copy_lib

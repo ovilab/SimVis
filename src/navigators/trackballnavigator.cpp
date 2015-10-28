@@ -1,7 +1,7 @@
 #include "trackballnavigator.h"
 #include "../core/camera.h"
+#include "../core/visualizer.h"
 #include <cmath>
-
 TrackballNavigator::TrackballNavigator(Camera *camera, QQuickItem *parent) :
     Navigator(camera, parent)
 {
@@ -34,20 +34,31 @@ QVector2D TrackballNavigator::scaledTouchPosition(QVector2D touchPosition) {
 
 void TrackballNavigator::moved(QVector2D delta)
 {
-    float deltaPan = -delta.x() * 200;
-    float deltaTilt = -delta.y() * 200;
+    if(m_button == Qt::RightButton) {
+        QVector2D deltaScaled = -scaledTouchPosition(delta)*1e4;
+        m_camera->translate(QVector3D(deltaScaled.x(), deltaScaled.y(), 0));
+    } else {
+        float deltaPan = -delta.x() * 200;
+        float deltaTilt = -delta.y() * 200;
 
-    double currentTilt = 180/M_PI*asin(double(m_camera->position().y()) / double(m_camera->position().length())); // sin(x) = a/b
-    // First remove all tilt so panning is not biased. Note that y is flipped
-    m_camera->tiltAboutViewCenter(currentTilt);
-    m_camera->panAboutViewCenter(deltaPan);
-    // Tilt back before we add the delta tilt from touch/mouse move
-    m_camera->tiltAboutViewCenter(-currentTilt);
-    m_camera->tiltAboutViewCenter(deltaTilt);
+        double currentTilt = 180/M_PI*asin(double(m_camera->position().y()) / double(m_camera->position().length())); // sin(x) = a/b
+        // First remove all tilt so panning is not biased. Note that y is flipped
+        m_camera->tiltAboutViewCenter(currentTilt);
+        m_camera->panAboutViewCenter(deltaPan);
+        // Tilt back before we add the delta tilt from touch/mouse move
+        m_camera->tiltAboutViewCenter(-currentTilt);
+        m_camera->tiltAboutViewCenter(deltaTilt);
+        emit m_camera->cameraMoved();
+    }
 }
 
 void TrackballNavigator::mousePressEvent(QMouseEvent *event)
 {
+    Visualizer *myParent = qobject_cast<Visualizer*>(parent());
+    if(myParent) {
+        emit myParent->touched();
+    }
+    m_button = event->button();
     m_touch1Position = scaledTouchPosition(QVector2D(event->pos().x(), event->pos().y()));
 }
 
@@ -65,6 +76,7 @@ void TrackballNavigator::wheelEvent(QWheelEvent *event)
     float deltaY = -event->angleDelta().y() * effectiveSensitivity;
     float factor = exp(deltaY);
     m_camera->setPosition(m_camera->position()*factor);
+    emit m_camera->cameraMoved();
 }
 
 void TrackballNavigator::touchEvent(QTouchEvent *event)
@@ -97,6 +109,7 @@ void TrackballNavigator::touchEvent(QTouchEvent *event)
                     float currentTheta = atan2(currentDelta.y(), currentDelta.x());
                     float deltaTheta = (lastTheta - currentTheta)*180.0/M_PI;
                     m_camera->rollAboutViewCenter(deltaTheta);
+                    emit m_camera->cameraMoved();
                 }
 
                 // Require at least movement in both touches if we want to move

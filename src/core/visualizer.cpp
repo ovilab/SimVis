@@ -6,17 +6,18 @@
 #include "../navigators/trackballnavigator.h"
 #include <QDebug>
 #include <QOpenGLFramebufferObjectFormat>
+#include <QQuickWindow>
 
 Visualizer::Visualizer() :
     m_defaultCamera(this)
 {
     connect(this, &Visualizer::widthChanged, this, &Visualizer::resetAspectRatio);
     connect(this, &Visualizer::heightChanged, this, &Visualizer::resetAspectRatio);
-    connect(this, &Visualizer::componentComplete, this, &Visualizer::resetAspectRatio);
     connect(&m_timer, &QTimer::timeout, this, &Visualizer::timerTicked);
+    // connect(this, &Visualizer::windowChanged, this, &Visualizer::handleWindowChanged);
+    connect(this, SIGNAL(windowChanged(QQuickWindow*)), this, SLOT(handleWindowChanged(QQuickWindow*)));
     m_timer.start(16);
     m_elapsedTimer.start();
-
 }
 
 Visualizer::~Visualizer()
@@ -65,6 +66,22 @@ float Visualizer::time() const
     return m_time;
 }
 
+void Visualizer::handleWindowChanged(QQuickWindow *win)
+{
+#if !defined(Q_OS_ANDROID)
+    if(win) {
+        QSurfaceFormat format = win->format();
+        format.setProfile(QSurfaceFormat::CoreProfile);
+        format.setMajorVersion(4);
+        format.setMinorVersion(3);
+        win->setFormat(format);
+        win->setClearBeforeRendering(false);
+    }
+#else
+    Q_UNUSED(win)
+#endif
+}
+
 void Visualizer::setSimulator(Simulator *arg)
 {
     if (m_simulator == arg) {
@@ -83,7 +100,11 @@ void Visualizer::setCamera(Camera *arg)
     if (m_camera == arg)
         return;
 
+    if(m_camera) {
+        disconnect(m_camera, &Camera::cameraMoved, this, &Visualizer::update);
+    }
     m_camera = arg;
+    connect(m_camera, &Camera::cameraMoved, this, &Visualizer::update);
     emit cameraChanged(arg);
 }
 
@@ -142,6 +163,9 @@ void Visualizer::timerTicked()
 
 void VisualizerRenderer::render()
 {
+    if(!m_visible) {
+        return;
+    }
     QOpenGLFunctions funcs(QOpenGLContext::currentContext());
 
     funcs.glClearColor(m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF(), m_backgroundColor.alphaF());
@@ -150,21 +174,11 @@ void VisualizerRenderer::render()
     funcs.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     funcs.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
-    funcs.glFrontFace(GL_CW);
-    funcs.glCullFace(GL_FRONT);
-    funcs.glEnable(GL_CULL_FACE);
-    funcs.glEnable(GL_DEPTH_TEST);
-
     for(Renderable* renderable : m_renderables) {
         if(renderable->visible()) {
             renderable->requestRender();
         }
     }
-
-    funcs.glDepthMask(GL_TRUE);
-
-    funcs.glDisable(GL_DEPTH_TEST);
-    funcs.glDisable(GL_CULL_FACE);
 
     if(m_frameCount % 60 == 0 && m_frameCount > 0) {
         qint64 t1 = QDateTime::currentMSecsSinceEpoch();
@@ -172,13 +186,13 @@ void VisualizerRenderer::render()
         m_fpsCounterTimeZero = QDateTime::currentMSecsSinceEpoch();
         m_fps = 60.0 / dt * 1000;
     }
-
     m_frameCount++;
 }
 
 void VisualizerRenderer::synchronize(QQuickFramebufferObject *fbo)
 {
     Visualizer* visualizer = static_cast<Visualizer*>(fbo);
+    m_visible = visualizer->isVisible();
     m_renderables = visualizer->findChildren<Renderable*>();
     m_camera = visualizer->camera();
     m_backgroundColor = visualizer->backgroundColor();
@@ -207,7 +221,7 @@ void VisualizerRenderer::setCamera(Camera *camera)
 QOpenGLFramebufferObject *VisualizerRenderer::createFramebufferObject(const QSize &size) {
     QOpenGLFramebufferObjectFormat format;
     format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
-//    format.setSamples(4);
     QOpenGLFramebufferObject* fbo = new QOpenGLFramebufferObject(size, format);
+
     return fbo;
 }

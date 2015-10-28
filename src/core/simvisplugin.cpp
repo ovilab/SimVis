@@ -3,7 +3,7 @@
 #include "../renderables/billboards/billboards.h"
 #include "../renderables/points/points.h"
 #include "../renderables/spheres/spheres.h"
-#include "../renderables/plotting/plotting.h"
+#include "../renderables/cylinders/cylinders.h"
 #include "../renderables/marchingcubes/marchingcubes.h"
 #include "../renderables/skybox/skybox.h"
 #include "visualizer.h"
@@ -14,6 +14,8 @@
 #include "../shadereffects/light.h"
 #include "../shadereffects/simplextexture.h"
 #include "../shadereffects/skyboxreflection.h"
+#include "../shadereffects/periodiccopies.h"
+#include "../shadereffects/slice.h"
 #include <qqml.h>
 #include <QQmlEngine>
 
@@ -37,11 +39,15 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<Light>("SimVis", 1, 0, "Light");
     qmlRegisterType<SkyBox>("SimVis", 1, 0, "SkyBox");
     qmlRegisterType<SkyBoxReflection>("SimVis", 1, 0, "SkyBoxReflection");
-    qmlRegisterType<Plotting>("SimVis", 1, 0, "Plotting");
+    qmlRegisterType<PeriodicCopies>("SimVis", 1, 0, "PeriodicCopies");
+    qmlRegisterType<Slice>("SimVis", 1, 0, "Slice");
+    qmlRegisterType<Cylinders>("SimVis", 1, 0, "Cylinders");
 }
 
 void SimVisPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
+    Q_UNUSED(engine);
+    Q_UNUSED(uri);
 }
 
 
