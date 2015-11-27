@@ -37,7 +37,8 @@ SOURCES += \
     shadereffects/light.cpp \
     renderables/skybox/skybox.cpp \
     shadereffects/skyboxreflection.cpp \
-    renderables/plotting/plotting.cpp
+    renderables/plotting/plotting.cpp \
+    renderables/trianglecollection/trianglecollection.cpp
 
 HEADERS += \
     core/navigator.h \
@@ -68,7 +69,12 @@ HEADERS += \
     shadereffects/light.h \
     renderables/skybox/skybox.h \
     shadereffects/skyboxreflection.h \
-    renderables/plotting/plotting.h
+    renderables/plotting/plotting.h \
+    renderables/trianglecollection/trianglecollection.h \
+    SimVis/QuickWorker \
+    SimVis/Renderable \
+    SimVis/Simulator \
+    SimVis/TriangleCollection
 
 DISTFILES = qmldir \
     core/simvisplugin.json \

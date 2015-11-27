@@ -14,6 +14,7 @@
 #include "../shadereffects/light.h"
 #include "../shadereffects/simplextexture.h"
 #include "../shadereffects/skyboxreflection.h"
+#include "../renderables/trianglecollection/trianglecollection.h"
 #include <qqml.h>
 #include <QQmlEngine>
 
@@ -38,6 +39,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<SkyBox>("SimVis", 1, 0, "SkyBox");
     qmlRegisterType<SkyBoxReflection>("SimVis", 1, 0, "SkyBoxReflection");
     qmlRegisterType<Plotting>("SimVis", 1, 0, "Plotting");
+    qmlRegisterType<TriangleCollection>("SimVis", 1, 0, "TriangleCollection");
 }
 
 void SimVisPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
