@@ -35,23 +35,10 @@ Window {
                 diffuseColor: "green"
                 ambientIntensity: 0.025
                 diffuseIntensity: 0.5
-                specularIntensity: 1.0
-                shininess: 40.0
+                specularIntensity: 0.01
+                shininess: 100.0
                 attenuation: 0.01
                 position: camera.position
-            }
-
-            Light {
-                id: light2
-                ambientColor: "red"
-                specularColor: "white"
-                diffuseColor: "green"
-                ambientIntensity: 0.025
-                diffuseIntensity: 0.5
-                specularIntensity: 1.0
-                shininess: 40.0
-                attenuation: 0.01
-                position: Qt.vector3d(Math.sin(0.1*6.28*visualizer.time), Math.cos(0.1*6.28*visualizer.time), 0)
             }
 
             SkyBoxReflection {
@@ -67,12 +54,12 @@ Window {
                 scale: 1.0
             }
 
-            SimplexTexture {
-                id: simplexTexture
-                scale: 1.0
-                enabled: true
-                timeDependent: true
-            }
+//            SimplexTexture {
+//                id: simplexTexture
+//                scale: 1.0
+//                enabled: true
+//                timeDependent: true
+//            }
         }
 
         TrackballNavigator {

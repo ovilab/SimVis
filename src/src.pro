@@ -2,7 +2,8 @@ TEMPLATE = lib
 TARGET = SimVis
 CONFIG += qt plugin c++11
 
-QMAKE_CXXFLAGS += -g
+message(SimVis src simvis_srcdir: $$simvis_srcdir)
+message(SimVis src simvis_builddir: $$simvis_builddir)
 
 ios {
     CONFIG += static
@@ -38,7 +39,10 @@ SOURCES += \
     renderables/skybox/skybox.cpp \
     shadereffects/skyboxreflection.cpp \
     renderables/plotting/plotting.cpp \
-    renderables/trianglecollection/trianglecollection.cpp
+    renderables/trianglecollection/trianglecollection.cpp \
+    shadereffects/periodiccopies.cpp \
+    shadereffects/slice.cpp \
+    renderables/cylinders/cylinders.cpp
 
 HEADERS += \
     core/navigator.h \
@@ -74,14 +78,17 @@ HEADERS += \
     SimVis/QuickWorker \
     SimVis/Renderable \
     SimVis/Simulator \
-    SimVis/TriangleCollection
+    SimVis/TriangleCollection \
+    shadereffects/periodiccopies.h \
+    shadereffects/slice.h \
+    renderables/cylinders/cylinders.h \
+    SimVis/Cylinders
 
 DISTFILES = qmldir \
-    core/simvisplugin.json \
-    SimVis/Plotting
+    core/simvisplugin.json
 
-DESTDIR = $$OUT_PWD/../dist/SimVis
-HEADERS_DESTDIR = $$OUT_PWD/../dist/include
+DESTDIR = $$simvis_builddir/dist/SimVis
+HEADERS_DESTDIR = $$simvis_builddir/dist/include
 
 RESOURCES += \
     shaders.qrc \

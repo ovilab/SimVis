@@ -1,9 +1,9 @@
 // BEGIN skybox.fsh
-varying highp vec3 textureCoordinate;
+in highp vec3 textureCoordinate;
 uniform samplerCube skyMapTexture;
-
+out vec4 outColor;
 void main()
 {
-    gl_FragColor = textureCube(skyMapTexture, textureCoordinate);
+    outColor = texture(skyMapTexture, textureCoordinate);
 }
 // END skybox.fsh

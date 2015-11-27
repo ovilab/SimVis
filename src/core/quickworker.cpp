@@ -2,7 +2,7 @@
 #include "../renderables/billboards/billboards.h"
 #include "../renderables/points/points.h"
 #include "../renderables/spheres/spheres.h"
-#include "../renderables/plotting/plotting.h"
+
 QuickWorker::QuickWorker()
 {
 
@@ -30,12 +30,6 @@ void QuickWorker::synchronizeRenderer(Renderable *renderableObject)
     Spheres* spheres = qobject_cast<Spheres*>(renderableObject);
     if(spheres) {
         spheres->setPositions(m_positions);
-        return;
-    }
-
-    Plotting* plotting = qobject_cast<Plotting*>(renderableObject);
-    if(plotting) {
-        plotting->setPositions(m_positions);
         return;
     }
 }

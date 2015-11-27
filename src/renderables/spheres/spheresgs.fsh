@@ -1,22 +1,20 @@
-// BEGIN spheres.fsh
-uniform sampler2D texture;
-varying highp vec2 coords;
-varying highp vec3 color;
-varying highp vec3 vertexPosition;
-varying highp float sphereId;
+in vec3 color;
+in vec2 texCoord;
+in vec3 vertexPosition;
+out vec4 fragcolor;
 
-void main() {
-    highp float x = coords.s;
-    highp float y = coords.t;
+void main(void) {
+    highp float x = texCoord.s;
+    highp float y = texCoord.t;
     highp float r2 = x*x + y*y;
-    if(r2 > 1.0) {
+    if(r2 > 0.9) {
         // 0.9 so we don't get this light circle on the back of the spheres
         discard;
     } else {
         highp float z = sqrt(1.0 - r2); // Equation for sphere, x^2 + y^2 + z^2 = R^2
 
         highp vec3 light = vec3(1.0, 1.0, 1.0);
-        highp vec3 normal = x*cp_rightVector - y*cp_upVector - z*cp_viewVector;
+        highp vec3 normal = x*cp_rightVector + y*cp_upVector - z*cp_viewVector;
 
     #ifdef SIMPLEXBUMP
         normal = simplexbump(normal, normal+vec3(sphereId));
@@ -30,7 +28,6 @@ void main() {
         light += skyboxReflection(normal, vertexPosition);
     #endif
 
-        gl_FragColor = vec4(color*light, 1.0);
+        fragcolor = vec4(color*light, 1.0);
     }
 }
-// END spheres.fsh

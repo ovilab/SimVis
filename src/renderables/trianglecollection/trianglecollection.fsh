@@ -1,8 +1,8 @@
 // BEGIN trianglecollection.fsh
-varying highp vec3 normal;
-varying highp vec3 color;
-varying highp vec3 vertexPosition;
-
+in highp vec3 normal;
+in highp vec3 color;
+in highp vec3 vertexPosition;
+out vec4 outColor;
 void main() {
     lowp float n = 1.0;
     highp vec3 light = vec3(color);
@@ -24,6 +24,6 @@ void main() {
     n = surface(vertexPosition); // From simplextexture.fsh
 #endif
 
-    gl_FragColor = vec4(light*n, 1.0);
+    outColor = vec4(light*n, 1.0);
 }
 // END trianglecollection.fsh

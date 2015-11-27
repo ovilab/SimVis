@@ -1,13 +1,12 @@
 // BEGIN trianglecollection.vsh
 uniform highp float normalVectorSign;
+layout(location=0) in vec4 a_position;
+layout(location=1) in vec3 a_normal;
+layout(location=2) in vec3 a_color;
 
-attribute highp vec4 a_position;
-attribute highp vec3 a_normal;
-attribute highp vec3 a_color;
-
-varying highp vec3 normal;
-varying highp vec3 color;
-varying highp vec3 vertexPosition;
+out highp vec3 normal;
+out highp vec3 color;
+out highp vec3 vertexPosition;
 
 void main() {
     vertexPosition = a_position.xyz;

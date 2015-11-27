@@ -1,7 +1,7 @@
 // BEGIN skybox.vsh
 uniform highp mat4 modelViewMatrixPrimeInverted;
-attribute highp vec2 a_position;
-varying highp vec3 textureCoordinate;
+in highp vec2 a_position;
+out highp vec3 textureCoordinate;
 
 void main() {
 //    gl_Position = cp_modelViewProjectionMatrix*vec4(a_position, 1.0);

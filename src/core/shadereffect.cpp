@@ -8,7 +8,7 @@ ShaderEffect::ShaderEffect()
 
 ShaderEffect::ShaderEffect(QUuid uniqueId)
 {
-
+    Q_UNUSED(uniqueId);
 }
 
 ShaderEffect::~ShaderEffect()
@@ -25,7 +25,6 @@ void ShaderEffect::setEnabled(bool arg)
 {
     if (m_enabled == arg)
         return;
-
     m_enabled = arg;
     m_shadersDirty = true;
     emit enabledChanged(arg);

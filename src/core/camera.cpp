@@ -4,16 +4,11 @@
 #include <QTransform>
 
 CameraPrivate::CameraPrivate(Camera *qq)
-//    : QEntityPrivate(qq)
-    : q_ptr(qq)
-    , m_lens(new CameraLens())
-//    , m_transform(new QTransform())
+    : m_lens(new CameraLens())
     , m_lookAt(new LookAtTransform())
+    , q_ptr(qq)
 {
 }
-
-//Camera::Camera(QNode *parent) :
-//    QEntity(*new CameraPrivate(this), parent)
 
 Camera::Camera(QObject *parent) :
     QObject(parent),
@@ -35,13 +30,16 @@ Camera::Camera(QObject *parent) :
     QObject::connect(d_func()->m_lookAt, SIGNAL(viewCenterChanged()), this, SIGNAL(viewCenterChanged()));
 
     // Default values
-    setPosition(QVector3D(0, 0, 5));
+    setPosition(QVector3D(0, 0, -5));
     setViewCenter(QVector3D(0, 0, 0));
     setUpVector(QVector3D(0, -1, 0));
-    setProjectionType(CameraLens::PerspectiveProjection);
+
     setFieldOfView(70);
     setNearPlane(0.1);
     setFarPlane(1000.0);
+
+    setProjectionType(CameraLens::PerspectiveProjection);
+
 //    QObject::connect(d_func()->m_transform, SIGNAL(matrixChanged()), this, SIGNAL(matrixChanged()));
 //    d_func()->m_transform->addTransform(d_func()->m_lookAt);
 //    addComponent(d_func()->m_lens);
@@ -268,6 +266,7 @@ void Camera::setAspectRatio(float aspectRatio)
 {
     Q_D(Camera);
     d->m_lens->setAspectRatio(aspectRatio);
+    updateViewBox();
 }
 
 float Camera::aspectRatio() const
@@ -330,10 +329,22 @@ QMatrix4x4 Camera::projectionMatrix()
     return d->m_lens->projectionMatrix();
 }
 
+void Camera::updateViewBox() {
+    Q_D(Camera);
+    QVector3D position = d->m_lookAt->position();
+    float r = (position-d->m_lookAt->viewCenter()).length();
+
+    setLeft(-r*(aspectRatio()));
+    setRight(r*(aspectRatio()));
+    setTop(r);
+    setBottom(-r);
+}
+
 void Camera::setPosition(const QVector3D &position)
 {
     Q_D(Camera);
     d->m_lookAt->setPosition(position);
+    updateViewBox();
 }
 
 QVector3D Camera::position() const

@@ -1,6 +1,6 @@
 #include "simulator.h"
 
-Simulator::Simulator(QObject *parent) : QObject(parent)
+Simulator::Simulator(QQuickItem *parent) : QQuickItem(parent)
 {
     connect(&m_timer, &QTimer::timeout, this, &Simulator::step);
     m_timer.start(1);
@@ -20,7 +20,7 @@ void Simulator::step()
     if(!m_worker) {
         m_worker = createWorker();
         m_worker->moveToThread(&m_workerThread);
-        m_workerThread.start();
+        m_workerThread.start(QThread::TimeCriticalPriority);
     }
     if(m_workerMutex.tryLock()) {
         m_worker->synchronizeSimulator(this);

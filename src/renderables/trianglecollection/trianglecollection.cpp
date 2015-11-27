@@ -38,6 +38,11 @@ void TriangleCollectionRenderer::render()
     if(numberOfTriangles == 0) {
         return;
     }
+    m_vao->bind();
+
+    int positionLocation = 0;
+    int normalLocation = 1;
+    int colorLocation = 2;
 
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
@@ -46,29 +51,25 @@ void TriangleCollectionRenderer::render()
     quintptr offset = 0;
 
     // Tell OpenGL programmable pipeline how to locate vertex position data
-    int vertexLocation = program().attributeLocation("a_position");
-    program().enableAttributeArray(vertexLocation);
-    glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(TriangleCollectionVBOData), (const void *)offset);
+    program().enableAttributeArray(positionLocation);
+    glFunctions()->glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(TriangleCollectionVBOData), (const void *)offset);
 
     // Offset for texture coordinate
     offset += sizeof(QVector3D);
 
     // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
-    vertexLocation = program().attributeLocation("a_normal");
-    program().enableAttributeArray(vertexLocation);
-    glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(TriangleCollectionVBOData), (const void *)offset);
+    program().enableAttributeArray(normalLocation);
+    glFunctions()->glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, sizeof(TriangleCollectionVBOData), (const void *)offset);
 
     // Offset for texture coordinate
     offset += sizeof(QVector3D);
 
     // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
-    vertexLocation = program().attributeLocation("a_color");
-    program().enableAttributeArray(vertexLocation);
-    glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(TriangleCollectionVBOData), (const void *)offset);
+    program().enableAttributeArray(colorLocation);
+    glFunctions()->glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(TriangleCollectionVBOData), (const void *)offset);
 
     glFunctions()->glEnable(GL_DEPTH_TEST);
-    glDepthMask(GL_TRUE);
-    // Draw cube geometry using indices from VBO 1
+    glFunctions()->glDepthMask(GL_TRUE);
 
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
     program().setUniformValue("normalVectorSign", 1.0f);
@@ -77,8 +78,9 @@ void TriangleCollectionRenderer::render()
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[2]);
     program().setUniformValue("normalVectorSign", -1.0f);
     glDrawElements(GL_TRIANGLES, numberOfTriangles*3, GL_UNSIGNED_INT, 0);
-
-    program().disableAttributeArray(vertexLocation);
+    program().disableAttributeArray(positionLocation);
+    program().disableAttributeArray(normalLocation);
+    program().disableAttributeArray(colorLocation);
 }
 
 void TriangleCollectionRenderer::uploadVBO(TriangleCollection *triangleCollection)
@@ -87,6 +89,8 @@ void TriangleCollectionRenderer::uploadVBO(TriangleCollection *triangleCollectio
     numberOfTriangles = triangleCollection->data.size()/3;
     if(triangleCollection->data.size() == 0) return;
     // Transfer vertex data to VBO 0
+    m_vao->bind();
+
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
     glFunctions()->glBufferData(GL_ARRAY_BUFFER, triangleCollection->data.size() * sizeof(TriangleCollectionVBOData), &triangleCollection->data[0], GL_STATIC_DRAW);
 

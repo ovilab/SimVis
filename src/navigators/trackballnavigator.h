@@ -12,19 +12,20 @@ class TrackballNavigator : public Navigator
 
 public:
     explicit TrackballNavigator(Camera *camera = 0, QQuickItem *parent = 0);
-~TrackballNavigator();
-float zoomSensitivity() const;
+    ~TrackballNavigator();
+    float zoomSensitivity() const;
 
 public slots:
-void setZoomSensitivity(float arg);
+    void setZoomSensitivity(float arg);
 
 signals:
-void zoomSensitivityChanged(float arg);
+    void zoomSensitivityChanged(float arg);
 
 protected:
     QVector2D m_touch1Position;
     QVector2D m_touch2Position;
     QVector3D m_initialCameraPosition;
+    Qt::MouseButton m_button;
     float m_zoomSensitivity = 1.0;
     void pressed(QVector2D position);
     void moved(QVector2D delta);

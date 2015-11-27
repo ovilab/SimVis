@@ -27,6 +27,7 @@ private:
     float m_fps = 60;
     qint64 m_fpsCounterTimeZero = QDateTime::currentMSecsSinceEpoch();
     QColor m_backgroundColor = QColor(0,0,0,0);
+    bool m_visible = true;
 };
 
 class Visualizer : public QQuickFramebufferObject
@@ -55,6 +56,7 @@ public slots:
     void setBackgroundColor(QColor arg);
     void setNavigator(Navigator* arg);
     void setFps(float arg);
+    void handleWindowChanged(QQuickWindow *win);
 
 private slots:
     void synchronizeWorker(SimulatorWorker* worker);
@@ -68,6 +70,7 @@ signals:
     void navigatorChanged(Navigator* arg);
     void fpsChanged(float arg);
     void timeChanged(float arg);
+    void touched();
 
 private:
     QTimer m_timer;
