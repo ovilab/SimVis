@@ -26,7 +26,7 @@ private:
     unsigned int m_frameCount = 0;
     float m_fps = 60;
     qint64 m_fpsCounterTimeZero = QDateTime::currentMSecsSinceEpoch();
-    QColor m_backgroundColor = QColor(0,0,0,0);
+    QColor m_backgroundColor = QColor(0,0,0);
     bool m_visible = true;
 };
 
@@ -79,7 +79,7 @@ private:
     Camera* m_camera = 0;
     Camera m_defaultCamera;
     Navigator* m_navigator = 0;
-    QColor m_backgroundColor = QColor(0,0,0,0);
+    QColor m_backgroundColor = QColor(0,0,0);
     float m_fps = 60;
     float m_time;
 
