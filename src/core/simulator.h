@@ -15,10 +15,12 @@ class Simulator;
 class SimulatorWorker : public QObject {
     Q_OBJECT
 
+protected:
+    virtual void work() = 0;
+
 private:
     virtual void synchronizeSimulator(Simulator *simulator) = 0;
     virtual void synchronizeRenderer(Renderable *renderableObject) = 0;
-    virtual void work() = 0;
 
     Q_INVOKABLE void workAndUnlock(Simulator *simulator);
 signals:

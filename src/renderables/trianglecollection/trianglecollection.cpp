@@ -70,17 +70,20 @@ void TriangleCollectionRenderer::render()
 
     glFunctions()->glEnable(GL_DEPTH_TEST);
     glFunctions()->glDepthMask(GL_TRUE);
+    glFunctions()->glEnable(GL_CULL_FACE);
+    glFunctions()->glCullFace(GL_FRONT);
 
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
-    program().setUniformValue("normalVectorSign", 1.0f);
+    program().setUniformValue("normalVectorSign", -1.0f);
     glDrawElements(GL_TRIANGLES, numberOfTriangles*3, GL_UNSIGNED_INT, 0);
 
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[2]);
-    program().setUniformValue("normalVectorSign", -1.0f);
+    program().setUniformValue("normalVectorSign", 1.0f);
     glDrawElements(GL_TRIANGLES, numberOfTriangles*3, GL_UNSIGNED_INT, 0);
     program().disableAttributeArray(positionLocation);
     program().disableAttributeArray(normalLocation);
     program().disableAttributeArray(colorLocation);
+    glFunctions()->glDisable(GL_CULL_FACE);
 }
 
 void TriangleCollectionRenderer::uploadVBO(TriangleCollection *triangleCollection)
