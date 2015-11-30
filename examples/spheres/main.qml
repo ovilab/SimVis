@@ -36,7 +36,7 @@ ApplicationWindow {
         SkyBox {
             id: skybox
             camera: camera
-            texture: ":/cubemap.jpg"
+            texture: ":/1024.png"
         }
 
         Spheres {
@@ -47,10 +47,10 @@ ApplicationWindow {
 
             Light {
                 id: light
-                ambientColor: spheres.color
+                ambientColor: "yellow"
                 specularColor: "white"
                 diffuseColor: spheres.color
-                ambientIntensity: 0.025
+                ambientIntensity: 0.5
                 diffuseIntensity: 0.5
                 specularIntensity: 1.0
                 shininess: 40.0
@@ -88,6 +88,13 @@ ApplicationWindow {
                 id: reflection
                 skybox: skybox
                 reflectivity: 0.2
+            }
+
+            SimplexBump {
+                id: simplexBump
+                enabled: true
+                intensity: 0.1
+                scale: 1.0
             }
         }
     }
@@ -128,9 +135,9 @@ ApplicationWindow {
 
                 Slider {
                     id: dt
-                    minimumValue: 0.05
+                    minimumValue: 0.01
                     maximumValue: 1.0
-                    value: 0.05
+                    value: 0.01
                 }
             }
 

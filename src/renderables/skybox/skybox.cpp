@@ -15,10 +15,15 @@ void SkyBoxRenderer::uploadTexture()
         m_texture->destroy();
         m_texture = 0;
     }
-    QStringList fileAppendNames;
-    fileAppendNames << "_positiveX" << "_negativeX"
-                    << "_positiveY" << "_negativeY"
-                    << "_positiveZ" << "_negativeZ";
+//    QStringList fileAppendNames;
+//    fileAppendNames << "_positiveX" << "_negativeX"
+//                    << "_positiveY" << "_negativeY"
+//                    << "_positiveZ" << "_negativeZ";
+
+    QStringList fileNamePrefixes;
+    fileNamePrefixes << "face_4_" << "face_2_"
+                     << "face_6_" << "face_5_"
+                    << "face_1_" << "face_3_";
 
     QList<QOpenGLTexture::CubeMapFace> faces;
     faces << QOpenGLTexture::CubeMapPositiveX << QOpenGLTexture::CubeMapNegativeX
@@ -26,8 +31,6 @@ void SkyBoxRenderer::uploadTexture()
           << QOpenGLTexture::CubeMapPositiveZ << QOpenGLTexture::CubeMapNegativeZ;
 
     QFileInfo f(m_textureFileBase);
-    QString baseName = f.absolutePath()+f.baseName();
-    QString suffix = f.suffix();
     m_texture = new QOpenGLTexture(QOpenGLTexture::TargetCubeMap);
 #if defined(Q_OS_IOS)
         m_texture->setFormat(QOpenGLTexture::RGBAFormat);
@@ -36,7 +39,8 @@ void SkyBoxRenderer::uploadTexture()
 #endif
 
     for(int i=0; i<6; i++) {
-        QString imageFileName = QString("%1%2.%3").arg(baseName, fileAppendNames[i], suffix);
+        // QString imageFileName = QString("%1%2.%3").arg(baseName, fileAppendNames[i], suffix);
+        QString imageFileName = QString("%1%2%3.%4").arg(f.absolutePath(), fileNamePrefixes[i], f.baseName(), f.suffix());
 
         QImage image(imageFileName);
         if(image.isNull()) {
@@ -61,7 +65,7 @@ void SkyBoxRenderer::uploadTexture()
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     m_texture->release();
 
-    fileAppendNames.clear();
+    fileNamePrefixes.clear();
     faces.clear();
 }
 
