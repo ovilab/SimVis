@@ -19,7 +19,7 @@ void main() {
         highp vec3 normal = x*cp_rightVector - y*cp_upVector - z*cp_viewVector;
 
     #ifdef SIMPLEXBUMP
-        normal = simplexbump(normal, normal+vec3(sphereId));
+        normal = simplexbump(normal, normal);
     #endif
 
     #ifdef DEFAULTLIGHT

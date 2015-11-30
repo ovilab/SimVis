@@ -336,7 +336,10 @@ void SpheresRenderer::renderGeometryShader() {
 
     program().enableAttributeArray(scaleLocation);
     glFunctions()->glVertexAttribPointer(scaleLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereGeometryShaderVBOData), (const void *)offset);
-    funcs.glDisable(GL_CULL_FACE);
+    glFunctions()->glDisable(GL_CULL_FACE);
+    glFunctions()->glEnable(GL_DEPTH_TEST);
+    glFunctions()->glDepthMask(GL_TRUE);
+
     glDrawArrays(GL_POINTS, 0, m_vertexCount);
 
     program().disableAttributeArray(positionLocation);
