@@ -1,90 +1,23 @@
 #include "mysimulator.h"
-
-#include <QVector3D>
-
+#include <QDebug>
+#include <SimVis/Spheres>
 MySimulator::MySimulator()
 {
 
 }
 
-MySimulator::~MySimulator()
-{
-
-}
-
-float MySimulator::springConstant() const
-{
-    return m_springConstant;
-}
-
-float MySimulator::mass() const
-{
-    return m_mass;
-}
-
-float MySimulator::dt() const
+double MySimulator::dt() const
 {
     return m_dt;
 }
 
-int MySimulator::ballCount() const
+void MySimulator::setDt(double dt)
 {
-    return m_numberOfBalls;
-}
-
-QVector3D MySimulator::firstParticlePosition() const
-{
-    return m_firstParticlePosition;
-}
-
-void MySimulator::setSpringConstant(float arg)
-{
-    if (m_springConstant == arg)
+    if (m_dt == dt)
         return;
 
-    m_springConstant = arg;
-    emit springConstantChanged(arg);
-}
-
-void MySimulator::setMass(float arg)
-{
-    if (m_mass == arg)
-        return;
-
-    m_mass = arg;
-    emit massChanged(arg);
-}
-
-void MySimulator::setDt(float arg)
-{
-    if (m_dt == arg)
-        return;
-
-    m_dt = arg;
-    emit dtChanged(arg);
-}
-
-void MySimulator::reset()
-{
-    m_willReset = true;
-}
-
-void MySimulator::setBallCount(int arg)
-{
-    if (m_numberOfBalls == arg)
-        return;
-
-    m_numberOfBalls = arg;
-    emit ballCountChanged(arg);
-}
-
-void MySimulator::setFirstParticlePosition(QVector3D arg)
-{
-    if (m_firstParticlePosition == arg)
-        return;
-
-    m_firstParticlePosition = arg;
-    emit firstParticlePositionChanged(arg);
+    m_dt = dt;
+    emit dtChanged(dt);
 }
 
 SimulatorWorker *MySimulator::createWorker()
@@ -94,60 +27,61 @@ SimulatorWorker *MySimulator::createWorker()
 
 MyWorker::MyWorker()
 {
-    reset();
+    using namespace SimVis;
+    m_positions.resize(50000);
+    m_velocities.resize(m_positions.size());
+    double size = 100;
+    for(int i=0; i<m_positions.size(); i++) {
+        float x = ((2.0*rand() / double(RAND_MAX))-1.0)*size;
+        float y = ((2.0*rand() / double(RAND_MAX))-1.0)*size;
+        float z = ((2.0*rand() / double(RAND_MAX))-1.0)*size;
+        float vx = ((2.0*rand() / double(RAND_MAX))-1.0);
+        float vy = ((2.0*rand() / double(RAND_MAX))-1.0);
+        float vz = ((2.0*rand() / double(RAND_MAX))-1.0);
+        m_positions[i] = QVector3D(x,y,z);
+        m_velocities[i] = QVector3D(vx,vy,vz);
+    }
+
 }
 
 void MyWorker::synchronizeSimulator(Simulator *simulator)
 {
-    MySimulator *mySimulator = static_cast<MySimulator *>(simulator);
-    m_dt = mySimulator->dt();
-    m_springConstant = mySimulator->springConstant();
-    m_mass = mySimulator->mass();
-    m_ballCount = mySimulator->ballCount();
-    if(mySimulator->m_willReset) {
-        reset();
-        mySimulator->m_willReset = false;
+    MySimulator *mySimulator = qobject_cast<MySimulator*>(simulator);
+    if(mySimulator) {
+        // Synchronize data between QML thread and computing thread (MySimulator is on QML, MyWorker is computing thread).
+        // This is for instance data from user through GUI (sliders, buttons, text fields etc)
+        dt = mySimulator->dt();
     }
-    if(m_positions.size() > 0) {
-        mySimulator->setFirstParticlePosition(m_positions[0]);
+}
+
+void MyWorker::synchronizeRenderer(Renderable *renderableObject)
+{
+    // Synchronize with renderables.
+    Spheres *spheres = qobject_cast<Spheres*>(renderableObject);
+    if(spheres) {
+        spheres->positions() = m_positions;
+        spheres->colors().resize(m_positions.size());
+        spheres->scales().resize(m_positions.size());
+        for(int i=0; i<m_positions.size(); i++) {
+            spheres->colors()[i] = QColor("red");
+            spheres->scales()[i] = 1.0;
+        }
+
+        spheres->setDirty(true);
+        return;
     }
 }
 
 void MyWorker::work()
 {
-    float m = m_mass;
-    float k = m_springConstant;
-    float dt = m_dt;
-    for(int i = 0; i < m_positions.size(); i++) {
-        QVector3D F;
-        QVector3D a;
-        QVector3D &r = m_positions[i];
-        QVector3D &v = m_velocities[i];
+    for(int i=0; i<m_positions.size(); i++) {
+        float ax = ((2.0*rand() / double(RAND_MAX))-1.0);
+        float ay = ((2.0*rand() / double(RAND_MAX))-1.0);
+        float az = ((2.0*rand() / double(RAND_MAX))-1.0);
+        m_velocities[i][0] += ax*dt;
+        m_velocities[i][1] += ay*dt;
+        m_velocities[i][2] += az*dt;
 
-        F = -r*k;
-        a = F / m;
-        v += a*dt;
-        r += v*dt;
-    }
-}
-
-void MyWorker::reset()
-{
-    m_positions.clear();
-    m_velocities.clear();
-    m_positions.resize(m_ballCount);
-    m_velocities.resize(m_ballCount);
-    for(auto i=0; i < m_ballCount; i++) {
-        float x =  2.0*(rand() / double(RAND_MAX)) - 1.0;
-        float y =  2.0*(rand() / double(RAND_MAX)) - 1.0;
-        float z =  2.0*(rand() / double(RAND_MAX)) - 1.0;
-        float vx = 2.0*(rand() / double(RAND_MAX)) - 1.0;
-        float vy = 2.0*(rand() / double(RAND_MAX)) - 1.0;
-        float vz = 2.0*(rand() / double(RAND_MAX)) - 1.0;
-
-        // x *= 5; y *= 5; z *= 5; vx *= 5; vy *= 5; vz *= 5;
-
-        m_positions[i] = 0.7 * QVector3D(x, y, z);
-        m_velocities[i] = 0.4 * QVector3D(vx, vy, vz);
+        m_positions[i] += m_velocities[i]*dt;
     }
 }
