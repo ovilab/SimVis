@@ -199,21 +199,31 @@ void SpheresRenderer::uploadVBOGeometryShader(Spheres* spheres) {
     QVector<QColor>& colors = spheres->m_colors;
     QVector<float>& scales = spheres->m_scales;
     QVector<SphereGeometryShaderVBOData>& vertices = spheres->m_verticesGeometryShader;
-    if(!spheres->dirty()) {
+
+    if(positions.size() < 1 || !spheres->dirty()) {
         return;
     }
-    if(colors.size() < 1 || scales.size() < 1 || positions.size() < 1) {
-        return;
-    }
+
     int numberOfVertices = positions.size();
     vertices.resize(numberOfVertices);
-
+    bool hasScales = scales.size();
+    bool hasColors = colors.size();
     for(auto i=0; i<numberOfVertices; i++) {
         vertices[i].position = positions[i];
-        vertices[i].color[0] = colors[i].redF();
-        vertices[i].color[1] = colors[i].greenF();
-        vertices[i].color[2] = colors[i].blueF();
-        vertices[i].scale = scales[i]*spheres->scale()*0.5;
+        if(hasColors) {
+            vertices[i].color[0] = colors[i].redF();
+            vertices[i].color[1] = colors[i].greenF();
+            vertices[i].color[2] = colors[i].blueF();
+        } else {
+            vertices[i].color[0] = spheres->color().redF();
+            vertices[i].color[1] = spheres->color().greenF();
+            vertices[i].color[2] = spheres->color().blueF();
+        }
+        if(hasScales) {
+            vertices[i].scale = scales[i]*spheres->scale()*0.5;
+        } else {
+            vertices[i].scale = spheres->scale();
+        }
     }
     spheres->setDirty(false);
 
