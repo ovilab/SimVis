@@ -77,8 +77,8 @@ void PointsRenderer::render()
     if(m_vertexCount == 0) {
         return;
     }
-
     QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
+    m_vao->bind();
     program().setUniformValue("modelViewProjectionMatrix", modelViewProjectionMatrix);
     program().setUniformValue("pointSize", m_pointSize);
 
@@ -107,23 +107,13 @@ void PointsRenderer::uploadVBO(Points *points)
     }
     // Transfer vertex data to VBO 0
     m_vertexCount = points->m_vertices.size();
+    m_vao->bind();
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
     glFunctions()->glBufferData(GL_ARRAY_BUFFER, m_vertexCount * sizeof(QVector3D), &points->m_vertices.front(), GL_STATIC_DRAW);
 }
 
 void PointsRenderer::beforeLinkProgram()
 {
-    setShaderFromSourceCode(QOpenGLShader::Vertex,
-                            "uniform highp float pointSize;\n"
-                            "attribute highp vec4 a_position;\n"
-                            "void main() {\n"
-                            "    gl_PointSize = 10.0;\n"
-                            "    gl_Position = cp_modelViewProjectionMatrix*a_position;\n"
-                            "}");
-
-    setShaderFromSourceCode(QOpenGLShader::Fragment,
-                            "uniform highp vec4 color;"
-                            "void main() {\n"
-                            "    gl_FragColor = color;\n"
-                            "}");
+    setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/points/points.vsh");
+    setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/points/points.fsh");
 }
