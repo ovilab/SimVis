@@ -59,6 +59,7 @@ protected:
     void addShaderCodeToBase(QOpenGLShader::ShaderType type, QString shaderCode);
     void setShaderFromSourceCode(QOpenGLShader::ShaderType type, QString shaderCode);
     void setShaderFromSourceFile(QOpenGLShader::ShaderType type, QString fileName);
+    bool geometryShaderIsSupported();
 signals:
 
 private:

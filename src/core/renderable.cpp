@@ -227,6 +227,11 @@ void RenderableRenderer::setShaderFromSourceFile(QOpenGLShader::ShaderType type,
     setShaderFromSourceCode(type, shaderCode);
 }
 
+bool RenderableRenderer::geometryShaderIsSupported()
+{
+    return QOpenGLShader::hasOpenGLShaders(QOpenGLShader::Geometry, QOpenGLContext::currentContext());
+}
+
 void RenderableRenderer::addShaderCodeToBase(QOpenGLShader::ShaderType type, QString shaderCode) {
     if(type == QOpenGLShader::Fragment) m_fragmentShaderBase.append(shaderCode);
     else if(type == QOpenGLShader::Vertex) m_vertexShaderBase.append(shaderCode);

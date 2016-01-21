@@ -103,11 +103,7 @@ void SpheresRenderer::synchronize(Renderable* renderer)
     m_rightVector = QVector3D::crossProduct(m_viewVector, m_upVector);
 
     if(!m_isInitialized) {
-        int major = QOpenGLContext::currentContext()->format().majorVersion();
-        int minor = QOpenGLContext::currentContext()->format().minorVersion();
-        m_geometryShaderSupported = major>3 || (major==3 && minor>=3);
-
-        if(m_geometryShaderSupported) m_numberOfVBOs = 1;
+        if(geometryShaderIsSupported()) m_numberOfVBOs = 1;
         else m_numberOfVBOs = 2;
         generateVBOs();
         m_isInitialized = true;
@@ -240,7 +236,7 @@ void SpheresRenderer::uploadVBOGeometryShader(Spheres* spheres) {
 
 void SpheresRenderer::uploadVBOs(Spheres* spheres)
 {
-    if(m_geometryShaderSupported) uploadVBOGeometryShader(spheres);
+    if(geometryShaderIsSupported()) uploadVBOGeometryShader(spheres);
     else uploadVBONoGeometryShader(spheres);
 }
 
@@ -250,7 +246,7 @@ void Spheres::setPositions(QVector<QVector3D> &positions)
 }
 
 void SpheresRenderer::beforeLinkProgram() {
-    if(m_geometryShaderSupported) {
+    if(geometryShaderIsSupported()) {
         setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/spheres/spheresgs.vsh");
         setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/spheres/spheresgs.fsh");
         setShaderFromSourceFile(QOpenGLShader::Geometry, ":/org.compphys.SimVis/renderables/spheres/spheres.gsh");
@@ -362,7 +358,7 @@ void SpheresRenderer::render()
     if(m_vertexCount == 0) {
         return;
     }
-    if(m_geometryShaderSupported) renderGeometryShader();
+    if(geometryShaderIsSupported()) renderGeometryShader();
     else renderNoGeometryShader();
 
 }

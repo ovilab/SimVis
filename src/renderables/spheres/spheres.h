@@ -37,7 +37,6 @@ private:
     virtual void render() override;
     virtual void beforeLinkProgram() override;
 
-    bool m_geometryShaderSupported = false;
     void uploadVBOs(Spheres* spheres);
     bool m_isInitialized = false;
     int m_vertexCount = 0;
