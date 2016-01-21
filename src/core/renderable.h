@@ -61,6 +61,7 @@ protected:
     void setShaderFromSourceFile(QOpenGLShader::ShaderType type, QString fileName);
     bool geometryShaderIsSupported();
     QString generateGLSLHeader();
+    // virtual QVector<QPair<int,int> > supportedGlslVersions() = 0;
 signals:
 
 private:
