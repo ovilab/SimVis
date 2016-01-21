@@ -28,6 +28,7 @@ struct SphereGeometryShaderVBOData
 class Spheres;
 class SpheresRenderer : public RenderableRenderer
 {
+    Q_OBJECT
 public:
     SpheresRenderer();
 

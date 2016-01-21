@@ -19,6 +19,7 @@ struct CylinderVBOData
 class Cylinders;
 class CylindersRenderer : public RenderableRenderer
 {
+    Q_OBJECT
 public:
     CylindersRenderer();
 

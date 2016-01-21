@@ -21,6 +21,7 @@ struct BillboardVBOData
 class Billboards;
 class BillboardsRenderer : public RenderableRenderer
 {
+    Q_OBJECT
 public:
     BillboardsRenderer();
 

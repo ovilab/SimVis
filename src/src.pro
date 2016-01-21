@@ -38,11 +38,11 @@ SOURCES += \
     shadereffects/light.cpp \
     renderables/skybox/skybox.cpp \
     shadereffects/skyboxreflection.cpp \
-    renderables/plotting/plotting.cpp \
     renderables/trianglecollection/trianglecollection.cpp \
     shadereffects/periodiccopies.cpp \
     shadereffects/slice.cpp \
-    renderables/cylinders/cylinders.cpp
+    renderables/cylinders/cylinders.cpp \
+    gui/axis/axis.cpp
 
 HEADERS += \
     core/navigator.h \
@@ -73,7 +73,6 @@ HEADERS += \
     shadereffects/light.h \
     renderables/skybox/skybox.h \
     shadereffects/skyboxreflection.h \
-    renderables/plotting/plotting.h \
     renderables/trianglecollection/trianglecollection.h \
     SimVis/QuickWorker \
     SimVis/Renderable \
@@ -82,7 +81,8 @@ HEADERS += \
     shadereffects/periodiccopies.h \
     shadereffects/slice.h \
     renderables/cylinders/cylinders.h \
-    SimVis/Cylinders
+    SimVis/Cylinders \
+    gui/axis/axis.h
 
 DISTFILES = qmldir \
     core/simvisplugin.json
