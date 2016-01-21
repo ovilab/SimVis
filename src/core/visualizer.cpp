@@ -68,7 +68,7 @@ float Visualizer::time() const
 
 void Visualizer::handleWindowChanged(QQuickWindow *win)
 {
-#if !defined(Q_OS_ANDROID)
+#if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
     if(win) {
         QSurfaceFormat format = win->format();
         format.setProfile(QSurfaceFormat::CoreProfile);
