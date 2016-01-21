@@ -32,5 +32,7 @@
         <file>renderables/cylinders/cylinders.vsh</file>
         <file>renderables/points/points.fsh</file>
         <file>renderables/points/points.vsh</file>
+        <file>renderables/lines/lines.fsh</file>
+        <file>renderables/lines/lines.vsh</file>
     </qresource>
 </RCC>

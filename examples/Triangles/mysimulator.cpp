@@ -13,7 +13,7 @@ SimulatorWorker *MySimulator::createWorker()
 
 void MyWorker::synchronizeSimulator(Simulator *simulator)
 {
-
+    Q_UNUSED(simulator)
 }
 
 void MyWorker::synchronizeRenderer(Renderable *renderableObject)

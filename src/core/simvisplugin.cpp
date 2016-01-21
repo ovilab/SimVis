@@ -4,6 +4,7 @@
 #include "../renderables/points/points.h"
 #include "../renderables/spheres/spheres.h"
 #include "../renderables/cylinders/cylinders.h"
+#include "../renderables/lines/lines.h"
 #include "../renderables/marchingcubes/marchingcubes.h"
 #include "../renderables/skybox/skybox.h"
 #include "visualizer.h"
@@ -44,6 +45,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<PeriodicCopies>("SimVis", 1, 0, "PeriodicCopies");
     qmlRegisterType<Slice>("SimVis", 1, 0, "Slice");
     qmlRegisterType<Cylinders>("SimVis", 1, 0, "Cylinders");
+    qmlRegisterType<Lines>("SimVis", 1, 0, "Lines");
 }
 
 void SimVisPlugin::initializeEngine(QQmlEngine *engine, const char *uri)

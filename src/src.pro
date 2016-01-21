@@ -42,7 +42,7 @@ SOURCES += \
     shadereffects/periodiccopies.cpp \
     shadereffects/slice.cpp \
     renderables/cylinders/cylinders.cpp \
-    gui/axis/axis.cpp
+    renderables/lines/lines.cpp
 
 HEADERS += \
     core/navigator.h \
@@ -82,7 +82,8 @@ HEADERS += \
     shadereffects/slice.h \
     renderables/cylinders/cylinders.h \
     SimVis/Cylinders \
-    gui/axis/axis.h
+    renderables/lines/lines.h \
+    SimVis/Lines
 
 DISTFILES = qmldir \
     core/simvisplugin.json
