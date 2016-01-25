@@ -59,10 +59,10 @@ void SkyBoxRenderer::uploadTexture()
 
     }
 
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glFunctions()->glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glFunctions()->glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glFunctions()->glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glFunctions()->glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     m_texture->release();
 
     fileNamePrefixes.clear();
@@ -154,8 +154,8 @@ void SkyBoxRenderer::render()
 
     m_texture->bind();
 
-    glDisable(GL_DEPTH_TEST); // Important so it will be behind everything else drawn later
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glFunctions()->glDisable(GL_DEPTH_TEST); // Important so it will be behind everything else drawn later
+    glFunctions()->glDrawArrays(GL_TRIANGLES, 0, 6);
 
     m_texture->release();
     program().disableAttributeArray(vertexLocation);

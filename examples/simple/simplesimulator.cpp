@@ -13,12 +13,12 @@ SimpleWorker::SimpleWorker()
     m_positions.resize(ballCount);
     m_velocities.resize(ballCount);
     for(auto i=0; i < ballCount; i++) {
-        float x =  2.0*(rand() / double(RAND_MAX)) - 1.0;
-        float y =  2.0*(rand() / double(RAND_MAX)) - 1.0;
-        float z =  2.0*(rand() / double(RAND_MAX)) - 1.0;
-        float vx = 2.0*(rand() / double(RAND_MAX)) - 1.0;
-        float vy = 2.0*(rand() / double(RAND_MAX)) - 1.0;
-        float vz = 2.0*(rand() / double(RAND_MAX)) - 1.0;
+        float x =  12.0*(rand() / double(RAND_MAX)) - 6.0;
+        float y =  12.0*(rand() / double(RAND_MAX)) - 6.0;
+        float z =  12.0*(rand() / double(RAND_MAX)) - 6.0;
+        float vx = 12.0*(rand() / double(RAND_MAX)) - 6.0;
+        float vy = 12.0*(rand() / double(RAND_MAX)) - 6.0;
+        float vz = 12.0*(rand() / double(RAND_MAX)) - 6.0;
 
         m_positions[i] = 0.5 * QVector3D(x, y, z);
         m_velocities[i] = 0.3 * QVector3D(vx, vy, vz);
@@ -34,8 +34,8 @@ void SimpleWorker::synchronizeSimulator(Simulator *simulator)
 
 void SimpleWorker::work()
 {
-    float m = 1.0;
-    float k = 1.0;
+    float m = 2.0;
+    float k = 0.1;
     float dt = 0.01;
     for(int i = 0; i < m_positions.size(); i++) {
         QVector3D F;

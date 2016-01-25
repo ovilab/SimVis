@@ -2,6 +2,8 @@ message(Library Deployment)
 message(simvis_srcdir: $$simvis_srcdir)
 message(simvis_builddir: $$simvis_builddir)
 
+INCLUDEPATH += /home/svenni/apps/nacl/nacl_sdk/pepper_47/include
+
 LIB_NAME = SimVis
 
 LIB_TARGET = $$qtLibraryTarget($$LIB_NAME)

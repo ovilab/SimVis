@@ -1,6 +1,10 @@
 TEMPLATE = lib
 TARGET = SimVis
-CONFIG += qt plugin c++11
+CONFIG += qt plugin #c++11
+
+QMAKE_CXXFLAGS += -std=gnu++11
+
+INCLUDEPATH += /home/svenni/apps/nacl/nacl_sdk/pepper_47/include
 
 message(SimVis src simvis_srcdir: $$simvis_srcdir)
 message(SimVis src simvis_builddir: $$simvis_builddir)
@@ -22,7 +26,6 @@ SOURCES += \
     core/quickworker.cpp \
     core/renderable.cpp \
     core/simulator.cpp \
-    core/simvisplugin.cpp \
     navigators/trackballnavigator.cpp \
     core/visualizer.cpp \
     core/cameralens.cpp \
@@ -50,7 +53,6 @@ HEADERS += \
     core/renderable.h \
     core/simulator.h \
     core/camera.h \
-    core/simvisplugin.h \
     navigators/trackballnavigator.h \
     core/visualizer.h \
     core/camera_p.h \

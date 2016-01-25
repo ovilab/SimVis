@@ -75,11 +75,11 @@ void TriangleCollectionRenderer::render()
 
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
     program().setUniformValue("normalVectorSign", -1.0f);
-    glDrawElements(GL_TRIANGLES, numberOfTriangles*3, GL_UNSIGNED_INT, 0);
+    glFunctions()->glDrawElements(GL_TRIANGLES, numberOfTriangles*3, GL_UNSIGNED_INT, 0);
 
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[2]);
     program().setUniformValue("normalVectorSign", 1.0f);
-    glDrawElements(GL_TRIANGLES, numberOfTriangles*3, GL_UNSIGNED_INT, 0);
+    glFunctions()->glDrawElements(GL_TRIANGLES, numberOfTriangles*3, GL_UNSIGNED_INT, 0);
     program().disableAttributeArray(positionLocation);
     program().disableAttributeArray(normalLocation);
     program().disableAttributeArray(colorLocation);

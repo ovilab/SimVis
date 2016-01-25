@@ -1,7 +1,8 @@
 TEMPLATE = subdirs
-SUBDIRS += spheres \
-    simple \
-    marchingcubes \
-    qmatplotpp \
-    Triangles
+SUBDIRS += \
+    spheres \
+    simple #\
+#    marchingcubes \
+#    qmatplotpp \
+#    Triangles
 CONFIG += ordered

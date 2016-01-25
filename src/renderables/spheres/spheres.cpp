@@ -271,43 +271,67 @@ void SpheresRenderer::renderNoGeometryShader() {
 
     // Tell OpenGL programmable pipeline how to locate vertex position data
     int sphereIdLocation = program().attributeLocation("a_sphereId");
-    program().enableAttributeArray(sphereIdLocation);
-    glFunctions()->glVertexAttribPointer(sphereIdLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
+    if(sphereIdLocation < 0) {
+        qWarning() << "a_sphereId not defined";
+    } else {
+        program().enableAttributeArray(sphereIdLocation);
+        glFunctions()->glVertexAttribPointer(sphereIdLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
+        offset += sizeof(GLfloat);
+    }
 
-    offset += sizeof(GLfloat);
 
     int scaleLocation = program().attributeLocation("a_scale");
-    program().enableAttributeArray(scaleLocation);
-    glFunctions()->glVertexAttribPointer(scaleLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
+    if(scaleLocation < 0) {
+        qWarning() << "a_scale not defined";
+    } else {
+        program().enableAttributeArray(scaleLocation);
+        glFunctions()->glVertexAttribPointer(scaleLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
+        offset += sizeof(GLfloat);
+    }
 
-    offset += sizeof(GLfloat);
 
     int vertexIdLocation = program().attributeLocation("a_vertexId");
-    program().enableAttributeArray(vertexIdLocation);
-    glFunctions()->glVertexAttribPointer(vertexIdLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
+    if(vertexIdLocation < 0) {
+        qWarning() << "a_vertexId not defined";
+    } else {
+        program().enableAttributeArray(vertexIdLocation);
+        glFunctions()->glVertexAttribPointer(vertexIdLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
+        offset += sizeof(GLfloat);
+    }
 
-    offset += sizeof(GLfloat);
 
     // Tell OpenGL programmable pipeline how to locate vertex position data
     int vertexLocation = program().attributeLocation("a_position");
-    program().enableAttributeArray(vertexLocation);
-    glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
+    if(vertexLocation < 0) {
+        qWarning() << "a_position not defined";
+    } else {
+        program().enableAttributeArray(vertexLocation);
+        glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
+        // Offset for texture coordinate
+        offset += sizeof(QVector3D);
+    }
 
-    // Offset for texture coordinate
-    offset += sizeof(QVector3D);
 
     // Tell OpenGL programmable pipeline how to locate vertex color data
     int colorLocation = program().attributeLocation("a_color");
-    program().enableAttributeArray(colorLocation);
-    glFunctions()->glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
+    if(colorLocation < 0) {
+        qWarning() << "a_color not defined";
+    } else {
+        program().enableAttributeArray(colorLocation);
+        glFunctions()->glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
+        // Offset for texture coordinate
+        offset += sizeof(QVector3D);
+    }
 
-    // Offset for texture coordinate
-    offset += sizeof(QVector3D);
 
     // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
     int texcoordLocation = program().attributeLocation("a_texcoord");
-    program().enableAttributeArray(texcoordLocation);
-    glFunctions()->glVertexAttribPointer(texcoordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
+    if(texcoordLocation  < 0) {
+        qWarning() << "a_texcoord not defined";
+    } else {
+        program().enableAttributeArray(texcoordLocation);
+        glFunctions()->glVertexAttribPointer(texcoordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
+    }
     // Draw cube geometry using indices from VBO 1
 
     glFunctions()->glEnable(GL_DEPTH_TEST);
@@ -346,7 +370,7 @@ void SpheresRenderer::renderGeometryShader() {
     glFunctions()->glEnable(GL_DEPTH_TEST);
     glFunctions()->glDepthMask(GL_TRUE);
 
-    glDrawArrays(GL_POINTS, 0, m_vertexCount);
+    glFunctions()->glDrawArrays(GL_POINTS, 0, m_vertexCount);
 
     program().disableAttributeArray(positionLocation);
     program().disableAttributeArray(colorLocation);

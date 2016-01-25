@@ -2,6 +2,9 @@
 #include "../core/camera.h"
 #include "../core/visualizer.h"
 #include <cmath>
+
+const double pi = 3.14159265359;
+
 TrackballNavigator::TrackballNavigator(Camera *camera, QQuickItem *parent) :
     Navigator(camera, parent)
 {
@@ -41,7 +44,7 @@ void TrackballNavigator::moved(QVector2D delta)
         float deltaPan = -delta.x() * 200;
         float deltaTilt = -delta.y() * 200;
 
-        double currentTilt = 180/M_PI*asin(double(m_camera->position().y()) / double(m_camera->position().length())); // sin(x) = a/b
+        double currentTilt = 180/pi*asin(double(m_camera->position().y()) / double(m_camera->position().length())); // sin(x) = a/b
         // First remove all tilt so panning is not biased. Note that y is flipped
         m_camera->tiltAboutViewCenter(currentTilt);
         m_camera->panAboutViewCenter(deltaPan);
@@ -107,7 +110,7 @@ void TrackballNavigator::touchEvent(QTouchEvent *event)
 
                     float lastTheta = atan2(lastDelta.y(), lastDelta.x());
                     float currentTheta = atan2(currentDelta.y(), currentDelta.x());
-                    float deltaTheta = (lastTheta - currentTheta)*180.0/M_PI;
+                    float deltaTheta = (lastTheta - currentTheta)*180.0/pi;
                     m_camera->rollAboutViewCenter(deltaTheta);
                     emit m_camera->cameraMoved();
                 }
