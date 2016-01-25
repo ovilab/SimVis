@@ -10,7 +10,6 @@ class Simulator;
 
 struct SphereNoGeometryShaderVBOData
 {
-    float sphereId;
     float scale;
     float vertexId;
     QVector3D position;

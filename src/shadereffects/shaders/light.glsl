@@ -5,7 +5,7 @@
 // and http://www.tomdalling.com/blog/modern-opengl/08-even-more-lighting-directional-lights-spotlights-multiple-lights/
 
 const int maxLights = 8;
-uniform int numLights;
+//uniform int numLights;
 struct Light {
     highp vec4 ambientColor;
     highp vec4 diffuseColor;
