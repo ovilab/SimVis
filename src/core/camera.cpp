@@ -167,10 +167,21 @@ void Camera::tilt( const float& angle )
     rotate( q );
 }
 
+QQuaternion Camera::rotation(float angle, const QVector3D &axis) const
+{
+    return QQuaternion::fromAxisAndAngle(axis, angle);
+}
+
 void Camera::pan( const float& angle )
 {
     QQuaternion q = panRotation( -angle );
     rotate( q );
+}
+
+void Camera::pan(float angle, const QVector3D &axis)
+{
+    QQuaternion q = rotation(-angle, axis);
+    rotate(q);
 }
 
 void Camera::roll( const float& angle )

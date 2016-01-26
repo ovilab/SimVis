@@ -124,6 +124,8 @@ public:
     void updateViewBox();
     void setViewVector(const QVector3D &viewVector);
     QVector3D rightVector() const;
+    void pan(float angle, const QVector3D &axis);
+    QQuaternion rotation(float angle, const QVector3D &axis) const;
 public slots:
     void setOrthographic(bool orthographic)
     {

@@ -195,8 +195,11 @@ void FlyModeNavigator::hoverMoveEvent(QHoverEvent *event)
     float thetaAboutRight = deltaF.y()/10.;
     float thetaAboutUp = deltaF.x()/10.;
 
+    // First remove all tilt so panning is not biased. Note that y is flipped
+    m_camera->pan(thetaAboutUp, QVector3D(0,-1,0));
     m_camera->tilt(thetaAboutRight);
-    m_camera->pan(thetaAboutUp);
+
+
     hideAndCenterMouse();
 }
 
