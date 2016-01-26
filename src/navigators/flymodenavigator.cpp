@@ -4,10 +4,11 @@
 #include <QWindow>
 #include <QApplication>
 #include <cmath>
-FlyModeNavigator::FlyModeNavigator(QQuickItem *parent) :
-    Navigator(parent)
+FlyModeNavigator::FlyModeNavigator(QQuickItem *parent)
 {
-    setFocus(true);
+    setAcceptedMouseButtons(Qt::AllButtons);
+    setAcceptHoverEvents(false);
+    setFocus(false);
     connect(&m_timer, &QTimer::timeout, this, &FlyModeNavigator::tick);
     m_timer.setInterval(16);
     m_timer.start();
@@ -66,6 +67,11 @@ void FlyModeNavigator::setMaxSpeed(float maxSpeed)
 
 void FlyModeNavigator::keyPressEvent(QKeyEvent *event)
 {
+    if(event->key() == Qt::Key_Escape) {
+        setAcceptHoverEvents(false);
+        setFocus(false);
+        showMouse();
+    }
     if(event->key() == Qt::Key_Shift) m_shiftPressed = true;
     if(event->key() == Qt::Key_W) {
         m_forwardIsPressed = true;
@@ -135,6 +141,28 @@ QWindow *FlyModeNavigator::getCurrentWindow() {
     return nullptr;
 }
 
+void FlyModeNavigator::showMouse() {
+    QWindow *window = getCurrentWindow();
+    if(window) {
+        QPoint middlePos = absolutePosition(QPoint(width()/2,height()/2));
+        QCursor::setPos(middlePos);
+        QCursor cursor;
+        cursor.setShape(Qt::ArrowCursor);
+        window->setCursor(cursor);
+    }
+}
+
+void FlyModeNavigator::hideAndCenterMouse() {
+    QWindow *window = getCurrentWindow();
+    if(window) {
+        QPoint middlePos = absolutePosition(QPoint(width()/2,height()/2));
+        QCursor::setPos(middlePos);
+        QCursor cursor;
+        cursor.setShape(Qt::BlankCursor);
+        window->setCursor(cursor);
+    }
+}
+
 QPoint FlyModeNavigator::absolutePosition(QPoint p) {
     QPointF pointFloat(p.x(), p.y());
     QQuickItem * item = this;
@@ -169,13 +197,12 @@ void FlyModeNavigator::hoverMoveEvent(QHoverEvent *event)
 
     m_camera->tilt(thetaAboutRight);
     m_camera->pan(thetaAboutUp);
+    hideAndCenterMouse();
+}
 
-    QWindow *window = getCurrentWindow();
-    if(window) {
-        QPoint middlePos = absolutePosition(QPoint(width()/2,height()/2));
-        QCursor::setPos(middlePos);
-        QCursor cursor;
-        cursor.setShape(Qt::BlankCursor);
-        window->setCursor(cursor);
-    }
+void FlyModeNavigator::mousePressEvent(QMouseEvent *event)
+{
+    setAcceptHoverEvents(true);
+    setFocus(true);
+    hideAndCenterMouse();
 }

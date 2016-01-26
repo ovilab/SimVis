@@ -36,6 +36,12 @@ protected:
     virtual void hoverMoveEvent(QHoverEvent *event) override;
     QPoint absolutePosition(QPoint p);
     QWindow *getCurrentWindow();
+
+    // QQuickItem interface
+protected:
+    virtual void mousePressEvent(QMouseEvent *event);
+    void hideAndCenterMouse();
+    void showMouse();
 };
 
 #endif // FLYMODENAVIGATOR_H
