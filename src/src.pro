@@ -43,7 +43,8 @@ SOURCES += \
     shadereffects/slice.cpp \
     renderables/cylinders/cylinders.cpp \
     renderables/lines/lines.cpp \
-    renderables/noiseviewer/noiseviewer.cpp
+    renderables/noiseviewer/noiseviewer.cpp \
+    navigators/flymodenavigator.cpp
 
 HEADERS += \
     core/navigator.h \
@@ -86,7 +87,8 @@ HEADERS += \
     renderables/lines/lines.h \
     SimVis/Lines \
     renderables/noiseviewer/noiseviewer.h \
-    SimVis/NoiseViewer
+    SimVis/NoiseViewer \
+    navigators/flymodenavigator.h
 
 DISTFILES = qmldir \
     core/simvisplugin.json

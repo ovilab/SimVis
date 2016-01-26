@@ -74,8 +74,8 @@ void NoiseViewerRenderer::synchronize(Renderable *renderable)
         if(!m_isInitialized) {
             m_numberOfVBOs = 1;
             generateVBOs();
-            noiseViewer->setVoxelsPerDimension(64);
-            noiseViewer->setScale(1000);
+            noiseViewer->setVoxelsPerDimension(32);
+            noiseViewer->setScale(10);
             m_voxelsPerDimension = noiseViewer->voxelsPerDimension();
             m_scale = noiseViewer->scale();
             uploadVBO();

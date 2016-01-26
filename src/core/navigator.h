@@ -12,7 +12,7 @@ protected:
     Camera* m_camera = nullptr;
     // QQuickItem* m_parent = nullptr;
 public:
-    explicit Navigator(Camera *camera = 0, QQuickItem *parent = 0);
+    explicit Navigator(QQuickItem *parent = 0);
     ~Navigator();
     Camera* camera() const;
 public slots:

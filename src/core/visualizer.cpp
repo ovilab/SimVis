@@ -51,7 +51,8 @@ QColor Visualizer::backgroundColor() const
 Navigator *Visualizer::navigator()
 {
     if(!m_navigator) {
-        m_navigator = new Navigator(camera(), this);
+        m_navigator = new Navigator(this);
+        m_navigator->setCamera(camera());
     }
     return m_navigator;
 }

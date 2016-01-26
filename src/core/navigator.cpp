@@ -1,10 +1,9 @@
 #include "navigator.h"
 #include "camera.h"
 
-Navigator::Navigator(Camera *camera, QQuickItem *parent) :
+Navigator::Navigator(QQuickItem *parent) :
     QQuickItem(parent)
 {
-    m_camera = camera;
     // m_parent = parent;
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);

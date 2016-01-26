@@ -372,10 +372,20 @@ void Camera::setViewCenter(const QVector3D &viewCenter)
     d->m_lookAt->setViewCenter(viewCenter);
 }
 
+void Camera::setViewVector(const QVector3D &viewVector) {
+    Q_D(Camera);
+    d->m_lookAt->setViewVector(viewVector);
+}
+
 QVector3D Camera::viewCenter() const
 {
     Q_D(const Camera);
     return d->m_lookAt->viewCenter();
+}
+
+QVector3D Camera::rightVector() const
+{
+    return QVector3D::crossProduct(viewVector(), upVector()).normalized();
 }
 
 QVector3D Camera::viewVector() const

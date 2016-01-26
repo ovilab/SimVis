@@ -11,7 +11,7 @@ class TrackballNavigator : public Navigator
     Q_PROPERTY(float zoomSensitivity READ zoomSensitivity WRITE setZoomSensitivity NOTIFY zoomSensitivityChanged)
 
 public:
-    explicit TrackballNavigator(Camera *camera = 0, QQuickItem *parent = 0);
+    explicit TrackballNavigator(QQuickItem *parent = 0);
     ~TrackballNavigator();
     float zoomSensitivity() const;
 

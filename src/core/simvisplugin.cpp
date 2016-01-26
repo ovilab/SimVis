@@ -11,6 +11,7 @@
 #include "camera.h"
 #include "navigator.h"
 #include "navigators/trackballnavigator.h"
+#include "navigators/flymodenavigator.h"
 #include "../shadereffects/simplexbump.h"
 #include "../shadereffects/light.h"
 #include "../shadereffects/simplextexture.h"
@@ -37,6 +38,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<Camera>("SimVis", 1, 0, "Camera");
     qmlRegisterType<Navigator>("SimVis", 1, 0, "Navigator");
     qmlRegisterType<TrackballNavigator>("SimVis", 1, 0, "TrackballNavigator");
+    qmlRegisterType<FlyModeNavigator>("SimVis", 1, 0, "FlyModeNavigator");
     qmlRegisterType<SimplexBump>("SimVis", 1, 0, "SimplexBump");
     qmlRegisterType<SimplexTexture>("SimVis", 1, 0, "SimplexTexture");
     qmlRegisterType<Light>("SimVis", 1, 0, "Light");

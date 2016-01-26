@@ -122,6 +122,8 @@ public:
     }
 
     void updateViewBox();
+    void setViewVector(const QVector3D &viewVector);
+    QVector3D rightVector() const;
 public slots:
     void setOrthographic(bool orthographic)
     {
