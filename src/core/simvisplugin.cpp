@@ -16,6 +16,7 @@
 #include "../shadereffects/simplextexture.h"
 #include "../shadereffects/skyboxreflection.h"
 #include "../renderables/trianglecollection/trianglecollection.h"
+#include "../renderables/noiseviewer/noiseviewer.h"
 #include "../shadereffects/periodiccopies.h"
 #include "../shadereffects/slice.h"
 #include <qqml.h>
@@ -42,6 +43,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<SkyBox>("SimVis", 1, 0, "SkyBox");
     qmlRegisterType<SkyBoxReflection>("SimVis", 1, 0, "SkyBoxReflection");
     qmlRegisterType<TriangleCollection>("SimVis", 1, 0, "TriangleCollection");
+    qmlRegisterType<NoiseViewer>("SimVis", 1, 0, "NoiseViewer");
     qmlRegisterType<PeriodicCopies>("SimVis", 1, 0, "PeriodicCopies");
     qmlRegisterType<Slice>("SimVis", 1, 0, "Slice");
     qmlRegisterType<Cylinders>("SimVis", 1, 0, "Cylinders");

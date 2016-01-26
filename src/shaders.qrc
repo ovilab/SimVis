@@ -34,5 +34,8 @@
         <file>renderables/points/points.vsh</file>
         <file>renderables/lines/lines.fsh</file>
         <file>renderables/lines/lines.vsh</file>
+        <file>renderables/noiseviewer/noiseviewer.fsh</file>
+        <file>renderables/noiseviewer/noiseviewer.gsh</file>
+        <file>renderables/noiseviewer/noiseviewer.vsh</file>
     </qresource>
 </RCC>

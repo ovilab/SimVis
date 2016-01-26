@@ -42,7 +42,8 @@ SOURCES += \
     shadereffects/periodiccopies.cpp \
     shadereffects/slice.cpp \
     renderables/cylinders/cylinders.cpp \
-    renderables/lines/lines.cpp
+    renderables/lines/lines.cpp \
+    renderables/noiseviewer/noiseviewer.cpp
 
 HEADERS += \
     core/navigator.h \
@@ -83,7 +84,9 @@ HEADERS += \
     renderables/cylinders/cylinders.h \
     SimVis/Cylinders \
     renderables/lines/lines.h \
-    SimVis/Lines
+    SimVis/Lines \
+    renderables/noiseviewer/noiseviewer.h \
+    SimVis/NoiseViewer
 
 DISTFILES = qmldir \
     core/simvisplugin.json
