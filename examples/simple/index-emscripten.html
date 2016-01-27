@@ -1,0 +1,49 @@
+
+
+<!DOCTYPE html>
+
+<!-- "windowed" template for Qt on NaCl -->
+
+<html>
+
+<head>
+   <meta http-equiv="Pragma" content="no-cache">
+   <meta http-equiv="Expires" content="-1">
+   <title>simple</title>
+   <!-- <script src="qtloader.js" type="text/javascript"></script> -->
+  <script type="text/javascript" src="loadnacl.js"></script>
+  <script type="text/javascript" src="common.js"></script>
+</head>
+
+<style>
+   embed { width:640px; height:480px; display:block; margin: auto; box-shadow: 0 0 1em #888888; }
+   H2 { text-align: center; }
+</style>
+
+<script type="text/javascript">
+
+// function init()
+// {
+//     // Create and configure Qt/NaCl controller
+//     var qt = new Qt({
+//         src : "simple.nmf",
+//         type : "application/x-pnacl",
+//         query : window.location.search.substring(1),
+//         isChromeApp : "false;"
+//     });
+// 
+//     // Create and append nacl <embed>
+//     var qtEmbed = qt.createQtElement()
+//     document.getElementById("nacl-container").appendChild(qtEmbed)
+// }
+
+</script>
+
+<body data-name="simple" data-width="480" data-height="480" data-tools="emscripten newlib pnacl" data-configs="Debug Release" data-path=".">
+<h2>simple</h2>
+<!-- <div id="nacl-container"></div> -->
+<div id="listener"></div>
+<script type="text/javascript" src="simple.js"></script>
+</body>
+
+</html>

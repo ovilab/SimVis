@@ -14,6 +14,9 @@ SOURCES += \
 RESOURCES += qml.qrc \
     ../../src/shaders.qrc
 
+# QMAKE_LFLAGS += -s ALLOW_MEMORY_GROWTH=1
+QMAKE_LFLAGS += -s PTHREAD_POOL_SIZE=4
+
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
 

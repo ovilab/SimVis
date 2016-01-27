@@ -5,6 +5,7 @@
 #include <QtGui>
 #include <QtQuick>
 #include <QDebug>
+#include <stdlib.h>
 #include <iostream>
 
 #include "simplesimulator.h"
@@ -35,6 +36,9 @@ QQuickView *view;
 
 void app_init(int argc, char **argv)
 {
+    setenv("QML_IMPORT_TRACE", "1", 1);
+
+    qDebug() << "App init, registering types";
     qmlRegisterUncreatableType<Simulator>("SimVis", 1, 0, "Simulator",
                                           "Cannot create abstract type Simulator. This must be subclassed.");
     qmlRegisterType<Billboards>("SimVis", 1, 0, "Billboards");
@@ -57,10 +61,12 @@ void app_init(int argc, char **argv)
     qmlRegisterType<Lines>("SimVis", 1, 0, "Lines");
     qmlRegisterType<SimpleSimulator>("SimpleSimulator", 1, 0, "SimpleSimulator");
     qDebug() << "Woooot!";
-    std::cerr << "Woot" << std::endl;
     view = new QQuickView();
+    qDebug() << "QQuickView made";
     view->setSource(QUrl("qrc:///main.qml"));
+    qDebug() << "Source set";
     view->setResizeMode(QQuickView::SizeRootObjectToView);
+    qDebug() << "Sized root to view";
     view->show();
     qDebug() << "View should be visible";
 }
@@ -70,18 +76,34 @@ void app_exit()
     delete view;
 }
 
-#ifdef Q_OS_NACL
-Q_GUI_MAIN(app_init, app_exit);
-#else
+Q_GUI_MAIN(app_init, app_exit)
 
-int main(int argc, char *argv[])
-{
-    QApplication app(argc, argv);
 
-    app_init(argc, argv);
+//int main(int argc, char *argv[])
+//{
+////    qDebug() << "Wrong main!";
+////    return 0;
+//    QApplication app(argc, argv);
 
-    int retVal = app.exec();
-    app_exit();
-    return retVal;
-}
-#endif
+//    app_init(argc, argv);
+
+//    int retVal = app.exec();
+//    app_exit();
+//    return retVal;
+//}
+
+//int main(int argc, char *argv[])
+//{
+//    std::cout << "Hello, world!" << std::endl;
+//    QApplication app(argc, argv);
+
+//    // use emscripten_set_main_loop and app.processEvents(); or something
+
+//    std::cout << "Hello, app!" << std::endl;
+//    app_init(argc, argv);
+//    std::cout << "Hello, init!" << std::endl;
+//    int retVal = app.exec();
+//    std::cout << "Hello, exec!" << std::endl;
+//    app_exit();
+//    return retVal;
+//}
