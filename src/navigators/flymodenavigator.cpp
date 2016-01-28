@@ -28,11 +28,13 @@ void FlyModeNavigator::tick()
         m_camera->setPosition(m_camera->position() + m_forwardSpeed*dt*m_camera->viewVector().normalized());
         m_camera->setViewCenter(m_camera->viewCenter() + m_rightSpeed*dt*m_camera->rightVector());
         m_camera->setPosition(m_camera->position() + m_rightSpeed*dt*m_camera->rightVector());
+        m_camera->roll(3*m_rollSpeed*dt);
     } else {
         m_camera->setViewCenter(m_camera->viewCenter() + m_forwardSpeed*dt*m_camera->viewVector().normalized());
         m_camera->setPosition(m_camera->position() + m_forwardSpeed*dt*m_camera->viewVector().normalized());
         m_camera->setViewCenter(m_camera->viewCenter() + m_rightSpeed*dt*m_camera->rightVector());
         m_camera->setPosition(m_camera->position() + m_rightSpeed*dt*m_camera->rightVector());
+        m_camera->roll(3*m_rollSpeed*dt);
     }
 
     if(!m_forwardIsPressed && !m_backwardIsPressed) {
@@ -52,6 +54,16 @@ void FlyModeNavigator::tick()
         } else {
             m_rightSpeed += m_maxSpeed*0.05;
             m_rightSpeed = std::min(0.0f, m_rightSpeed);
+        }
+    }
+
+    if(!m_rollLeftIsPressed && !m_rollRightIsPressed) {
+        if(m_rollSpeed > 0) {
+            m_rollSpeed -= m_maxSpeed*0.05;
+            m_rollSpeed = std::max(0.0f, m_rollSpeed);
+        } else {
+            m_rollSpeed += m_maxSpeed*0.05;
+            m_rollSpeed = std::min(0.0f, m_rollSpeed);
         }
     }
 }
@@ -98,6 +110,20 @@ void FlyModeNavigator::keyPressEvent(QKeyEvent *event)
         m_rightSpeed -= m_maxSpeed*0.2;
         m_rightSpeed = std::max(m_rightSpeed, -m_maxSpeed);
     }
+
+    if(event->key() == Qt::Key_Q) {
+        m_rollLeftIsPressed = true;
+        if(m_rollSpeed < 0) m_rollSpeed = 0;
+        m_rollSpeed += m_maxSpeed*0.2;
+        m_rollSpeed = std::min(m_rollSpeed, m_maxSpeed);
+    }
+
+    if(event->key() == Qt::Key_E) {
+        m_rollRightIsPressed = true;
+        if(m_rollSpeed > 0) m_rollSpeed = 0;
+        m_rollSpeed -= m_maxSpeed*0.2;
+        m_rollSpeed = std::max(m_rollSpeed, -m_maxSpeed);
+    }
 }
 
 
@@ -116,6 +142,12 @@ void FlyModeNavigator::keyReleaseEvent(QKeyEvent *event)
     }
     if(event->key() == Qt::Key_A) {
         m_leftIsPressed = false;
+    }
+    if(event->key() == Qt::Key_Q) {
+        m_rollLeftIsPressed = false;
+    }
+    if(event->key() == Qt::Key_E) {
+        m_rollRightIsPressed = false;
     }
 }
 
@@ -196,7 +228,8 @@ void FlyModeNavigator::hoverMoveEvent(QHoverEvent *event)
     float thetaAboutUp = deltaF.x()/10.;
 
     // First remove all tilt so panning is not biased. Note that y is flipped
-    m_camera->pan(thetaAboutUp, QVector3D(0,-1,0));
+    // m_camera->pan(thetaAboutUp, QVector3D(0,-1,0));
+    m_camera->pan(thetaAboutUp);
     m_camera->tilt(thetaAboutRight);
 
 

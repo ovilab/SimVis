@@ -26,6 +26,9 @@ protected:
     bool m_shiftPressed = false;
     float m_forwardSpeed = 0;
     float m_rightSpeed = 0;
+    float m_rollSpeed = 0;
+    bool m_rollRightIsPressed = false;
+    bool m_rollLeftIsPressed = false;
     bool m_forwardIsPressed = false;
     bool m_backwardIsPressed = false;
     bool m_rightIsPressed = false;
