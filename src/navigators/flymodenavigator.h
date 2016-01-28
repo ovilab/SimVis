@@ -42,7 +42,7 @@ protected:
 
     // QQuickItem interface
 protected:
-    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event) override;
     void hideAndCenterMouse();
     void showMouse();
 };

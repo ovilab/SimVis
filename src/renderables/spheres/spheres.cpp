@@ -185,7 +185,6 @@ void SpheresRenderer::uploadVBONoGeometryShader(Spheres* spheres) {
     // Transfer index data to VBO 1
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
     glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices.front(), GL_STATIC_DRAW);
-
     m_vertexCount = spheres->m_verticesNoGeometryShader.size();
     m_indexCount = spheres->m_indices.size();
 }

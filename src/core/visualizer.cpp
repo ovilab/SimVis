@@ -194,6 +194,7 @@ void VisualizerRenderer::synchronize(QQuickFramebufferObject *fbo)
 {
     Visualizer* visualizer = static_cast<Visualizer*>(fbo);
     m_visible = visualizer->isVisible();
+
     m_renderables = visualizer->findChildren<Renderable*>();
     m_camera = visualizer->camera();
     m_backgroundColor = visualizer->backgroundColor();

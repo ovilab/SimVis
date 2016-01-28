@@ -126,8 +126,6 @@ void FlyModeNavigator::keyPressEvent(QKeyEvent *event)
     }
 }
 
-
-
 void FlyModeNavigator::keyReleaseEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_Shift) m_shiftPressed = false;
