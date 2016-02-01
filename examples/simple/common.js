@@ -32,10 +32,6 @@ var common = (function () {
   }
 
   nacl.createInstance = function(config) {
-      var ENVIRONMENT_IS_PTHREAD;
-      if (!ENVIRONMENT_IS_PTHREAD) ENVIRONMENT_IS_PTHREAD = false; // ENVIRONMENT_IS_PTHREAD=true will have been preset in pthread-main.js. Make it false in the main runtime thread.
-
-      console.log("Is pthread in common? " + ENVIRONMENT_IS_PTHREAD);
     var variant = config.module;
     var e;
     var width = config.width;
@@ -369,8 +365,6 @@ var common = (function () {
 // the page's document has finished.
 //common.addListener(document, 'DOMContentLoaded', function() {
 window.onload = function() {
-    console.log("Body onload, but should we?");
-
   var body = document.querySelector('body');
 
   var loadFunction = common.domContentLoaded;

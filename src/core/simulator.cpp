@@ -22,13 +22,15 @@ void Simulator::step()
         m_worker->moveToThread(&m_workerThread);
         m_workerThread.start(QThread::TimeCriticalPriority);
     }
-    if(m_workerMutex.tryLock()) {
+    // if(m_workerMutex.tryLock()) {
         m_worker->synchronizeSimulator(this);
         emit requestVisualizerSync(m_worker);
-        QMetaObject::invokeMethod(m_worker, "workAndUnlock",
-                                  Qt::QueuedConnection,
-                                  Q_ARG(Simulator*, this)); // call happens on worker's thread
-    }
+//        emit requestWorkAndUnlock();
+        m_worker->workAndUnlock(this);
+        // QMetaObject::invokeMethod(m_worker, "workAndUnlock",
+                                //   Qt::QueuedConnection,
+                                //   Q_ARG(Simulator*, this)); // call happens on worker's thread
+    // }
 }
 
 void SimulatorWorker::workAndUnlock(Simulator* simulator)

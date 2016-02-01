@@ -15,7 +15,11 @@ RESOURCES += qml.qrc \
     ../../src/shaders.qrc
 
 # QMAKE_LFLAGS += -s ALLOW_MEMORY_GROWTH=1
-QMAKE_LFLAGS += -s PTHREAD_POOL_SIZE=4
+# QMAKE_LFLAGS += -s PTHREAD_POOL_SIZE=4
+QMAKE_LFLAGS += --preload-file qml
+QMAKE_LFLAGS -= -Wl,-O1
+QMAKE_LFLAGS += -O2
+LIBS += -lqtquick2plugin -L/home/svenni/apps/qt-nacl/qt5-nacl-5.6-emscripten2/qtbase/qtbase/qml/QtQuick.2/
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

@@ -1,4 +1,10 @@
+// Copyright (c) 2013 Google Inc. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 var nacl = nacl || {};
+
+var doCreateInstance;
 
 (function(nacl) {
   nacl.chromeMajorVersion = function() {
@@ -116,9 +122,16 @@ var nacl = nacl || {};
 
     // To be called after the element is inserted into the page.
     e.load = function() {
+      console.log("Loaaading!")
       e.setAttribute('src', url);
       loadScript(url, function() {
-        instanceToCreate = function() {CreateInstance(width, height, e); e.finishLoading();}
+        console.log("Create instance in JS")
+        doCreateInstance = function() {          
+          CreateInstance(width, height, e);
+          e.finishLoading();
+        }
+        // CreateInstance(width, height, e);
+        // e.finishLoading();
       }, function() {
         // TODO send event.
         e.readyState = 4;

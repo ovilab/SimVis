@@ -9,6 +9,7 @@ SimulatorWorker *SimpleSimulator::createWorker()
 
 SimpleWorker::SimpleWorker()
 {
+    qDebug() << "Construct worker!";
     int ballCount = 100;
     m_positions.resize(ballCount);
     m_velocities.resize(ballCount);

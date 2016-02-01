@@ -30,7 +30,7 @@
 #include "core/../shadereffects/periodiccopies.h"
 #include "core/../shadereffects/slice.h"
 
-//Q_IMPORT_PLUGIN(SimVisPlugin)
+Q_IMPORT_PLUGIN(QtQuick2Plugin)
 
 QQuickView *view;
 

@@ -74,7 +74,7 @@ highp vec3 applyLight(Light light, highp vec3 normal, highp vec3 vertexPosition,
 highp vec3 defaultLight(highp vec3 normal, highp vec3 vertexPosition, highp vec3 color) {
     highp vec3 light = vec3(0.0);
     // highp float oneOverNumberOfLights = 1.0/max(float(cp_numberOfLights), 1.0);
-    for(int i=0; i<cp_numberOfLights; i++) {
+    for(int i=0; i<1; i++) {
         light += cp_oneOverNumberOfLights*applyLight(cp_lights[i], normal, vertexPosition, color);
     }
 
