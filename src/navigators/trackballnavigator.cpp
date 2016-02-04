@@ -34,6 +34,9 @@ QVector2D TrackballNavigator::scaledTouchPosition(QVector2D touchPosition) {
 
 void TrackballNavigator::moved(QVector2D delta)
 {
+    if(!m_camera) {
+        return;
+    }
     if(m_button == Qt::RightButton) {
         QVector2D deltaScaled = -scaledTouchPosition(delta)*1e4;
         m_camera->translate(QVector3D(deltaScaled.x(), deltaScaled.y(), 0));

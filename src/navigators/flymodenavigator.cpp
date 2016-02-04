@@ -21,6 +21,10 @@ float FlyModeNavigator::maxSpeed() const
 
 void FlyModeNavigator::tick()
 {
+    if(!m_camera) {
+        return;
+    }
+
     float dt = 0.1;
     if(m_shiftPressed) {
         dt = 0.5;
@@ -219,6 +223,10 @@ QPoint FlyModeNavigator::absolutePosition(QPoint p) {
 
 void FlyModeNavigator::hoverMoveEvent(QHoverEvent *event)
 {
+    if(!m_camera) {
+        return;
+    }
+
     QPointF deltaF = event->posF() - event->oldPosF();
     if(deltaF == -lastMoveEvent) return;
     lastMoveEvent = deltaF;

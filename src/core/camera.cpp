@@ -362,7 +362,6 @@ QVector3D Camera::position() const
 {
     Q_D(const Camera);
     return d->m_lookAt->position();
-
 }
 
 void Camera::setUpVector(const QVector3D &upVector)
