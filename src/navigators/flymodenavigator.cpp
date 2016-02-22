@@ -2,9 +2,9 @@
 #include "../core/camera.h"
 #include <QCursor>
 #include <QWindow>
-#include <QApplication>
 #include <cmath>
 FlyModeNavigator::FlyModeNavigator(QQuickItem *parent)
+    : Navigator(parent)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(false);
