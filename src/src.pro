@@ -93,15 +93,11 @@ HEADERS += \
 DISTFILES = qmldir \
     core/simvisplugin.json
 
-DESTDIR = $$simvis_builddir/dist/SimVis
-HEADERS_DESTDIR = $$simvis_builddir/dist/include
-
 RESOURCES += \
     shaders.qrc \
     qmldir.qrc
 
 # Used for dynamic builds
-
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
     copy_qmldir.target = $$DESTDIR/qmldir
     copy_qmldir.depends = $$_PRO_FILE_PWD_/imports/SimVis/qmldir
