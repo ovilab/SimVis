@@ -117,7 +117,7 @@ void NoiseViewerRenderer::render()
     glFunctions()->glDepthMask(GL_TRUE);
     glFunctions()->glEnable(GL_DEPTH_TEST);
 
-    glDrawArrays(GL_POINTS, 0, m_numberOfVoxels);
+    glFunctions()->glDrawArrays(GL_POINTS, 0, m_numberOfVoxels);
 
     program().disableAttributeArray(positionLocation);
     glFunctions()->glDisable(GL_CULL_FACE);
