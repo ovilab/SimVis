@@ -4,6 +4,8 @@
 #include <cmath>
 #include "mysimulator.h"
 
+#include "vendor.h"
+
 int main(int argc, char *argv[])
 {
     qmlRegisterType<MySimulator>("MySimulator", 1, 0, "MySimulator");
