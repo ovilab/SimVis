@@ -2,6 +2,7 @@ message(Library Deployment)
 message(simvis_srcdir: $$simvis_srcdir)
 message(simvis_builddir: $$simvis_builddir)
 message(pwd: $$PWD)
+message(shadowed_pwd: shadowed($$PWD))
 message(out_pwd: $$OUT_PWD)
 
 package_subdirs {
