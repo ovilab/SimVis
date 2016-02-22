@@ -5,7 +5,7 @@
 #include <cmath>
 
 FlyModeNavigator::FlyModeNavigator(QQuickItem *parent)
-    : QQuickItem(parent)
+    : Navigator(parent)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(false);
