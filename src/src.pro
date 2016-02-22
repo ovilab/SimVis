@@ -89,7 +89,7 @@ HEADERS += \
     renderables/noiseviewer/noiseviewer.h \
     SimVis/NoiseViewer \
     navigators/flymodenavigator.h \
-    vendor.h
+    qpm.h
 
 DISTFILES = qmldir \
     core/simvisplugin.json

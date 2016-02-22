@@ -81,4 +81,4 @@ HEADERS += \
     $$PWD/src/renderables/noiseviewer/noiseviewer.h \
     $$PWD/src/SimVis/NoiseViewer \
     $$PWD/src/navigators/flymodenavigator.h \
-    $$PWD/src/vendor.h
+    $$PWD/src/qpm.h
