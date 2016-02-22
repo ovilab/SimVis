@@ -88,8 +88,7 @@ HEADERS += \
     SimVis/Lines \
     renderables/noiseviewer/noiseviewer.h \
     SimVis/NoiseViewer \
-    navigators/flymodenavigator.h \
-    qpm.h
+    navigators/flymodenavigator.h
 
 DISTFILES = qmldir \
     core/simvisplugin.json
