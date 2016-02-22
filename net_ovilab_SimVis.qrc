@@ -1,0 +1,6 @@
+
+<RCC>
+    <qresource prefix="/net/ovilab/SimVis">
+        <file>qmldir</file>
+    </qresource>
+</RCC>

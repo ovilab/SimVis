@@ -1,0 +1,22 @@
+{
+  "name": "net.ovilab.SimVis",
+  "description": "",
+  "author": {
+    "name": "Svenn-Arne Dragly",
+    "email": "s@dragly.com"
+  },
+  "repository": {
+    "type": "GITHUB",
+    "url": "git@github.com:ComputationalPhysics/SimVis.git"
+  },
+  "version": {
+    "label": "0.0.1",
+    "revision": "",
+    "fingerprint": ""
+  },
+  "dependencies": [
+  ],
+  "license": "GPL_2_0",
+  "pri_filename": "package.pri",
+  "webpage": ""
+}
