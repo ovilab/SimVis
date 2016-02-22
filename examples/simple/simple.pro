@@ -14,7 +14,7 @@ QML_IMPORT_PATH =
 
 # Default rules for deployment.
 include(deployment.pri)
-include(../../library_deployment.pri)
+include(../../package.pri)
 
 HEADERS += \
     simplesimulator.h
