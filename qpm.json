@@ -10,7 +10,7 @@
     "url": "git@github.com:ComputationalPhysics/SimVis.git"
   },
   "version": {
-    "label": "0.0.12",
+    "label": "0.0.14",
     "revision": "",
     "fingerprint": ""
   },
@@ -18,5 +18,11 @@
   ],
   "license": "GPL_2_0",
   "pri_filename": "package.pri",
-  "webpage": ""
+  "webpage": "",
+  "headers": [
+    "src/core/simvisplugin.h"
+  ],
+  "plugins": [
+    "SimVisPlugin"
+  ]
 }
