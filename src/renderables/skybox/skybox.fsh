@@ -1,5 +1,5 @@
 // BEGIN skybox.fsh
-in highp vec3 textureCoordinate;
+in highp vec2 textureCoordinate;
 uniform sampler2D skyMapTexture;
 out vec4 outColor;
 // varying highp vec3 textureCoordinate;
