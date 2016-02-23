@@ -1,7 +1,7 @@
 // BEGIN skybox.vsh
 uniform highp mat4 modelViewMatrixPrimeInverted;
 in highp vec2 a_position;
-out highp vec2 textureCoordinate;
+out highp vec3 textureCoordinate;
 // attribute highp vec2 a_position;
 // varying highp vec3 textureCoordinate;
 
