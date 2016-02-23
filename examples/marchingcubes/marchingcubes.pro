@@ -1,6 +1,5 @@
 TEMPLATE = app
 CONFIG += c++11
-QMAKE_CXXFLAGS += -g
 
 QT += qml quick widgets opengl openglextensions
 
@@ -15,7 +14,7 @@ RESOURCES += qml.qrc
 QML_IMPORT_PATH =
 
 # Default rules for deployment.
-include(../../library_deployment.pri)
+include(../examples_vendor.pri)
 
 HEADERS += \
     mysimulator.h \
