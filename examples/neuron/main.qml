@@ -105,7 +105,7 @@ ApplicationWindow {
         id: camera
         nearPlane: 0.1
         farPlane: 5000.0
-        position: Qt.vector3d(0.0, 0.0, 30.0)
+        position: Qt.vector3d(0.0, 0.0, 10.0)
         upVector: Qt.vector3d(0.0, -1.0, 0.0)
         viewCenter: Qt.vector3d(0.0, 0.0, 0.0)
     }
