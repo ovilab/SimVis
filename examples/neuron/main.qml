@@ -14,8 +14,12 @@ ApplicationWindow {
 
     Visualizer {
         anchors.fill: parent
-        simulator: reader
+        simulator: NeuronReader {
+            id: reader
+            source: "test.xml"
+        }
         camera: camera
+        backgroundColor: "blue"
 
         focus: true
 
@@ -25,37 +29,76 @@ ApplicationWindow {
             camera: camera
         }
 
-        Neuron {
-            id: neuron
-            scale: 0.3
-            color: "blue"
-
-            Light {
-                id: light
-                ambientColor: neuron.color
-                specularColor: "white"
-                diffuseColor: neuron.color
-                ambientIntensity: 0.25
-                diffuseIntensity: 1.0
-                specularIntensity: 1.0
-                shininess: 40.0
-                attenuation: 0.0001
-                position: Qt.vector3d(10, 10, 10)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
-            }
+        Cylinders {
+            visible: true
+            scale: 1.0
+            radius: 1.2
 
             Light {
                 id: light2
-                ambientColor: neuron.color
+                ambientColor: "yellow"
                 specularColor: "white"
-                diffuseColor: neuron.color
-                ambientIntensity: 0.025
-                diffuseIntensity: 1.0
+                diffuseColor: "#ff17e6"
+                ambientIntensity: 0.5
+                diffuseIntensity: 0.5
                 specularIntensity: 1.0
                 shininess: 40.0
-                attenuation: 0.0001
-                position: Qt.vector3d(-10, -10, 10)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
+                attenuation: 0.01
+                position: Qt.vector3d(0.5, 0.5, 0.5)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
             }
         }
+
+//        Spheres {
+//            id: spheres
+//            visible: true
+//            scale: 1.0
+//            color: "#ff17e6"
+
+//            Light {
+//                id: light
+//                ambientColor: "yellow"
+//                specularColor: "white"
+//                diffuseColor: spheres.color
+//                ambientIntensity: 0.5
+//                diffuseIntensity: 0.5
+//                specularIntensity: 1.0
+//                shininess: 40.0
+//                attenuation: 0.01
+//                position: Qt.vector3d(0.5, 0.5, 0.5)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
+//            }
+//        }
+
+//        Neuron {
+//            id: neuron
+//            scale: 0.3
+//            color: "blue"
+
+//            Light {
+//                id: light
+//                ambientColor: neuron.color
+//                specularColor: "white"
+//                diffuseColor: neuron.color
+//                ambientIntensity: 0.25
+//                diffuseIntensity: 1.0
+//                specularIntensity: 1.0
+//                shininess: 40.0
+//                attenuation: 0.0001
+//                position: Qt.vector3d(10, 10, 10)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
+//            }
+
+//            Light {
+//                id: light2
+//                ambientColor: neuron.color
+//                specularColor: "white"
+//                diffuseColor: neuron.color
+//                ambientIntensity: 0.025
+//                diffuseIntensity: 1.0
+//                specularIntensity: 1.0
+//                shininess: 40.0
+//                attenuation: 0.0001
+//                position: Qt.vector3d(-10, -10, 10)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
+//            }
+//        }
     }
 
     Camera {
@@ -63,20 +106,15 @@ ApplicationWindow {
         nearPlane: 0.1
     }
 
-    NeuronReader {
-        id: reader
-        source: "test.xml"
-    }
+//    FileDialog {
+//        id: fileDialog
+//        onAccepted: {
+//            reader.source = fileUrl
+//        }
+//    }
 
-    FileDialog {
-        id: fileDialog
-        onAccepted: {
-            reader.source = fileUrl
-        }
-    }
-
-    Button {
-        text: "Test"
-        onClicked: fileDialog.open()
-    }
+//    Button {
+//        text: "Test"
+//        onClicked: fileDialog.open()
+//    }
 }

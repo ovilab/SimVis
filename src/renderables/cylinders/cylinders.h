@@ -46,32 +46,21 @@ public:
 
     virtual CylindersRenderer *createRenderer();
     bool dirty() const;
-    QVector<CylinderVBOData> &vertices() { return m_vertices; }
+    QVector<CylinderVBOData> &cylinders() { return m_cylinders; }
 
-    float radius() const
-    {
-        return m_radius;
-    }
+    float radius() const;
+    void setCylinders(const QVector<CylinderVBOData> &cylinders);
 
 public slots:
     void setDirty(bool dirty);
-
-    void setRadius(float radius)
-    {
-        if (m_radius == radius)
-            return;
-
-        m_radius = radius;
-        emit radiusChanged(radius);
-    }
+    void setRadius(float radius);
 
 signals:
     void dirtyChanged(bool dirty);
-
     void radiusChanged(float radius);
 
 private:
-    QVector<CylinderVBOData> m_vertices;
+    QVector<CylinderVBOData> m_cylinders;
 
     friend class CylindersRenderer;
     bool m_dirty = false;

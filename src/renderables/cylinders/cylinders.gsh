@@ -16,11 +16,9 @@ void main(void) {
     float sphereRadius2 = vs_radius2[0]; // Spheres discard any r^2 > 0.9 => r>0.95
     float dr1 = sqrt(sphereRadius1*sphereRadius1 - radius*radius);
     float dr2 = sqrt(sphereRadius2*sphereRadius2 - radius*radius);
-    vec3 epsilonAwayFromCamera = cp_viewVector*0.001;
 
-    // Move vertices slightly away from camera so they always appear behind spheres
-    vec3 v1 = vs_vertex1Position[0]+epsilonAwayFromCamera;
-    vec3 v2 = vs_vertex2Position[0]+epsilonAwayFromCamera;
+    vec3 v1 = vs_vertex1Position[0];
+    vec3 v2 = vs_vertex2Position[0];
     vec3 deltaV2V1Normalized = normalize(v2-v1);
 
     vec4 v14 = vec4(v1+deltaV2V1Normalized*dr1, 1.0);

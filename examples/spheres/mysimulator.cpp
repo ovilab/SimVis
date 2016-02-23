@@ -60,13 +60,6 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
     Spheres *spheres = qobject_cast<Spheres*>(renderableObject);
     if(spheres) {
         spheres->positions() = m_positions;
-        spheres->colors().resize(m_positions.size());
-        spheres->scales().resize(m_positions.size());
-        for(int i=0; i<m_positions.size(); i++) {
-            spheres->colors()[i] = QColor("red");
-            spheres->scales()[i] = 1.0;
-        }
-
         spheres->setDirty(true);
         return;
     }
