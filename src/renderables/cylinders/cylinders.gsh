@@ -33,11 +33,19 @@ void main(void) {
 
     // top cap
 
-    gl_Position = cp_modelViewProjectionMatrix*(vec4(v1 - ortho*vs_radius1[0] + sign*ortho2*vs_radius1[0], 1.0));
+    gl_Position = cp_modelViewProjectionMatrix*(vec4(v1 - ortho*vs_radius1[0] - ortho2*vs_radius1[0], 1.0));
+    texCoord = vec2(-1.0, -1.0);
+    EmitVertex();
+
+    gl_Position = cp_modelViewProjectionMatrix*(vec4(v1 + ortho*vs_radius1[0] - ortho2*vs_radius1[0], 1.0));
+    texCoord = vec2(1.0, -1.0);
+    EmitVertex();
+
+    gl_Position = cp_modelViewProjectionMatrix*(vec4(v1 - ortho*vs_radius1[0] + ortho2*vs_radius1[0], 1.0));
     texCoord = vec2(-1.0, 1.0);
     EmitVertex();
 
-    gl_Position = cp_modelViewProjectionMatrix*(vec4(v1 + ortho*vs_radius1[0] + sign*ortho2*vs_radius1[0], 1.0));
+    gl_Position = cp_modelViewProjectionMatrix*(vec4(v1 + ortho*vs_radius1[0] + ortho2*vs_radius1[0], 1.0));
     texCoord = vec2(1.0, 1.0);
     EmitVertex();
 
@@ -59,11 +67,19 @@ void main(void) {
     EmitVertex();
 
     // bottom cap
-    gl_Position = cp_modelViewProjectionMatrix*(vec4(v2 - ortho*vs_radius1[0] - sign*ortho2*vs_radius1[0], 1.0));
+    gl_Position = cp_modelViewProjectionMatrix*(vec4(v2 - ortho*vs_radius2[0] - ortho2*vs_radius2[0], 1.0));
+    texCoord = vec2(-1.0, -1.0);
+    EmitVertex();
+
+    gl_Position = cp_modelViewProjectionMatrix*(vec4(v2 + ortho*vs_radius2[0] - ortho2*vs_radius2[0], 1.0));
+    texCoord = vec2(1.0, -1.0);
+    EmitVertex();
+
+    gl_Position = cp_modelViewProjectionMatrix*(vec4(v2 - ortho*vs_radius2[0] + ortho2*vs_radius2[0], 1.0));
     texCoord = vec2(-1.0, 1.0);
     EmitVertex();
 
-    gl_Position = cp_modelViewProjectionMatrix*(vec4(v2 + ortho*vs_radius1[0] - sign*ortho2*vs_radius1[0], 1.0));
+    gl_Position = cp_modelViewProjectionMatrix*(vec4(v2 + ortho*vs_radius2[0] + ortho2*vs_radius2[0], 1.0));
     texCoord = vec2(1.0, 1.0);
     EmitVertex();
 
