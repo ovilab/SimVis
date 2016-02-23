@@ -13,8 +13,7 @@ RESOURCES += qml.qrc
 QML_IMPORT_PATH =
 
 # Default rules for deployment.
-include(deployment.pri)
-include(../../package.pri)
+include(../../library_deployment.pri)
 
 HEADERS += \
     simplesimulator.h
