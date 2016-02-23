@@ -93,9 +93,9 @@ void PointsRenderer::render()
 
     // Draw cube geometry using indices from VBO 1
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
-    glEnable(GL_PROGRAM_POINT_SIZE);
+    glFunctions()->glEnable(GL_PROGRAM_POINT_SIZE);
 #endif
-    glDrawArrays(GL_POINTS, 0, m_vertexCount);
+    glFunctions()->glDrawArrays(GL_POINTS, 0, m_vertexCount);
 
     program().disableAttributeArray(vertexLocation);
 }

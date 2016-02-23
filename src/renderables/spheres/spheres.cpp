@@ -345,7 +345,7 @@ void SpheresRenderer::renderGeometryShader() {
     glFunctions()->glEnable(GL_DEPTH_TEST);
     glFunctions()->glDepthMask(GL_TRUE);
 
-    glDrawArrays(GL_POINTS, 0, m_vertexCount);
+    glFunctions()->glDrawArrays(GL_POINTS, 0, m_vertexCount);
 
     program().disableAttributeArray(positionLocation);
     program().disableAttributeArray(colorLocation);

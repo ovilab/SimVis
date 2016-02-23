@@ -64,7 +64,7 @@ void LinesRenderer::render()
     glFunctions()->glEnable(GL_DEPTH_TEST);
     glFunctions()->glDepthMask(GL_TRUE);
 
-    glDrawArrays(GL_LINES, 0, m_vertexCount);
+    glFunctions()->glDrawArrays(GL_LINES, 0, m_vertexCount);
 
     program().disableAttributeArray(positionLocation);
 }

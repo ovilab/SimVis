@@ -99,7 +99,7 @@ void CylindersRenderer::render()
     glFunctions()->glVertexAttribPointer(radius2Location, 1, GL_FLOAT, GL_FALSE, sizeof(CylinderVBOData), (const void *)offset);
 
     funcs.glDisable(GL_CULL_FACE);
-    glDrawArrays(GL_LINES, 0, m_vertexCount);
+    glFunctions()->glDrawArrays(GL_LINES, 0, m_vertexCount);
 
     program().disableAttributeArray(vertex1Location);
     program().disableAttributeArray(vertex2Location);

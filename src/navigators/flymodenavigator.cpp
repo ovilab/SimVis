@@ -3,6 +3,7 @@
 #include <QCursor>
 #include <QWindow>
 #include <cmath>
+
 FlyModeNavigator::FlyModeNavigator(QQuickItem *parent)
     : Navigator(parent)
 {

@@ -295,7 +295,7 @@ void BillboardsRenderer::render()
     m_texture->bind();
 
     // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
+    glFunctions()->glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
 
     m_texture->release();
     program().disableAttributeArray(vertexLocation);
