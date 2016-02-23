@@ -3,29 +3,20 @@ import qbs 1.0
 Product {
     name: "net.ovilab.SimVis"
     type: "staticlibrary"
+
     cpp.includePaths: ["src"]
     cpp.cxxLanguageVersion: "c++14"
+
     Depends { name: 'cpp' }
     Depends { name: "Qt.core" }
     Depends { name: "Qt.opengl" }
     Depends { name: "Qt.quick" }
 
     Export {
-        cpp.includePaths: [
-            "src"
-        ]
+        cpp.includePaths: ["src"]
         Depends { name: "cpp" }
-        Depends {
-            name: "Qt"
-            submodules: [
-                "core",
-                "gui",
-                "qml",
-                "quick",
-                "widgets"
-            ]
-        }
     }
+
     files: [
         "src/shaders.qrc",
         "src/qmldir.qrc",
