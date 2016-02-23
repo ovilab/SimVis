@@ -141,17 +141,21 @@ void NeuronReader::readFile()
 
         cylinder.vertex1 = segment.proximal * scaler;
         cylinder.vertex2 = segment.distal * scaler;
-        cylinder.radius1 = segment.proximalWidth * 1 * scaler;
-        cylinder.radius2 = segment.distalWidth * 1 * scaler;
-
-        qDebug() << cylinder.vertex1 << cylinder.vertex2 << cylinder.radius1 << cylinder.radius2;
+        cylinder.radius1 = segment.proximalWidth * scaler * 0.5;
+        cylinder.radius2 = segment.distalWidth * scaler * 0.5;
 
         m_cylinders.push_back(cylinder);
-
-        QVector3D sphere;
-        sphere = segment.proximal;
-        m_spheres.push_back(sphere);
     }
+
+//    m_cylinders.clear();
+//    CylinderVBOData cylinder;
+//    cylinder.vertex1 = QVector3D(0.0, 0.0, 5.0);
+//    cylinder.vertex2 = QVector3D(0.0, 0.0, -5.0);
+//    cylinder.radius1 = 1.0;
+//    cylinder.radius2 = 2.0;
+
+//    m_cylinders.push_back(cylinder);
+
 
     qDebug() << "Done reading";
     m_segmentsAreDirty = true;
