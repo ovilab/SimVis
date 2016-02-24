@@ -3,7 +3,9 @@ in vec3 vertexPosition;
 in vec3 base;
 in vec3 end_cyl;
 in vec3 axis;
-in float radius;
+//in float radius;
+in float radiusA;
+in float radiusB;
 in float da;
 in vec3 U;
 in vec3 V;
@@ -11,36 +13,53 @@ in vec3 V;
 out vec4 fragcolor;
 
 void main(void) {
-    vec3 ray_origin = vec3(0.0, 0.0, 0.0);
-    vec3 ray_target = vertexPosition;
-    vec3 surface_point = vertexPosition;
+    vec3 ray_origin = vec3(0.0, 0.0, 0.0); // in modelview space
+    vec3 ray_target = vertexPosition; // in modelview space
     vec3 ray_direction = normalize(ray_origin - ray_target);
 
-    mat3 basis = mat3(U, V, axis);
+    mat3 basis = mat3(U, V, axis); // cylinder space basis
 
+    // Ray origin in cylinder space
     vec3 diff = ray_target - 0.5 * (base + end_cyl);
-    vec3 P = diff * basis;
 
-    // angle (cos) between cylinder cylinder_axis and ray direction
-    float dz = dot(axis, ray_direction);
+    // Ray origin in cylinder basis
+    vec3 E = diff * basis;
 
+    // Radius of cylinder
+    float radius = radiusA;
     float radius2 = radius*radius;
 
-    // calculate distance to the cylinder from ray origin
-    vec3 D = vec3(dot(U, ray_direction),
-                  dot(V, ray_direction),
-                  dz);
-    float a0 = P.x*P.x + P.y*P.y - radius2;
-    float a1 = P.x*D.x + P.y*D.y;
-    float a2 = D.x*D.x + D.y*D.y;
-    // calculate a dicriminant of the above quadratic equation
-    float d = a1*a1 - a0*a2;
+    // Ray direction in cylinder basis
+    vec3 D = ray_direction * basis;
+
+    // Cylinder equation is
+    //     x^2 + y^2 = r^2
+    // Ray equation is
+    //     P(t) = E + t*D
+    // We substitute ray into cylinder equation to get
+    //     (Ex + Dx * t)^2 + (Ey + Dy * t)^2 = r^2
+    // The result is a quadratic equation with form
+    //      a*t^2 + b*t + c = 0
+    // where
+    //      a = Dx^2 + Dy^2
+    //      b = 2*(Dx*Ex + Dy*Ey)
+    //      c = Ex^2 + Ey^2 - r^2
+    float a = D.x*D.x + D.y*D.y;
+    float b = 2.0*E.x*D.x + 2.0*E.y*D.y;
+    float c = E.x*E.x + E.y*E.y - radius2;
+    // the solutions are
+    //      t = (-b +/- sqrt(b*b - 4*a*c)) / 2*a
+    // the discriminant of the above equation is
+    //      d = b*b - 4*a*c
+    float d = b*b - 4.0*a*c;
+    // if this is below zero, there is no solution
+    // and we are outside cylinder
     if (d < 0.0) {
 //        fragcolor = vec4(0.2, 1.0, 0.2, 1.0);
 //        return;
         discard;
     }
-    float dist = (-a1 + sqrt(d))/a2;
+    float dist = (-b + sqrt(d))/(2.0*a);
 
     // point of intersection on cylinder surface
     vec3 new_point = ray_target + dist * ray_direction;
@@ -103,4 +122,5 @@ void main(void) {
       normal = axis;
     }
     fragcolor = vec4(dot(normal, ray_direction), 0.2, 0.2, 1.0);
+//    fragcolor = vec4(1.0, 0.2, 0.2, 1.0);
 }

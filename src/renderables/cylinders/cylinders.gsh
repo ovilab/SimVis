@@ -14,6 +14,8 @@ out vec3 U;
 out vec3 V;
 out float da;
 out float radius;
+out float radiusA;
+out float radiusB;
 out vec3 base;
 out vec3 end_cyl;
 
@@ -31,7 +33,7 @@ void main(void) {
     axis = normalize(cp_normalMatrix * deltaNormalized);
 
     float r1 = vs_radius1[0];
-    float r2 = vs_radius2[0];
+    float r2 = vs_radius1[0]; // TODO use both radii
 
     vec3 center = (v1 + v2) * 0.5;
     vec3 cam_dir = (cp_cameraPosition - center);
@@ -47,6 +49,8 @@ void main(void) {
 
     vec4 mvv1 = MV * vec4(v1, 1.0);
     vec4 mvv2 = MV * vec4(v2, 1.0);
+    // NOTE: dividing by w here is typically not necessary
+    // w is seldom modified by model view matrices
     base = mvv1.xyz / mvv1.w;
     end_cyl = mvv2.xyz / mvv2.w;
 
@@ -104,15 +108,17 @@ void main(void) {
 
     radiuses[4] = r1;
     radiuses[5] = r1;
-    radiuses[6] = r1;
-    radiuses[7] = r1;
+    radiuses[6] = r2;
+    radiuses[7] = r2;
 
     // top cap
     for(int i = 0; i < 8; i++) {
         vertexPosition = vertices[i].xyz / vertices[i].w;
         gl_Position = P*vertices[i];
         texCoord = texCoords[i];
-        radius = radiuses[i];
+//        radius = radiuses[i];
+        radiusA = r1;
+        radiusB = r2;
         EmitVertex();
     }
 
