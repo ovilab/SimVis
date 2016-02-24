@@ -2,13 +2,11 @@ in vec2 texCoord;
 in vec3 vertexPosition;
 in vec3 base;
 in vec3 end_cyl;
-in vec3 axis;
 //in float radius;
 in float radiusA;
 in float radiusB;
 in float da;
-in vec3 U;
-in vec3 V;
+in mat3 cylinderBasis;
 
 out vec4 fragcolor;
 
@@ -17,7 +15,8 @@ void main(void) {
     vec3 ray_target = vertexPosition; // in modelview space
     vec3 ray_direction = normalize(ray_origin - ray_target);
 
-    mat3 basis = mat3(U, V, axis); // cylinder space basis
+    mat3 basis = cylinderBasis; // cylinder space basis
+    vec3 axis = cylinderBasis[2];
 
     // Ray origin in cylinder space
     vec3 diff = ray_target - base;

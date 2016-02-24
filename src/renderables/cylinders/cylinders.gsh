@@ -9,9 +9,7 @@ in float vs_radius2[1];
 out vec2 texCoord;
 out vec3 vertexPosition;
 out vec3 cylinderDirection;
-out vec3 axis;
-out vec3 U;
-out vec3 V;
+out mat3 cylinderBasis;
 out float da;
 out float radius;
 out float radiusA;
@@ -30,8 +28,6 @@ void main(void) {
     vec3 delta = v2 - v1;
     vec3 deltaNormalized = normalize(delta);
 
-    axis = normalize(cp_normalMatrix * deltaNormalized);
-
     radiusA = vs_radius1[0];
     radiusB = vs_radius2[0];
 
@@ -43,11 +39,12 @@ void main(void) {
     vec3 right = cross(cam_dir, deltaNormalized);
     right = normalize(right);
 
-    vec3 outward = -cross(right, deltaNormalized);
+    vec3 outward = cross(deltaNormalized, right);
     outward = normalize(outward);
 
-    U = normalize(cp_normalMatrix * outward);
-    V = normalize(cp_normalMatrix * right);
+    cylinderBasis = mat3(normalize(cp_normalMatrix * outward), // U
+                         normalize(cp_normalMatrix * right), // V
+                         normalize(cp_normalMatrix * deltaNormalized)); // axis
 
     vec4 mvv1 = MV * vec4(v1, 1.0);
     vec4 mvv2 = MV * vec4(v2, 1.0);
