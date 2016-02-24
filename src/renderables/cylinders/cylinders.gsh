@@ -64,18 +64,16 @@ void main(void) {
         v2 = vtmp;
     }
 
-    vec4 vertices[12];
+    vec4 vertices[6];
     vertices[ 0] = MV*vec4(v1 - right*rmax - outward*rmax, 1.0); // cap top left
     vertices[ 1] = MV*vec4(v1 + right*rmax - outward*rmax, 1.0);
     vertices[ 2] = MV*vec4(v1 - right*rmax + outward*rmax, 1.0); // cap bottom left
     vertices[ 3] = MV*vec4(v1 + right*rmax + outward*rmax, 1.0);
 
-    vertices[ 4] = MV*vec4(v1 - right*rmax + outward*rmax, 1.0); // main top left
-    vertices[ 5] = MV*vec4(v1 + right*rmax + outward*rmax, 1.0);
-    vertices[ 6] = MV*vec4(v2 - right*rmax + outward*rmax, 1.0); // main bottom left
-    vertices[ 7] = MV*vec4(v2 + right*rmax + outward*rmax, 1.0);
+    vertices[ 4] = MV*vec4(v2 - right*rmax + outward*rmax, 1.0); // main bottom left
+    vertices[ 5] = MV*vec4(v2 + right*rmax + outward*rmax, 1.0);
 
-    vec2 texCoords[12];
+    vec2 texCoords[6];
     texCoords[ 0] = vec2(-1.0, -1.0);
     texCoords[ 1] = vec2(1.0, -1.0);
     texCoords[ 2] = vec2(-1.0, 1.0);
@@ -83,11 +81,9 @@ void main(void) {
 
     texCoords[ 4] = vec2(-1.0, 0.0);
     texCoords[ 5] = vec2(1.0, 0.0);
-    texCoords[ 6] = vec2(-1.0, 0.0);
-    texCoords[ 7] = vec2(1.0, 0.0);
 
     // top cap
-    for(int i = 0; i < 8; i++) {
+    for(int i = 0; i < 6; i++) {
         vertexPosition = vertices[i].xyz / vertices[i].w;
         gl_Position = P*vertices[i];
         texCoord = texCoords[i];
