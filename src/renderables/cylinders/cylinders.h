@@ -33,6 +33,8 @@ private:
     bool m_isInitialized = false;
     int m_vertexCount = 0;
     int m_indexCount = 0;
+    void geometryShaderMissingError();
+    bool m_hasPrintedError = false;
 };
 
 class Cylinders : public Renderable

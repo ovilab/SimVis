@@ -54,8 +54,20 @@ CylindersRenderer::CylindersRenderer()
     m_vboCount = 1;
 }
 
+void CylindersRenderer::geometryShaderMissingError()
+{
+    if(!m_hasPrintedError) {
+        qDebug() << "ERROR: Cylinders requires geometry shader to function.";
+        m_hasPrintedError = true;
+    }
+}
+
 void CylindersRenderer::synchronize(Renderable* renderer)
 {
+    if(!geometryShaderIsSupported()) {
+        geometryShaderMissingError();
+        return;
+    }
     Cylinders* cylinders= static_cast<Cylinders*>(renderer);
     if(!m_isInitialized) {
         generateVBOs();
@@ -68,6 +80,10 @@ void CylindersRenderer::synchronize(Renderable* renderer)
 
 void CylindersRenderer::uploadVBOs(Cylinders* cylinders)
 {
+    if(!geometryShaderIsSupported()) {
+        geometryShaderMissingError();
+        return;
+    }
     if(!cylinders->dirty()) {
         return;
     }
@@ -86,6 +102,10 @@ void CylindersRenderer::uploadVBOs(Cylinders* cylinders)
 }
 
 void CylindersRenderer::beforeLinkProgram() {
+    if(!geometryShaderIsSupported()) {
+        geometryShaderMissingError();
+        return;
+    }
     setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/cylinders/cylinders.vsh");
     setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/cylinders/cylinders.fsh");
     setShaderFromSourceFile(QOpenGLShader::Geometry, ":/org.compphys.SimVis/renderables/cylinders/cylinders.gsh");

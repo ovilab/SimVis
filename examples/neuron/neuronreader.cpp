@@ -149,9 +149,9 @@ void NeuronReader::readFile()
 
     m_cylinders.clear();
     CylinderVBOData cylinder;
-    cylinder.vertex1 = QVector3D(0.0, -2.0,  0.0);
-    cylinder.vertex2 = QVector3D(0.0,  2.0,  0.0);
-    cylinder.radius1 = 3.0;
+    cylinder.vertex1 = QVector3D(1.0, -2.0,  1.0);
+    cylinder.vertex2 = QVector3D(-1.0,  2.0,  -1.0);
+    cylinder.radius1 = 1.4;
     cylinder.radius2 = 1.2;
 
     m_cylinders.push_back(cylinder);
