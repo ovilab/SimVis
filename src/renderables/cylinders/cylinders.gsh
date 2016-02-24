@@ -32,8 +32,10 @@ void main(void) {
 
     axis = normalize(cp_normalMatrix * deltaNormalized);
 
-    float r1 = vs_radius1[0];
-    float r2 = vs_radius2[0];
+    radiusA = vs_radius1[0];
+    radiusB = vs_radius2[0];
+
+    float rmax = max(radiusA, radiusB);
 
     vec3 center = (v1 + v2) * 0.5;
     vec3 cam_dir = (cp_cameraPosition - center);
@@ -63,12 +65,7 @@ void main(void) {
         vec3 vtmp = v1;
         v1 = v2;
         v2 = vtmp;
-        float rtmp = r1;
-        r1 = r2;
-        r2 = rtmp;
     }
-
-    float rmax = max(r1, r2);
 
     vec4 vertices[12];
     vertices[ 0] = MV*vec4(v1 - right*rmax - outward*rmax, 1.0); // cap top left
@@ -81,11 +78,6 @@ void main(void) {
     vertices[ 6] = MV*vec4(v2 - right*rmax + outward*rmax, 1.0); // main bottom left
     vertices[ 7] = MV*vec4(v2 + right*rmax + outward*rmax, 1.0);
 
-//    vertices[ 8] = MV*vec4(v2 - right*r2 - outward*r2, 1.0); // cap top left
-//    vertices[ 9] = MV*vec4(v2 + right*r2 - outward*r2, 1.0);
-//    vertices[10] = MV*vec4(v2 - right*r2 + outward*r2, 1.0); // cap bottom left
-//    vertices[11] = MV*vec4(v2 + right*r2 + outward*r2, 1.0);
-
     vec2 texCoords[12];
     texCoords[ 0] = vec2(-1.0, -1.0);
     texCoords[ 1] = vec2(1.0, -1.0);
@@ -97,30 +89,11 @@ void main(void) {
     texCoords[ 6] = vec2(-1.0, 0.0);
     texCoords[ 7] = vec2(1.0, 0.0);
 
-//    texCoords[ 8] = vec2(-1.0, -1.0);
-//    texCoords[ 9] = vec2(1.0, -1.0);
-//    texCoords[10] = vec2(-1.0, 1.0);
-//    texCoords[11] = vec2(1.0, 1.0);
-
-    float radiuses[8];
-    radiuses[0] = r1;
-    radiuses[1] = r1;
-    radiuses[2] = r1;
-    radiuses[3] = r1;
-
-    radiuses[4] = r1;
-    radiuses[5] = r1;
-    radiuses[6] = r2;
-    radiuses[7] = r2;
-
     // top cap
     for(int i = 0; i < 8; i++) {
         vertexPosition = vertices[i].xyz / vertices[i].w;
         gl_Position = P*vertices[i];
         texCoord = texCoords[i];
-//        radius = radiuses[i];
-        radiusA = vs_radius1[0];
-        radiusB = vs_radius2[0];
         EmitVertex();
     }
 
