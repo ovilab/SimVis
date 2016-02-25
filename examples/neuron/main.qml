@@ -19,7 +19,7 @@ ApplicationWindow {
             source: "test.xml"
         }
         camera: camera
-        backgroundColor: "blue"
+//        backgroundColor: "blue"
 
         focus: true
 
@@ -36,11 +36,11 @@ ApplicationWindow {
 
             Light {
                 id: light2
-                ambientColor: "yellow"
+                ambientColor: "white"
                 specularColor: "white"
-                diffuseColor: "#ff17e6"
+                diffuseColor: "blue"
                 ambientIntensity: 0.5
-                diffuseIntensity: 0.5
+                diffuseIntensity: 1.0
                 specularIntensity: 1.0
                 shininess: 40.0
                 attenuation: 0.01

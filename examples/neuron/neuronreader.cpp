@@ -147,14 +147,14 @@ void NeuronReader::readFile()
         m_cylinders.push_back(cylinder);
     }
 
-    m_cylinders.clear();
-    CylinderVBOData cylinder;
-    cylinder.vertex1 = QVector3D(1.0, -2.0,  1.0);
-    cylinder.vertex2 = QVector3D(-1.0,  2.0,  -1.0);
-    cylinder.radius1 = 1.4;
-    cylinder.radius2 = 1.2;
+//    m_cylinders.clear();
+//    CylinderVBOData cylinder;
+//    cylinder.vertex1 = QVector3D(1.0, -2.0,  1.0);
+//    cylinder.vertex2 = QVector3D(-1.0,  2.0,  -1.0);
+//    cylinder.radius1 = 2.4;
+//    cylinder.radius2 = 1.2;
 
-    m_cylinders.push_back(cylinder);
+//    m_cylinders.push_back(cylinder);
 
 
     qDebug() << "Done reading";

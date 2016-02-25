@@ -16,6 +16,7 @@ out float radiusA;
 out float radiusB;
 out vec3 base;
 out vec3 end_cyl;
+out vec3 color;
 
 void main(void) {
     mat4 MV = cp_modelViewMatrix;
@@ -82,8 +83,8 @@ void main(void) {
     texCoords[ 4] = vec2(-1.0, 0.0);
     texCoords[ 5] = vec2(1.0, 0.0);
 
-    // top cap
     for(int i = 0; i < 6; i++) {
+        color = vec3(1.0, 1.0, 1.0);
         vertexPosition = vertices[i].xyz / vertices[i].w;
         gl_Position = P*vertices[i];
         texCoord = texCoords[i];

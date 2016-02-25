@@ -2,6 +2,7 @@ in vec2 texCoord;
 in vec3 vertexPosition;
 in vec3 base;
 in vec3 end_cyl;
+in vec3 color;
 //in float radius;
 in float radiusA;
 in float radiusB;
@@ -139,5 +140,15 @@ void main(void) {
         }
         normal = axis;
     }
-    fragcolor = vec4(dot(normal, ray_direction), 0.0, 0.5, 1.0);
+    vec3 light = vec3(1.0, 1.0, 1.0);
+#ifdef SIMPLEXBUMP
+    normal = simplexbump(normal, normal);
+#endif
+#ifdef DEFAULTLIGHT
+    light = defaultLight(normal, vertexPosition, color);
+#endif
+#ifdef SKYBOXREFLECTION
+    light += skyboxReflection(normal, vertexPosition);
+#endif
+    fragcolor = vec4(color*light, 1.0);
 }
