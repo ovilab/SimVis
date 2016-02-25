@@ -77,11 +77,12 @@ RenderableRenderer::RenderableRenderer()
 
 void RenderableRenderer::generateVBOs()
 {
-    if(m_numberOfVBOs < 1) {
-        return;
+    if(m_vboCount>0) {
+        m_vboIds.resize(m_vboCount);
+        glFunctions()->glGenBuffers(m_vboCount, &m_vboIds.front());
     }
-    m_vboIds.resize(m_numberOfVBOs);
-    glFunctions()->glGenBuffers(m_numberOfVBOs, &m_vboIds.front());
+    m_vboIds.resize(m_vboCount);
+    glFunctions()->glGenBuffers(m_vboCount, &m_vboIds.front());
     m_vao = new QOpenGLVertexArrayObject(this);
     m_vao->create();
 }
@@ -134,6 +135,8 @@ void RenderableRenderer::prepareAndRender()
     m_program.setUniformValue("cp_modelViewMatrix", m_modelViewMatrix);
     m_program.setUniformValue("cp_projectionMatrix", m_projectionMatrix);
     m_program.setUniformValue("cp_modelViewMatrixInverse", m_modelViewMatrixInverse);
+    m_program.setUniformValue("cp_normalMatrix", m_modelViewMatrix.normalMatrix());
+
     m_program.setUniformValue("cp_projectionMatrixInverse", m_projectionMatrixInverse);
     m_program.setUniformValue("cp_viewVector", m_viewVector.normalized());
     m_program.setUniformValue("cp_rightVector", m_rightVector.normalized());

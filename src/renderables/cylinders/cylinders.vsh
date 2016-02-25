@@ -9,7 +9,7 @@ out float vs_radius2;
 
 void main(void)
 {
-    gl_Position = vec4(1.0);
+//    gl_Position = vec4(1.0);
     vs_vertex1Position = vertex1Position;
     vs_vertex2Position = vertex2Position;
     vs_radius1 = radius1;

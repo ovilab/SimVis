@@ -72,7 +72,7 @@ void NoiseViewerRenderer::synchronize(Renderable *renderable)
     NoiseViewer *noiseViewer = qobject_cast<NoiseViewer*>(renderable);
     if(noiseViewer) {
         if(!m_isInitialized) {
-            m_numberOfVBOs = 1;
+            m_vboCount = 1;
             generateVBOs();
             noiseViewer->setVoxelsPerDimension(32);
             noiseViewer->setScale(10);

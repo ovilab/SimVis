@@ -13,7 +13,7 @@ LinesRenderer *Lines::createRenderer()
 
 LinesRenderer::LinesRenderer()
 {
-    m_numberOfVBOs = 1;
+    m_vboCount = 1;
 }
 
 void LinesRenderer::synchronize(Renderable *renderable)

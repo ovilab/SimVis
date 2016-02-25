@@ -105,7 +105,7 @@ void SkyBox::setTexture(QString arg)
 
 SkyBoxRenderer::SkyBoxRenderer()
 {
-    m_numberOfVBOs = 1;
+    m_vboCount = 1;
 }
 
 void SkyBoxRenderer::beforeLinkProgram()

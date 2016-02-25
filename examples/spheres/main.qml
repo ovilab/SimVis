@@ -9,7 +9,7 @@ import SimVis 1.0
 
 ApplicationWindow {
     id: applicationRoot
-    title: qsTr("Footballs in a harmonic oscillator - SimVis example")
+    title: qsTr("Spheres in an harmonic oscillator - SimVis example")
     width: 1650
     height: 900
     visible: true
@@ -93,8 +93,8 @@ ApplicationWindow {
             SimplexBump {
                 id: simplexBump
                 enabled: true
-                intensity: 0.1
-                scale: 1.0
+                intensity: 0.03
+                scale: 5.0
             }
         }
     }

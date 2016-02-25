@@ -21,6 +21,11 @@ bool Cylinders::dirty() const
     return m_dirty;
 }
 
+float Cylinders::radius() const
+{
+    return m_radius;
+}
+
 void Cylinders::setDirty(bool dirty)
 {
     if (m_dirty == dirty)
@@ -30,13 +35,39 @@ void Cylinders::setDirty(bool dirty)
     emit dirtyChanged(dirty);
 }
 
+void Cylinders::setRadius(float radius)
+{
+    if (m_radius == radius)
+        return;
+
+    m_radius = radius;
+    emit radiusChanged(radius);
+}
+
+void Cylinders::setCylinders(const QVector<CylinderVBOData> &vertices)
+{
+    m_cylinders = vertices;
+}
+
 CylindersRenderer::CylindersRenderer()
 {
-    m_numberOfVBOs = 1;
+    m_vboCount = 1;
+}
+
+void CylindersRenderer::geometryShaderMissingError()
+{
+    if(!m_hasPrintedError) {
+        qDebug() << "ERROR: Cylinders requires geometry shader to function.";
+        m_hasPrintedError = true;
+    }
 }
 
 void CylindersRenderer::synchronize(Renderable* renderer)
 {
+    if(!geometryShaderIsSupported()) {
+        geometryShaderMissingError();
+        return;
+    }
     Cylinders* cylinders= static_cast<Cylinders*>(renderer);
     if(!m_isInitialized) {
         generateVBOs();
@@ -44,13 +75,19 @@ void CylindersRenderer::synchronize(Renderable* renderer)
     }
     uploadVBOs(cylinders);
     m_radius = cylinders->radius();
-    m_vertexCount = cylinders->m_vertices.size();
+    m_vertexCount = cylinders->m_cylinders.size();
 }
 
 void CylindersRenderer::uploadVBOs(Cylinders* cylinders)
 {
-    if(!cylinders->dirty()) return;
-    QVector<CylinderVBOData>& vertices = cylinders->m_vertices;
+    if(!geometryShaderIsSupported()) {
+        geometryShaderMissingError();
+        return;
+    }
+    if(!cylinders->dirty()) {
+        return;
+    }
+    QVector<CylinderVBOData>& vertices = cylinders->m_cylinders;
     if(vertices.size() < 1) {
         return;
     }
@@ -65,6 +102,10 @@ void CylindersRenderer::uploadVBOs(Cylinders* cylinders)
 }
 
 void CylindersRenderer::beforeLinkProgram() {
+    if(!geometryShaderIsSupported()) {
+        geometryShaderMissingError();
+        return;
+    }
     setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/cylinders/cylinders.vsh");
     setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/cylinders/cylinders.fsh");
     setShaderFromSourceFile(QOpenGLShader::Geometry, ":/org.compphys.SimVis/renderables/cylinders/cylinders.gsh");
@@ -72,7 +113,6 @@ void CylindersRenderer::beforeLinkProgram() {
 
 void CylindersRenderer::render()
 {
-    QOpenGLFunctions funcs(QOpenGLContext::currentContext());
     m_vao->bind();
 
     int vertex1Location = 0;
@@ -98,12 +138,12 @@ void CylindersRenderer::render()
     program().enableAttributeArray(radius2Location);
     glFunctions()->glVertexAttribPointer(radius2Location, 1, GL_FLOAT, GL_FALSE, sizeof(CylinderVBOData), (const void *)offset);
 
-    funcs.glDisable(GL_CULL_FACE);
-    glFunctions()->glDrawArrays(GL_LINES, 0, m_vertexCount);
+    glFunctions()->glDisable(GL_CULL_FACE);
+    glFunctions()->glDrawArrays(GL_POINTS, 0, m_vertexCount);
 
     program().disableAttributeArray(vertex1Location);
     program().disableAttributeArray(vertex2Location);
     program().disableAttributeArray(radius1Location);
     program().disableAttributeArray(radius2Location);
-
+    glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MainForm.ui.qml</file>
+        <file>SimpleMorphology.nml</file>
+        <file>test.xml</file>
+    </qresource>
+</RCC>
