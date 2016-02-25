@@ -7,7 +7,6 @@ in float vs_radius1[1];
 in float vs_radius2[1];
 
 out vec2 texCoord;
-out vec3 vertexPosition;
 out vec3 modelViewPosition;
 out vec3 cylinderDirection;
 out mat3 cylinderBasis;
@@ -91,7 +90,6 @@ void main(void) {
 
     for(int i = 0; i < 6; i++) {
         color = vec3(1.0, 1.0, 1.0);
-        vertexPosition = vertices[i];
         modelViewPosition = (MV*vec4(vertices[i], 1.0)).xyz;
         gl_Position = P*MV*vec4(vertices[i], 1.0);
         texCoord = texCoords[i];

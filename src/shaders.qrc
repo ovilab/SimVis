@@ -37,5 +37,6 @@
         <file>renderables/noiseviewer/noiseviewer.fsh</file>
         <file>renderables/noiseviewer/noiseviewer.gsh</file>
         <file>renderables/noiseviewer/noiseviewer.vsh</file>
+        <file>shadereffects/shaders/defaultfragment.glsl</file>
     </qresource>
 </RCC>

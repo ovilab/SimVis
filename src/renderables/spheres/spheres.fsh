@@ -15,22 +15,7 @@ void main() {
     } else {
         highp float z = sqrt(1.0 - r2); // Equation for sphere, x^2 + y^2 + z^2 = R^2
 
-        highp vec3 light = vec3(1.0, 1.0, 1.0);
-        highp vec3 normal = x*cp_rightVector - y*cp_upVector - z*cp_viewVector;
-
-    #ifdef SIMPLEXBUMP
-        normal = simplexbump(normal, normal);
-    #endif
-
-    #ifdef DEFAULTLIGHT
-        light = defaultLight(normal, vertexPosition, color);
-    #endif
-
-    #ifdef SKYBOXREFLECTION
-        light += skyboxReflection(normal, vertexPosition);
-    #endif
-
-        gl_FragColor = vec4(color*light, 1.0);
+        gl_FragColor = defaultFragment(normal, vertexPosition, color);
     }
 }
 // END spheres.fsh

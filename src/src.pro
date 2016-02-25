@@ -91,8 +91,7 @@ HEADERS += \
     navigators/flymodenavigator.h
 
 DISTFILES = qmldir \
-    core/simvisplugin.json \
-    renderables/spheres/cylinders.fsh
+    core/simvisplugin.json
 
 RESOURCES += \
     shaders.qrc \

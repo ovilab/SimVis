@@ -124,6 +124,8 @@ void RenderableRenderer::prepareAndRender()
             }
         }
 
+        addShaderCodeToBase(QOpenGLShader::Fragment, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/defaultfragment.glsl"));
+
         beforeLinkProgram();
         m_program.link();
         m_shadersDirty = false;

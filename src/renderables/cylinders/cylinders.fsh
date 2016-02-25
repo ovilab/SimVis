@@ -1,5 +1,4 @@
 in vec2 texCoord;
-in vec3 vertexPosition;
 in vec3 modelViewPosition;
 in vec3 base;
 in vec3 end_cyl;
@@ -78,6 +77,7 @@ void main(void) {
 
     // The new point in cylinder space
     vec3 cyl_point = E + D * dist;
+    vec3 cyl_point_world = cylinderWorldBasis * cyl_point;
 
     // the normal is the gradient of the function defining the cone shape
     // This is found in cone space as
@@ -151,15 +151,5 @@ void main(void) {
         }
         normal = worldAxis;
     }
-    vec3 light = vec3(1.0, 1.0, 1.0);
-//#ifdef SIMPLEXBUMP
-//    normal = simplexbump(normal, normal);
-//#endif
-#ifdef DEFAULTLIGHT
-    light = defaultLight(normal, vertexPosition, color);
-#endif
-//#ifdef SKYBOXREFLECTION
-//    light += skyboxReflection(normal, vertexPosition);
-//#endif
-    fragcolor = vec4(color*light, 1.0);
+    fragcolor = defaultFragment(normal, cyl_point_world, color);
 }

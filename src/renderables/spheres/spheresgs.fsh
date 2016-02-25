@@ -16,18 +16,6 @@ void main(void) {
         highp vec3 light = vec3(1.0, 1.0, 1.0);
         highp vec3 normal = x*cp_rightVector + y*cp_upVector - z*cp_viewVector;
 
-    #ifdef SIMPLEXBUMP
-        normal = simplexbump(normal, normal);
-    #endif
-
-    #ifdef DEFAULTLIGHT
-        light = defaultLight(normal, vertexPosition, color);
-    #endif
-
-    #ifdef SKYBOXREFLECTION
-        light += skyboxReflection(normal, vertexPosition);
-    #endif
-
-        fragcolor = vec4(color*light, 1.0);
+        fragcolor = defaultFragment(normal, vertexPosition, color);
     }
 }

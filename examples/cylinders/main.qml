@@ -42,6 +42,13 @@ ApplicationWindow {
                 attenuation: 0.001
                 position: Qt.vector3d(0.0, 20.0, -20.0)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
             }
+
+            SimplexBump {
+                id: simplexBump
+                enabled: true
+                intensity: 0.03
+                scale: 5.0
+            }
         }
     }
 
