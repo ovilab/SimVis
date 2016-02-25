@@ -36,15 +36,15 @@ ApplicationWindow {
 
             Light {
                 id: light2
-                ambientColor: "white"
+                ambientColor: "blue"
                 specularColor: "white"
-                diffuseColor: "blue"
-                ambientIntensity: 0.5
+                diffuseColor: "cyan"
+                ambientIntensity: 0.1
                 diffuseIntensity: 1.0
                 specularIntensity: 1.0
                 shininess: 40.0
-                attenuation: 0.01
-                position: Qt.vector3d(0.5, 0.5, 0.5)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
+                attenuation: 0.001
+                position: Qt.vector3d(0.0, 0.0, -30.0)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
             }
         }
 
@@ -105,7 +105,7 @@ ApplicationWindow {
         id: camera
         nearPlane: 0.1
         farPlane: 5000.0
-        position: Qt.vector3d(0.0, 0.0, 10.0)
+        position: Qt.vector3d(0.0, 0.0, -70.0)
         upVector: Qt.vector3d(0.0, -1.0, 0.0)
         viewCenter: Qt.vector3d(0.0, 0.0, 0.0)
     }
