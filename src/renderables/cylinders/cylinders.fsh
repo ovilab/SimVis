@@ -1,5 +1,6 @@
 in vec2 texCoord;
 in vec3 vertexPosition;
+in vec3 modelViewPosition;
 in vec3 base;
 in vec3 end_cyl;
 in vec3 color;
@@ -8,16 +9,18 @@ in float radiusA;
 in float radiusB;
 in float da;
 in mat3 cylinderBasis;
+in mat3 cylinderWorldBasis;
 
 out vec4 fragcolor;
 
 void main(void) {
     vec3 ray_origin = vec3(0.0, 0.0, 0.0); // in modelview space
-    vec3 ray_target = vertexPosition; // in modelview space
+    vec3 ray_target = modelViewPosition; // in modelview space
     vec3 ray_direction = normalize(ray_origin - ray_target);
 
     mat3 basis = cylinderBasis; // cylinder space basis
     vec3 axis = cylinderBasis[2];
+    vec3 worldAxis = cylinderWorldBasis[2];
 
     // Ray origin in cylinder space
     vec3 diff = ray_target - base;
@@ -79,11 +82,19 @@ void main(void) {
     // the normal is the gradient of the function defining the cone shape
     // This is found in cone space as
     //      grad = vec3(2.0*x, 2.0*y, -(rd/l*r1 + 2*rd^2/l^2*z))
+//    vec3 cylNormal = vec3(2.0*cyl_point.x,
+//                          2.0*cyl_point.y,
+//                          -(rd/l*r1 + 2.0*(rd*rd/(l*l)) * cyl_point.z));
     vec3 cylNormal = vec3(2.0*cyl_point.x,
                           2.0*cyl_point.y,
-                          -(rd/l*r1 + 2.0*(rd*rd/(l*l)) * cyl_point.z));
+                          (2.0*(r1-r2)*(r1*(l - cyl_point.z) + r2*cyl_point.z))/(l*l));
+//    vec3 cylNormal = vec3(2.0*cyl_point.x,
+//                          2.0*cyl_point.y,
+//                          0.0);
     // we transform this to real space by using our basis matrix
-    vec3 normal = basis * cylNormal;
+    vec3 normal = cylinderWorldBasis * cylNormal;
+//    normal = tmp_point - dot(tmp_point, axis) * axis;
+//    normal = (cp_modelViewProjectionMatrix*vec4(normal, 0.0)).xyz;
     normal = normalize(normal);
 
     // test front cap
@@ -113,7 +124,7 @@ void main(void) {
             //        return;
             discard;
         }
-        normal = -axis;
+        normal = -worldAxis;
     }
 
     // test end cap
@@ -138,17 +149,17 @@ void main(void) {
             //          return;
             discard;
         }
-        normal = axis;
+        normal = worldAxis;
     }
     vec3 light = vec3(1.0, 1.0, 1.0);
-#ifdef SIMPLEXBUMP
-    normal = simplexbump(normal, normal);
-#endif
+//#ifdef SIMPLEXBUMP
+//    normal = simplexbump(normal, normal);
+//#endif
 #ifdef DEFAULTLIGHT
     light = defaultLight(normal, vertexPosition, color);
 #endif
-#ifdef SKYBOXREFLECTION
-    light += skyboxReflection(normal, vertexPosition);
-#endif
+//#ifdef SKYBOXREFLECTION
+//    light += skyboxReflection(normal, vertexPosition);
+//#endif
     fragcolor = vec4(color*light, 1.0);
 }
