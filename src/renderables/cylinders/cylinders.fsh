@@ -60,18 +60,30 @@ void main(void) {
     // if this is below zero, there is no solution
     // and we are outside cylinder
     if (d < 0.0) {
-//        fragcolor = vec4(0.2, 1.0, 0.2, 1.0);
-//        return;
+        //        fragcolor = vec4(0.2, 1.0, 0.2, 1.0);
+        //        return;
         discard;
     }
-    float dist = (-b + sqrt(d))/(2.0*a);
+    float dist = (-b + sqrt(d))/(2.0*a); // the solution, t
+
 
     // point of intersection on cylinder surface
     vec3 new_point = ray_target + dist * ray_direction;
 
     vec3 tmp_point = new_point - base;
-    // TODO normal is now somewhat more diagonal
-    vec3 normal = normalize(tmp_point - axis * dot(tmp_point, axis));
+
+    // The new point in cylinder space
+    vec3 cyl_point = E + D * dist;
+
+    // the normal is the gradient of the function defining the cone shape
+    // This is found in cone space as
+    //      grad = vec3(2.0*x, 2.0*y, -(rd/l*r1 + 2*rd^2/l^2*z))
+    vec3 cylNormal = vec3(2.0*cyl_point.x,
+                          2.0*cyl_point.y,
+                          -(rd/l*r1 + 2.0*(rd*rd/(l*l)) * cyl_point.z));
+    // we transform this to real space by using our basis matrix
+    vec3 normal = basis * cylNormal;
+    normal = normalize(normal);
 
     // test front cap
     float cap_test = dot((new_point - base), axis);
@@ -85,22 +97,22 @@ void main(void) {
     // flat
     if (cap_test < 0.0)
     {
-      // ray-plane intersection
-      float dNV = dot(-axis, ray_direction);
-      if (dNV < 0.0) {
-//        fragcolor = vec4(1.0, 1.0, 0.2, 1.0);
-//        return;
-          discard;
-      }
-      float near = dot(-axis, (base)) / dNV;
-      new_point = ray_direction * near + ray_origin;
-      // within the cap radius?
-      if (dot(new_point - base, new_point-base) > r1*r1)  {
-//        fragcolor = vec4(1.0, 1.0, 1.0, 1.0);
-//        return;
-          discard;
-      }
-      normal = -axis;
+        // ray-plane intersection
+        float dNV = dot(-axis, ray_direction);
+        if (dNV < 0.0) {
+            //        fragcolor = vec4(1.0, 1.0, 0.2, 1.0);
+            //        return;
+            discard;
+        }
+        float near = dot(-axis, (base)) / dNV;
+        new_point = ray_direction * near + ray_origin;
+        // within the cap radius?
+        if (dot(new_point - base, new_point-base) > r1*r1)  {
+            //        fragcolor = vec4(1.0, 1.0, 1.0, 1.0);
+            //        return;
+            discard;
+        }
+        normal = -axis;
     }
 
     // test end cap
@@ -110,23 +122,22 @@ void main(void) {
     // flat
     if (cap_test > 0.0)
     {
-      // ray-plane intersection
-      float dNV = dot(axis, ray_direction);
-      if (dNV < 0.0) {
-//          fragcolor = vec4(1.0, 0.3, 1.0, 1.0);
-//          return;
-          discard;
-      }
-      float near = dot(axis, end_cyl) / dNV;
-      new_point = ray_direction * near + ray_origin;
-      // within the cap radius?
-      if (dot(new_point - end_cyl, new_point-base) > r2*r2) {
-//          fragcolor = vec4(0.2, 0.5, 0.5, 1.0);
-//          return;
-          discard;
-      }
-      normal = axis;
+        // ray-plane intersection
+        float dNV = dot(axis, ray_direction);
+        if (dNV < 0.0) {
+            //          fragcolor = vec4(1.0, 0.3, 1.0, 1.0);
+            //          return;
+            discard;
+        }
+        float near = dot(axis, end_cyl) / dNV;
+        new_point = ray_direction * near + ray_origin;
+        // within the cap radius?
+        if (dot(new_point - end_cyl, new_point-base) > r2*r2) {
+            //          fragcolor = vec4(0.2, 0.5, 0.5, 1.0);
+            //          return;
+            discard;
+        }
+        normal = axis;
     }
-    fragcolor = vec4(dot(normal, ray_direction), 0.2, 0.2, 1.0);
-//    fragcolor = vec4(1.0, 0.2, 0.2, 1.0);
+    fragcolor = vec4(dot(normal, ray_direction), 0.0, 0.5, 1.0);
 }
