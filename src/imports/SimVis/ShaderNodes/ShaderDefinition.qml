@@ -18,45 +18,49 @@ QtObject {
     }
 
     readonly property string finalShader: {
-        var shader = ""
-        shader += "\n// ------  begin generated outputs ------\n\n"
-        for(var i in outputs) {
-            shader += "out " + outputs[i].type + " " + outputs[i].name + ";\n"
-        }
-        shader += "\n// ------  end generated outputs   ------\n\n"
-        shader += "\n// ------  begin generated header  ------\n\n"
+        // Verify all that all outputs have values
         for(var i in outputs) {
             var value = outputs[i].value
-            if(value) {
-                shader += value.generateHeader() + "\n"
+            if(!value) {
+                throw "ShaderDefintion output " + outputs[i].name + " has no value: " + value
             }
         }
-        shader += "\n// ------   end generated header   ------\n\n"
-        var body = ""
-        body += "\n// ------   begin generated body   ------\n\n"
-        for(var i in outputs) {
-            var value = outputs[i].value
-            if(value) {
-                body += value.generateBody();
-            }
-        }
-        body += "\n// ------    end generated body    ------\n\n"
-        body += "\n// ------ begin output assignments ------\n\n"
-        for(var i in outputs) {
-            var value = outputs[i].value
-            if(value) {
-                body += outputs[i].name + " = " + convertGlslType(value, outputs[i].type) + ";\n";
-            }
-        }
-        body += "\n// ------  end output assignments  ------\n\n"
 
-        var indent = source.match(/^( *)\$generate_shader\(\);?/m)
+        var contents = ""
+        contents += "\n// ------  begin generated outputs ------\n\n"
+        for(var i in outputs) {
+            contents += "out " + outputs[i].type + " " + outputs[i].name + ";\n"
+        }
+        contents += "\n// ------  end generated outputs   ------\n\n"
+        contents += "\n// ------  begin generated header  ------\n\n"
+        for(var i in outputs) {
+            var value = outputs[i].value
+            contents += value.generateHeader() + "\n"
+        }
+        contents += "\n// ------   end generated header   ------\n\n"
+
+        var setup = ""
+        setup += "\n// ------   begin generated body   ------\n\n"
+        for(var i in outputs) {
+            var value = outputs[i].value
+            setup += value.generateBody();
+        }
+        setup += "\n// ------    end generated body    ------\n\n"
+        setup += "\n// ------ begin output assignments ------\n\n"
+        for(var i in outputs) {
+            var value = outputs[i].value
+            setup += outputs[i].name + " = " + convertGlslType(value, outputs[i].type) + ";\n";
+        }
+        setup += "\n// ------  end output assignments  ------\n\n"
+        var matchString = "\\$shaderNodes.setup\\(\\);?"
+
+        var indent = source.match(new RegExp("^( *)" + matchString, "m"))
         if(indent && indent.length > 1) {
-            body = body.replace(/\n/g, "\n" + indent[1])
+            setup = setup.replace(/\n/g, "\n" + indent[1])
         }
-        shader += source.replace(/\$generate_shader\(\);?/, body)
+        contents += source.replace(new RegExp(matchString), setup)
 
-        return shader
+        return contents
     }
 
     function convertGlslType(value, targetType) {

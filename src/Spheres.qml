@@ -27,13 +27,20 @@ AbstractSpheres {
             result: "texCoord";
         }
 
-        property Value fragColor
+        property Value fragColor: Diffuse {
+            position: shader.position
+            color: UniformValue {
+                type: "vec3"
+                value: Qt.vector3d(0.1, 0.7, 0.9)
+            }
+            normal: shader.normal
+        }
 
         outputs: [
             OutputValue {
                 type: "vec4"
                 name: "fragColor"
-                value: fragColor
+                value: _shader.fragColor
             }
         ]
 
@@ -53,7 +60,7 @@ void main(void) {
 
         highp vec3 normal = x*cp_rightVector + y*cp_upVector - z*cp_viewVector;
 
-        $generate_shader();
+        $shaderNodes.setup();
     }
 }
 "

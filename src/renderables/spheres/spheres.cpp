@@ -282,6 +282,9 @@ void SpheresRenderer::setUniforms() {
         case QVariant::Vector3D:
             program().setUniformValue(name, value.value<QVector3D>());
             break;
+        case QVariant::Vector4D:
+            program().setUniformValue(name, value.value<QVector4D>());
+            break;
         default:
             qWarning() << "Cannot set uniform value of type " << value.typeName();
         }

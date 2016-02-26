@@ -57,7 +57,6 @@ void TrackballNavigator::moved(QVector2D delta)
 
 void TrackballNavigator::mousePressEvent(QMouseEvent *event)
 {
-    qDebug() << "Mouse press.";
     Visualizer *myParent = qobject_cast<Visualizer*>(parent());
     if(myParent) {
         emit myParent->touched();

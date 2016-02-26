@@ -73,7 +73,7 @@ ApplicationWindow {
                 specularIntensity: 0.1
                 shininess: 2.0
                 attenuation: 0.01
-                position: Qt.vector3d(0.5, 0.5, 0.5)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
+                position: Qt.vector3d(0.5, 0.5, 0.5)
             }
         }
     }

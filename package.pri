@@ -4,6 +4,7 @@ message(shadowed_pwd: $$shadowed($$PWD))
 message(out_pwd: $$OUT_PWD)
 
 INCLUDEPATH += $$PWD/src
+QML_IMPORT_PATH += $$PWD/src/imports/
 
 RESOURCES += \
              $$PWD/src/simvis_qml.qrc \
