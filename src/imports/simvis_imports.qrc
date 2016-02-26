@@ -5,7 +5,7 @@
         <file>SimVis/ShaderNodes/Diffuse.qml</file>
         <file>SimVis/ShaderNodes/Float.qml</file>
         <file>SimVis/ShaderNodes/Geometry.qml</file>
-        <file>SimVis/ShaderNodes/Lerp.qml</file>
+        <file>SimVis/ShaderNodes/Mix.qml</file>
         <file>SimVis/ShaderNodes/MainForm.ui.qml</file>
         <file>SimVis/ShaderNodes/OutputValue.qml</file>
         <file>SimVis/ShaderNodes/Perlin.qml</file>

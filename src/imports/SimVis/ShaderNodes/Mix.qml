@@ -5,7 +5,7 @@ Value {
     property Value value2
     property Value mix
 
-    identifier: "lerp"
+    identifier: "mix"
 
     depends: [value1, value2, mix]
     type: value1.type

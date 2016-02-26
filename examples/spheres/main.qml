@@ -46,7 +46,7 @@ ApplicationWindow {
             scale: scaleSlider.value
 
             fragColor: Diffuse {
-                color: Lerp {
+                color: Mix {
                     value1: spheres.shader.normal
                     value2: spheres.shader.position
                     mix: UniformValue {
