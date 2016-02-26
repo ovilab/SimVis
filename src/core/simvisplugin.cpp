@@ -25,13 +25,13 @@
 
 void SimVisPlugin::registerTypes(const char *uri)
 {
-    Q_INIT_RESOURCE(shaders);
+    Q_INIT_RESOURCE(simvis_shaders);
     // @uri SimVis
     Q_ASSERT(uri == QLatin1String("SimVis"));
     qmlRegisterUncreatableType<Simulator>("SimVis", 1, 0, "Simulator",
                                           "Cannot create abstract type Simulator. This must be subclassed.");
     qmlRegisterType<Billboards>("SimVis", 1, 0, "Billboards");
-    qmlRegisterType<Spheres>("SimVis", 1, 0, "Spheres");
+    qmlRegisterType<Spheres>("SimVis", 1, 0, "AbstractSpheres");
     qmlRegisterType<MarchingCubes>("SimVis", 1, 0, "MarchingCubes");
     qmlRegisterType<Points>("SimVis", 1, 0, "Points");
     qmlRegisterType<Visualizer>("SimVis", 1, 0, "Visualizer");

@@ -5,8 +5,10 @@ message(out_pwd: $$OUT_PWD)
 
 INCLUDEPATH += $$PWD/src
 
-RESOURCES += $$PWD/src/shaders.qrc \
-             $$PWD/src/qmldir.qrc
+RESOURCES += \
+             $$PWD/src/simvis_qml.qrc \
+    $$PWD/src/simvis_shaders.qrc \
+    $$PWD/src/imports/simvis_imports.qrc
 
 SOURCES += \
     $$PWD/src/core/camera.cpp \
@@ -36,7 +38,10 @@ SOURCES += \
     $$PWD/src/renderables/cylinders/cylinders.cpp \
     $$PWD/src/renderables/lines/lines.cpp \
     $$PWD/src/renderables/noiseviewer/noiseviewer.cpp \
-    $$PWD/src/navigators/flymodenavigator.cpp
+    $$PWD/src/navigators/flymodenavigator.cpp \
+#    $$PWD/src/shaderbuilder/shader.cpp \
+#    $$PWD/src/shaderbuilder/shadervalue.cpp \
+#    $$PWD/src/shaderbuilder/shaderoutput.cpp
 
 HEADERS += \
     $$PWD/src/core/navigator.h \
@@ -80,4 +85,7 @@ HEADERS += \
     $$PWD/src/SimVis/Lines \
     $$PWD/src/renderables/noiseviewer/noiseviewer.h \
     $$PWD/src/SimVis/NoiseViewer \
-    $$PWD/src/navigators/flymodenavigator.h
+    $$PWD/src/navigators/flymodenavigator.h \
+#    $$PWD/src/shaderbuilder/shader.h \
+#    $$PWD/src/shaderbuilder/shadervalue.h \
+#    $$PWD/src/shaderbuilder/shaderoutput.h

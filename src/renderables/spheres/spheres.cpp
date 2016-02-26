@@ -6,13 +6,14 @@
 #include <cmath>
 #include <QThread>
 #include <QPainter>
+#include <QQmlEngine>
+#include <QQmlContext>
 
 #include "../../core/camera.h"
 
 Spheres::Spheres(QQuickItem *parent)
     : Renderable(parent)
 {
-
 }
 
 Spheres::~Spheres()
@@ -101,6 +102,17 @@ void SpheresRenderer::synchronize(Renderable* renderer)
     m_upVector = spheres->camera()->upVector().normalized();
     m_viewVector = spheres->camera()->viewVector().normalized();
     m_rightVector = QVector3D::crossProduct(m_viewVector, m_upVector);
+
+    if(spheres->fragmentShader()) {
+        m_fragmentShaderString = spheres->fragmentShader()->property("finalShader").toString();
+        QVariant uniforms;
+        QMetaObject::invokeMethod(spheres->fragmentShader(), "findUniforms", Qt::DirectConnection, Q_RETURN_ARG(QVariant, uniforms));
+        m_uniforms.clear();
+        for(const QVariant &uniformVariant : uniforms.toList()) {
+            const QObject* uniform = qvariant_cast<QObject*>(uniformVariant);
+            m_uniforms.insert(uniform->property("name").toString(), uniform->property("value"));
+        }
+    }
 
     if(!m_isInitialized) {
         if(geometryShaderIsSupported()) m_vboCount = 1;
@@ -247,11 +259,24 @@ void Spheres::setPositions(QVector<QVector3D> &positions)
 void SpheresRenderer::beforeLinkProgram() {
     if(geometryShaderIsSupported()) {
         setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/spheres/spheresgs.vsh");
-        setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/spheres/spheresgs.fsh");
         setShaderFromSourceFile(QOpenGLShader::Geometry, ":/org.compphys.SimVis/renderables/spheres/spheres.gsh");
+        if(m_fragmentShaderString.isEmpty()) {
+            setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/spheres/spheresgs.fsh");
+        } else {
+            setShaderFromSourceCode(QOpenGLShader::Fragment, m_fragmentShaderString);
+        }
     } else {
         setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/spheres/spheres.vsh");
         setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/spheres/spheres.fsh");
+    }
+}
+
+void SpheresRenderer::setUniforms() {
+    for(const QString &uniformName : m_uniforms.keys()) {
+        const QVariant &value = m_uniforms.value(uniformName);
+        if(value.type() == QVariant::Double) {
+            program().setUniformValue(uniformName.toStdString().c_str(), value.toFloat());
+        }
     }
 }
 
@@ -264,6 +289,8 @@ void SpheresRenderer::renderNoGeometryShader() {
     QVector3D upPlusRightHalf = (m_upVector + m_rightVector)*0.5;
     program().setUniformValue("cp_upMinusRightHalf", upMinusRightHalf);
     program().setUniformValue("cp_upPlusRightHalf", upPlusRightHalf);
+
+    setUniforms();
 
     // Offset for position
     quintptr offset = 0;
@@ -322,14 +349,20 @@ void SpheresRenderer::renderNoGeometryShader() {
 void SpheresRenderer::renderGeometryShader() {
     QOpenGLFunctions funcs(QOpenGLContext::currentContext());
 
+    setUniforms();
+
     m_vao->bind();
+
 
     int positionLocation = 0;
     int colorLocation = 1;
     int scaleLocation = 2;
 
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]); // Tell OpenGL which VBOs to use
+
+
     quintptr offset = 0;
+
 
     program().enableAttributeArray(positionLocation);
     glFunctions()->glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(SphereGeometryShaderVBOData), (const void *)offset);
@@ -357,7 +390,10 @@ void SpheresRenderer::render()
     if(m_vertexCount == 0) {
         return;
     }
-    if(geometryShaderIsSupported()) renderGeometryShader();
-    else renderNoGeometryShader();
+    if(geometryShaderIsSupported()) {
+        renderGeometryShader();
+    } else {
+        renderNoGeometryShader();
+    }
 
 }

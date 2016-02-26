@@ -6,6 +6,7 @@ import QtQuick.Layouts 1.1
 import QtGraphicalEffects 1.0
 import MySimulator 1.0
 import SimVis 1.0
+import SimVis.ShaderNodes 1.0
 
 ApplicationWindow {
     id: applicationRoot
@@ -24,7 +25,7 @@ ApplicationWindow {
         anchors.fill: parent
         simulator: simulator
         camera: camera
-        backgroundColor: "#fff"
+        backgroundColor: "#000"
         navigator: navigator
 
         TrackballNavigator {
@@ -33,69 +34,79 @@ ApplicationWindow {
             camera: camera
         }
 
-        SkyBox {
-            id: skybox
-            camera: camera
-            texture: ":/1024.png"
-        }
+//        SkyBox {
+//            id: skybox
+//            camera: camera
+//            texture: ":/1024.png"
+//        }
 
         Spheres {
             id: spheres
             visible: true
             scale: scaleSlider.value
-            color: "#ff17e6"
 
-            Light {
-                id: light
-                ambientColor: "yellow"
-                specularColor: "white"
-                diffuseColor: spheres.color
-                ambientIntensity: 0.5
-                diffuseIntensity: 0.5
-                specularIntensity: 1.0
-                shininess: 40.0
-                attenuation: 0.01
-                position: Qt.vector3d(0.5, 0.5, 0.5)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
+            fragColor: Diffuse {
+                color: Lerp {
+                    value1: spheres.shader.normal
+                    value2: spheres.shader.position
+                    mix: UniformValue {
+                        value: mixSlider.value
+                    }
+                }
+                normal: spheres.shader.position
             }
 
-            Light {
-                id: light2
-                ambientColor: spheres.color
-                specularColor: "white"
-                diffuseColor: spheres.color
-                ambientIntensity: 0.025
-                diffuseIntensity: 0.5
-                specularIntensity: 1.0
-                shininess: 40.0
-                attenuation: 0.01
-                position: Qt.vector3d(Math.sin(0.3*6.28*visualizer.time), Math.cos(0.223*6.28*visualizer.time), 0)
-            }
+//            Light {
+//                id: light
+//                ambientColor: "yellow"
+//                specularColor: "white"
+//                diffuseColor: spheres.color
+//                ambientIntensity: 0.5
+//                diffuseIntensity: 0.5
+//                specularIntensity: 1.0
+//                shininess: 40.0
+//                attenuation: 0.01
+//                position: Qt.vector3d(0.5, 0.5, 0.5)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
+//            }
 
-            Light {
-                id: light3
-                ambientColor: spheres.color
-                specularColor: "white"
-                diffuseColor: spheres.color
-                ambientIntensity: 0.025
-                diffuseIntensity: 0.5
-                specularIntensity: 1.0
-                shininess: 40.0
-                attenuation: 0.01
-                position: camera.position
-            }
+//            Light {
+//                id: light2
+//                ambientColor: spheres.color
+//                specularColor: "white"
+//                diffuseColor: spheres.color
+//                ambientIntensity: 0.025
+//                diffuseIntensity: 0.5
+//                specularIntensity: 1.0
+//                shininess: 40.0
+//                attenuation: 0.01
+//                position: Qt.vector3d(Math.sin(0.3*6.28*visualizer.time), Math.cos(0.223*6.28*visualizer.time), 0)
+//            }
 
-            SkyBoxReflection {
-                id: reflection
-                skybox: skybox
-                reflectivity: 0.2
-            }
+//            Light {
+//                id: light3
+//                ambientColor: spheres.color
+//                specularColor: "white"
+//                diffuseColor: spheres.color
+//                ambientIntensity: 0.025
+//                diffuseIntensity: 0.5
+//                specularIntensity: 1.0
+//                shininess: 40.0
+//                attenuation: 0.01
+//                position: camera.position
+//            }
 
-            SimplexBump {
-                id: simplexBump
-                enabled: true
-                intensity: 0.03
-                scale: 5.0
-            }
+//            SkyBoxReflection {
+//                id: reflection
+//                skybox: skybox
+//                reflectivity: 0.2
+//            }
+
+//            SimplexBump {
+//                id: simplexBump
+//                enabled: true
+//                intensity: 0.03
+//                scale: 5.0
+//            }
         }
     }
 
@@ -140,6 +151,30 @@ ApplicationWindow {
                     value: 0.01
                 }
             }
+
+            Row {
+                Text {
+                    text: "Mix 1:"
+                }
+                Slider {
+                    id: mixSlider
+                    minimumValue: 0.0
+                    maximumValue: 1.0
+                    value: 0.5
+                }
+            }
+
+//            Row {
+//                Text {
+//                    text: "Mix 2:"
+//                }
+//                Slider {
+//                    id: mixSlider2
+//                    minimumValue: 0.0
+//                    maximumValue: 1.0
+//                    value: 0.5
+//                }
+//            }
 
         }
     }

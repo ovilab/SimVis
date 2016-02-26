@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>SimVis/qmldir</file>
+        <file>SimVis/ShaderNodes/Add.qml</file>
+        <file>SimVis/ShaderNodes/Diffuse.qml</file>
+        <file>SimVis/ShaderNodes/Float.qml</file>
+        <file>SimVis/ShaderNodes/Geometry.qml</file>
+        <file>SimVis/ShaderNodes/Lerp.qml</file>
+        <file>SimVis/ShaderNodes/MainForm.ui.qml</file>
+        <file>SimVis/ShaderNodes/OutputValue.qml</file>
+        <file>SimVis/ShaderNodes/Perlin.qml</file>
+        <file>SimVis/ShaderNodes/ShaderDefinition.qml</file>
+        <file>SimVis/ShaderNodes/Sine.qml</file>
+        <file>SimVis/ShaderNodes/UniformValue.qml</file>
+        <file>SimVis/ShaderNodes/Value.qml</file>
+        <file>SimVis/ShaderNodes/Vector3D.qml</file>
+        <file>SimVis/ShaderNodes/qmldir</file>
+    </qresource>
+</RCC>
