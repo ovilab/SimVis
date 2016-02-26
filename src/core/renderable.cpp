@@ -226,6 +226,12 @@ void RenderableRenderer::setShaderFromSourceCode(QOpenGLShader::ShaderType type,
     removeShader(type);
     // sqDebug() << "Shader: " << fullShaderCode;
 
+    if(type == QOpenGLShader::Fragment) {
+        QFile file("/tmp/currentshader.glsl");
+        file.open(QFile::WriteOnly);
+        QTextStream out(&file);
+        out << fullShaderCode;
+    }
     m_program.addShaderFromSourceCode(type, fullShaderCode);
 }
 

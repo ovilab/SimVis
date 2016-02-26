@@ -38,25 +38,25 @@ AbstractSpheres {
         ]
 
         source: "
-    in vec3 color;
-    in vec2 texCoord;
-    in vec3 vertexPosition;
+in vec3 color;
+in vec2 texCoord;
+in vec3 vertexPosition;
 
-    void main(void) {
-        highp float x = texCoord.s;
-        highp float y = texCoord.t;
-        highp float r2 = x*x + y*y;
-        if(r2 > 0.9) {
-            discard;
-        } else {
-            highp float z = sqrt(1.0 - r2); // Equation for sphere, x^2 + y^2 + z^2 = R^2
+void main(void) {
+    highp float x = texCoord.s;
+    highp float y = texCoord.t;
+    highp float r2 = x*x + y*y;
+    if(r2 > 0.9) {
+        discard;
+    } else {
+        highp float z = sqrt(1.0 - r2); // Equation for sphere, x^2 + y^2 + z^2 = R^2
 
-            highp vec3 normal = x*cp_rightVector + y*cp_upVector - z*cp_viewVector;
+        highp vec3 normal = x*cp_rightVector + y*cp_upVector - z*cp_viewVector;
 
-            $generate_shader();
-        }
+        $generate_shader();
     }
-    "
+}
+"
     }
 }
 

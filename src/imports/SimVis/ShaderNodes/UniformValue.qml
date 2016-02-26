@@ -6,5 +6,6 @@ Value {
     header: "uniform " + type + " " + name + ";\n"
     identifier: "univalue"
     type: "float"
+
     result: ""
 }

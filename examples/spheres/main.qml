@@ -34,11 +34,11 @@ ApplicationWindow {
             camera: camera
         }
 
-//        SkyBox {
-//            id: skybox
-//            camera: camera
-//            texture: ":/1024.png"
-//        }
+        //        SkyBox {
+        //            id: skybox
+        //            camera: camera
+        //            texture: ":/1024.png"
+        //        }
 
         Spheres {
             id: spheres
@@ -46,67 +46,35 @@ ApplicationWindow {
             scale: scaleSlider.value
 
             fragColor: Diffuse {
+                position: spheres.shader.position
                 color: Mix {
                     value1: spheres.shader.normal
-                    value2: spheres.shader.position
+                    value2: UniformValue {
+                        type: "vec3"
+                        value: Qt.vector3d(0.1, 0.7, 0.9)
+                    }
                     mix: UniformValue {
                         value: mixSlider.value
                     }
                 }
-                normal: spheres.shader.position
+                normal: Simplex {
+                    normal: spheres.shader.normal
+                    position: spheres.shader.normal
+                }
             }
 
-//            Light {
-//                id: light
-//                ambientColor: "yellow"
-//                specularColor: "white"
-//                diffuseColor: spheres.color
-//                ambientIntensity: 0.5
-//                diffuseIntensity: 0.5
-//                specularIntensity: 1.0
-//                shininess: 40.0
-//                attenuation: 0.01
-//                position: Qt.vector3d(0.5, 0.5, 0.5)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
-//            }
-
-//            Light {
-//                id: light2
-//                ambientColor: spheres.color
-//                specularColor: "white"
-//                diffuseColor: spheres.color
-//                ambientIntensity: 0.025
-//                diffuseIntensity: 0.5
-//                specularIntensity: 1.0
-//                shininess: 40.0
-//                attenuation: 0.01
-//                position: Qt.vector3d(Math.sin(0.3*6.28*visualizer.time), Math.cos(0.223*6.28*visualizer.time), 0)
-//            }
-
-//            Light {
-//                id: light3
-//                ambientColor: spheres.color
-//                specularColor: "white"
-//                diffuseColor: spheres.color
-//                ambientIntensity: 0.025
-//                diffuseIntensity: 0.5
-//                specularIntensity: 1.0
-//                shininess: 40.0
-//                attenuation: 0.01
-//                position: camera.position
-//            }
-
-//            SkyBoxReflection {
-//                id: reflection
-//                skybox: skybox
-//                reflectivity: 0.2
-//            }
-
-//            SimplexBump {
-//                id: simplexBump
-//                enabled: true
-//                intensity: 0.03
-//                scale: 5.0
-//            }
+            Light {
+                id: light
+                ambientColor: "white"
+                specularColor: "white"
+                diffuseColor: "white"
+                ambientIntensity: 0.05
+                diffuseIntensity: 1.0
+                specularIntensity: 0.1
+                shininess: 2.0
+                attenuation: 0.01
+                position: Qt.vector3d(0.5, 0.5, 0.5)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
+            }
         }
     }
 
@@ -164,17 +132,17 @@ ApplicationWindow {
                 }
             }
 
-//            Row {
-//                Text {
-//                    text: "Mix 2:"
-//                }
-//                Slider {
-//                    id: mixSlider2
-//                    minimumValue: 0.0
-//                    maximumValue: 1.0
-//                    value: 0.5
-//                }
-//            }
+            //            Row {
+            //                Text {
+            //                    text: "Mix 2:"
+            //                }
+            //                Slider {
+            //                    id: mixSlider2
+            //                    minimumValue: 0.0
+            //                    maximumValue: 1.0
+            //                    value: 0.5
+            //                }
+            //            }
 
         }
     }

@@ -274,8 +274,16 @@ void SpheresRenderer::beforeLinkProgram() {
 void SpheresRenderer::setUniforms() {
     for(const QString &uniformName : m_uniforms.keys()) {
         const QVariant &value = m_uniforms.value(uniformName);
-        if(value.type() == QVariant::Double) {
-            program().setUniformValue(uniformName.toStdString().c_str(), value.toFloat());
+        const char* name = uniformName.toStdString().c_str();
+        switch(value.type()) {
+        case QVariant::Double:
+            program().setUniformValue(name, value.toFloat());
+            break;
+        case QVariant::Vector3D:
+            program().setUniformValue(name, value.value<QVector3D>());
+            break;
+        default:
+            qWarning() << "Cannot set uniform value of type " << value.typeName();
         }
     }
 }
