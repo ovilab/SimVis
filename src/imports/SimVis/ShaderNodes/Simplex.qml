@@ -6,7 +6,7 @@ Value {
     depends: [normal, position]
     type: normal.type
     identifier: "simplex"
-    result: "simplexbump(" + normal.name + ", " + position.name + ")"
+    result: "simplexbump(" + normal.convert("vec3") + ", " + normal.convert("vec3") + ")"
     header: "
 // GLSL textureless classic 4D noise \"cnoise\",
 // with an RSL-style periodic variant \"pnoise\".
