@@ -2,6 +2,8 @@
 #define SPHERES_H
 
 #include "../../core/renderable.h"
+#include "../../shadernodes/shaderbuilder.h"
+
 #include <QOpenGLFunctions>
 #include <QOpenGLTexture>
 #include <QColor>
@@ -61,7 +63,7 @@ class Spheres : public Renderable
     Q_PROPERTY(float scale READ scale WRITE setScale NOTIFY scaleChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(bool dirty READ dirty WRITE setDirty NOTIFY dirtyChanged)
-    Q_PROPERTY(QObject* fragmentShader READ fragmentShader WRITE setFragmentShader NOTIFY fragmentShaderChanged)
+    Q_PROPERTY(ShaderBuilder* fragmentShader READ fragmentShader WRITE setFragmentShader NOTIFY fragmentShaderChanged)
 public:
     Spheres(QQuickItem *parent = 0);
     ~Spheres();
@@ -78,30 +80,22 @@ public:
     void setScales(const QVector<float> &scales);
     bool dirty() const;
 
-    QObject* fragmentShader() const
-    {
-        return m_fragmentShader;
-    }
+    ShaderBuilder* fragmentShader() const;
 
 public slots:
     void setDirty(bool dirty);
 
-    void setFragmentShader(QObject* fragmentShader)
-    {
-        if (m_fragmentShader == fragmentShader)
-            return;
-
-        m_fragmentShader = fragmentShader;
-        emit fragmentShaderChanged(fragmentShader);
-    }
+    void setFragmentShader(ShaderBuilder* fragmentShader);
 
 signals:
     void scaleChanged(bool arg);
     void colorChanged(QColor arg);
     void dirtyChanged(bool dirty);
 
-    void fragmentShaderChanged(QObject* fragmentShader);
+    void fragmentShaderChanged(ShaderBuilder* fragmentShader);
 
+private slots:
+    void makeDirty();
 private:
     QVector3D vectorFromColor(const QColor &color);
     QVector<SphereNoGeometryShaderVBOData> m_verticesNoGeometryShader;
@@ -115,7 +109,7 @@ private:
     float m_scale = 1.0;
     bool m_dirty = false;
     friend class SpheresRenderer;
-    QObject* m_fragmentShader = nullptr;
+    ShaderBuilder* m_fragmentShader = nullptr;
 };
 
 

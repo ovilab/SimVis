@@ -1,7 +1,5 @@
 import QtQuick 2.0
+import SimVis 1.0
 
-QtObject {
-    property Value value
-    property string name
-    property string type
+ShaderOutput {
 }

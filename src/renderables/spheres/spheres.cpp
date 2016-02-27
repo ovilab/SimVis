@@ -40,6 +40,11 @@ bool Spheres::dirty() const
     return m_dirty;
 }
 
+ShaderBuilder *Spheres::fragmentShader() const
+{
+    return m_fragmentShader;
+}
+
 void Spheres::setDirty(bool dirty)
 {
     if (m_dirty == dirty)
@@ -47,6 +52,22 @@ void Spheres::setDirty(bool dirty)
 
     m_dirty = dirty;
     emit dirtyChanged(dirty);
+}
+
+void Spheres::makeDirty() {
+    setDirty(true);
+}
+
+void Spheres::setFragmentShader(ShaderBuilder *fragmentShader)
+{
+    if (m_fragmentShader == fragmentShader)
+        return;
+    if(m_fragmentShader) {
+        disconnect(m_fragmentShader, 0, this, 0);
+    }
+    m_fragmentShader = fragmentShader;
+    connect(m_fragmentShader, &ShaderBuilder::finalShaderChanged, this, &Spheres::makeDirty);
+    emit fragmentShaderChanged(fragmentShader);
 }
 
 QVector<QColor> &Spheres::colors()
@@ -104,17 +125,10 @@ void SpheresRenderer::synchronize(Renderable* renderer)
     m_rightVector = QVector3D::crossProduct(m_viewVector, m_upVector);
 
     if(spheres->fragmentShader()) {
-        m_fragmentShaderString = spheres->fragmentShader()->property("finalShader").toString();
-        QVariant uniforms;
-        QMetaObject::invokeMethod(spheres->fragmentShader(), "findUniforms",
-                                  Qt::DirectConnection, Q_RETURN_ARG(QVariant, uniforms));
+        m_fragmentShaderString = spheres->fragmentShader()->finalShader();
         m_uniforms.clear();
-        for(const QVariant &uniformVariant : uniforms.toList()) {
-            qDebug() << "Uniform variant" << uniformVariant;
-            const QObject* uniform = qvariant_cast<QObject*>(uniformVariant);
-            if(uniform) {
-                m_uniforms.insert(uniform->property("identifier").toString(), uniform->property("value"));
-            }
+        for(const ShaderNode *uniform : spheres->fragmentShader()->uniformDependencies()) {
+            m_uniforms.insert(uniform->identifier(), uniform->uniformValue());
         }
     }
 
@@ -261,6 +275,7 @@ void Spheres::setPositions(QVector<QVector3D> &positions)
 }
 
 void SpheresRenderer::beforeLinkProgram() {
+    qDebug() << "Linking";
     if(geometryShaderIsSupported()) {
         setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/spheres/spheresgs.vsh");
         setShaderFromSourceFile(QOpenGLShader::Geometry, ":/org.compphys.SimVis/renderables/spheres/spheres.gsh");

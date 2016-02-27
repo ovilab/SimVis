@@ -59,10 +59,10 @@ ApplicationWindow {
                     value1: spheres.shader.normal
                     value2: UniformValue {
                         type: "vec3"
-                        value: Qt.vector3d(0.1, 0.7, 0.9)
+                        uniformValue: Qt.vector3d(0.1, 0.7, 0.9)
                     }
                     mix: UniformValue {
-                        value: mixSlider.value
+                        uniformValue: mixSlider.value
                     }
                 }
                 normal: Simplex {

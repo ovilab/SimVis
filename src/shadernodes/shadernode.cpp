@@ -63,8 +63,14 @@ QString ShaderNode::generateHeader() const
     if(m_hasGeneratedHeader) {
         return QString();
     }
+
+    QString headerResult = "";
+    for(const ShaderNode *node : m_resolvedDependencies) {
+        headerResult += node->generateHeader();
+    }
+    headerResult += m_header;
     m_hasGeneratedHeader = true;
-    return QString();
+    return headerResult;
 }
 
 QString ShaderNode::convert(QString targetType) const
@@ -120,14 +126,14 @@ QString ShaderNode::convert(QString targetType) const
     return m_identifier;
 }
 
-QList<QVariant> ShaderNode::findUniforms() const
+QList<ShaderNode*> ShaderNode::uniformDependencies() const
 {
-    QList<QVariant> uniforms;
+    QList<ShaderNode*> uniforms;
     for(ShaderNode* node : m_resolvedDependencies) {
-        uniforms.append(node->findUniforms());
+        uniforms.append(node->uniformDependencies());
     }
     if(isUniform()) {
-//        uniforms.append(QVariant(this));
+        uniforms.append(const_cast<ShaderNode*>(this));
     }
     return uniforms;
 }
@@ -158,6 +164,11 @@ QString ShaderNode::generateBody() const
     body += "\n";
     m_hasGeneratedBody = true;
     return body;
+}
+
+QVariant ShaderNode::uniformValue() const
+{
+    return m_uniformValue;
 }
 
 void ShaderNode::setName(QString name)
@@ -225,6 +236,15 @@ void ShaderNode::setDepends(QList<QVariant> depends)
     m_depends = depends;
     resolveDependencies();
     emit dependsChanged(depends);
+}
+
+void ShaderNode::setUniformValue(QVariant uniformValue)
+{
+    if (m_uniformValue == uniformValue)
+        return;
+
+    m_uniformValue = uniformValue;
+    emit uniformValueChanged(uniformValue);
 }
 
 void ShaderNode::resolveDependencies()

@@ -1,3 +1,4 @@
+import QtQuick 2.0
 import SimVis 1.0
 import SimVis.ShaderNodes 1.0
 
@@ -31,18 +32,20 @@ AbstractSpheres {
             position: shader.position
             color: UniformValue {
                 type: "vec3"
-                value: Qt.vector3d(0.1, 0.7, 0.9)
+                uniformValue: Qt.vector3d(0.1, 0.7, 0.9)
             }
             normal: shader.normal
         }
 
         outputs: [
-            OutputValue {
-                type: "vec4"
-                name: "fragColor"
-                value: _shader.fragColor
-            }
+            output
         ]
+        OutputValue {
+            id: output
+            type: "vec4"
+            name: "fragColor"
+            value: _shader.fragColor
+        }
 
         source: "
 in vec3 color;
@@ -64,6 +67,16 @@ void main(void) {
     }
 }
 "
+
+        Timer {
+            interval: 1000
+            running: true
+            repeat: true
+            onTriggered: {
+                console.log("Appending")
+                shader.source += " "
+            }
+        }
     }
 }
 

@@ -16,9 +16,15 @@ class ShaderNode : public QObject
     Q_PROPERTY(bool isUniform READ isUniform WRITE setIsUniform NOTIFY isUniformChanged)
     Q_PROPERTY(QList<QVariant> depends READ depends WRITE setDepends NOTIFY dependsChanged)
     Q_PROPERTY(QString identifier READ identifier NOTIFY identifierChanged)
+    Q_PROPERTY(QVariant uniformValue READ uniformValue WRITE setUniformValue NOTIFY uniformValueChanged)
 
 public:
     explicit ShaderNode(QObject *parent = 0);
+
+    Q_INVOKABLE QString generateHeader() const;
+    Q_INVOKABLE QString convert(QString targetType) const;
+    Q_INVOKABLE QList<ShaderNode *> uniformDependencies() const;
+    Q_INVOKABLE QString generateBody() const;
 
     QString name() const;
     QString type() const;
@@ -28,11 +34,7 @@ public:
     bool isUniform() const;
     QList<QVariant> depends() const;
     QString identifier() const;
-
-    Q_INVOKABLE QString generateHeader() const;
-    Q_INVOKABLE QString convert(QString targetType) const;
-    Q_INVOKABLE QList<QVariant> findUniforms() const;
-    Q_INVOKABLE QString generateBody() const;
+    QVariant uniformValue() const;
 
 signals:
     void nameChanged(QString name);
@@ -44,6 +46,8 @@ signals:
     void dependsChanged(QList<QVariant> depends);
     void identifierChanged(QString identifier);
 
+    void uniformValueChanged(QVariant uniformValue);
+
 public slots:
     void setName(QString name);
     void setType(QString type);
@@ -52,6 +56,8 @@ public slots:
     void setHeader(QString header);
     void setIsUniform(bool isUniform);
     void setDepends(QList<QVariant> depends);
+
+    void setUniformValue(QVariant uniformValue);
 
 private:
     void resolveDependencies();
@@ -68,6 +74,7 @@ private:
 
     mutable bool m_hasGeneratedHeader = false;
     mutable bool m_hasGeneratedBody = false;
+    QVariant m_uniformValue;
 };
 
 #endif // SHADERNODE_H

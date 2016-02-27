@@ -40,9 +40,10 @@ SOURCES += \
     $$PWD/src/renderables/lines/lines.cpp \
     $$PWD/src/renderables/noiseviewer/noiseviewer.cpp \
     $$PWD/src/navigators/flymodenavigator.cpp \
-#    $$PWD/src/shaderbuilder/shader.cpp \
-#    $$PWD/src/shaderbuilder/shadervalue.cpp \
-#    $$PWD/src/shaderbuilder/shaderoutput.cpp
+    $$PWD/src/shadernodes/glslvariantbridge.cpp \
+    $$PWD/src/shadernodes/shadernode.cpp \
+    $$PWD/src/shadernodes/shaderbuilder.cpp \
+    $$PWD/src/shadernodes/shaderoutput.cpp \
 
 HEADERS += \
     $$PWD/src/core/navigator.h \
@@ -87,19 +88,7 @@ HEADERS += \
     $$PWD/src/renderables/noiseviewer/noiseviewer.h \
     $$PWD/src/SimVis/NoiseViewer \
     $$PWD/src/navigators/flymodenavigator.h \
-#    $$PWD/src/shaderbuilder/shader.h \
-#    $$PWD/src/shaderbuilder/shadervalue.h \
-#    $$PWD/src/shaderbuilder/shaderoutput.h
-
-
-HEADERS += \
-    $$PWD/src/shadernodes/glslvariantbridge.h
-
-SOURCES += \
-    $$PWD/src/shadernodes/glslvariantbridge.cpp
-
-HEADERS += \
-    $$PWD/src/shadernodes/shadernode.h
-
-SOURCES += \
-    $$PWD/src/shadernodes/shadernode.cpp
+    $$PWD/src/shadernodes/glslvariantbridge.h \
+    $$PWD/src/shadernodes/shadernode.h \
+    $$PWD/src/shadernodes/shaderbuilder.h \
+    $$PWD/src/shadernodes/shaderoutput.h \
