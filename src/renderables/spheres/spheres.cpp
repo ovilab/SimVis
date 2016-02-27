@@ -55,7 +55,7 @@ void Spheres::setDirty(bool dirty)
 }
 
 void Spheres::makeDirty() {
-    setDirty(true);
+    m_shadersDirty = true;
 }
 
 void Spheres::setFragmentShader(ShaderBuilder *fragmentShader)
@@ -123,6 +123,11 @@ void SpheresRenderer::synchronize(Renderable* renderer)
     m_upVector = spheres->camera()->upVector().normalized();
     m_viewVector = spheres->camera()->viewVector().normalized();
     m_rightVector = QVector3D::crossProduct(m_viewVector, m_upVector);
+
+    if(spheres->m_shadersDirty) {
+        m_shadersDirty = true;
+        spheres->m_shadersDirty = false;
+    }
 
     if(spheres->fragmentShader()) {
         m_fragmentShaderString = spheres->fragmentShader()->finalShader();
@@ -275,7 +280,6 @@ void Spheres::setPositions(QVector<QVector3D> &positions)
 }
 
 void SpheresRenderer::beforeLinkProgram() {
-    qDebug() << "Linking";
     if(geometryShaderIsSupported()) {
         setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/spheres/spheresgs.vsh");
         setShaderFromSourceFile(QOpenGLShader::Geometry, ":/org.compphys.SimVis/renderables/spheres/spheres.gsh");

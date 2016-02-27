@@ -86,15 +86,20 @@ void ShaderBuilder::updateFinalShader()
 
     QString matchString = "\\$setupShaderNodes\\(\\);?";
 
-//    QRegularExpression indentRegex("^( *)" + matchString, QRegularExpression::PatternOption::MultilineOption);
-//    QString indent = indentRegex.match(m_source);
-//    if(indent && indent.length > 1) {
-//        setup = setup.replace(/\n/g, "\n" + indent[1])
-//    }
+    QRegularExpression indentRegex("^( *)" + matchString, QRegularExpression::PatternOption::MultilineOption);
+    QRegularExpressionMatch indentMatch = indentRegex.match(m_source);
+    if(indentMatch.hasMatch()) {
+        setup.replace(QRegularExpression("\n"), "\n" + indentMatch.captured(1));
+    }
     QString originalSource = m_source;
     contents += originalSource.replace(QRegularExpression(matchString), setup);
 
     m_finalShader = contents;
+
+    for(const ShaderOutput *output : m_resolvedOutputs) {
+        ShaderNode *value = output->value();
+        value->reset();
+    }
 
     emit finalShaderChanged(m_finalShader);
 }

@@ -67,16 +67,6 @@ void main(void) {
     }
 }
 "
-
-        Timer {
-            interval: 1000
-            running: true
-            repeat: true
-            onTriggered: {
-                console.log("Appending")
-                shader.source += " "
-            }
-        }
     }
 }
 

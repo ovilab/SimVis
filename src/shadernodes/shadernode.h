@@ -35,6 +35,7 @@ public:
     QList<QVariant> depends() const;
     QString identifier() const;
     QVariant uniformValue() const;
+    void reset() const;
 
 signals:
     void nameChanged(QString name);
@@ -67,10 +68,10 @@ private:
     QString m_initialization;
     QString m_result;
     QString m_header;
-    bool m_isUniform;
     QList<QVariant> m_depends;
     QList<ShaderNode*> m_resolvedDependencies;
     QString m_identifier;
+    bool m_isUniform = false;
 
     mutable bool m_hasGeneratedHeader = false;
     mutable bool m_hasGeneratedBody = false;

@@ -171,6 +171,15 @@ QVariant ShaderNode::uniformValue() const
     return m_uniformValue;
 }
 
+void ShaderNode::reset() const
+{
+    for(ShaderNode* dependency : m_resolvedDependencies) {
+        dependency->reset();
+    }
+    m_hasGeneratedBody = false;
+    m_hasGeneratedHeader = false;
+}
+
 void ShaderNode::setName(QString name)
 {
     if (m_name == name)

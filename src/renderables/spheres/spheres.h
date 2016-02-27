@@ -108,6 +108,7 @@ private:
     QColor m_color = QColor(0.8, 0.7, 0.5, 1.0);
     float m_scale = 1.0;
     bool m_dirty = false;
+    bool m_shadersDirty = false;
     friend class SpheresRenderer;
     ShaderBuilder* m_fragmentShader = nullptr;
 };
