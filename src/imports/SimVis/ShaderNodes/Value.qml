@@ -6,7 +6,7 @@ QtObject {
     default property var children
 
     property list<QtObject> depends
-    property string identifier: randomName()
+    property string name: randomName()
     property string type: ""
     property string initialization: ""
     property string result: ""
@@ -16,21 +16,21 @@ QtObject {
 
     property bool _hasGeneratedBody: false
     property bool _hasGeneratedHeader: false
-    readonly property string name: identifier + "_" + randomName()
+    readonly property string identifier: name + "_" + randomName()
 
     function convert(targetType) {
         if(type === targetType) {
-            return name
+            return identifier
         }
         var scalar = {
-            "bool": "bool(" + name + ")",
-            "int": "int(" + name + ")",
-            "uint": "uint(" + name + ")",
-            "float": "float(" + name + ")",
-            "double": "double(" + name + ")",
-            "vec3": "vec2(" + name + ", 0.0)",
-            "vec3": "vec3(" + name + ", 0.0, 0.0)",
-            "vec4": "vec4(" + name + ", 0.0, 0.0, 1.0)"
+            "bool": "bool(" + identifier + ")",
+            "int": "int(" + identifier + ")",
+            "uint": "uint(" + identifier + ")",
+            "float": "float(" + identifier + ")",
+            "double": "double(" + identifier + ")",
+            "vec3": "vec2(" + identifier + ", 0.0)",
+            "vec3": "vec3(" + identifier + ", 0.0, 0.0)",
+            "vec4": "vec4(" + identifier + ", 0.0, 0.0, 1.0)"
         }
         var conversions = {
             // first type is from, second is to, third is result
@@ -40,26 +40,26 @@ QtObject {
             "float": scalar,
             "double": scalar,
             "vec2": {
-                "float": "0.5 * (" + name + ".x + " + name + ".y)",
-                "vec3": "vec3(" + name + ", 0.0)",
-                "vec4": "vec4(" + name + ", 0.0, 1.0)"
+                "float": "0.5 * (" + identifier + ".x + " + identifier + ".y)",
+                "vec3": "vec3(" + identifier + ", 0.0)",
+                "vec4": "vec4(" + identifier + ", 0.0, 1.0)"
             },
             "vec3": {
-                "float": "1.0 / 3.0 * (" + name + ".x + " + name + ".y + " + name + ".z)",
-                "vec2": name + ".xy",
-                "vec4": "vec4(" + name + ", 1.0)"
+                "float": "1.0 / 3.0 * (" + identifier + ".x + " + identifier + ".y + " + identifier + ".z)",
+                "vec2": identifier + ".xy",
+                "vec4": "vec4(" + identifier + ", 1.0)"
             },
             "vec4": {
-                "float": "0.25 * (" + name + ".x + " + name + ".y + " + name + ".z + " + name + ".w)",
-                "vec2": name + ".xy",
-                "vec3": name + ".xyz"
+                "float": "0.25 * (" + identifier + ".x + " + identifier + ".y + " + identifier + ".z + " + identifier + ".w)",
+                "vec2": identifier + ".xy",
+                "vec3": identifier + ".xyz"
             }
         }
         if(conversions[type] && conversions[type][targetType]) {
             return "(" + conversions[type][targetType] + ")"
         }
         console.warn("WARNING: No known conversion from " + type + " to " + targetType)
-        return name
+        return identifier
     }
 
     function randomName()
@@ -87,7 +87,7 @@ QtObject {
     }
 
     function replaceWithName(text) {
-        return text.replace(/\$/, name + "_")
+        return text.replace(/\$/, identifier + "_")
     }
 
     function generateHeader() {
@@ -120,13 +120,13 @@ QtObject {
                 }
             }
             if(type) {
-                bodyResult += type + " " + name + ";\n";
+                bodyResult += type + " " + identifier + ";\n";
             }
             if(initialization) {
                 bodyResult += replaceWithName(initialization) + "\n";
             }
             if(result) {
-                bodyResult += name + " = " + replaceWithName(result) + ";\n";
+                bodyResult += identifier + " = " + replaceWithName(result) + ";\n";
             }
             bodyResult += "\n";
             _hasGeneratedBody = true;

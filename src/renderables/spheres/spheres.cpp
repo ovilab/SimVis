@@ -110,7 +110,7 @@ void SpheresRenderer::synchronize(Renderable* renderer)
         m_uniforms.clear();
         for(const QVariant &uniformVariant : uniforms.toList()) {
             const QObject* uniform = qvariant_cast<QObject*>(uniformVariant);
-            m_uniforms.insert(uniform->property("name").toString(), uniform->property("value"));
+            m_uniforms.insert(uniform->property("identifier").toString(), uniform->property("value"));
         }
     }
 

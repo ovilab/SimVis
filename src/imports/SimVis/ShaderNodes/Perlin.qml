@@ -4,5 +4,5 @@ Value {
     property Float factor
     property Float result
 
-    identifier: "perlin"
+    identifiertifier: "perlin"
 }

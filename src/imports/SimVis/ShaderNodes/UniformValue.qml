@@ -4,8 +4,8 @@ import SimVis 1.0
 Value {
     property var value
     isUniform: true
-    header: "uniform " + type + " " + name + ";\n"
-    identifier: "univalue"
+    header: "uniform " + type + " " + identifier + ";\n"
+    name: "univalue"
     GlslVariantBridge {
         id: bridge
     }

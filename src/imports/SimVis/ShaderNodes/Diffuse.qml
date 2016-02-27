@@ -5,10 +5,10 @@ Value {
     property Value normal
     property Value position
 
-    identifier: "diffuse"
+    name: "diffuse"
     depends: [color, normal, position]
     type: color.type
-    result: "defaultLight(" + normal.name + ", " + position.name + ", " + color.name + ");"
+    result: "defaultLight(" + normal.identifier + ", " + position.identifier + ", " + color.identifier + ");"
 
     header: "
 // BEGIN light.glsl

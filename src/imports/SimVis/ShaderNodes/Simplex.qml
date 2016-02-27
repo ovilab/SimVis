@@ -5,7 +5,7 @@ Value {
     property Value position
     depends: [normal, position]
     type: normal.type
-    identifier: "simplex"
+    name: "simplex"
     result: "simplexbump(" + normal.convert("vec3") + ", " + normal.convert("vec3") + ")"
     header: "
 // GLSL textureless classic 4D noise \"cnoise\",

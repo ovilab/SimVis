@@ -8,22 +8,22 @@ AbstractSpheres {
         id: _shader
         property Value position: Value {
             type: "vec3"
-            identifier: "position"
+            name: "position"
             result: "vertexPosition";
         }
         property Value normal: Value {
             type: "vec3"
-            identifier: "normal"
+            name: "normal"
             result: "normal";
         }
         property Value texCoord: Value {
             type: "vec2"
-            identifier: "texCoord"
+            name: "texCoord"
             result: "texCoord";
         }
         property Value color: Value {
             type: "vec2"
-            identifier: "texCoord"
+            name: "texCoord"
             result: "texCoord";
         }
 

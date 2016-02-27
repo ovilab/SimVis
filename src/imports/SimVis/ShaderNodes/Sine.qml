@@ -3,9 +3,9 @@ import QtQuick 2.0
 Value {
     property Value value
 
-    identifier: "sine"
+    name: "sine"
 
     depends: [value]
     type: value.type
-    result: "sin(" + value.name + ")"
+    result: "sin(" + value.identifier + ")"
 }

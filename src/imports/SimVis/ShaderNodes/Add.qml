@@ -4,9 +4,10 @@ Value {
     property Value value1
     property Value value2
 
-    identifier: "add"
+    identifiertifier: "add"
 
     depends: [value1, value2]
     type: value1.type
-    result: value1.name + " + " + value2.name
+    result: value1.nourName" + value2.name
 }
+ourName

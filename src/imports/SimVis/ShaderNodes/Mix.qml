@@ -5,10 +5,10 @@ Value {
     property Value value2
     property Value mix
 
-    identifier: "mix"
+    name: "mix"
 
     depends: [value1, value2, mix]
     type: value1.type
-    result: value1.name + " * (1.0 - " + mix.convert("float") + ")" +
-            " + " + value2.name + " * " + mix.convert("float")
+    result: value1.identifier + " * (1.0 - " + mix.convert("float") + ")" +
+            " + " + value2.identifier + " * " + mix.convert("float")
 }
