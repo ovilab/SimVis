@@ -18,6 +18,50 @@ QtObject {
     property bool _hasGeneratedHeader: false
     readonly property string name: identifier + "_" + randomName()
 
+    function convert(targetType) {
+        if(type === targetType) {
+            return name
+        }
+        var scalar = {
+            "bool": "bool(" + name + ")",
+            "int": "int(" + name + ")",
+            "uint": "uint(" + name + ")",
+            "float": "float(" + name + ")",
+            "double": "double(" + name + ")",
+            "vec3": "vec2(" + name + ", 0.0)",
+            "vec3": "vec3(" + name + ", 0.0, 0.0)",
+            "vec4": "vec4(" + name + ", 0.0, 0.0, 1.0)"
+        }
+        var conversions = {
+            // first type is from, second is to, third is result
+            "bool": scalar,
+            "int": scalar,
+            "uint": scalar,
+            "float": scalar,
+            "double": scalar,
+            "vec2": {
+                "float": "0.5 * (" + name + ".x + " + name + ".y)",
+                "vec3": "vec3(" + name + ", 0.0)",
+                "vec4": "vec4(" + name + ", 0.0, 1.0)"
+            },
+            "vec3": {
+                "float": "1.0 / 3.0 * (" + name + ".x + " + name + ".y + " + name + ".z)",
+                "vec2": name + ".xy",
+                "vec4": "vec4(" + name + ", 1.0)"
+            },
+            "vec4": {
+                "float": "0.25 * (" + name + ".x + " + name + ".y + " + name + ".z + " + name + ".w)",
+                "vec2": name + ".xy",
+                "vec3": name + ".xyz"
+            }
+        }
+        if(conversions[type] && conversions[type][targetType]) {
+            return "(" + conversions[type][targetType] + ")"
+        }
+        console.warn("WARNING: No known conversion from " + type + " to " + targetType)
+        return name
+    }
+
     function randomName()
     {
         var text = "";

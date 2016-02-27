@@ -20,6 +20,8 @@
 #include "../renderables/noiseviewer/noiseviewer.h"
 #include "../shadereffects/periodiccopies.h"
 #include "../shadereffects/slice.h"
+#include "../shadernodes/glslvariantbridge.h"
+
 #include <qqml.h>
 #include <QQmlEngine>
 
@@ -50,6 +52,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<Slice>("SimVis", 1, 0, "Slice");
     qmlRegisterType<Cylinders>("SimVis", 1, 0, "Cylinders");
     qmlRegisterType<Lines>("SimVis", 1, 0, "Lines");
+    qmlRegisterType<GlslVariantBridge>("SimVis", 1, 0, "GlslVariantBridge");
 }
 
 void SimVisPlugin::initializeEngine(QQmlEngine *engine, const char *uri)

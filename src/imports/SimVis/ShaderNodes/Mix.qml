@@ -9,5 +9,6 @@ Value {
 
     depends: [value1, value2, mix]
     type: value1.type
-    result: value1.name + " * (1.0 - " + mix.name + ")" + " + " + value2.name + " * " + mix.name
+    result: value1.name + " * (1.0 - " + mix.convert("float") + ")" +
+            " + " + value2.name + " * " + mix.convert("float")
 }

@@ -27,17 +27,17 @@ QtObject {
         }
 
         var contents = ""
-        contents += "\n// ------  begin generated outputs ------\n\n"
-        for(var i in outputs) {
-            contents += "out " + outputs[i].type + " " + outputs[i].name + ";\n"
-        }
-        contents += "\n// ------  end generated outputs   ------\n\n"
         contents += "\n// ------  begin generated header  ------\n\n"
         for(var i in outputs) {
             var value = outputs[i].value
             contents += value.generateHeader() + "\n"
         }
         contents += "\n// ------   end generated header   ------\n\n"
+        contents += "\n// ------  begin generated outputs ------\n\n"
+        for(var i in outputs) {
+            contents += "out " + outputs[i].type + " " + outputs[i].name + ";\n"
+        }
+        contents += "\n// ------  end generated outputs   ------\n\n"
 
         var setup = ""
         setup += "\n// ------   begin generated body   ------\n\n"
@@ -49,10 +49,10 @@ QtObject {
         setup += "\n// ------ begin output assignments ------\n\n"
         for(var i in outputs) {
             var value = outputs[i].value
-            setup += outputs[i].name + " = " + convertGlslType(value, outputs[i].type) + ";\n";
+            setup += outputs[i].name + " = " + value.convert(outputs[i].type) + ";\n";
         }
         setup += "\n// ------  end output assignments  ------\n\n"
-        var matchString = "\\$shaderNodes.setup\\(\\);?"
+        var matchString = "\\$setupShaderNodes\\(\\);?"
 
         var indent = source.match(new RegExp("^( *)" + matchString, "m"))
         if(indent && indent.length > 1) {
@@ -61,16 +61,5 @@ QtObject {
         contents += source.replace(new RegExp(matchString), setup)
 
         return contents
-    }
-
-    function convertGlslType(value, targetType) {
-        if(value.type === targetType) {
-            return value.name
-        }
-        if(value.type === "vec3" && targetType === "vec4") {
-            return "vec4(" + value.name + ", 1.0)"
-        }
-        console.warn("WARNING: could not convert " + value.type + " to " + targetType)
-        return value.name
     }
 }

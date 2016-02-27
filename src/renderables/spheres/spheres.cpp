@@ -276,8 +276,17 @@ void SpheresRenderer::setUniforms() {
         const QVariant &value = m_uniforms.value(uniformName);
         const char* name = uniformName.toStdString().c_str();
         switch(value.type()) {
+        case QVariant::Bool:
+            program().setUniformValue(name, value.toBool());
+            break;
+        case QVariant::Int:
+            program().setUniformValue(name, value.toInt());
+            break;
         case QVariant::Double:
             program().setUniformValue(name, value.toFloat());
+            break;
+        case QVariant::Vector2D:
+            program().setUniformValue(name, value.value<QVector2D>());
             break;
         case QVariant::Vector3D:
             program().setUniformValue(name, value.value<QVector3D>());
@@ -286,7 +295,7 @@ void SpheresRenderer::setUniforms() {
             program().setUniformValue(name, value.value<QVector4D>());
             break;
         default:
-            qWarning() << "Cannot set uniform value of type " << value.typeName();
+            break;
         }
     }
 }

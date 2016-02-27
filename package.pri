@@ -90,3 +90,10 @@ HEADERS += \
 #    $$PWD/src/shaderbuilder/shader.h \
 #    $$PWD/src/shaderbuilder/shadervalue.h \
 #    $$PWD/src/shaderbuilder/shaderoutput.h
+
+
+HEADERS += \
+    $$PWD/src/shadernodes/glslvariantbridge.h
+
+SOURCES += \
+    $$PWD/src/shadernodes/glslvariantbridge.cpp

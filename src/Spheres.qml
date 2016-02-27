@@ -60,7 +60,7 @@ void main(void) {
 
         highp vec3 normal = x*cp_rightVector + y*cp_upVector - z*cp_viewVector;
 
-        $shaderNodes.setup();
+        $setupShaderNodes();
     }
 }
 "
