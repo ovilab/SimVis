@@ -5,7 +5,7 @@ import SimVis.ShaderNodes 1.0
 AbstractSpheres {
     property alias fragColor: _shader.fragColor
     property alias shader: _shader
-    fragmentShader: ShaderDefinition {
+    fragmentShader: ShaderBuilder {
         id: _shader
         property Value position: Value {
             type: "vec3"
@@ -38,14 +38,12 @@ AbstractSpheres {
         }
 
         outputs: [
-            output
+            ShaderOutput {
+                type: "vec4"
+                name: "fragColor"
+                value: _shader.fragColor
+            }
         ]
-        OutputValue {
-            id: output
-            type: "vec4"
-            name: "fragColor"
-            value: _shader.fragColor
-        }
 
         source: "
 in vec3 color;

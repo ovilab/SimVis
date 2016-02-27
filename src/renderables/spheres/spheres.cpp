@@ -67,6 +67,7 @@ void Spheres::setFragmentShader(ShaderBuilder *fragmentShader)
     }
     m_fragmentShader = fragmentShader;
     connect(m_fragmentShader, &ShaderBuilder::finalShaderChanged, this, &Spheres::makeDirty);
+    makeDirty();
     emit fragmentShaderChanged(fragmentShader);
 }
 
@@ -126,15 +127,12 @@ void SpheresRenderer::synchronize(Renderable* renderer)
 
     if(spheres->m_shadersDirty) {
         m_shadersDirty = true;
-        spheres->m_shadersDirty = false;
-    }
-
-    if(spheres->fragmentShader()) {
         m_fragmentShaderString = spheres->fragmentShader()->finalShader();
         m_uniforms.clear();
         for(const ShaderNode *uniform : spheres->fragmentShader()->uniformDependencies()) {
             m_uniforms.insert(uniform->identifier(), uniform->uniformValue());
         }
+        spheres->m_shadersDirty = false;
     }
 
     if(!m_isInitialized) {

@@ -5,7 +5,6 @@
 
 ShaderBuilder::ShaderBuilder(QObject *parent) : QObject(parent)
 {
-
 }
 
 QString ShaderBuilder::source() const
@@ -15,70 +14,38 @@ QString ShaderBuilder::source() const
 
 QString ShaderBuilder::finalShader() const
 {
-    return m_finalShader;
-}
-
-QVariantList ShaderBuilder::outputs() const
-{
-    return m_outputs;
-}
-
-QList<ShaderNode*> ShaderBuilder::uniformDependencies() const
-{
-    QList<ShaderNode *> uniforms;
-    for(const ShaderOutput *output : m_resolvedOutputs) {
-        ShaderNode *value = output->value();
-        if(!value) {
-            continue;
-        }
-        uniforms.append(value->uniformDependencies());
-    }
-    return uniforms;
-}
-
-void ShaderBuilder::setSource(QString source)
-{
-    if (m_source == source)
-        return;
-
-    m_source = source;
-    updateFinalShader();
-    emit sourceChanged(source);
-}
-
-void ShaderBuilder::updateFinalShader()
-{
+    qDebug() << "Requesting final shader";
     // Verify all that all outputs have values
-    for(const ShaderOutput *output : m_resolvedOutputs) {
+    for(const ShaderOutput *output : m_outputs) {
         ShaderNode *value = output->value();
         if(!value) {
             qWarning() << "ERROR: ShaderDefintion output " << output->name() << " has no value";
-            return;
+            return QString();
         }
     }
 
     QString contents = "";
     contents += "\n// ------  begin generated header  ------\n\n";
-    for(const ShaderOutput *output : m_resolvedOutputs) {
+    for(const ShaderOutput *output : m_outputs) {
         ShaderNode *value = output->value();
         contents += value->generateHeader();
     }
     contents += "\n// ------   end generated header   ------\n\n";
     contents += "\n// ------  begin generated outputs ------\n\n";
-    for(const ShaderOutput *output : m_resolvedOutputs) {
+    for(const ShaderOutput *output : m_outputs) {
         contents += "out " + output->type() + " " + output->name() + ";\n";
     }
     contents += "\n// ------  end generated outputs   ------\n\n";
 
     QString setup = "";
     setup += "\n// ------   begin generated body   ------\n\n";
-    for(const ShaderOutput *output : m_resolvedOutputs) {
+    for(const ShaderOutput *output : m_outputs) {
         ShaderNode* value = output->value();
         setup += value->generateBody();
     }
     setup += "\n// ------    end generated body    ------\n\n";
     setup += "\n// ------ begin output assignments ------\n\n";
-    for(const ShaderOutput *output : m_resolvedOutputs) {
+    for(const ShaderOutput *output : m_outputs) {
         ShaderNode* value = output->value();
         setup += output->name() + " = " + value->convert(output->type()) + ";\n";
     }
@@ -94,37 +61,38 @@ void ShaderBuilder::updateFinalShader()
     QString originalSource = m_source;
     contents += originalSource.replace(QRegularExpression(matchString), setup);
 
-    m_finalShader = contents;
-
-    for(const ShaderOutput *output : m_resolvedOutputs) {
+    for(const ShaderOutput *output : m_outputs) {
         ShaderNode *value = output->value();
         value->reset();
     }
 
-    emit finalShaderChanged(m_finalShader);
+    return contents;
 }
 
-void ShaderBuilder::resolveOutputs()
+QQmlListProperty<ShaderOutput> ShaderBuilder::outputs()
 {
-    m_resolvedOutputs.clear();
-    for(const QVariant &outputVariant : m_outputs) {
-        ShaderOutput* output = qvariant_cast<ShaderOutput*>(outputVariant);
-        if(!output) {
-            qWarning() << "WARNING: ShaderBuilder: Cannot use" <<  outputVariant << "as output";
+    return QQmlListProperty<ShaderOutput>(this, m_outputs);
+}
+
+QList<ShaderNode*> ShaderBuilder::uniformDependencies() const
+{
+    QList<ShaderNode *> uniforms;
+    for(const ShaderOutput *output : m_outputs) {
+        ShaderNode *value = output->value();
+        if(!value) {
             continue;
         }
-        m_resolvedOutputs.append(output);
+        uniforms.append(value->uniformDependencies());
     }
+    return uniforms;
 }
 
-void ShaderBuilder::setOutputs(QVariantList outputs)
+void ShaderBuilder::setSource(QString source)
 {
-    if (m_outputs == outputs)
+    if (m_source == source)
         return;
 
-    m_outputs = outputs;
-
-    resolveOutputs();
-    updateFinalShader();
-    emit outputsChanged(outputs);
+    m_source = source;
+    emit finalShaderChanged();
+    emit sourceChanged(source);
 }

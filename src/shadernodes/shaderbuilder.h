@@ -5,6 +5,7 @@
 #include "shaderoutput.h"
 
 #include <QObject>
+#include <QQmlListProperty>
 #include <QVariantList>
 
 class ShaderBuilder : public QObject
@@ -12,7 +13,8 @@ class ShaderBuilder : public QObject
     Q_OBJECT
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(QString finalShader READ finalShader NOTIFY finalShaderChanged)
-    Q_PROPERTY(QVariantList outputs READ outputs WRITE setOutputs NOTIFY outputsChanged)
+    Q_PROPERTY(QQmlListProperty<ShaderOutput> outputs READ outputs)
+    Q_CLASSINFO("DefaultProperty", "outputs")
 
 public:
     explicit ShaderBuilder(QObject *parent = 0);
@@ -20,26 +22,19 @@ public:
     QString source() const;
     QString finalShader() const;
 
-    QVariantList outputs() const;
+    QQmlListProperty<ShaderOutput> outputs();
     QList<ShaderNode *> uniformDependencies() const;
 
 signals:
     void sourceChanged(QString source);
-    void finalShaderChanged(QString finalShader);
-    void outputsChanged(QVariantList outputs);
+    void finalShaderChanged();
 
 public slots:
     void setSource(QString source);
-    void setOutputs(QVariantList outputs);
 
 private:
-    void resolveOutputs();
-    void updateFinalShader();
-
     QString m_source;
-    QString m_finalShader;
-    QVariantList m_outputs;
-    QList<ShaderOutput*> m_resolvedOutputs;
+    QList<ShaderOutput*> m_outputs;
 };
 
 #endif // SHADERBUILDER_H
