@@ -7,28 +7,28 @@ AbstractSpheres {
     property alias shader: _shader
     fragmentShader: ShaderBuilder {
         id: _shader
-        property Value position: Value {
+        property ShaderNode position: ShaderNode {
             type: "vec3"
             name: "position"
             result: "vertexPosition";
         }
-        property Value normal: Value {
+        property ShaderNode normal: ShaderNode {
             type: "vec3"
             name: "normal"
             result: "normal";
         }
-        property Value texCoord: Value {
+        property ShaderNode texCoord: ShaderNode {
             type: "vec2"
             name: "texCoord"
             result: "texCoord";
         }
-        property Value color: Value {
+        property ShaderNode color: ShaderNode {
             type: "vec2"
             name: "texCoord"
             result: "texCoord";
         }
 
-        property Value fragColor: Diffuse {
+        property ShaderNode fragColor: Diffuse {
             position: shader.position
             color: UniformValue {
                 type: "vec3"

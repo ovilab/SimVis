@@ -48,9 +48,9 @@ bool ShaderNode::isUniform() const
     return m_isUniform;
 }
 
-QList<QVariant> ShaderNode::depends() const
+QQmlListProperty<ShaderNode> ShaderNode::depends()
 {
-    return m_depends;
+    return QQmlListProperty<ShaderNode>(this, m_dependencies);
 }
 
 QString ShaderNode::identifier() const
@@ -65,7 +65,7 @@ QString ShaderNode::generateHeader() const
     }
 
     QString headerResult = "";
-    for(const ShaderNode *node : m_resolvedDependencies) {
+    for(const ShaderNode *node : m_dependencies) {
         headerResult += node->generateHeader();
     }
     headerResult += m_header;
@@ -129,7 +129,7 @@ QString ShaderNode::convert(QString targetType) const
 QList<ShaderNode*> ShaderNode::uniformDependencies() const
 {
     QList<ShaderNode*> uniforms;
-    for(ShaderNode* node : m_resolvedDependencies) {
+    for(ShaderNode* node : m_dependencies) {
         uniforms.append(node->uniformDependencies());
     }
     if(isUniform()) {
@@ -151,7 +151,7 @@ QString ShaderNode::generateBody() const
         return QString();
     }
     QString body = "";
-    for(ShaderNode* dependency : m_resolvedDependencies) {
+    for(ShaderNode* dependency : m_dependencies) {
         body += dependency->generateBody();
     }
     body += m_type + " " + m_identifier + ";\n";
@@ -173,7 +173,7 @@ QVariant ShaderNode::uniformValue() const
 
 void ShaderNode::reset() const
 {
-    for(ShaderNode* dependency : m_resolvedDependencies) {
+    for(ShaderNode* dependency : m_dependencies) {
         dependency->reset();
     }
     m_hasGeneratedBody = false;
@@ -237,16 +237,6 @@ void ShaderNode::setIsUniform(bool isUniform)
     emit isUniformChanged(isUniform);
 }
 
-void ShaderNode::setDepends(QList<QVariant> depends)
-{
-    if (m_depends == depends)
-        return;
-
-    m_depends = depends;
-    resolveDependencies();
-    emit dependsChanged(depends);
-}
-
 void ShaderNode::setUniformValue(QVariant uniformValue)
 {
     if (m_uniformValue == uniformValue)
@@ -256,16 +246,30 @@ void ShaderNode::setUniformValue(QVariant uniformValue)
     emit uniformValueChanged(uniformValue);
 }
 
-void ShaderNode::resolveDependencies()
+QString ShaderNode::glslTypeFromVariant(QVariant value) const
 {
-    m_resolvedDependencies.clear();
-    for(const QVariant &variant : m_depends) {
-        ShaderNode* otherNode = qvariant_cast<ShaderNode*>(variant);
-        if(otherNode) {
-            m_resolvedDependencies.append(otherNode);
-        } else {
-            // TODO convert regular variants to ShaderNode automatically
-            qDebug() << "Got unresolvable variant dependency";
-        }
+    switch(value.type()) {
+    case QVariant::Bool:
+        return QString("bool");
+        break;
+    case QVariant::Int:
+        return QString("int");
+        break;
+    case QVariant::Double:
+        return QString("float");
+        break;
+    case QVariant::Vector2D:
+        return QString("vec2");
+        break;
+    case QVariant::Vector3D:
+        return QString("vec3");
+        break;
+    case QVariant::Vector4D:
+        return QString("vec4");
+        break;
+    default:
+        qWarning() << "WARNING: GlslVariantBridge could not identify type" << value.typeName();
+        return QString("float");
+        break;
     }
 }

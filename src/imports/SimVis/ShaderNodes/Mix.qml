@@ -1,6 +1,6 @@
-import QtQuick 2.0
+import SimVis 1.0
 
-Value {
+ShaderNode {
     property var value1
     property var value2
     property var mix

@@ -1,8 +1,8 @@
-import QtQuick 2.0
+import SimVis 1.0
 
-Value {
-    property Value value1
-    property Value value2
+ShaderNode {
+    property ShaderNode value1
+    property ShaderNode value2
 
     name: "add"
 

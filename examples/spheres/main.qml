@@ -138,6 +138,9 @@ ApplicationWindow {
                     maximumValue: 1.0
                     value: 0.5
                 }
+                Text {
+                    text: mixSlider.value.toFixed(2)
+                }
             }
 
             //            Row {

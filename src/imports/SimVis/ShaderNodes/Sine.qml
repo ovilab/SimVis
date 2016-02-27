@@ -1,7 +1,7 @@
-import QtQuick 2.0
+import SimVis 1.0
 
-Value {
-    property Value value
+ShaderNode {
+    property ShaderNode value
 
     name: "sine"
 

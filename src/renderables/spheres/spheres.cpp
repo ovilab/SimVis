@@ -128,11 +128,12 @@ void SpheresRenderer::synchronize(Renderable* renderer)
     if(spheres->m_shadersDirty) {
         m_shadersDirty = true;
         m_fragmentShaderString = spheres->fragmentShader()->finalShader();
-        m_uniforms.clear();
-        for(const ShaderNode *uniform : spheres->fragmentShader()->uniformDependencies()) {
-            m_uniforms.insert(uniform->identifier(), uniform->uniformValue());
-        }
         spheres->m_shadersDirty = false;
+    }
+
+    m_uniforms.clear();
+    for(const ShaderNode *uniform : spheres->fragmentShader()->uniformDependencies()) {
+        m_uniforms.insert(uniform->identifier(), uniform->uniformValue());
     }
 
     if(!m_isInitialized) {
@@ -316,6 +317,7 @@ void SpheresRenderer::setUniforms() {
             program().setUniformValue(name, value.value<QVector4D>());
             break;
         default:
+            qDebug() << "Cannot set unknown uniform type" << value.typeName();
             break;
         }
     }

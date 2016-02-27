@@ -1,9 +1,9 @@
-import QtQuick 2.0
+import SimVis 1.0
 
-Value {
-    property Value color
-    property Value normal
-    property Value position
+ShaderNode {
+    property ShaderNode color
+    property ShaderNode normal
+    property ShaderNode position
 
     name: "diffuse"
     depends: [color, normal, position]

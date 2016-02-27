@@ -4,6 +4,7 @@
 #include <QString>
 #include <QVariant>
 #include <QList>
+#include <QQmlListProperty>
 
 class ShaderNode : public QObject
 {
@@ -14,7 +15,7 @@ class ShaderNode : public QObject
     Q_PROPERTY(QString result READ result WRITE setResult NOTIFY resultChanged)
     Q_PROPERTY(QString header READ header WRITE setHeader NOTIFY headerChanged)
     Q_PROPERTY(bool isUniform READ isUniform WRITE setIsUniform NOTIFY isUniformChanged)
-    Q_PROPERTY(QList<QVariant> depends READ depends WRITE setDepends NOTIFY dependsChanged)
+    Q_PROPERTY(QQmlListProperty<ShaderNode> depends READ depends)
     Q_PROPERTY(QString identifier READ identifier NOTIFY identifierChanged)
     Q_PROPERTY(QVariant uniformValue READ uniformValue WRITE setUniformValue NOTIFY uniformValueChanged)
 
@@ -25,6 +26,7 @@ public:
     Q_INVOKABLE QString convert(QString targetType) const;
     Q_INVOKABLE QList<ShaderNode *> uniformDependencies() const;
     Q_INVOKABLE QString generateBody() const;
+    Q_INVOKABLE QString glslTypeFromVariant(QVariant value) const;
 
     QString name() const;
     QString type() const;
@@ -32,7 +34,7 @@ public:
     QString result() const;
     QString header() const;
     bool isUniform() const;
-    QList<QVariant> depends() const;
+    QQmlListProperty<ShaderNode> depends();
     QString identifier() const;
     QVariant uniformValue() const;
     void reset() const;
@@ -44,7 +46,6 @@ signals:
     void resultChanged(QString result);
     void headerChanged(QString header);
     void isUniformChanged(bool isUniform);
-    void dependsChanged(QList<QVariant> depends);
     void identifierChanged(QString identifier);
 
     void uniformValueChanged(QVariant uniformValue);
@@ -56,7 +57,6 @@ public slots:
     void setResult(QString result);
     void setHeader(QString header);
     void setIsUniform(bool isUniform);
-    void setDepends(QList<QVariant> depends);
 
     void setUniformValue(QVariant uniformValue);
 
@@ -68,8 +68,7 @@ private:
     QString m_initialization;
     QString m_result;
     QString m_header;
-    QList<QVariant> m_depends;
-    QList<ShaderNode*> m_resolvedDependencies;
+    QList<ShaderNode*> m_dependencies;
     QString m_identifier;
     bool m_isUniform = false;
 
