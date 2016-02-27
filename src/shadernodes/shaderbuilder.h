@@ -14,7 +14,6 @@ class ShaderBuilder : public QObject
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(QString finalShader READ finalShader NOTIFY finalShaderChanged)
     Q_PROPERTY(QQmlListProperty<ShaderOutput> outputs READ outputs)
-    Q_CLASSINFO("DefaultProperty", "outputs")
 
 public:
     explicit ShaderBuilder(QObject *parent = 0);
