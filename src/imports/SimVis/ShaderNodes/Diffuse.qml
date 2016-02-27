@@ -6,9 +6,8 @@ ShaderNode {
     property ShaderNode position
 
     name: "diffuse"
-    depends: [color, normal, position]
     type: color.type
-    result: "defaultLight(" + normal.identifier + ", " + position.identifier + ", " + color.identifier + ");"
+    result: "defaultLight(" + resolve(normal) + ", " + resolve(position) + ", " + resolve(color) + ");"
 
     header: "
 // BEGIN light.glsl

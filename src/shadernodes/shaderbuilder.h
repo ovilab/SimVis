@@ -8,6 +8,8 @@
 #include <QQmlListProperty>
 #include <QVariantList>
 
+class VariantShaderNode;
+
 class ShaderBuilder : public QObject
 {
     Q_OBJECT
@@ -22,7 +24,7 @@ public:
     QString finalShader() const;
 
     QQmlListProperty<ShaderOutput> outputs();
-    QList<ShaderNode *> uniformDependencies() const;
+    QList<VariantShaderNode *> uniformDependencies() const;
 
 signals:
     void sourceChanged(QString source);
@@ -30,6 +32,7 @@ signals:
 
 public slots:
     void setSource(QString source);
+    void receiveOutputChange();
 
 private:
     QString m_source;

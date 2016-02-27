@@ -10,7 +10,6 @@
         <file>SimVis/ShaderNodes/Perlin.qml</file>
         <file>SimVis/ShaderNodes/ShaderDefinition.qml</file>
         <file>SimVis/ShaderNodes/Sine.qml</file>
-        <file>SimVis/ShaderNodes/UniformValue.qml</file>
         <file>SimVis/ShaderNodes/qmldir</file>
         <file>SimVis/ShaderNodes/Simplex.qml</file>
     </qresource>

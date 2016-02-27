@@ -57,13 +57,8 @@ ApplicationWindow {
                 position: spheres.shader.position
                 color: Mix {
                     value1: spheres.shader.normal
-                    value2: UniformValue {
-                        type: "vec3"
-                        uniformValue: Qt.vector3d(0.1, 0.7, 0.9)
-                    }
-                    mix: UniformValue {
-                        uniformValue: mixSlider.value
-                    }
+                    value2: Qt.vector3d(3.0, 1.0, 1.0)
+                    mix: mixSlider.value
                 }
                 normal: Simplex {
                     normal: spheres.shader.normal

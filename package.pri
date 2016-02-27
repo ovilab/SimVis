@@ -44,6 +44,7 @@ SOURCES += \
     $$PWD/src/shadernodes/shadernode.cpp \
     $$PWD/src/shadernodes/shaderbuilder.cpp \
     $$PWD/src/shadernodes/shaderoutput.cpp \
+    $$PWD/src/shadernodes/variantshadernode.cpp
 
 HEADERS += \
     $$PWD/src/core/navigator.h \
@@ -92,3 +93,4 @@ HEADERS += \
     $$PWD/src/shadernodes/shadernode.h \
     $$PWD/src/shadernodes/shaderbuilder.h \
     $$PWD/src/shadernodes/shaderoutput.h \
+    $$PWD/src/shadernodes/variantshadernode.h

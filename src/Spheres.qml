@@ -30,10 +30,7 @@ AbstractSpheres {
 
         property ShaderNode fragColor: Diffuse {
             position: shader.position
-            color: UniformValue {
-                type: "vec3"
-                uniformValue: Qt.vector3d(0.1, 0.7, 0.9)
-            }
+            color: shader.normal
             normal: shader.normal
         }
 

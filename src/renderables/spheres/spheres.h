@@ -95,7 +95,7 @@ signals:
     void fragmentShaderChanged(ShaderBuilder* fragmentShader);
 
 private slots:
-    void makeDirty();
+    void markShadersDirty();
 private:
     QVector3D vectorFromColor(const QColor &color);
     QVector<SphereNoGeometryShaderVBOData> m_verticesNoGeometryShader;

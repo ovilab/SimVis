@@ -3,10 +3,9 @@ import SimVis 1.0
 ShaderNode {
     property ShaderNode normal
     property ShaderNode position
-    depends: [normal, position]
     type: normal.type
     name: "simplex"
-    result: "simplexbump(" + normal.convert("vec3") + ", " + normal.convert("vec3") + ")"
+    result: "simplexbump(" + resolve(normal, "vec3") + ", " + resolve(normal ,"vec3") + ")"
     header: "
 // GLSL textureless classic 4D noise \"cnoise\",
 // with an RSL-style periodic variant \"pnoise\".

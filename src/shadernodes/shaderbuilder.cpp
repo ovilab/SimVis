@@ -14,7 +14,6 @@ QString ShaderBuilder::source() const
 
 QString ShaderBuilder::finalShader() const
 {
-    qDebug() << "Requesting final shader";
     // Verify all that all outputs have values
     for(const ShaderOutput *output : m_outputs) {
         ShaderNode *value = output->value();
@@ -22,6 +21,7 @@ QString ShaderBuilder::finalShader() const
             qWarning() << "ERROR: ShaderDefintion output " << output->name() << " has no value";
             return QString();
         }
+        output->value()->setShaderBuilder(const_cast<ShaderBuilder*>(this));
     }
 
     QString contents = "";
@@ -74,9 +74,9 @@ QQmlListProperty<ShaderOutput> ShaderBuilder::outputs()
     return QQmlListProperty<ShaderOutput>(this, m_outputs);
 }
 
-QList<ShaderNode*> ShaderBuilder::uniformDependencies() const
+QList<VariantShaderNode*> ShaderBuilder::uniformDependencies() const
 {
-    QList<ShaderNode *> uniforms;
+    QList<VariantShaderNode*> uniforms;
     for(const ShaderOutput *output : m_outputs) {
         ShaderNode *value = output->value();
         if(!value) {
@@ -95,4 +95,9 @@ void ShaderBuilder::setSource(QString source)
     m_source = source;
     emit finalShaderChanged();
     emit sourceChanged(source);
+}
+
+void ShaderBuilder::receiveOutputChange()
+{
+    emit finalShaderChanged();
 }

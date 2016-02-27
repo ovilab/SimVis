@@ -1,4 +1,6 @@
 #include "shadernode.h"
+#include "variantshadernode.h"
+#include "shaderbuilder.h"
 
 #include <QDebug>
 
@@ -43,19 +45,35 @@ QString ShaderNode::header() const
     return m_header;
 }
 
-bool ShaderNode::isUniform() const
+QQmlListProperty<VariantShaderNode> ShaderNode::variantNodes()
 {
-    return m_isUniform;
-}
-
-QQmlListProperty<ShaderNode> ShaderNode::depends()
-{
-    return QQmlListProperty<ShaderNode>(this, m_dependencies);
+    return QQmlListProperty<VariantShaderNode>(this, m_variantNodes);
 }
 
 QString ShaderNode::identifier() const
 {
     return m_identifier;
+}
+
+QString ShaderNode::resolve(ShaderNode *node, QString targetType)
+{
+    if(!node) {
+        qWarning() << "ERROR: Cannot resolve nullptr node.";
+        return QString();
+    }
+    VariantShaderNode *variantShaderNode = qobject_cast<VariantShaderNode*>(node);
+    if(variantShaderNode) {
+        ShaderNode *variantNodeValue = qvariant_cast<ShaderNode*>(variantShaderNode->value());
+        if(variantNodeValue) { // if a variant node carries a ShaderNode, it's just a wrapper
+            node = variantNodeValue;
+        }
+    }
+    m_dependencies.append(node);
+    if(targetType.isEmpty()) {
+        return node->identifier();
+    } else {
+        return node->convert(targetType);
+    }
 }
 
 QString ShaderNode::generateHeader() const
@@ -73,12 +91,17 @@ QString ShaderNode::generateHeader() const
     return headerResult;
 }
 
-QString ShaderNode::convert(QString targetType) const
+QString ShaderNode::convert(QString targetType, QString identifier) const
 {
-    if(m_type == targetType) {
-        return m_identifier;
+    QString v;
+    if(!identifier.isEmpty()) {
+        v = identifier;
+    } else {
+        v = m_identifier;
     }
-    QString v = m_identifier;
+    if(m_type == targetType) {
+        return v;
+    }
 
     QVariantMap scalar{
         {"bool", "bool(" + v + ")"},
@@ -123,17 +146,18 @@ QString ShaderNode::convert(QString targetType) const
         }
     }
     qWarning() << "WARNING: No known conversion from " << m_type << " to " << targetType;
-    return m_identifier;
+    return v;
 }
 
-QList<ShaderNode*> ShaderNode::uniformDependencies() const
+QList<VariantShaderNode*> ShaderNode::uniformDependencies() const
 {
-    QList<ShaderNode*> uniforms;
+    QList<VariantShaderNode*> uniforms;
     for(ShaderNode* node : m_dependencies) {
         uniforms.append(node->uniformDependencies());
-    }
-    if(isUniform()) {
-        uniforms.append(const_cast<ShaderNode*>(this));
+        VariantShaderNode *variantNode = qobject_cast<VariantShaderNode*>(node);
+        if(variantNode) {
+            uniforms.append(variantNode);
+        }
     }
     return uniforms;
 }
@@ -141,9 +165,6 @@ QList<ShaderNode*> ShaderNode::uniformDependencies() const
 QString ShaderNode::generateBody() const
 {
     if(m_hasGeneratedBody) {
-        return QString();
-    }
-    if(m_isUniform) {
         return QString();
     }
     if(m_type.isEmpty()) {
@@ -164,11 +185,6 @@ QString ShaderNode::generateBody() const
     body += "\n";
     m_hasGeneratedBody = true;
     return body;
-}
-
-QVariant ShaderNode::uniformValue() const
-{
-    return m_uniformValue;
 }
 
 void ShaderNode::reset() const
@@ -228,22 +244,28 @@ void ShaderNode::setHeader(QString header)
     emit headerChanged(header);
 }
 
-void ShaderNode::setIsUniform(bool isUniform)
+ShaderBuilder *ShaderNode::shaderBuilder() const
 {
-    if (m_isUniform == isUniform)
-        return;
-
-    m_isUniform = isUniform;
-    emit isUniformChanged(isUniform);
+    return m_shaderBuilder;
 }
 
-void ShaderNode::setUniformValue(QVariant uniformValue)
+void ShaderNode::setShaderBuilder(ShaderBuilder *shaderBuilder)
 {
-    if (m_uniformValue == uniformValue)
+    for(ShaderNode *node : m_dependencies) {
+        node->setShaderBuilder(shaderBuilder);
+    }
+    if(m_shaderBuilder) {
+        disconnect(this, 0, m_shaderBuilder, SLOT(receiveOutputChange()));
+    }
+    m_shaderBuilder = shaderBuilder;
+    if(!m_shaderBuilder) {
         return;
-
-    m_uniformValue = uniformValue;
-    emit uniformValueChanged(uniformValue);
+    }
+    connect(this, &ShaderNode::headerChanged, m_shaderBuilder, &ShaderBuilder::receiveOutputChange);
+    connect(this, &ShaderNode::resultChanged, m_shaderBuilder, &ShaderBuilder::receiveOutputChange);
+    connect(this, &ShaderNode::identifierChanged, m_shaderBuilder, &ShaderBuilder::receiveOutputChange);
+    connect(this, &ShaderNode::initializationChanged, m_shaderBuilder, &ShaderBuilder::receiveOutputChange);
+    connect(this, &ShaderNode::typeChanged, m_shaderBuilder, &ShaderBuilder::receiveOutputChange);
 }
 
 QString ShaderNode::glslTypeFromVariant(QVariant value) const

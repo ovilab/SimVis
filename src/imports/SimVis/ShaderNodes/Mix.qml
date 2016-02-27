@@ -3,12 +3,24 @@ import SimVis 1.0
 ShaderNode {
     property var value1
     property var value2
-    property var mix
+    property var mix: 0.5
+
+    VariantShaderNode {
+        id: _mix
+        value: mix
+    }
+    VariantShaderNode {
+        id: _value1
+        value: value1
+    }
+    VariantShaderNode {
+        id: _value2
+        value: value2
+    }
 
     name: "mix"
-
-    depends: [value1, value2, mix]
     type: value1.type
-    result: value1.identifier + " * (1.0 - " + mix.convert("float") + ")" +
-            " + " + value2.identifier + " * " + mix.convert("float")
+    result: resolve(_value1) + " * (1.0 - " + resolve(_mix, "float") + ")" +
+            " + " + resolve(_value2) + " * " + resolve(_mix, "float")
+
 }

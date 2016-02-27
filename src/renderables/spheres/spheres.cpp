@@ -10,6 +10,7 @@
 #include <QQmlContext>
 
 #include "../../core/camera.h"
+#include "../../shadernodes/variantshadernode.h"
 
 Spheres::Spheres(QQuickItem *parent)
     : Renderable(parent)
@@ -54,7 +55,7 @@ void Spheres::setDirty(bool dirty)
     emit dirtyChanged(dirty);
 }
 
-void Spheres::makeDirty() {
+void Spheres::markShadersDirty() {
     m_shadersDirty = true;
 }
 
@@ -66,8 +67,8 @@ void Spheres::setFragmentShader(ShaderBuilder *fragmentShader)
         disconnect(m_fragmentShader, 0, this, 0);
     }
     m_fragmentShader = fragmentShader;
-    connect(m_fragmentShader, &ShaderBuilder::finalShaderChanged, this, &Spheres::makeDirty);
-    makeDirty();
+    connect(m_fragmentShader, &ShaderBuilder::finalShaderChanged, this, &Spheres::markShadersDirty);
+    markShadersDirty();
     emit fragmentShaderChanged(fragmentShader);
 }
 
@@ -132,8 +133,8 @@ void SpheresRenderer::synchronize(Renderable* renderer)
     }
 
     m_uniforms.clear();
-    for(const ShaderNode *uniform : spheres->fragmentShader()->uniformDependencies()) {
-        m_uniforms.insert(uniform->identifier(), uniform->uniformValue());
+    for(const VariantShaderNode *uniform : spheres->fragmentShader()->uniformDependencies()) {
+        m_uniforms.insert(uniform->identifier(), uniform->value());
     }
 
     if(!m_isInitialized) {
@@ -317,7 +318,7 @@ void SpheresRenderer::setUniforms() {
             program().setUniformValue(name, value.value<QVector4D>());
             break;
         default:
-            qDebug() << "Cannot set unknown uniform type" << value.typeName();
+            qDebug() << "Cannot set unknown uniform type" << value.typeName() << value;
             break;
         }
     }

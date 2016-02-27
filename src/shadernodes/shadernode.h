@@ -5,6 +5,10 @@
 #include <QVariant>
 #include <QList>
 #include <QQmlListProperty>
+#include <QJSValue>
+
+class ShaderBuilder;
+class VariantShaderNode;
 
 class ShaderNode : public QObject
 {
@@ -14,30 +18,32 @@ class ShaderNode : public QObject
     Q_PROPERTY(QString initialization READ initialization WRITE setInitialization NOTIFY initializationChanged)
     Q_PROPERTY(QString result READ result WRITE setResult NOTIFY resultChanged)
     Q_PROPERTY(QString header READ header WRITE setHeader NOTIFY headerChanged)
-    Q_PROPERTY(bool isUniform READ isUniform WRITE setIsUniform NOTIFY isUniformChanged)
-    Q_PROPERTY(QQmlListProperty<ShaderNode> depends READ depends)
     Q_PROPERTY(QString identifier READ identifier NOTIFY identifierChanged)
-    Q_PROPERTY(QVariant uniformValue READ uniformValue WRITE setUniformValue NOTIFY uniformValueChanged)
+    Q_PROPERTY(QQmlListProperty<VariantShaderNode> variantNodes READ variantNodes)
+    Q_CLASSINFO("DefaultProperty", "variantNodes")
 
 public:
     explicit ShaderNode(QObject *parent = 0);
 
-    Q_INVOKABLE QString generateHeader() const;
-    Q_INVOKABLE QString convert(QString targetType) const;
-    Q_INVOKABLE QList<ShaderNode *> uniformDependencies() const;
-    Q_INVOKABLE QString generateBody() const;
+    Q_INVOKABLE virtual QString generateHeader() const;
+    Q_INVOKABLE virtual QString generateBody() const;
+
+    Q_INVOKABLE QString convert(QString targetType, QString identifier = QString()) const;
+    Q_INVOKABLE QList<VariantShaderNode *> uniformDependencies() const;
     Q_INVOKABLE QString glslTypeFromVariant(QVariant value) const;
+    Q_INVOKABLE QString resolve(ShaderNode *node, QString targetType = QString());
 
     QString name() const;
     QString type() const;
     QString initialization() const;
     QString result() const;
     QString header() const;
-    bool isUniform() const;
-    QQmlListProperty<ShaderNode> depends();
+    QQmlListProperty<VariantShaderNode> variantNodes();
     QString identifier() const;
-    QVariant uniformValue() const;
     void reset() const;
+
+    ShaderBuilder *shaderBuilder() const;
+    void setShaderBuilder(ShaderBuilder *shaderBuilder);
 
 signals:
     void nameChanged(QString name);
@@ -45,10 +51,7 @@ signals:
     void initializationChanged(QString initialization);
     void resultChanged(QString result);
     void headerChanged(QString header);
-    void isUniformChanged(bool isUniform);
     void identifierChanged(QString identifier);
-
-    void uniformValueChanged(QVariant uniformValue);
 
 public slots:
     void setName(QString name);
@@ -56,25 +59,21 @@ public slots:
     void setInitialization(QString initialization);
     void setResult(QString result);
     void setHeader(QString header);
-    void setIsUniform(bool isUniform);
 
-    void setUniformValue(QVariant uniformValue);
+protected:
+    mutable bool m_hasGeneratedHeader = false;
+    mutable bool m_hasGeneratedBody = false;
 
 private:
-    void resolveDependencies();
-
     QString m_name;
     QString m_type;
     QString m_initialization;
     QString m_result;
     QString m_header;
     QList<ShaderNode*> m_dependencies;
+    QList<VariantShaderNode*> m_variantNodes;
     QString m_identifier;
-    bool m_isUniform = false;
-
-    mutable bool m_hasGeneratedHeader = false;
-    mutable bool m_hasGeneratedBody = false;
-    QVariant m_uniformValue;
+    ShaderBuilder *m_shaderBuilder = nullptr;
 };
 
 #endif // SHADERNODE_H
