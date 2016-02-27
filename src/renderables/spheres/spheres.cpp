@@ -106,11 +106,15 @@ void SpheresRenderer::synchronize(Renderable* renderer)
     if(spheres->fragmentShader()) {
         m_fragmentShaderString = spheres->fragmentShader()->property("finalShader").toString();
         QVariant uniforms;
-        QMetaObject::invokeMethod(spheres->fragmentShader(), "findUniforms", Qt::DirectConnection, Q_RETURN_ARG(QVariant, uniforms));
+        QMetaObject::invokeMethod(spheres->fragmentShader(), "findUniforms",
+                                  Qt::DirectConnection, Q_RETURN_ARG(QVariant, uniforms));
         m_uniforms.clear();
         for(const QVariant &uniformVariant : uniforms.toList()) {
+            qDebug() << "Uniform variant" << uniformVariant;
             const QObject* uniform = qvariant_cast<QObject*>(uniformVariant);
-            m_uniforms.insert(uniform->property("identifier").toString(), uniform->property("value"));
+            if(uniform) {
+                m_uniforms.insert(uniform->property("identifier").toString(), uniform->property("value"));
+            }
         }
     }
 

@@ -45,6 +45,14 @@ ApplicationWindow {
             visible: true
             scale: scaleSlider.value
 
+//            fragColor: Mix {
+//                value1: spheres.shader.normal
+//                value2: spheres.shader.normal
+//                mix: UniformValue {
+//                    value: Qt.vector3d(1.0, 0.0, 1.0)
+//                }
+//            }
+
             fragColor: Diffuse {
                 position: spheres.shader.position
                 color: Mix {

@@ -97,3 +97,9 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/src/shadernodes/glslvariantbridge.cpp
+
+HEADERS += \
+    $$PWD/src/shadernodes/shadernode.h
+
+SOURCES += \
+    $$PWD/src/shadernodes/shadernode.cpp

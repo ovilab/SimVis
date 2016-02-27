@@ -1,9 +1,9 @@
 import QtQuick 2.0
 
 Value {
-    property Value value1
-    property Value value2
-    property Value mix
+    property var value1
+    property var value2
+    property var mix
 
     name: "mix"
 

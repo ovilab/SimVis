@@ -21,6 +21,7 @@
 #include "../shadereffects/periodiccopies.h"
 #include "../shadereffects/slice.h"
 #include "../shadernodes/glslvariantbridge.h"
+#include "../shadernodes/shadernode.h"
 
 #include <qqml.h>
 #include <QQmlEngine>
@@ -53,6 +54,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<Cylinders>("SimVis", 1, 0, "Cylinders");
     qmlRegisterType<Lines>("SimVis", 1, 0, "Lines");
     qmlRegisterType<GlslVariantBridge>("SimVis", 1, 0, "GlslVariantBridge");
+    qmlRegisterType<ShaderNode>("SimVis", 1, 0, "ShaderNode");
 }
 
 void SimVisPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
