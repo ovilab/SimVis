@@ -1,12 +1,10 @@
 import SimVis 1.0
 
 ShaderNode {
-    property ShaderNode value1
-    property ShaderNode value2
+    property var value1: 0.0
+    property var value2: 0.0
 
     name: "add"
-
-    depends: [value1, value2]
-    type: value1.type
-    result: value1.identifier + " + " + value2.identifier
+    type: glslType(value1)
+    result: "$value + $value2"
 }
