@@ -1,11 +1,13 @@
 import SimVis 1.0
 
 ShaderNode {
-    property ShaderNode normal
-    property ShaderNode position
+    property var normal: Qt.vector3d(1.0, 0.0, 0.0)
+    property var position: Qt.vector3d(0.0, 0.0, 0.0)
+    property var scale: 1.0
+    property var intensity: 0.2
     type: normal.type
     name: "simplex"
-    result: "simplexbump(" + resolve(normal, "vec3") + ", " + resolve(normal ,"vec3") + ")"
+    result: "simplexbump($normal.vec3, $position.vec3, $scale.float, $intensity.float)"
     header: "
 // GLSL textureless classic 4D noise \"cnoise\",
 // with an RSL-style periodic variant \"pnoise\".
@@ -96,11 +98,11 @@ highp float snoise(highp vec2 v)
   return 130.0 * dot(m, g);
 }
 
-highp vec3 simplexbump(highp vec3 normal, highp vec3 vertexPosition) {
-    highp float nx = snoise(0.9*(vertexPosition.xy + vertexPosition.zz + vec2(2.0,2.0)));
-    highp float ny = snoise(0.9*(vertexPosition.yz + vertexPosition.xx + vec2(-2.0,2.0)));
-    highp float nz = snoise(0.9*(vertexPosition.xz + vertexPosition.yy + vec2(2.0,-2.0)));
-    return normal + vec3(nx, ny, nz)*0.2;
+highp vec3 simplexbump(highp vec3 normal, highp vec3 vertexPosition, float scale, float intensity) {
+    highp float nx = snoise(0.5*scale*(vertexPosition.xy + vertexPosition.zz + vec2(2.0,2.0)));
+    highp float ny = snoise(0.5*scale*(vertexPosition.yz + vertexPosition.xx + vec2(-2.0,2.0)));
+    highp float nz = snoise(0.5*scale*(vertexPosition.xz + vertexPosition.yy + vec2(2.0,-2.0)));
+    return normal + vec3(nx, ny, nz)*intensity;
 }
 #endif
 "

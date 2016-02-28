@@ -50,15 +50,17 @@ ApplicationWindow {
                 color: Mix {
                     id: mixer
                     value1: spheres.shader.normal
-                    value2: spheres.shader.position
+                    value2: Qt.vector3d(0.2, 0.7, 0.9)
                     mix: mixSlider.value
                 }
-                normal: spheres.shader.normal
-//                normal: Simplex {
-//                    normal: spheres.shader.normal
-//                    position: spheres.shader.normal
-//                }
+                normal: Simplex {
+                    normal: spheres.shader.normal
+                    position: normal
+                    scale: mixSlider3.value
+                    intensity: mixSlider4.value
+                }
             }
+
 
             Light {
                 id: light
@@ -78,8 +80,8 @@ ApplicationWindow {
     Rectangle {
         radius: 4
         color: Qt.rgba(1.0, 1.0, 1.0, 0.975)
-        width: 350
-        height: 100
+        width: statusColumn.width
+        height: statusColumn.height
 
         MouseArea {
             anchors.fill: parent
@@ -129,6 +131,51 @@ ApplicationWindow {
                 }
                 Text {
                     text: mixSlider.value.toFixed(2)
+                }
+            }
+
+            Row {
+                Text {
+                    text: "Mix 2:"
+                }
+                Slider {
+                    id: mixSlider2
+                    minimumValue: 0.0
+                    maximumValue: 1.0
+                    value: 0.5
+                }
+                Text {
+                    text: mixSlider.value.toFixed(2)
+                }
+            }
+
+            Row {
+                Text {
+                    text: "Scale:"
+                }
+                Slider {
+                    id: mixSlider3
+                    minimumValue: 0.0
+                    maximumValue: 10.0
+                    value: 0.5
+                }
+                Text {
+                    text: mixSlider3.value.toFixed(2)
+                }
+            }
+
+            Row {
+                Text {
+                    text: "Intensity:"
+                }
+                Slider {
+                    id: mixSlider4
+                    minimumValue: 0.0
+                    maximumValue: 10.0
+                    value: 0.2
+                }
+                Text {
+                    text: mixSlider4.value.toFixed(2)
                 }
             }
 
