@@ -41,7 +41,7 @@ ApplicationWindow {
 
             fragColor: Diffuse {
                 position: spheres.shader.position
-                color: Qt.vector3d(1.0, 1.0, 1.0)
+                color: Qt.vector3d(0.2, 0.8, 1.0)
                 normal: Simplex {
                     normal: spheres.shader.normal
                     position: spheres.shader.normal

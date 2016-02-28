@@ -110,13 +110,9 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
         QRegularExpression propertyRegex("\\$(?:\\(\\s*)?([a-zA-Z0-9]+)\\s*\\)?(?:\\s*,\\s*([a-zA-Z0-9]+)\\s*\\))?");
         QRegularExpressionMatchIterator matches = propertyRegex.globalMatch(sourceContent);
         QList<QString> alreadyReplaced;
-        qDebug() << "Matching..." << name();
         while(matches.hasNext()) {
-            qDebug() << "Next match";
             QRegularExpressionMatch match = matches.next();
-            qDebug() << match;
             QString propertyName = match.captured(1);
-            qDebug() << propertyName;
             if(alreadyReplaced.contains(propertyName)) {
                 continue;
             }

@@ -20,6 +20,7 @@ class ShaderNode : public QObject
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(QString header READ header WRITE setHeader NOTIFY headerChanged)
     Q_PROPERTY(QString identifier READ identifier NOTIFY identifierChanged)
+    Q_PROPERTY(QObject* parent READ parent WRITE setParent NOTIFY parentChanged)
     Q_PROPERTY(bool requirement READ requirement WRITE setRequirement NOTIFY requirementChanged)
     Q_PROPERTY(QQmlListProperty<VariantShaderNode> variantNodes READ variantNodes)
     Q_CLASSINFO("DefaultProperty", "variantNodes")
@@ -58,6 +59,8 @@ signals:
     void sourceChanged(QString source);
 
     void requirementChanged(bool requirement);
+
+    void parentChanged(QObject* parent);
 
 public slots:
     void setName(QString name);
