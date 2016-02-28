@@ -100,7 +100,7 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
     if(!sourceContent.isEmpty()) {
 
         // matches '$property' or '$(property, type)'
-        QRegularExpression propertyRegex("\\$(?:\\(\\s*)?([a-z0-9]+)\\s*\\)?(?:\\s*,\\s*([a-z0-9]+)\\s*\\))?");
+        QRegularExpression propertyRegex("\\$(?:\\(\\s*)?([a-zA-Z0-9]+)\\s*\\)?(?:\\s*,\\s*([a-zA-Z0-9]+)\\s*\\))?");
         QRegularExpressionMatchIterator matches = propertyRegex.globalMatch(sourceContent);
         QList<QString> alreadyReplaced;
         while(matches.hasNext()) {
@@ -118,7 +118,7 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
             if(propertyIndex < 0) {
                 // No connected property, assume internal variable that just needs a unique name
                 QString propertylessIdentifier = propertyName + "_" + randomName();
-                QRegularExpression namedRegex("\\$(\\(\\s*)?" + propertyName + "(\\s*,\\s*[a-z0-9]+\\s*\\))?");
+                QRegularExpression namedRegex("\\$(\\(\\s*)?" + propertyName + "(\\s*,\\s*[a-zA-Z0-9]+\\s*\\))?");
                 sourceContent.replace(namedRegex, propertylessIdentifier);
                 alreadyReplaced.append(propertyName);
                 continue;
@@ -137,7 +137,7 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
                     QString targetIdentifier = groupNode->identifier();
                     QString sourceType = groupNode->type();
                     // replaces '$property' or '$(property, type)'
-                    QRegularExpression indexedRegex("\\$(\\(\\s*)?" + propertyName + "\\[" + QString::number(i) +"\\](\\s*,\\s*[a-z0-9]+\\s*\\))?");
+                    QRegularExpression indexedRegex("\\$(\\(\\s*)?" + propertyName + "\\[" + QString::number(i) +"\\](\\s*,\\s*[a-zA-Z0-9]+\\s*\\))?");
                     sourceContent.replace(indexedRegex, ShaderUtils::convert(sourceType, targetType, targetIdentifier));
                     i++;
                 }
@@ -174,6 +174,7 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
                     qWarning() << "ShaderNode: property" << propertyName << "has no notification signal in" << this << "object with name" << name();
                 }
                 shaderBuilder->addUniform(this, propertyName, targetIdentifier, value, metaProperty);
+                qDebug() << "Registered uniform" << targetIdentifier;
             }
             // replaces '$property' or '$(property, type)'
             QRegularExpression namedRegex("\\$(\\(\\s*)?" + propertyName + "(\\s*,\\s*[a-z0-9]+\\s*\\))?");

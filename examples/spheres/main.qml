@@ -25,7 +25,7 @@ ApplicationWindow {
         anchors.fill: parent
         simulator: simulator
         camera: camera
-        backgroundColor: "#000"
+        backgroundColor: "#111"
         navigator: navigator
 
         TrackballNavigator {
@@ -41,44 +41,12 @@ ApplicationWindow {
 
             fragColor: Diffuse {
                 position: spheres.shader.position
-                color: Qt.vector3d(1.0, 0.0, 0.0)
-                normal: Simplex {
-                    normal: spheres.shader.normal
-                    position: normal
-                    scale: 1.0
-                    intensity: Sum {
-                        inputs: ShaderGroup {
-                            Mix {
-                                id: mix1
-                                value1: mixSlider.value
-                                value2: mixSlider2.value
-                                mix: mixSlider3.value
-                            }
-                            Mix {
-                                id: mix2
-                                value1: mixSlider.value
-                                value2: mixSlider2.value
-                                mix: mixSlider3.value
-                            }
-                        }
-                    }
+                color: spheres.shader.normal
+                normal: spheres.shader.normal
+                lights: ShaderGroup {
+                    Light {}
                 }
             }
-
-            //            LightSystem {
-            Light {
-                id: light
-                ambientColor: "white"
-                specularColor: "white"
-                diffuseColor: "white"
-                ambientIntensity: 0.05
-                diffuseIntensity: 1.0
-                specularIntensity: 0.1
-                shininess: 2.0
-                attenuation: 0.01
-                position: Qt.vector3d(0.5, 0.5, 0.5)
-            }
-            //            }
         }
     }
 

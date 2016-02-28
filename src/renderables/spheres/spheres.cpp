@@ -298,9 +298,9 @@ void SpheresRenderer::beforeLinkProgram() {
 }
 
 void SpheresRenderer::setUniforms() {
-    for(const QString &uniformName : m_uniforms.keys()) {
-        const QVariant &value = m_uniforms.value(uniformName);
-        const char* name = uniformName.toStdString().c_str();
+    for(QString uniformName : m_uniforms.keys()) {
+        QVariant value = m_uniforms.value(uniformName);
+        const char* name = uniformName.toUtf8().constData();
         switch(value.type()) {
         case QVariant::Bool:
             program().setUniformValue(name, value.toBool());
@@ -320,8 +320,10 @@ void SpheresRenderer::setUniforms() {
         case QVariant::Vector4D:
             program().setUniformValue(name, value.value<QVector4D>());
             break;
+        case QVariant::Color:
+            program().setUniformValue(name, value.value<QColor>());
+            break;
         default:
-            qDebug() << "Cannot set unknown uniform type" << value.typeName() << value;
             break;
         }
     }

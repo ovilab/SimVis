@@ -47,7 +47,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<FlyModeNavigator>("SimVis", 1, 0, "FlyModeNavigator");
     qmlRegisterType<SimplexBump>("SimVis", 1, 0, "SimplexBump");
     qmlRegisterType<SimplexTexture>("SimVis", 1, 0, "SimplexTexture");
-    qmlRegisterType<Light>("SimVis", 1, 0, "Light");
+    qmlRegisterType<Light>("SimVis", 1, 0, "RenderableLight");
     qmlRegisterType<SkyBox>("SimVis", 1, 0, "SkyBox");
     qmlRegisterType<SkyBoxReflection>("SimVis", 1, 0, "SkyBoxReflection");
     qmlRegisterType<TriangleCollection>("SimVis", 1, 0, "TriangleCollection");
