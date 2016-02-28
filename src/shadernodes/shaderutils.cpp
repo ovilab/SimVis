@@ -17,7 +17,7 @@ QString ShaderUtils::glslType(const QVariant &value)
     case QVariant::Bool:
         return QString("bool");
     case QVariant::Int:
-        return QString("int");
+        return QString("float");
     case QVariant::Double:
         return QString("float");
     case QVariant::Vector2D:
@@ -27,7 +27,10 @@ QString ShaderUtils::glslType(const QVariant &value)
     case QVariant::Vector4D:
         return QString("vec4");
     case QVariant::Color:
-        return QString("vec3");
+        return QString("vec4");
+    case QVariant::String:
+        // assume strings to be colors because there are no strings in GLSL
+        return QString("vec4");
     default:
         qWarning() << "ShaderUtils::glslType(): could not identify type" << value.typeName();
         return QString("float");

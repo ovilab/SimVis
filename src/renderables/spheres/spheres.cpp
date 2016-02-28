@@ -306,7 +306,7 @@ void SpheresRenderer::setUniforms() {
             program().setUniformValue(name, value.toBool());
             break;
         case QVariant::Int:
-            program().setUniformValue(name, value.toInt());
+            program().setUniformValue(name, value.toFloat());
             break;
         case QVariant::Double:
             program().setUniformValue(name, value.toFloat());
@@ -323,7 +323,11 @@ void SpheresRenderer::setUniforms() {
         case QVariant::Color:
             program().setUniformValue(name, value.value<QColor>());
             break;
+        case QVariant::String:
+            program().setUniformValue(name, QColor(value.toString()));
+            break;
         default:
+            qWarning() << "Cannot set uniform value because the type is unknown:" << value;
             break;
         }
     }

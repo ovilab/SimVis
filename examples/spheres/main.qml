@@ -42,17 +42,20 @@ ApplicationWindow {
             fragColor: Diffuse {
                 position: spheres.shader.position
                 color: Qt.vector3d(1.0, 1.0, 1.0)
-                normal: spheres.shader.normal
-//                lights: ShaderGroup {
-//                    Light {
-//                        diffuseColor: Qt.vector3d(1.0, 0.8, 0.8)
-//                        position: Qt.vector3d(50.0, 0.0, 0.0)
-//                    }
-//                    Light {
-//                        diffuseColor: Qt.vector3d(1.0, 0.8, 0.8)
-//                        position: Qt.vector3d(-50.0, 0.0, 0.0)
-//                    }
-//                }
+                normal: Simplex {
+                    normal: spheres.shader.normal
+                    position: spheres.shader.normal
+                    scale: 2.0
+                }
+
+                lights: ShaderGroup {
+                    Light {
+                        position: Qt.vector3d(50.0, 0.0, 0.0)
+                    }
+                    Light {
+                        position: Qt.vector3d(-50.0, 0.0, 0.0)
+                    }
+                }
             }
         }
     }

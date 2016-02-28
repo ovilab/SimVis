@@ -3,9 +3,9 @@ import SimVis 1.0
 ShaderNode {
     // TODO split light into multiple functions available for different materials (should perhaps be on each material?)
 
-    property var ambientColor: Qt.vector3d(1.0, 1.0, 1.0)
-    property var diffuseColor: Qt.vector3d(1.0, 1.0, 1.0)
-    property var specularColor: Qt.vector3d(1.0, 1.0, 1.0)
+    property var ambientColor: "white"
+    property var diffuseColor: "white"
+    property var specularColor: "white"
     property var position: Qt.vector3d(0.0, 0.0, 0.0)
     property var attenuation: 0.01
     property var shininess: 1.0
