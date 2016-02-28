@@ -4,6 +4,7 @@ import SimVis 1.0
 ShaderNode {
     property var input
 
+    // TODO use readonly instead of OutputNode
     property var a: OutputNode {
         name: "split_a"
         type: "float"

@@ -41,29 +41,31 @@ ApplicationWindow {
 
             fragColor: Diffuse {
                 position: spheres.shader.position
-                color: Mix {
-                    id: mixer
-                    value1: spheres.shader.normal
-                    value2: Qt.vector3d(0.2, 0.7, 0.9)
-                    mix: split.a
-                }
+                color: Qt.vector3d(1.0, 0.0, 0.0)
                 normal: Simplex {
                     normal: spheres.shader.normal
                     position: normal
-                    scale: split.b
-                    intensity: mixSlider4.value
+                    scale: 1.0
+                    intensity: Sum {
+                        inputs: ShaderGroup {
+                            Mix {
+                                id: mix1
+                                value1: mixSlider.value
+                                value2: mixSlider2.value
+                                mix: mixSlider3.value
+                            }
+                            Mix {
+                                id: mix2
+                                value1: mixSlider.value
+                                value2: mixSlider2.value
+                                mix: mixSlider3.value
+                            }
+                        }
+                    }
                 }
             }
 
-            Split {
-                id: split
-                input: Mix {
-                    value1: 0.3
-                    value2: Qt.vector3d(1.0, 2.0, 2.0)
-                    mix: mixSlider.value
-                }
-            }
-
+            //            LightSystem {
             Light {
                 id: light
                 ambientColor: "white"
@@ -76,6 +78,7 @@ ApplicationWindow {
                 attenuation: 0.01
                 position: Qt.vector3d(0.5, 0.5, 0.5)
             }
+            //            }
         }
     }
 

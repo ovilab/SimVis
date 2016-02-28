@@ -30,7 +30,7 @@ QString ShaderUtils::glslType(const QVariant &value)
         return QString("vec4");
         break;
     default:
-        qWarning() << "WARNING: GlslVariantBridge could not identify type" << value.typeName();
+        qWarning() << "ShaderUtils::glslType(): could not identify type" << value.typeName();
         return QString("float");
         break;
     }

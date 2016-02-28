@@ -1,12 +1,13 @@
 import SimVis 1.0
 
 ShaderNode {
-    property ShaderNode color
-    property ShaderNode normal
-    property ShaderNode position
+    property var color
+    property var normal
+    property var position
+    property var light1
 
     name: "diffuse"
-    type: color.type
+    type: glslType(color)
     result: "defaultLight($normal, $position, $color);"
 
     header: "

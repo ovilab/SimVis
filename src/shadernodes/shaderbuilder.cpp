@@ -39,17 +39,17 @@ QString ShaderBuilder::finalShader()
     }
 
     QString contents = "";
-    contents += "\n// ------ begin generated uniforms ------\n\n";
-    for(const UniformValue &uniform : m_uniforms) {
-        contents += "uniform " + uniform.type + " " + uniform.identifier + ";\n";
-    }
-    contents += "\n// ------  end generated uniforms  ------\n\n";
     contents += "\n// ------  begin generated header  ------\n\n";
     for(const ShaderOutput *output : m_outputs) {
         ShaderNode *value = output->value();
         contents += value->generateHeader();
     }
     contents += "\n// ------   end generated header   ------\n\n";
+    contents += "\n// ------ begin generated uniforms ------\n\n";
+    for(const UniformValue &uniform : m_uniforms) {
+        contents += "uniform " + uniform.type + " " + uniform.identifier + ";\n";
+    }
+    contents += "\n// ------  end generated uniforms  ------\n\n";
     contents += "\n// ------  begin generated outputs ------\n\n";
     for(const ShaderOutput *output : m_outputs) {
         contents += "out " + output->type() + " " + output->name() + ";\n";
