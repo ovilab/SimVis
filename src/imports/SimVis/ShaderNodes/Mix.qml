@@ -6,6 +6,6 @@ ShaderNode {
     property var mix: 0.5
 
     name: "mix"
-    type: value1.type
+    type: glslType(value1)
     result: "$value1 * (1.0 - $(mix, float)) + $value2 * $(mix, float)"
 }

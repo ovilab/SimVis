@@ -28,8 +28,8 @@ public:
 
     Q_INVOKABLE virtual QString generateHeader() const;
     Q_INVOKABLE virtual QString generateBody() const;
-
     Q_INVOKABLE QString convert(QString targetType, QString identifier = QString()) const;
+    Q_INVOKABLE QString glslType(QVariant value) const;
 
     QString name() const;
     QString type() const;

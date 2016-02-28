@@ -98,3 +98,9 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/src/shadernodes/outputnode.cpp
+
+HEADERS += \
+    $$PWD/src/shadernodes/shaderutils.h
+
+SOURCES += \
+    $$PWD/src/shadernodes/shaderutils.cpp

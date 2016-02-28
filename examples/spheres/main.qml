@@ -57,7 +57,11 @@ ApplicationWindow {
 
             Split {
                 id: split
-                input: mixSlider.value
+                input: Mix {
+                    value1: 0.3
+                    value2: 10.0
+                    mix: mixSlider.value
+                }
             }
 
             Light {

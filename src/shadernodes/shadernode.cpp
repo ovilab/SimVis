@@ -1,5 +1,6 @@
 #include "shadernode.h"
 #include "shaderbuilder.h"
+#include "shaderutils.h"
 #include "outputnode.h"
 
 #include <QDebug>
@@ -296,6 +297,11 @@ void ShaderNode::setShaderBuilder(ShaderBuilder *shaderBuilder)
     connect(this, &ShaderNode::sourceChanged, m_shaderBuilder, &ShaderBuilder::triggerOutputChange);
     connect(this, &ShaderNode::typeChanged, m_shaderBuilder, &ShaderBuilder::triggerOutputChange);
     connect(this, &ShaderNode::identifierChanged, m_shaderBuilder, &ShaderBuilder::triggerOutputChange);
+}
+
+QString ShaderNode::glslType(QVariant value) const
+{
+    return ShaderUtils::glslType(value);
 }
 
 QString ShaderNode::source() const

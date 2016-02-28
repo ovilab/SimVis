@@ -49,7 +49,7 @@ public slots:
     void updateUniform(int i);
 
 private:
-    QString glslTypeFromVariant(QVariant value) const;
+    QString glslType(QVariant value) const;
 
     QString m_source;
     QList<ShaderOutput*> m_outputs;

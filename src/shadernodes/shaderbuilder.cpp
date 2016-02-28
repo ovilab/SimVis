@@ -1,5 +1,7 @@
 #include "shaderbuilder.h"
 
+#include "shaderutils.h"
+
 #include <QRegularExpression>
 #include <QDebug>
 #include <QMetaProperty>
@@ -104,7 +106,7 @@ void ShaderBuilder::addUniform(ShaderNode *node, const QString &propertyName, co
     uniform.propertyName = propertyName;
     uniform.identifier = identifier;
     uniform.value = value;
-    uniform.type = glslTypeFromVariant(value);
+    uniform.type = glslType(value);
     m_uniforms.append(uniform);
 
     QSignalMapper *mapper = new QSignalMapper;
@@ -120,7 +122,7 @@ void ShaderBuilder::updateUniform(int i)
     UniformValue &uniform = m_uniforms[i];
     QVariant value = uniform.node->property(uniform.propertyName.toStdString().c_str());;
     uniform.value = value;
-    QString type = glslTypeFromVariant(value);
+    QString type = glslType(value);
     if(type != uniform.type) {
         uniform.type = type;
         emit finalShaderChanged();
@@ -143,30 +145,7 @@ void ShaderBuilder::triggerOutputChange()
     emit finalShaderChanged();
 }
 
-QString ShaderBuilder::glslTypeFromVariant(QVariant value) const
+QString ShaderBuilder::glslType(QVariant value) const
 {
-    switch(value.type()) {
-    case QVariant::Bool:
-        return QString("bool");
-        break;
-    case QVariant::Int:
-        return QString("int");
-        break;
-    case QVariant::Double:
-        return QString("float");
-        break;
-    case QVariant::Vector2D:
-        return QString("vec2");
-        break;
-    case QVariant::Vector3D:
-        return QString("vec3");
-        break;
-    case QVariant::Vector4D:
-        return QString("vec4");
-        break;
-    default:
-        qWarning() << "WARNING: GlslVariantBridge could not identify type" << value.typeName();
-        return QString("float");
-        break;
-    }
+    return ShaderUtils::glslType(value);
 }
