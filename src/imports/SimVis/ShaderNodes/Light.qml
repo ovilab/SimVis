@@ -8,7 +8,7 @@ ShaderNode {
     property var specularColor: "white"
     property var position: Qt.vector3d(0.0, 0.0, 0.0)
     property var attenuation: 0.01
-    property var shininess: 1.0
+    property var shininess: 4.0
     property var gamma: 1.0
     property var ambientIntensity: 0.04
     property var diffuseIntensity: 1.0
@@ -73,7 +73,7 @@ highp vec3 applyLight(Light light, highp vec3 normal, highp vec3 vertexPosition,
 
     /* SPECULAR */
     highp vec3  reflectionVector = reflect(-surfaceToLight, normal);
-    highp float cosAngle = max(0.0, dot(surfaceToCamera, reflectionVector));
+    highp float cosAngle = clamp(dot(surfaceToCamera, reflectionVector), 0.0, 1.0);
     highp float specularCoefficient = pow(cosAngle, light.shininess);
     lightVector += light.specularColor.rgb*specularCoefficient*light.specularIntensity*attenuationFactor;
 
