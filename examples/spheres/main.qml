@@ -59,7 +59,7 @@ ApplicationWindow {
                 id: split
                 input: Mix {
                     value1: 0.3
-                    value2: 10.0
+                    value2: Qt.vector3d(1.0, 2.0, 2.0)
                     mix: mixSlider.value
                 }
             }

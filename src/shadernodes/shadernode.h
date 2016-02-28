@@ -20,6 +20,7 @@ class ShaderNode : public QObject
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(QString header READ header WRITE setHeader NOTIFY headerChanged)
     Q_PROPERTY(QString identifier READ identifier NOTIFY identifierChanged)
+    Q_PROPERTY(bool requirement READ requirement WRITE setRequirement NOTIFY requirementChanged)
     Q_PROPERTY(QQmlListProperty<VariantShaderNode> variantNodes READ variantNodes)
     Q_CLASSINFO("DefaultProperty", "variantNodes")
 
@@ -28,7 +29,7 @@ public:
 
     Q_INVOKABLE virtual QString generateHeader() const;
     Q_INVOKABLE virtual QString generateBody() const;
-    Q_INVOKABLE QString convert(QString targetType, QString identifier = QString()) const;
+    Q_INVOKABLE QString convert(const QString &targetType, const QString &identifier = QString()) const;
     Q_INVOKABLE QString glslType(QVariant value) const;
 
     QString name() const;
@@ -38,12 +39,14 @@ public:
     QQmlListProperty<VariantShaderNode> variantNodes();
     QString identifier() const;
     void reset() const;
-    virtual void setup(ShaderBuilder* shaderBuilder);
+    virtual bool setup(ShaderBuilder* shaderBuilder);
 
     ShaderBuilder *shaderBuilder() const;
     void setShaderBuilder(ShaderBuilder *shaderBuilder);
 
     QString source() const;
+
+    bool requirement() const;
 
 signals:
     void nameChanged(QString name);
@@ -54,12 +57,16 @@ signals:
 
     void sourceChanged(QString source);
 
+    void requirementChanged(bool requirement);
+
 public slots:
     void setName(QString name);
     void setType(QString type);
     void setResult(QString result);
     void setHeader(QString header);
     void setSource(QString source);
+
+    void setRequirement(bool requirement);
 
 protected:
     mutable bool m_hasGeneratedHeader = false;
@@ -79,6 +86,7 @@ private:
     QSignalMapper mapper;
     QString m_source;
     QString m_resolvedSource;
+    bool m_requirement = true;
 };
 
 #endif // SHADERNODE_H

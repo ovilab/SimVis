@@ -27,10 +27,14 @@ QString ShaderBuilder::finalShader()
     for(const ShaderOutput *output : m_outputs) {
         ShaderNode *value = output->value();
         if(!value) {
-            qWarning() << "ERROR: ShaderDefintion output " << output->name() << " has no value";
+            qWarning() << "ShaderBuilder::finalShader(): ShaderDefintion output " << output->name() << " has no value";
             return QString();
         }
-        output->value()->setup(this);
+        bool success = output->value()->setup(this);
+        if(!success) {
+            qWarning() << "ShaderBuilder::finalShader(): Shader construction failed.";
+            return QString();
+        }
         output->value()->setShaderBuilder(const_cast<ShaderBuilder*>(this));
     }
 

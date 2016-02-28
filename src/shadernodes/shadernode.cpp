@@ -69,79 +69,32 @@ QString ShaderNode::generateHeader() const
     return headerResult;
 }
 
-QString ShaderNode::convert(QString targetType, QString identifier) const
+QString ShaderNode::convert(const QString &targetType, const QString &identifier) const
 {
-    QString v;
-    if(!identifier.isEmpty()) {
-        v = identifier;
-    } else {
+    QString v = identifier;
+    if(v.isEmpty()) {
         v = m_identifier;
     }
-    if(targetType.isEmpty() || m_type == targetType) {
-        return v;
-    }
-
-    QVariantMap scalar{
-        {"bool", "bool(" + v + ")"},
-        {"int", "int(" + v + ")"},
-        {"uint", "uint(" + v + ")"},
-        {"float", "float(" + v + ")"},
-        {"double", "double(" + v + ")"},
-        {"vec3", "vec2(" + v + ", 0.0)"},
-        {"vec3", "vec3(" + v + ", 0.0, 0.0)"},
-        {"vec4", "vec4(" + v + ", 0.0, 0.0, 1.0)"}
-    };
-
-    QVariantMap conversions{
-        {"bool", scalar},
-        {"int", scalar},
-        {"uint", scalar},
-        {"float", scalar},
-        {"double", scalar},
-        {"vec2", QVariantMap{
-                {"float", "0.5 * " + v + ".x + " + v + ".y)"},
-                {"vec3", "vec3(" + v + ", 0.0)"},
-                {"vec4", "vec4(" + v + ", 0.0, 1.0)"}
-            }
-        },
-        {"vec3", QVariantMap{
-                {"float", "1.0 / 3.0 * (" + v + ".x + " + v + ".y + " + v + ".z)"},
-                {"vec2", v + ".xy"},
-                {"vec4", "vec4(" + v + ", 1.0)"}
-            }
-        },
-        {"vec4", QVariantMap{
-                {"float", "0.25 * (" + v + ".x + " + v + ".y + " + v + ".z + " + v + ".w)"},
-                {"vec2", v + ".xy"},
-                {"vec3", v + ".xyz"}
-            }
-        }
-    };
-    if(conversions.contains(m_type)) {
-        QVariantMap typeConversions = conversions[m_type].toMap();
-        if(typeConversions.contains(targetType)) {
-            return "(" + typeConversions[targetType].toString() + ")";
-        }
-    }
-    qWarning() << "WARNING: No known conversion from " << m_type << " to " << targetType;
-    return v;
+    return ShaderUtils::convert(type(), targetType, v);
 }
 
-void ShaderNode::setup(ShaderBuilder* shaderBuilder)
+bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
 {
     if(m_hasSetup) {
-        return;
+        return true;
     }
-
-    qDebug() << "Working on" << name();
+    if(!m_requirement) {
+        qWarning() << "ShaderNode::setup(): Requirement for" << this << name() << "is not satisfied.";
+        return false;
+    }
 
     QString sourceContent;
     sourceContent = m_source;
     if(!m_result.isEmpty()) {
         sourceContent += m_identifier + " = " + m_result + ";\n";
     }
-    qDebug() << "Source was" << sourceContent;
 
+    bool success = true;
     if(!sourceContent.isEmpty()) {
         QRegularExpression propertyRegex("\\$(?:\\(\\s*)?([a-z0-9]+)\\s*\\)?(?:\\s*,\\s*([a-z0-9]+)\\s*\\))?");
         QRegularExpressionMatchIterator matches = propertyRegex.globalMatch(sourceContent);
@@ -162,37 +115,41 @@ void ShaderNode::setup(ShaderBuilder* shaderBuilder)
             QVariant value = metaProperty.read(this);
             ShaderNode *node = qvariant_cast<ShaderNode*>(value);
             OutputNode *outputNode = qvariant_cast<OutputNode*>(value);
-            QString identifier;
+            QString targetIdentifier;
+            QString sourceType;
             if(outputNode) {
                 // If it is an output node, we need to depend on its parent too
                 ShaderNode *parentNode = qobject_cast<ShaderNode*>(outputNode->parent());
                 if(parentNode && parentNode != this) {
-                    parentNode->setup(shaderBuilder);
+                    success = success && parentNode->setup(shaderBuilder);
                     if(!m_dependencies.contains(parentNode)) {
                         m_dependencies.append(parentNode);
                     }
                 }
             }
             if(node) {
-                node->setup(shaderBuilder);
+                success = success && node->setup(shaderBuilder);
                 if(!m_dependencies.contains(node)) {
                     m_dependencies.append(node);
                 }
-                identifier = node->convert(targetType);
+                targetIdentifier = node->identifier();
+                sourceType = node->type();
             } else {
-                identifier = propertyName + "_" + randomName(); // TODO add conversion if necessary
+                targetIdentifier = propertyName + "_" + randomName();
+                sourceType = glslType(value);
 
                 if(!metaProperty.hasNotifySignal()) {
                     qWarning() << "ShaderNode: property" << propertyName << "has no notification signal in" << this << "object with name" << name();
                 }
-                shaderBuilder->addUniform(this, propertyName, identifier, value, metaProperty);
+                shaderBuilder->addUniform(this, propertyName, targetIdentifier, value, metaProperty);
             }
-            sourceContent.replace(QRegularExpression("\\$(\\(\\s*)?" + propertyName + "(\\s*,\\s*[a-z0-9]+\\s*\\))?"), identifier);
+            sourceContent.replace(QRegularExpression("\\$(\\(\\s*)?" + propertyName + "(\\s*,\\s*[a-z0-9]+\\s*\\))?"),
+                                  ShaderUtils::convert(sourceType, targetType, targetIdentifier));
         }
     }
-    qDebug() << "Source became" << sourceContent;
     m_resolvedSource = sourceContent;
     m_hasSetup = true;
+    return success;
 }
 
 QString ShaderNode::generateBody() const
@@ -275,6 +232,15 @@ void ShaderNode::setSource(QString source)
         emit sourceChanged(source);
 }
 
+void ShaderNode::setRequirement(bool requirement)
+{
+    if (m_requirement == requirement)
+            return;
+
+        m_requirement = requirement;
+        emit requirementChanged(requirement);
+}
+
 ShaderBuilder *ShaderNode::shaderBuilder() const
 {
     return m_shaderBuilder;
@@ -307,4 +273,9 @@ QString ShaderNode::glslType(QVariant value) const
 QString ShaderNode::source() const
 {
     return m_source;
+}
+
+bool ShaderNode::requirement() const
+{
+    return m_requirement;
 }
