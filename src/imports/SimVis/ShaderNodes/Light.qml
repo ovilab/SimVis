@@ -7,7 +7,6 @@ ShaderNode {
     property var strength: 1.0
     property var position: Qt.vector3d(0.0, 0.0, 0.0)
     property var attenuation: 0.001
-    property var shininess: 10.0
     property var gamma: 1.0
 
     name: "light"
@@ -16,7 +15,6 @@ ShaderNode {
 $this.color = $(color, vec3);
 $this.strength = $(strength, float);
 $this.position = $(position, vec3);
-$this.shininess = $(shininess, float);
 $this.attenuation = $(attenuation, float);
 $this.gamma = $(gamma, float);
 "
@@ -27,7 +25,6 @@ struct Light {
     highp float strength;
     highp vec3 position;
     highp float attenuation;
-    highp float shininess;
     highp float gamma;
 };
 
