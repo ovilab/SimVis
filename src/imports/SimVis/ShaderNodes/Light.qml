@@ -17,19 +17,17 @@ ShaderNode {
     name: "light"
     type: "Light"
     source: "
-Light $light;\n
-$light.ambientColor = $(ambientColor, vec3);
-$light.diffuseColor = $(diffuseColor, vec3);
-$light.specularColor = $(specularColor, vec3);
-$light.position = $(position, vec3);
-$light.ambientIntensity = $(ambientIntensity, float);
-$light.diffuseIntensity = $(diffuseIntensity, float);
-$light.specularIntensity = $(specularIntensity, float);
-$light.shininess = $(shininess, float);
-$light.attenuation = $(attenuation, float);
-$light.gamma = $(gamma, float);
+$this.ambientColor = $(ambientColor, vec3);
+$this.diffuseColor = $(diffuseColor, vec3);
+$this.specularColor = $(specularColor, vec3);
+$this.position = $(position, vec3);
+$this.ambientIntensity = $(ambientIntensity, float);
+$this.diffuseIntensity = $(diffuseIntensity, float);
+$this.specularIntensity = $(specularIntensity, float);
+$this.shininess = $(shininess, float);
+$this.attenuation = $(attenuation, float);
+$this.gamma = $(gamma, float);
 "
-    result: "$light"
 
     header: "
 struct Light {

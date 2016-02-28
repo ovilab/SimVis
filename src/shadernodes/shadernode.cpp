@@ -120,7 +120,14 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
             if(match.lastCapturedIndex() > 1) {
                 targetType = match.captured(2);
             }
-
+            if(propertyName == "this") {
+                // $this is a special keyword that refers to the node itself, it cannot be used for a property name
+                QString thisIdentifier = identifier();
+                QRegularExpression namedRegex("\\$(\\(\\s*)?" + propertyName + "(\\s*,\\s*[a-zA-Z0-9]+\\s*\\))?");
+                sourceContent.replace(namedRegex, thisIdentifier);
+                alreadyReplaced.append(propertyName);
+                continue;
+            }
             int propertyIndex = metaObject()->indexOfProperty(propertyName.toStdString().c_str());
             if(propertyIndex < 0) {
                 // No connected property, assume internal variable that just needs a unique name
