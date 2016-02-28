@@ -43,22 +43,16 @@ ApplicationWindow {
                 position: spheres.shader.position
                 color: Qt.vector3d(1.0, 1.0, 1.0)
                 normal: spheres.shader.normal
-                lights: ShaderGroup {
-                    id: group
-                    property real scale: 100.0
-                    Light {
-                        diffuseColor: Qt.vector3d(Math.random(), Math.random(), Math.random())
-                        position: Qt.vector3d((2.0*Math.random() - 1.0)*group.scale, (2.0*Math.random() - 1.0)*group.scale, (2.0*Math.random() - 1.0)*group.scale)
-                    }
-                    Light {
-                        diffuseColor: Qt.vector3d(Math.random(), Math.random(), Math.random())
-                        position: Qt.vector3d((2.0*Math.random() - 1.0)*group.scale, (2.0*Math.random() - 1.0)*group.scale, (2.0*Math.random() - 1.0)*group.scale)
-                    }
-                    Light {
-                        diffuseColor: Qt.vector3d(Math.random(), Math.random(), Math.random())
-                        position: Qt.vector3d((2.0*Math.random() - 1.0)*group.scale, (2.0*Math.random() - 1.0)*group.scale, (2.0*Math.random() - 1.0)*group.scale)
-                    }
-                }
+//                lights: ShaderGroup {
+//                    Light {
+//                        diffuseColor: Qt.vector3d(1.0, 0.8, 0.8)
+//                        position: Qt.vector3d(50.0, 0.0, 0.0)
+//                    }
+//                    Light {
+//                        diffuseColor: Qt.vector3d(1.0, 0.8, 0.8)
+//                        position: Qt.vector3d(-50.0, 0.0, 0.0)
+//                    }
+//                }
             }
         }
     }

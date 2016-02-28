@@ -6,26 +6,26 @@ ShaderNode {
     property var specularColor: Qt.vector3d(1.0, 1.0, 1.0)
     property var position: Qt.vector3d(0.0, 0.0, 0.0)
     property var attenuation: 0.01
-    property var shininess: 2.1
+    property var shininess: 1.0
     property var gamma: 1.0
     property var ambientIntensity: 0.0
     property var diffuseIntensity: 1.0
-    property var specularIntensity: 0.1
+    property var specularIntensity: 1.0
 
     name: "light"
     type: "Light"
     source: "
 Light $light;\n
-$light.ambientColor = $ambientColor;
-$light.specularColor = $specularColor;
-$light.diffuseColor = $diffuseColor;
-$light.ambientIntensity = $ambientIntensity;
-$light.diffuseIntensity = $diffuseIntensity;
-$light.specularIntensity = $specularIntensity;
-$light.shininess = $shininess;
-$light.attenuation = $attenuation;
-$light.position = $position;
-$light.gamma = $gamma;
+$light.ambientColor = $(ambientColor, vec3);
+$light.diffuseColor = $(diffuseColor, vec3);
+$light.specularColor = $(specularColor, vec3);
+$light.position = $(position, vec3);
+$light.ambientIntensity = $(ambientIntensity, float);
+$light.diffuseIntensity = $(diffuseIntensity, float);
+$light.specularIntensity = $(specularIntensity, float);
+$light.shininess = $(shininess, float);
+$light.attenuation = $(attenuation, float);
+$light.gamma = $(gamma, float);
 "
     result: "$light"
 
