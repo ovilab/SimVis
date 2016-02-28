@@ -124,7 +124,8 @@ void ShaderBuilder::addUniform(ShaderNode *node, const QString &propertyName, co
 void ShaderBuilder::updateUniform(int i)
 {
     UniformValue &uniform = m_uniforms[i];
-    QVariant value = uniform.node->property(uniform.propertyName.toStdString().c_str());;
+    QByteArray propertyNameArray = uniform.propertyName.toUtf8();
+    QVariant value = uniform.node->property(propertyNameArray.constData());;
     uniform.value = value;
     QString type = glslType(value);
     if(type != uniform.type) {

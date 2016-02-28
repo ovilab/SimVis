@@ -10,7 +10,7 @@ ShaderNode {
     property var attenuation: 0.01
     property var shininess: 1.0
     property var gamma: 1.0
-    property var ambientIntensity: 0.0
+    property var ambientIntensity: 0.04
     property var diffuseIntensity: 1.0
     property var specularIntensity: 1.0
 

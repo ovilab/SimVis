@@ -300,7 +300,8 @@ void SpheresRenderer::beforeLinkProgram() {
 void SpheresRenderer::setUniforms() {
     for(QString uniformName : m_uniforms.keys()) {
         QVariant value = m_uniforms.value(uniformName);
-        const char* name = uniformName.toUtf8().constData();
+        QByteArray nameArray = uniformName.toUtf8();
+        const char* name = nameArray.constData();
         switch(value.type()) {
         case QVariant::Bool:
             program().setUniformValue(name, value.toBool());

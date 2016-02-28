@@ -7,10 +7,6 @@ class Navigator : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(Camera* camera READ camera WRITE setCamera NOTIFY cameraChanged)
-
-protected:
-    Camera* m_camera = nullptr;
-    // QQuickItem* m_parent = nullptr;
 public:
     explicit Navigator(QQuickItem *parent = 0);
     ~Navigator();
@@ -19,6 +15,9 @@ public slots:
     void setCamera(Camera* arg);
 signals:
     void cameraChanged(Camera* arg);
+
+protected:
+    Camera* m_camera = nullptr;
 };
 
 #endif // NAVIGATOR_H

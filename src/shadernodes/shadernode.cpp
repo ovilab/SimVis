@@ -110,9 +110,13 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
         QRegularExpression propertyRegex("\\$(?:\\(\\s*)?([a-zA-Z0-9]+)\\s*\\)?(?:\\s*,\\s*([a-zA-Z0-9]+)\\s*\\))?");
         QRegularExpressionMatchIterator matches = propertyRegex.globalMatch(sourceContent);
         QList<QString> alreadyReplaced;
+        qDebug() << "Matching..." << name();
         while(matches.hasNext()) {
+            qDebug() << "Next match";
             QRegularExpressionMatch match = matches.next();
+            qDebug() << match;
             QString propertyName = match.captured(1);
+            qDebug() << propertyName;
             if(alreadyReplaced.contains(propertyName)) {
                 continue;
             }
@@ -128,7 +132,8 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
                 alreadyReplaced.append(propertyName);
                 continue;
             }
-            int propertyIndex = metaObject()->indexOfProperty(propertyName.toStdString().c_str());
+            QByteArray propertyNameArray = propertyName.toUtf8();
+            int propertyIndex = metaObject()->indexOfProperty(propertyNameArray.constData());
             if(propertyIndex < 0) {
                 // No connected property, assume internal variable that just needs a unique name
                 QString propertylessIdentifier = propertyName + "_" + generateName();
@@ -160,7 +165,6 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
 
             ShaderNode *node = qvariant_cast<ShaderNode*>(value);
 
-            // TODO check readonly instead of output node?
             OutputNode *outputNode = qvariant_cast<OutputNode*>(value);
             QString targetIdentifier;
             QString sourceType;

@@ -3,6 +3,7 @@
 #include "shadernode.h"
 
 #include <QDebug>
+#include <QJSEngine>
 
 int ShaderUtils::m_nameCounter = 0;
 QMutex ShaderUtils::m_nameMutex;
@@ -32,7 +33,7 @@ QString ShaderUtils::glslType(const QVariant &value)
         // assume strings to be colors because there are no strings in GLSL
         return QString("vec4");
     default:
-        qWarning() << "ShaderUtils::glslType(): could not identify type" << value.typeName();
+        qWarning() << "ShaderUtils::glslType(): could not identify type of" << value;
         return QString("float");
         break;
     }

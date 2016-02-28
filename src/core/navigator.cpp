@@ -4,7 +4,6 @@
 Navigator::Navigator(QQuickItem *parent) :
     QQuickItem(parent)
 {
-    // m_parent = parent;
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
 }
