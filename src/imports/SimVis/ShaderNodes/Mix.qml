@@ -7,5 +7,5 @@ ShaderNode {
 
     name: "mix"
     type: value1.type
-    result: "$value1 * (1.0 - $mix.float) + $value2 * $mix.float"
+    result: "$value1 * (1.0 - $(mix, float)) + $value2 * $(mix, float)"
 }

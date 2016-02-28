@@ -139,7 +139,7 @@ void ShaderNode::setup(ShaderBuilder* shaderBuilder)
     m_resolvedResult = m_result;
 
     if(!m_result.isEmpty()) {
-        QRegularExpression propertyRegex("\\$([a-z0-9]+)(?:\\.([a-z0-9]+))?");
+        QRegularExpression propertyRegex("\\$(?:\\(\\s*)?([a-z0-9]+)\\s*\\)?(?:\\s*,\\s*([a-z0-9]+)\\s*\\))?");
         QRegularExpressionMatchIterator matches = propertyRegex.globalMatch(m_result);
         while(matches.hasNext()) {
             QRegularExpressionMatch match = matches.next();
@@ -148,6 +148,7 @@ void ShaderNode::setup(ShaderBuilder* shaderBuilder)
             if(match.lastCapturedIndex() > 1) {
                 targetType = match.captured(2);
             }
+            qDebug() << "Matched" << propertyName << targetType;
 
             int propertyIndex = metaObject()->indexOfProperty(propertyName.toStdString().c_str());
             if(propertyIndex < 0) {
@@ -170,7 +171,7 @@ void ShaderNode::setup(ShaderBuilder* shaderBuilder)
                 }
                 shaderBuilder->addUniform(this, propertyName, identifier, value, metaProperty);
             }
-            m_resolvedResult.replace(QRegularExpression("\\$" + propertyName + "(\\.[a-z0-9]+)?"), identifier);
+            m_resolvedResult.replace(QRegularExpression("\\$(\\(\\s*)?" + propertyName + "(\\s*,\\s*[a-z0-9]+\\s*\\))?"), identifier);
         }
     }
     qDebug() << "Resulted in" << m_resolvedResult;

@@ -7,7 +7,7 @@ ShaderNode {
     property var intensity: 0.2
     type: normal.type
     name: "simplex"
-    result: "simplexbump($normal.vec3, $position.vec3, $scale.float, $intensity.float)"
+    result: "simplexbump($(normal, vec3), $(position, vec3), $(scale, float), $(intensity, float))"
     header: "
 // GLSL textureless classic 4D noise \"cnoise\",
 // with an RSL-style periodic variant \"pnoise\".

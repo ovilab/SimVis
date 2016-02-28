@@ -34,12 +34,6 @@ ApplicationWindow {
             camera: camera
         }
 
-        //        SkyBox {
-        //            id: skybox
-        //            camera: camera
-        //            texture: ":/1024.png"
-        //        }
-
         Spheres {
             id: spheres
             visible: true
