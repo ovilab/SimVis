@@ -1,5 +1,6 @@
 #include "shadernode.h"
 #include "shaderbuilder.h"
+#include "outputnode.h"
 
 #include <QDebug>
 #include <QMetaProperty>
@@ -30,11 +31,6 @@ QString ShaderNode::name() const
 QString ShaderNode::type() const
 {
     return m_type;
-}
-
-QString ShaderNode::initialization() const
-{
-    return m_initialization;
 }
 
 QString ShaderNode::result() const
@@ -135,12 +131,19 @@ void ShaderNode::setup(ShaderBuilder* shaderBuilder)
     if(m_hasSetup) {
         return;
     }
-    qDebug() << "Setting up" << name() << result();
-    m_resolvedResult = m_result;
 
+    qDebug() << "Working on" << name();
+
+    QString sourceContent;
+    sourceContent = m_source;
     if(!m_result.isEmpty()) {
+        sourceContent += m_identifier + " = " + m_result + ";\n";
+    }
+    qDebug() << "Source was" << sourceContent;
+
+    if(!sourceContent.isEmpty()) {
         QRegularExpression propertyRegex("\\$(?:\\(\\s*)?([a-z0-9]+)\\s*\\)?(?:\\s*,\\s*([a-z0-9]+)\\s*\\))?");
-        QRegularExpressionMatchIterator matches = propertyRegex.globalMatch(m_result);
+        QRegularExpressionMatchIterator matches = propertyRegex.globalMatch(sourceContent);
         while(matches.hasNext()) {
             QRegularExpressionMatch match = matches.next();
             QString propertyName = match.captured(1);
@@ -148,7 +151,6 @@ void ShaderNode::setup(ShaderBuilder* shaderBuilder)
             if(match.lastCapturedIndex() > 1) {
                 targetType = match.captured(2);
             }
-            qDebug() << "Matched" << propertyName << targetType;
 
             int propertyIndex = metaObject()->indexOfProperty(propertyName.toStdString().c_str());
             if(propertyIndex < 0) {
@@ -158,10 +160,23 @@ void ShaderNode::setup(ShaderBuilder* shaderBuilder)
             QMetaProperty metaProperty = metaObject()->property(propertyIndex);
             QVariant value = metaProperty.read(this);
             ShaderNode *node = qvariant_cast<ShaderNode*>(value);
+            OutputNode *outputNode = qvariant_cast<OutputNode*>(value);
             QString identifier;
+            if(outputNode) {
+                // If it is an output node, we need to depend on its parent too
+                ShaderNode *parentNode = qobject_cast<ShaderNode*>(outputNode->parent());
+                if(parentNode && parentNode != this) {
+                    parentNode->setup(shaderBuilder);
+                    if(!m_dependencies.contains(parentNode)) {
+                        m_dependencies.append(parentNode);
+                    }
+                }
+            }
             if(node) {
                 node->setup(shaderBuilder);
-                m_dependencies.append(node);
+                if(!m_dependencies.contains(node)) {
+                    m_dependencies.append(node);
+                }
                 identifier = node->convert(targetType);
             } else {
                 identifier = propertyName + "_" + randomName(); // TODO add conversion if necessary
@@ -171,10 +186,11 @@ void ShaderNode::setup(ShaderBuilder* shaderBuilder)
                 }
                 shaderBuilder->addUniform(this, propertyName, identifier, value, metaProperty);
             }
-            m_resolvedResult.replace(QRegularExpression("\\$(\\(\\s*)?" + propertyName + "(\\s*,\\s*[a-z0-9]+\\s*\\))?"), identifier);
+            sourceContent.replace(QRegularExpression("\\$(\\(\\s*)?" + propertyName + "(\\s*,\\s*[a-z0-9]+\\s*\\))?"), identifier);
         }
     }
-    qDebug() << "Resulted in" << m_resolvedResult;
+    qDebug() << "Source became" << sourceContent;
+    m_resolvedSource = sourceContent;
     m_hasSetup = true;
 }
 
@@ -192,11 +208,8 @@ QString ShaderNode::generateBody() const
         body += dependency->generateBody();
     }
     body += m_type + " " + m_identifier + ";\n";
-    if(!m_initialization.isEmpty()) {
-        body += m_initialization + ";\n";
-    }
-    if(!m_resolvedResult.isEmpty()) {
-        body += m_identifier + " = " + m_resolvedResult + ";\n";
+    if(!m_resolvedSource.isEmpty()) {
+        body += m_resolvedSource + "\n";
     }
     body += "\n";
     m_hasGeneratedBody = true;
@@ -234,15 +247,6 @@ void ShaderNode::setType(QString type)
     emit typeChanged(type);
 }
 
-void ShaderNode::setInitialization(QString initialization)
-{
-    if (m_initialization == initialization)
-        return;
-
-    m_initialization = initialization;
-    emit initializationChanged(initialization);
-}
-
 void ShaderNode::setResult(QString result)
 {
     if (m_result == result)
@@ -261,6 +265,15 @@ void ShaderNode::setHeader(QString header)
     emit headerChanged(header);
 }
 
+void ShaderNode::setSource(QString source)
+{
+    if (m_source == source)
+            return;
+
+        m_source = source;
+        emit sourceChanged(source);
+}
+
 ShaderBuilder *ShaderNode::shaderBuilder() const
 {
     return m_shaderBuilder;
@@ -272,15 +285,20 @@ void ShaderNode::setShaderBuilder(ShaderBuilder *shaderBuilder)
         node->setShaderBuilder(shaderBuilder);
     }
     if(m_shaderBuilder) {
-        disconnect(this, 0, m_shaderBuilder, SLOT(receiveOutputChange()));
+        disconnect(this, 0, m_shaderBuilder, SLOT(triggerOutputChange()));
     }
     m_shaderBuilder = shaderBuilder;
     if(!m_shaderBuilder) {
         return;
     }
-    connect(this, &ShaderNode::headerChanged, m_shaderBuilder, &ShaderBuilder::receiveOutputChange);
-    connect(this, &ShaderNode::resultChanged, m_shaderBuilder, &ShaderBuilder::receiveOutputChange);
-    connect(this, &ShaderNode::identifierChanged, m_shaderBuilder, &ShaderBuilder::receiveOutputChange);
-    connect(this, &ShaderNode::initializationChanged, m_shaderBuilder, &ShaderBuilder::receiveOutputChange);
-    connect(this, &ShaderNode::typeChanged, m_shaderBuilder, &ShaderBuilder::receiveOutputChange);
+    connect(this, &ShaderNode::headerChanged, m_shaderBuilder, &ShaderBuilder::triggerOutputChange);
+    connect(this, &ShaderNode::resultChanged, m_shaderBuilder, &ShaderBuilder::triggerOutputChange);
+    connect(this, &ShaderNode::sourceChanged, m_shaderBuilder, &ShaderBuilder::triggerOutputChange);
+    connect(this, &ShaderNode::typeChanged, m_shaderBuilder, &ShaderBuilder::triggerOutputChange);
+    connect(this, &ShaderNode::identifierChanged, m_shaderBuilder, &ShaderBuilder::triggerOutputChange);
+}
+
+QString ShaderNode::source() const
+{
+    return m_source;
 }

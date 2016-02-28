@@ -6,6 +6,7 @@ Mix 1.0 Mix.qml
 OutputValue 1.0 OutputValue.qml
 ShaderDefinition 1.0 ShaderDefinition.qml
 Simplex 1.0 Simplex.qml
+Split 1.0 Split.qml
 Sine 1.0 Sine.qml
 UniformValue 1.0 UniformValue.qml
 Value 1.0 Value.qml

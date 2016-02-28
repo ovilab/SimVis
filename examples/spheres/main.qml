@@ -45,16 +45,20 @@ ApplicationWindow {
                     id: mixer
                     value1: spheres.shader.normal
                     value2: Qt.vector3d(0.2, 0.7, 0.9)
-                    mix: mixSlider.value
+                    mix: split.a
                 }
                 normal: Simplex {
                     normal: spheres.shader.normal
                     position: normal
-                    scale: mixSlider3.value
+                    scale: split.b
                     intensity: mixSlider4.value
                 }
             }
 
+            Split {
+                id: split
+                input: mixSlider.value
+            }
 
             Light {
                 id: light

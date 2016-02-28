@@ -11,5 +11,6 @@
         <file>SimVis/ShaderNodes/Sine.qml</file>
         <file>SimVis/ShaderNodes/qmldir</file>
         <file>SimVis/ShaderNodes/Simplex.qml</file>
+        <file>SimVis/ShaderNodes/Split.qml</file>
     </qresource>
 </RCC>

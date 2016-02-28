@@ -45,7 +45,7 @@ signals:
 
 public slots:
     void setSource(QString source);
-    void receiveOutputChange();
+    void triggerOutputChange();
     void updateUniform(int i);
 
 private:

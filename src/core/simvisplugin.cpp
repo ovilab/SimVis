@@ -21,6 +21,7 @@
 #include "../shadereffects/periodiccopies.h"
 #include "../shadereffects/slice.h"
 #include "../shadernodes/shadernode.h"
+#include "../shadernodes/outputnode.h"
 #include "../shadernodes/shaderbuilder.h"
 #include "../shadernodes/shaderoutput.h"
 
@@ -55,6 +56,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<Cylinders>("SimVis", 1, 0, "Cylinders");
     qmlRegisterType<Lines>("SimVis", 1, 0, "Lines");
     qmlRegisterType<ShaderNode>("SimVis", 1, 0, "ShaderNode");
+    qmlRegisterType<OutputNode>("SimVis", 1, 0, "OutputNode");
     qmlRegisterType<ShaderBuilder>("SimVis", 1, 0, "ShaderBuilder");
     qmlRegisterType<ShaderOutput>("SimVis", 1, 0, "ShaderOutput");
 }

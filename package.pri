@@ -90,3 +90,11 @@ HEADERS += \
     $$PWD/src/shadernodes/shadernode.h \
     $$PWD/src/shadernodes/shaderbuilder.h \
     $$PWD/src/shadernodes/shaderoutput.h
+
+
+
+HEADERS += \
+    $$PWD/src/shadernodes/outputnode.h
+
+SOURCES += \
+    $$PWD/src/shadernodes/outputnode.cpp

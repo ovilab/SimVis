@@ -138,7 +138,7 @@ void ShaderBuilder::setSource(QString source)
     emit sourceChanged(source);
 }
 
-void ShaderBuilder::receiveOutputChange()
+void ShaderBuilder::triggerOutputChange()
 {
     emit finalShaderChanged();
 }
