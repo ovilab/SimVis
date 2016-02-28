@@ -10,6 +10,15 @@
 
 class VariantShaderNode;
 
+struct UniformValue
+{
+    ShaderNode *node;
+    QString propertyName;
+    QString identifier;
+    QVariant value;
+    QString type;
+};
+
 class ShaderBuilder : public QObject
 {
     Q_OBJECT
@@ -21,22 +30,29 @@ public:
     explicit ShaderBuilder(QObject *parent = 0);
 
     QString source() const;
-    QString finalShader() const;
+    QString finalShader();
 
     QQmlListProperty<ShaderOutput> outputs();
     QList<VariantShaderNode *> uniformDependencies() const;
+    QVariantMap uniforms() const;
+    void addUniform(ShaderNode *node, const QString &propertyName, const QString &identifier,
+                    const QVariant &value, const QString &type, QMetaProperty metaProperty);
 
 signals:
     void sourceChanged(QString source);
     void finalShaderChanged();
+    void uniformsChanged();
 
 public slots:
     void setSource(QString source);
     void receiveOutputChange();
+    void updateUniform(int i);
 
 private:
     QString m_source;
     QList<ShaderOutput*> m_outputs;
+    QList<UniformValue> m_uniforms;
+    QList<QSignalMapper*> m_mappers;
 };
 
 #endif // SHADERBUILDER_H

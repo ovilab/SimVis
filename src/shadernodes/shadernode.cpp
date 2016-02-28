@@ -3,6 +3,9 @@
 #include "shaderbuilder.h"
 
 #include <QDebug>
+#include <QMetaProperty>
+#include <QRegularExpression>
+#include <QSignalMapper>
 
 QString randomName() {
     QString letters = "abcdefghijklmnopqrstuvwzyz";
@@ -99,7 +102,7 @@ QString ShaderNode::convert(QString targetType, QString identifier) const
     } else {
         v = m_identifier;
     }
-    if(m_type == targetType) {
+    if(targetType.isEmpty() || m_type == targetType) {
         return v;
     }
 
@@ -162,6 +165,54 @@ QList<VariantShaderNode*> ShaderNode::uniformDependencies() const
     return uniforms;
 }
 
+void ShaderNode::setup(ShaderBuilder* shaderBuilder)
+{
+    if(m_hasSetup) {
+        return;
+    }
+    qDebug() << "Setting up" << name() << result();
+    m_resolvedResult = m_result;
+
+    if(!m_result.isEmpty()) {
+        QRegularExpression propertyRegex("\\$([a-z0-9]+)(?:\\.([a-z0-9]+))?");
+        QRegularExpressionMatchIterator matches = propertyRegex.globalMatch(m_result);
+        while(matches.hasNext()) {
+            QRegularExpressionMatch match = matches.next();
+            QString propertyName = match.captured(1);
+            QString targetType;
+            if(match.lastCapturedIndex() > 1) {
+                targetType = match.captured(2);
+            }
+
+            int propertyIndex = metaObject()->indexOfProperty(propertyName.toStdString().c_str());
+            if(propertyIndex < 0) {
+                qWarning() << "ShaderNode: Could not find property with name" << propertyName << "in" << this << "object with name" << name();
+                continue;
+            }
+            QMetaProperty metaProperty = metaObject()->property(propertyIndex);
+            QVariant value = metaProperty.read(this);
+            ShaderNode *node = qvariant_cast<ShaderNode*>(value);
+            QString identifier;
+            if(node) {
+                node->setup(shaderBuilder);
+                m_dependencies.append(node);
+                identifier = node->convert(targetType);
+            } else {
+                identifier = propertyName + "_" + randomName(); // TODO add conversion if necessary
+
+                if(!metaProperty.hasNotifySignal()) {
+                    qWarning() << "ShaderNode: property" << propertyName << "has no notification signal in" << this << "object with name" << name();
+                }
+                QString type = glslTypeFromVariant(value);
+                shaderBuilder->addUniform(this, propertyName, identifier, value, type, metaProperty);
+            }
+            m_resolvedResult.replace(QRegularExpression("\\$" + propertyName + "(\\.[a-z0-9]+)?"), identifier);
+        }
+    }
+    qDebug() << "Resulted in" << m_resolvedResult;
+    m_hasSetup = true;
+}
+
 QString ShaderNode::generateBody() const
 {
     if(m_hasGeneratedBody) {
@@ -179,8 +230,8 @@ QString ShaderNode::generateBody() const
     if(!m_initialization.isEmpty()) {
         body += m_initialization + ";\n";
     }
-    if(!m_result.isEmpty()) {
-        body += m_identifier + " = " + m_result + ";\n";
+    if(!m_resolvedResult.isEmpty()) {
+        body += m_identifier + " = " + m_resolvedResult + ";\n";
     }
     body += "\n";
     m_hasGeneratedBody = true;
@@ -194,6 +245,7 @@ void ShaderNode::reset() const
     }
     m_hasGeneratedBody = false;
     m_hasGeneratedHeader = false;
+    m_hasSetup = false;
 }
 
 void ShaderNode::setName(QString name)

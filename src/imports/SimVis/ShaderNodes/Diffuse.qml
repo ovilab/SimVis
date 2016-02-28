@@ -7,7 +7,7 @@ ShaderNode {
 
     name: "diffuse"
     type: color.type
-    result: "defaultLight(" + resolve(normal) + ", " + resolve(position) + ", " + resolve(color) + ");"
+    result: "defaultLight($normal, $position, $color);"
 
     header: "
 // BEGIN light.glsl

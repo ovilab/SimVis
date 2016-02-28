@@ -49,7 +49,7 @@ private:
     QVector3D m_rightVector;
     QString m_fragmentShaderString;
 
-    QMap<QString, QVariant> m_uniforms;
+    QVariantMap m_uniforms;
 
     void uploadVBONoGeometryShader(Spheres *spheres);
     void uploadVBOGeometryShader(Spheres *spheres);
@@ -96,6 +96,7 @@ signals:
 
 private slots:
     void markShadersDirty();
+    void markDirty();
 private:
     QVector3D vectorFromColor(const QColor &color);
     QVector<SphereNoGeometryShaderVBOData> m_verticesNoGeometryShader;

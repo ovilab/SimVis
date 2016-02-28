@@ -6,6 +6,7 @@
 #include <QList>
 #include <QQmlListProperty>
 #include <QJSValue>
+#include <QSignalMapper>
 
 class ShaderBuilder;
 class VariantShaderNode;
@@ -41,6 +42,7 @@ public:
     QQmlListProperty<VariantShaderNode> variantNodes();
     QString identifier() const;
     void reset() const;
+    void setup(ShaderBuilder* shaderBuilder);
 
     ShaderBuilder *shaderBuilder() const;
     void setShaderBuilder(ShaderBuilder *shaderBuilder);
@@ -63,17 +65,20 @@ public slots:
 protected:
     mutable bool m_hasGeneratedHeader = false;
     mutable bool m_hasGeneratedBody = false;
+    mutable bool m_hasSetup = false;
 
 private:
     QString m_name;
     QString m_type;
     QString m_initialization;
     QString m_result;
+    QString m_resolvedResult;
     QString m_header;
     QList<ShaderNode*> m_dependencies;
     QList<VariantShaderNode*> m_variantNodes;
     QString m_identifier;
     ShaderBuilder *m_shaderBuilder = nullptr;
+    QSignalMapper mapper;
 };
 
 #endif // SHADERNODE_H

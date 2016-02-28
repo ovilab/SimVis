@@ -59,6 +59,11 @@ void Spheres::markShadersDirty() {
     m_shadersDirty = true;
 }
 
+void Spheres::markDirty()
+{
+    setDirty(true);
+}
+
 void Spheres::setFragmentShader(ShaderBuilder *fragmentShader)
 {
     if (m_fragmentShader == fragmentShader)
@@ -68,7 +73,9 @@ void Spheres::setFragmentShader(ShaderBuilder *fragmentShader)
     }
     m_fragmentShader = fragmentShader;
     connect(m_fragmentShader, &ShaderBuilder::finalShaderChanged, this, &Spheres::markShadersDirty);
+    connect(m_fragmentShader, &ShaderBuilder::uniformsChanged, this, &Spheres::markDirty);
     markShadersDirty();
+    markDirty();
     emit fragmentShaderChanged(fragmentShader);
 }
 
@@ -120,7 +127,7 @@ SpheresRenderer::SpheresRenderer()
 
 void SpheresRenderer::synchronize(Renderable* renderer)
 {
-    Spheres* spheres= static_cast<Spheres*>(renderer);
+    Spheres* spheres = static_cast<Spheres*>(renderer);
 
     m_upVector = spheres->camera()->upVector().normalized();
     m_viewVector = spheres->camera()->viewVector().normalized();
@@ -132,10 +139,7 @@ void SpheresRenderer::synchronize(Renderable* renderer)
         spheres->m_shadersDirty = false;
     }
 
-    m_uniforms.clear();
-    for(const VariantShaderNode *uniform : spheres->fragmentShader()->uniformDependencies()) {
-        m_uniforms.insert(uniform->identifier(), uniform->value());
-    }
+    m_uniforms = spheres->fragmentShader()->uniforms();
 
     if(!m_isInitialized) {
         if(geometryShaderIsSupported()) m_vboCount = 1;
