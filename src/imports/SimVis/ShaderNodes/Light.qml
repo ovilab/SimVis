@@ -4,12 +4,12 @@ ShaderNode {
     property var ambientColor: Qt.vector3d(1.0, 1.0, 1.0)
     property var diffuseColor: Qt.vector3d(1.0, 1.0, 1.0)
     property var specularColor: Qt.vector3d(1.0, 1.0, 1.0)
-    property var position: Qt.vector3d(0.5, 0.5, 0.5)
+    property var position: Qt.vector3d(0.0, 0.0, 0.0)
     property var attenuation: 0.01
     property var shininess: 2.1
     property var gamma: 1.0
-    property var ambientIntensity: 0.05
-    property var diffuseIntensity: 1.1
+    property var ambientIntensity: 0.0
+    property var diffuseIntensity: 1.0
     property var specularIntensity: 0.1
 
     name: "light"
@@ -60,7 +60,7 @@ highp vec3 applyLight(Light light, highp vec3 normal, highp vec3 vertexPosition,
     highp vec3 lightVector = vec3(0.0, 0.0, 0.0);
 
     highp vec3 surfaceToLight = normalize(light.position - vertexPosition);
-    highp float attenuationFactor = 1.0; //attenuation(light, vertexPosition);
+    highp float attenuationFactor = attenuation(light, vertexPosition);
 
     highp vec3 surfaceToCamera = normalize(cp_cameraPosition - vertexPosition);
 

@@ -1,5 +1,6 @@
 module SimVis.ShaderNodes
 Add 1.0 Add.qml
+Clamp 1.0 Clamp.qml
 Diffuse 1.0 Diffuse.qml
 Lerp 1.0 Lerp.qml
 Light 1.0 Light.qml

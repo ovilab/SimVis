@@ -41,10 +41,23 @@ ApplicationWindow {
 
             fragColor: Diffuse {
                 position: spheres.shader.position
-                color: spheres.shader.normal
+                color: Qt.vector3d(1.0, 1.0, 1.0)
                 normal: spheres.shader.normal
                 lights: ShaderGroup {
-                    Light {}
+                    id: group
+                    property real scale: 100.0
+                    Light {
+                        diffuseColor: Qt.vector3d(Math.random(), Math.random(), Math.random())
+                        position: Qt.vector3d((2.0*Math.random() - 1.0)*group.scale, (2.0*Math.random() - 1.0)*group.scale, (2.0*Math.random() - 1.0)*group.scale)
+                    }
+                    Light {
+                        diffuseColor: Qt.vector3d(Math.random(), Math.random(), Math.random())
+                        position: Qt.vector3d((2.0*Math.random() - 1.0)*group.scale, (2.0*Math.random() - 1.0)*group.scale, (2.0*Math.random() - 1.0)*group.scale)
+                    }
+                    Light {
+                        diffuseColor: Qt.vector3d(Math.random(), Math.random(), Math.random())
+                        position: Qt.vector3d((2.0*Math.random() - 1.0)*group.scale, (2.0*Math.random() - 1.0)*group.scale, (2.0*Math.random() - 1.0)*group.scale)
+                    }
                 }
             }
         }

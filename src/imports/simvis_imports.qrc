@@ -14,5 +14,6 @@
         <file>SimVis/ShaderNodes/Split.qml</file>
         <file>SimVis/ShaderNodes/Sum.qml</file>
         <file>SimVis/ShaderNodes/Light.qml</file>
+        <file>SimVis/ShaderNodes/Clamp.qml</file>
     </qresource>
 </RCC>

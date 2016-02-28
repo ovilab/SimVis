@@ -4,6 +4,9 @@
 
 #include <QDebug>
 
+int ShaderUtils::m_nameCounter = 0;
+QMutex ShaderUtils::m_nameMutex;
+
 QString ShaderUtils::glslType(const QVariant &value)
 {
     ShaderNode *node = qvariant_cast<ShaderNode*>(value);
@@ -83,4 +86,13 @@ QString ShaderUtils::convert(const QString &sourceType, const QString &targetTyp
     }
     qWarning() << "ShaderUtils::convert(): No known conversion from " << sourceType << " to " << targetType;
     return v;
+}
+
+QString ShaderUtils::generateName()
+{
+    m_nameMutex.lock();
+    QString name = QString::number(m_nameCounter);
+    m_nameCounter += 1;
+    m_nameMutex.unlock();
+    return name;
 }
