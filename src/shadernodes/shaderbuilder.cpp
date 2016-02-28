@@ -87,19 +87,6 @@ QQmlListProperty<ShaderOutput> ShaderBuilder::outputs()
     return QQmlListProperty<ShaderOutput>(this, m_outputs);
 }
 
-QList<VariantShaderNode*> ShaderBuilder::uniformDependencies() const
-{
-    QList<VariantShaderNode*> uniforms;
-    for(const ShaderOutput *output : m_outputs) {
-        ShaderNode *value = output->value();
-        if(!value) {
-            continue;
-        }
-        uniforms.append(value->uniformDependencies());
-    }
-    return uniforms;
-}
-
 QVariantMap ShaderBuilder::uniforms() const
 {
     QVariantMap result;
@@ -110,14 +97,14 @@ QVariantMap ShaderBuilder::uniforms() const
 }
 
 void ShaderBuilder::addUniform(ShaderNode *node, const QString &propertyName, const QString &identifier,
-                               const QVariant &value, const QString &type, QMetaProperty metaProperty)
+                               const QVariant &value, QMetaProperty metaProperty)
 {
     UniformValue uniform;
     uniform.node = node;
     uniform.propertyName = propertyName;
     uniform.identifier = identifier;
     uniform.value = value;
-    uniform.type = type;
+    uniform.type = glslTypeFromVariant(value);
     m_uniforms.append(uniform);
 
     QSignalMapper *mapper = new QSignalMapper;
@@ -131,7 +118,13 @@ void ShaderBuilder::addUniform(ShaderNode *node, const QString &propertyName, co
 void ShaderBuilder::updateUniform(int i)
 {
     UniformValue &uniform = m_uniforms[i];
-    uniform.value = uniform.node->property(uniform.propertyName.toStdString().c_str());
+    QVariant value = uniform.node->property(uniform.propertyName.toStdString().c_str());;
+    uniform.value = value;
+    QString type = glslTypeFromVariant(value);
+    if(type != uniform.type) {
+        uniform.type = type;
+        emit finalShaderChanged();
+    }
     emit uniformsChanged();
 }
 
@@ -148,4 +141,32 @@ void ShaderBuilder::setSource(QString source)
 void ShaderBuilder::receiveOutputChange()
 {
     emit finalShaderChanged();
+}
+
+QString ShaderBuilder::glslTypeFromVariant(QVariant value) const
+{
+    switch(value.type()) {
+    case QVariant::Bool:
+        return QString("bool");
+        break;
+    case QVariant::Int:
+        return QString("int");
+        break;
+    case QVariant::Double:
+        return QString("float");
+        break;
+    case QVariant::Vector2D:
+        return QString("vec2");
+        break;
+    case QVariant::Vector3D:
+        return QString("vec3");
+        break;
+    case QVariant::Vector4D:
+        return QString("vec4");
+        break;
+    default:
+        qWarning() << "WARNING: GlslVariantBridge could not identify type" << value.typeName();
+        return QString("float");
+        break;
+    }
 }

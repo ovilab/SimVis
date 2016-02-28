@@ -10,7 +10,6 @@
 #include <QQmlContext>
 
 #include "../../core/camera.h"
-#include "../../shadernodes/variantshadernode.h"
 
 Spheres::Spheres(QQuickItem *parent)
     : Renderable(parent)

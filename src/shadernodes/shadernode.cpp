@@ -1,5 +1,4 @@
 #include "shadernode.h"
-#include "variantshadernode.h"
 #include "shaderbuilder.h"
 
 #include <QDebug>
@@ -56,27 +55,6 @@ QQmlListProperty<VariantShaderNode> ShaderNode::variantNodes()
 QString ShaderNode::identifier() const
 {
     return m_identifier;
-}
-
-QString ShaderNode::resolve(ShaderNode *node, QString targetType)
-{
-    if(!node) {
-        qWarning() << "ERROR: Cannot resolve nullptr node.";
-        return QString();
-    }
-    VariantShaderNode *variantShaderNode = qobject_cast<VariantShaderNode*>(node);
-    if(variantShaderNode) {
-        ShaderNode *variantNodeValue = qvariant_cast<ShaderNode*>(variantShaderNode->value());
-        if(variantNodeValue) { // if a variant node carries a ShaderNode, it's just a wrapper
-            node = variantNodeValue;
-        }
-    }
-    m_dependencies.append(node);
-    if(targetType.isEmpty()) {
-        return node->identifier();
-    } else {
-        return node->convert(targetType);
-    }
 }
 
 QString ShaderNode::generateHeader() const
@@ -152,19 +130,6 @@ QString ShaderNode::convert(QString targetType, QString identifier) const
     return v;
 }
 
-QList<VariantShaderNode*> ShaderNode::uniformDependencies() const
-{
-    QList<VariantShaderNode*> uniforms;
-    for(ShaderNode* node : m_dependencies) {
-        uniforms.append(node->uniformDependencies());
-        VariantShaderNode *variantNode = qobject_cast<VariantShaderNode*>(node);
-        if(variantNode) {
-            uniforms.append(variantNode);
-        }
-    }
-    return uniforms;
-}
-
 void ShaderNode::setup(ShaderBuilder* shaderBuilder)
 {
     if(m_hasSetup) {
@@ -203,8 +168,7 @@ void ShaderNode::setup(ShaderBuilder* shaderBuilder)
                 if(!metaProperty.hasNotifySignal()) {
                     qWarning() << "ShaderNode: property" << propertyName << "has no notification signal in" << this << "object with name" << name();
                 }
-                QString type = glslTypeFromVariant(value);
-                shaderBuilder->addUniform(this, propertyName, identifier, value, type, metaProperty);
+                shaderBuilder->addUniform(this, propertyName, identifier, value, metaProperty);
             }
             m_resolvedResult.replace(QRegularExpression("\\$" + propertyName + "(\\.[a-z0-9]+)?"), identifier);
         }
@@ -318,32 +282,4 @@ void ShaderNode::setShaderBuilder(ShaderBuilder *shaderBuilder)
     connect(this, &ShaderNode::identifierChanged, m_shaderBuilder, &ShaderBuilder::receiveOutputChange);
     connect(this, &ShaderNode::initializationChanged, m_shaderBuilder, &ShaderBuilder::receiveOutputChange);
     connect(this, &ShaderNode::typeChanged, m_shaderBuilder, &ShaderBuilder::receiveOutputChange);
-}
-
-QString ShaderNode::glslTypeFromVariant(QVariant value) const
-{
-    switch(value.type()) {
-    case QVariant::Bool:
-        return QString("bool");
-        break;
-    case QVariant::Int:
-        return QString("int");
-        break;
-    case QVariant::Double:
-        return QString("float");
-        break;
-    case QVariant::Vector2D:
-        return QString("vec2");
-        break;
-    case QVariant::Vector3D:
-        return QString("vec3");
-        break;
-    case QVariant::Vector4D:
-        return QString("vec4");
-        break;
-    default:
-        qWarning() << "WARNING: GlslVariantBridge could not identify type" << value.typeName();
-        return QString("float");
-        break;
-    }
 }

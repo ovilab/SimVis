@@ -30,9 +30,6 @@ public:
     Q_INVOKABLE virtual QString generateBody() const;
 
     Q_INVOKABLE QString convert(QString targetType, QString identifier = QString()) const;
-    Q_INVOKABLE QList<VariantShaderNode *> uniformDependencies() const;
-    Q_INVOKABLE QString glslTypeFromVariant(QVariant value) const;
-    Q_INVOKABLE QString resolve(ShaderNode *node, QString targetType = QString());
 
     QString name() const;
     QString type() const;

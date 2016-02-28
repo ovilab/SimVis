@@ -33,10 +33,10 @@ public:
     QString finalShader();
 
     QQmlListProperty<ShaderOutput> outputs();
-    QList<VariantShaderNode *> uniformDependencies() const;
     QVariantMap uniforms() const;
     void addUniform(ShaderNode *node, const QString &propertyName, const QString &identifier,
-                    const QVariant &value, const QString &type, QMetaProperty metaProperty);
+                    const QVariant &value, QMetaProperty metaProperty);
+
 
 signals:
     void sourceChanged(QString source);
@@ -49,6 +49,8 @@ public slots:
     void updateUniform(int i);
 
 private:
+    QString glslTypeFromVariant(QVariant value) const;
+
     QString m_source;
     QList<ShaderOutput*> m_outputs;
     QList<UniformValue> m_uniforms;

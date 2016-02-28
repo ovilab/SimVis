@@ -8,7 +8,6 @@
         <file>SimVis/ShaderNodes/MainForm.ui.qml</file>
         <file>SimVis/ShaderNodes/OutputValue.qml</file>
         <file>SimVis/ShaderNodes/Perlin.qml</file>
-        <file>SimVis/ShaderNodes/ShaderDefinition.qml</file>
         <file>SimVis/ShaderNodes/Sine.qml</file>
         <file>SimVis/ShaderNodes/qmldir</file>
         <file>SimVis/ShaderNodes/Simplex.qml</file>
