@@ -67,7 +67,13 @@ QString ShaderNode::generateHeader() const
     for(const ShaderNode *node : m_dependencies) {
         headerResult += node->generateHeader();
     }
-    headerResult += m_header;
+    if(!m_header.isEmpty()) {
+        QString headerIdentifier = "SHADER_NODE_HEADER_" + name().toUpper();
+        headerResult += "#ifndef " + headerIdentifier + "\n";
+        headerResult += "#define " + headerIdentifier + "\n";
+        headerResult += m_header + "\n";
+        headerResult += "#endif // " + headerIdentifier + "\n";
+    }
     m_hasGeneratedHeader = true;
     return headerResult;
 }

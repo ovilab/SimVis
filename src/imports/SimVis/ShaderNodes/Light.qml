@@ -1,6 +1,8 @@
 import SimVis 1.0
 
 ShaderNode {
+    // TODO split light into multiple functions available for different materials (should perhaps be on each material?)
+
     property var ambientColor: Qt.vector3d(1.0, 1.0, 1.0)
     property var diffuseColor: Qt.vector3d(1.0, 1.0, 1.0)
     property var specularColor: Qt.vector3d(1.0, 1.0, 1.0)
@@ -30,9 +32,6 @@ $light.gamma = $(gamma, float);
     result: "$light"
 
     header: "
-#ifndef LIGHTNODE_GLSL
-#define LIGHTNODE_GLSL
-
 struct Light {
     highp vec3 ambientColor;
     highp vec3 diffuseColor;
@@ -83,6 +82,5 @@ highp vec3 applyLight(Light light, highp vec3 normal, highp vec3 vertexPosition,
    /* RETURN GAMMA CORRECTED COMBINED */
    return gamma(lightVector, light.gamma);
 }
-#endif // LIGHTNODE_GLSL
 "
 }
