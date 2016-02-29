@@ -245,12 +245,20 @@ void RenderableRenderer::setShaderFromSourceCode(QOpenGLShader::ShaderType type,
     removeShader(type);
     // sqDebug() << "Shader: " << fullShaderCode;
 
+    QString fileName = "/tmp/currentshader.";
     if(type == QOpenGLShader::Fragment) {
-        QFile file("/tmp/currentshader.glsl");
-        file.open(QFile::WriteOnly);
-        QTextStream out(&file);
-        out << fullShaderCode;
+        fileName += ".fsh";
     }
+    if(type == QOpenGLShader::Geometry) {
+        fileName += ".gsh";
+    }
+    if(type == QOpenGLShader::Vertex) {
+        fileName += ".vsh";
+    }
+    QFile file(fileName);
+    file.open(QFile::WriteOnly);
+    QTextStream out(&file);
+    out << fullShaderCode;
     m_program.addShaderFromSourceCode(type, fullShaderCode);
 }
 

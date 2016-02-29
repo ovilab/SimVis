@@ -19,4 +19,5 @@ QT += qml quick widgets opengl openglextensions
 include(../package.pri)
 
 DISTFILES = qmldir \
-    core/simvisplugin.json
+    core/simvisplugin.json \
+    renderables/spheres/spheres_node.vsh

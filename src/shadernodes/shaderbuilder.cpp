@@ -30,8 +30,7 @@ QString ShaderBuilder::finalShader()
     for(const ShaderOutput *output : m_outputs) {
         ShaderNode *value = output->value();
         if(!value) {
-            qWarning() << "ShaderBuilder::finalShader(): ShaderDefintion output " << output->name() << " has no value";
-            return QString();
+            continue;
         }
         bool success = output->value()->setup(this);
         if(!success) {
@@ -44,33 +43,48 @@ QString ShaderBuilder::finalShader()
     contents += "\n// ------  begin generated header  ------\n\n";
     for(const ShaderOutput *output : m_outputs) {
         ShaderNode *value = output->value();
+        if(!value) {
+            continue;
+        }
         contents += value->generateHeader();
     }
-    contents += "\n// ------   end generated header   ------\n\n";
-    contents += "\n// ------ begin generated uniforms ------\n\n";
+    contents += "\n// ------          uniforms        ------\n\n";
     for(const UniformValue &uniform : m_uniforms) {
         contents += "uniform " + uniform.type + " " + uniform.identifier + ";\n";
     }
-    contents += "\n// ------  end generated uniforms  ------\n\n";
-    contents += "\n// ------  begin generated outputs ------\n\n";
+    contents += "\n// ------           inputs         ------\n\n";
+    for(const ShaderOutput *input : m_inputs) {
+        contents += "in " + input->type() + " " + input->name();
+
+        // TODO add support for other input types and thus other numbers of elements in inputs
+        if(m_shaderType == ShaderType::Geometry) {
+            contents += "[1]";
+        }
+        contents += ";\n";
+    }
+    contents += "\n// ------           outputs        ------\n\n";
     for(const ShaderOutput *output : m_outputs) {
         contents += "out " + output->type() + " " + output->name() + ";\n";
     }
-    contents += "\n// ------  end generated outputs   ------\n\n";
 
     QString setup = "";
     setup += "\n// ------   begin generated body   ------\n\n";
     for(const ShaderOutput *output : m_outputs) {
-        ShaderNode* value = output->value();
+        ShaderNode *value = output->value();
+        if(!value) {
+            continue;
+        }
         setup += value->generateBody();
     }
-    setup += "\n// ------    end generated body    ------\n\n";
-    setup += "\n// ------ begin output assignments ------\n\n";
+    setup += "\n// ------    output assignments    ------\n\n";
     for(const ShaderOutput *output : m_outputs) {
-        ShaderNode* value = output->value();
+        ShaderNode *value = output->value();
+        if(!value) {
+            continue;
+        }
         setup += output->name() + " = " + value->convert(output->type()) + ";\n";
     }
-    setup += "\n// ------  end output assignments  ------\n\n";
+    setup += "\n// ------    end generated body    ------\n\n";
 
     QString matchString = "\\$setupShaderNodes\\(\\);?";
 
@@ -84,6 +98,9 @@ QString ShaderBuilder::finalShader()
 
     for(const ShaderOutput *output : m_outputs) {
         ShaderNode *value = output->value();
+        if(!value) {
+            continue;
+        }
         value->reset();
     }
 
@@ -126,6 +143,11 @@ void ShaderBuilder::addUniform(ShaderNode *node, const QString &propertyName, co
 QUrl ShaderBuilder::sourceFile() const
 {
     return m_sourceFile;
+}
+
+QQmlListProperty<ShaderOutput> ShaderBuilder::inputs()
+{
+    return QQmlListProperty<ShaderOutput>(this, m_inputs);
 }
 
 void ShaderBuilder::updateUniform(int i)
