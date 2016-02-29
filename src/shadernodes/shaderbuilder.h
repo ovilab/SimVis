@@ -6,6 +6,7 @@
 
 #include <QObject>
 #include <QQmlListProperty>
+#include <QUrl>
 #include <QVariantList>
 
 class VariantShaderNode;
@@ -23,6 +24,7 @@ class ShaderBuilder : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(QUrl sourceFile READ sourceFile WRITE setSourceFile NOTIFY sourceFileChanged)
     Q_PROPERTY(QString finalShader READ finalShader NOTIFY finalShaderChanged)
     Q_PROPERTY(QQmlListProperty<ShaderOutput> outputs READ outputs)
 
@@ -37,16 +39,21 @@ public:
     void addUniform(ShaderNode *node, const QString &propertyName, const QString &identifier,
                     const QVariant &value, QMetaProperty metaProperty);
 
+    QUrl sourceFile() const;
 
 signals:
     void sourceChanged(QString source);
     void finalShaderChanged();
     void uniformsChanged();
 
+    void sourceFileChanged(QUrl sourceFile);
+
 public slots:
     void setSource(QString source);
     void triggerOutputChange();
     void updateUniform(int i);
+
+    void setSourceFile(QUrl sourceFile);
 
 private:
     QString glslType(QVariant value) const;
@@ -55,6 +62,7 @@ private:
     QList<ShaderOutput*> m_outputs;
     QList<UniformValue> m_uniforms;
     QList<QSignalMapper*> m_mappers;
+    QUrl m_sourceFile;
 };
 
 #endif // SHADERBUILDER_H

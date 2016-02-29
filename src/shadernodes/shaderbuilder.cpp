@@ -5,6 +5,9 @@
 #include <QRegularExpression>
 #include <QDebug>
 #include <QMetaProperty>
+#include <QQmlEngine>
+#include <QQmlFile>
+#include <QFile>
 
 ShaderBuilder::ShaderBuilder(QObject *parent) : QObject(parent)
 {
@@ -121,6 +124,11 @@ void ShaderBuilder::addUniform(ShaderNode *node, const QString &propertyName, co
     m_mappers.append(mapper);
 }
 
+QUrl ShaderBuilder::sourceFile() const
+{
+    return m_sourceFile;
+}
+
 void ShaderBuilder::updateUniform(int i)
 {
     UniformValue &uniform = m_uniforms[i];
@@ -133,6 +141,21 @@ void ShaderBuilder::updateUniform(int i)
         emit finalShaderChanged();
     }
     emit uniformsChanged();
+}
+
+void ShaderBuilder::setSourceFile(QUrl sourceFile)
+{
+    if (m_sourceFile == sourceFile)
+        return;
+
+    m_sourceFile = sourceFile;
+
+    QString fileName = QQmlFile::urlToLocalFileOrQrc(sourceFile);
+    QFile file(fileName);
+    file.open(QFile::ReadOnly);
+    setSource(file.readAll());
+
+    emit sourceFileChanged(sourceFile);
 }
 
 void ShaderBuilder::setSource(QString source)
