@@ -335,6 +335,10 @@ void SpheresRenderer::setUniforms() {
 }
 
 void SpheresRenderer::renderNoGeometryShader() {
+    if(!program().isLinked()) {
+        return;
+    }
+
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
@@ -401,6 +405,10 @@ void SpheresRenderer::renderNoGeometryShader() {
 }
 
 void SpheresRenderer::renderGeometryShader() {
+    if(!program().isLinked()) {
+        return;
+    }
+
     QOpenGLFunctions funcs(QOpenGLContext::currentContext());
 
     setUniforms();
@@ -411,6 +419,7 @@ void SpheresRenderer::renderGeometryShader() {
     int positionLocation = 0;
     int colorLocation = 1;
     int scaleLocation = 2;
+    int sphereIdLocation = 3;
 
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]); // Tell OpenGL which VBOs to use
 
@@ -420,14 +429,20 @@ void SpheresRenderer::renderGeometryShader() {
 
     program().enableAttributeArray(positionLocation);
     glFunctions()->glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(SphereGeometryShaderVBOData), (const void *)offset);
-    offset += sizeof(QVector3D);
+    offset += sizeof(SphereGeometryShaderVBOData::position);
 
     program().enableAttributeArray(colorLocation);
     glFunctions()->glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(SphereGeometryShaderVBOData), (const void *)offset);
-    offset += sizeof(QVector3D);
+    offset += sizeof(SphereGeometryShaderVBOData::color);
 
     program().enableAttributeArray(scaleLocation);
     glFunctions()->glVertexAttribPointer(scaleLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereGeometryShaderVBOData), (const void *)offset);
+    offset += sizeof(SphereGeometryShaderVBOData::scale);
+
+    program().enableAttributeArray(sphereIdLocation);
+    glFunctions()->glVertexAttribPointer(sphereIdLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereGeometryShaderVBOData), (const void *)offset);
+    offset += sizeof(SphereGeometryShaderVBOData::sphereId);
+
     glFunctions()->glDisable(GL_CULL_FACE);
     glFunctions()->glEnable(GL_DEPTH_TEST);
     glFunctions()->glDepthMask(GL_TRUE);

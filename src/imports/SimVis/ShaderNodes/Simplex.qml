@@ -22,9 +22,6 @@ ShaderNode {
 // https://github.com/ashimavec/webgl-noise
 //
 
-#ifndef SIMPLEX2GLSL
-#define SIMPLEX2GLSL
-
 #ifndef MOD289VEC3
 #define MOD289VEC3
 highp vec3 mod289(highp vec3 x)
@@ -104,6 +101,5 @@ highp vec3 simplexbump(highp vec3 normal, highp vec3 vertexPosition, float scale
     highp float nz = snoise(0.5*scale*(vertexPosition.xz + vertexPosition.yy + vec2(2.0,-2.0)));
     return normal + vec3(nx, ny, nz)*intensity;
 }
-#endif
 "
 }

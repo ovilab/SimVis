@@ -130,6 +130,9 @@ void RenderableRenderer::prepareAndRender()
         m_program.link();
         m_shadersDirty = false;
     }
+    if(!m_program.isLinked()) {
+        return;
+    }
 
     m_program.bind();
     QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;

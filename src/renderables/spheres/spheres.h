@@ -25,6 +25,7 @@ struct SphereGeometryShaderVBOData
     QVector3D position;
     QVector3D color;
     float scale;
+    int sphereId;
 };
 
 class Spheres;

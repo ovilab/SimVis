@@ -1,6 +1,8 @@
 in vec3 color;
 in vec2 texCoord;
 in vec3 vertexPosition;
+in int sphereId;
+
 out vec4 fragcolor;
 
 void main(void) {
@@ -12,8 +14,6 @@ void main(void) {
         discard;
     } else {
         highp float z = sqrt(1.0 - r2); // Equation for sphere, x^2 + y^2 + z^2 = R^2
-
-        highp vec3 light = vec3(1.0, 1.0, 1.0);
         highp vec3 normal = x*cp_rightVector + y*cp_upVector - z*cp_viewVector;
 
         fragcolor = defaultFragment(normal, vertexPosition, color);
