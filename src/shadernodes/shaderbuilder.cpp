@@ -38,7 +38,6 @@ QString ShaderBuilder::finalShader()
             qWarning() << "ShaderBuilder::finalShader(): Shader construction failed.";
             return QString();
         }
-        output->value()->setShaderBuilder(const_cast<ShaderBuilder*>(this));
     }
 
     QString contents = "";

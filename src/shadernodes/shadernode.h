@@ -23,6 +23,7 @@ class ShaderNode : public QObject
     Q_PROPERTY(QObject* parent READ parent WRITE setParent NOTIFY parentChanged)
     Q_PROPERTY(bool requirement READ requirement WRITE setRequirement NOTIFY requirementChanged)
     Q_PROPERTY(QQmlListProperty<VariantShaderNode> variantNodes READ variantNodes)
+    Q_PROPERTY(QQmlListProperty<ShaderNode> dependencies READ dependencies)
     Q_CLASSINFO("DefaultProperty", "variantNodes")
 
 public:
@@ -48,6 +49,11 @@ public:
     QString source() const;
 
     bool requirement() const;
+
+    QQmlListProperty<ShaderNode> dependencies()
+    {
+        return QQmlListProperty<ShaderNode>(this, m_declaredDependencies);
+    }
 
 signals:
     void nameChanged(QString name);
@@ -76,6 +82,7 @@ protected:
     mutable bool m_hasGeneratedBody = false;
     mutable bool m_hasSetup = false;
     QList<ShaderNode*> m_dependencies;
+    QList<ShaderNode*> m_declaredDependencies;
 
 private:
     QString m_name;

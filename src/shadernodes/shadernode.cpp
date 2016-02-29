@@ -2,7 +2,6 @@
 #include "shaderbuilder.h"
 #include "shaderutils.h"
 #include "shadergroup.h"
-#include "outputnode.h"
 
 #include <QDebug>
 #include <QJSValueIterator>
@@ -92,6 +91,7 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
     if(m_hasSetup) {
         return true;
     }
+
     if(!m_requirement) {
         qWarning() << "ShaderNode::setup(): Requirement for" << this << name() << "is not satisfied.";
         return false;
@@ -103,9 +103,10 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
         sourceContent += m_identifier + " = " + m_result + ";\n";
     }
 
+    m_dependencies.clear();
+
     bool success = true;
     if(!sourceContent.isEmpty()) {
-
         // matches '$property' or '$(property, type)'
         QRegularExpression propertyRegex("\\$(?:\\(\\s*)?([a-zA-Z0-9]+)\\s*\\)?(?:\\s*,\\s*([a-zA-Z0-9]+)\\s*\\))?");
         QRegularExpressionMatchIterator matches = propertyRegex.globalMatch(sourceContent);
@@ -161,20 +162,18 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
 
             ShaderNode *node = qvariant_cast<ShaderNode*>(value);
 
-            OutputNode *outputNode = qvariant_cast<OutputNode*>(value);
             QString targetIdentifier;
             QString sourceType;
-            if(outputNode) {
-                // If it is an output node, we need to depend on its parent too
-                ShaderNode *parentNode = qobject_cast<ShaderNode*>(outputNode->parent());
-                if(parentNode && parentNode != this) {
-                    success = success && parentNode->setup(shaderBuilder);
-                    if(!m_dependencies.contains(parentNode)) {
-                        m_dependencies.append(parentNode);
+            if(node) {
+                // Take over any declared dependencies
+                for(ShaderNode* declaredDependency : node->m_declaredDependencies) {
+                    if(declaredDependency && declaredDependency != this) {
+                        success = success && declaredDependency->setup(shaderBuilder);
+                        if(!m_dependencies.contains(declaredDependency)) {
+                            m_dependencies.append(declaredDependency);
+                        }
                     }
                 }
-            }
-            if(node) {
                 success = success && node->setup(shaderBuilder);
                 if(!m_dependencies.contains(node)) {
                     m_dependencies.append(node);
@@ -195,8 +194,10 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
             alreadyReplaced.append(propertyName);
         }
     }
-    m_resolvedSource = sourceContent;
+
+    setShaderBuilder(shaderBuilder);
     m_hasSetup = true;
+    m_resolvedSource = sourceContent;
     return success;
 }
 
@@ -296,9 +297,6 @@ ShaderBuilder *ShaderNode::shaderBuilder() const
 
 void ShaderNode::setShaderBuilder(ShaderBuilder *shaderBuilder)
 {
-    for(ShaderNode *node : m_dependencies) {
-        node->setShaderBuilder(shaderBuilder);
-    }
     if(m_shaderBuilder) {
         disconnect(this, 0, m_shaderBuilder, SLOT(triggerOutputChange()));
     }

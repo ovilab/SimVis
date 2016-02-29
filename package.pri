@@ -95,11 +95,9 @@ HEADERS += \
 
 
 
-HEADERS += \
-    $$PWD/src/shadernodes/outputnode.h
+HEADERS +=
 
-SOURCES += \
-    $$PWD/src/shadernodes/outputnode.cpp
+SOURCES +=
 
 HEADERS += \
     $$PWD/src/shadernodes/shaderutils.h

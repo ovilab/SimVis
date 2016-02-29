@@ -2,16 +2,18 @@ import QtQuick 2.0
 import SimVis 1.0
 
 ShaderNode {
+    id: splitRoot
     property var input
 
-    // TODO use readonly instead of OutputNode
-    property var a: OutputNode {
+    property var a: ShaderNode {
         name: "split_a"
         type: "float"
+        dependencies: [splitRoot]
     }
-    property var b: OutputNode {
+    property var b: ShaderNode {
         name: "split_b"
         type: "float"
+        dependencies: [splitRoot]
     }
 
     name: "split"
