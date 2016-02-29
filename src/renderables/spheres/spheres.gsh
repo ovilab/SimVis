@@ -6,12 +6,12 @@ layout( triangle_strip, max_vertices = 4 ) out;
 in vec3 vs_color[1];
 in float vs_scale[1];
 in vec3 vs_vertexPosition[1];
-in int vs_sphereId[1];
+in float vs_sphereId[1];
 
 out vec2 texCoord;
 out vec3 vertexPosition;
 out vec3 color;
-flat out int sphereId;
+out float sphereId;
 
 void main(void) {
     vec4 displacement = vec4(0.0,0.0,0.0,0.0);

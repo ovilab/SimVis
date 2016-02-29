@@ -1,7 +1,7 @@
 in vec3 color;
 in vec2 texCoord;
 in vec3 vertexPosition;
-in int sphereId;
+in float sphereId;
 
 out vec4 fragcolor;
 

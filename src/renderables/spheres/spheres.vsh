@@ -1,7 +1,7 @@
 // BEGIN spheres.vsh
 attribute highp vec3 a_position;
 attribute highp vec3 a_color;
-attribute highp vec2 a_texcoord;
+attribute highp vec2 a_texCoord;
 attribute highp float a_sphereId;
 attribute highp float a_scale;
 attribute highp float a_vertexId;
@@ -9,13 +9,13 @@ attribute highp float a_vertexId;
 uniform highp vec3 cp_upPlusRightHalf;
 uniform highp vec3 cp_upMinusRightHalf;
 
-varying highp vec2 coords;
+varying highp vec2 texCoord;
 varying highp vec3 color;
 varying highp vec3 vertexPosition;
 varying highp float sphereId;
 
 void main() {
-    coords = 2.0*a_texcoord - 1.0;
+    texCoord = 2.0*a_texCoord - 1.0;
     // vertexPosition = a_position.xyz + 0.5*(cp_rightVector*coords.x + cp_upVector*coords.y);
 
     vertexPosition = a_position.xyz;

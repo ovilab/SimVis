@@ -253,7 +253,6 @@ QString RenderableRenderer::generateGLSLHeader()
     /*
      * Based on http://stackoverflow.com/questions/19021567/finding-supported-glsl-version
      */
-
     QPair<int,int> openGLVersion = QOpenGLContext::currentContext()->format().version();
 
     QString header;
@@ -264,25 +263,6 @@ QString RenderableRenderer::generateGLSLHeader()
     if(openGLVersion==qMakePair(3,2)) header = "#version 150\n";
     if(openGLVersion>=qMakePair(3,3)) header = QString("#version %1%2%3\n").arg(openGLVersion.first).arg(openGLVersion.second).arg(0);
     return header;
-}
-
-void RenderableRenderer::enableVboAttribute(int location, GLint count, GLenum type, GLsizei stride, quintptr offset) {
-    program().enableAttributeArray(location);
-    glFunctions()->glVertexAttribPointer(location, count, type, GL_FALSE, stride, (const void *)offset);
-}
-
-void RenderableRenderer::enableVboObjectMemberHelper(int location, GLsizei stride, quintptr offset, const QVector3D &) {
-    enableVboAttribute(location, 3, GL_FLOAT, stride, offset);
-}
-
-void RenderableRenderer::enableVboObjectMemberHelper(int location, GLsizei stride, quintptr offset, float) {
-    enableVboAttribute(location, 1, GL_FLOAT, stride, offset);
-}
-
-void RenderableRenderer::disableVboObject(int location) {
-    for(int i = location; i >= 0; i--) {
-        program().disableAttributeArray(i);
-    }
 }
 
 void RenderableRenderer::addShaderCodeToBase(QOpenGLShader::ShaderType type, QString shaderCode) {

@@ -28,7 +28,7 @@ AbstractSpheres {
             result: "texCoord";
         }
         property ShaderNode sphereId: ShaderNode {
-            type: "int"
+            type: "float"
             name: "sphereId"
             result: "sphereId";
         }
@@ -42,7 +42,7 @@ AbstractSpheres {
         outputs: [
             ShaderOutput {
                 type: "vec4"
-                name: "fragColor"
+                name: "gl_FragColor"
                 value: _shader.fragColor
             }
         ]
@@ -51,7 +51,12 @@ AbstractSpheres {
 in vec3 color;
 in vec2 texCoord;
 in vec3 vertexPosition;
-flat in int sphereId;
+in float sphereId;
+
+//varying highp vec2 texCoord;
+//varying highp vec3 color;
+//varying highp vec3 vertexPosition;
+//varying highp float sphereId;
 
 void main(void) {
     highp float x = texCoord.s;

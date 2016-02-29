@@ -297,6 +297,11 @@ void SpheresRenderer::beforeLinkProgram() {
     } else {
         setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/spheres/spheres.vsh");
         setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/spheres/spheres.fsh");
+        if(m_fragmentShaderString.isEmpty()) {
+            setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/spheres/spheresgs.fsh");
+        } else {
+            setShaderFromSourceCode(QOpenGLShader::Fragment, m_fragmentShaderString);
+        }
     }
 }
 
@@ -356,55 +361,18 @@ void SpheresRenderer::renderNoGeometryShader() {
     // Offset for position
     quintptr offset = 0;
 
-    // Tell OpenGL programmable pipeline how to locate vertex position data
-    int sphereIdLocation = program().attributeLocation("a_sphereId");
-    program().enableAttributeArray(sphereIdLocation);
-    glFunctions()->glVertexAttribPointer(sphereIdLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
-
-    offset += sizeof(GLfloat);
-
-    int scaleLocation = program().attributeLocation("a_scale");
-    program().enableAttributeArray(scaleLocation);
-    glFunctions()->glVertexAttribPointer(scaleLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
-
-    offset += sizeof(GLfloat);
-
-    int vertexIdLocation = program().attributeLocation("a_vertexId");
-    program().enableAttributeArray(vertexIdLocation);
-    glFunctions()->glVertexAttribPointer(vertexIdLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
-
-    offset += sizeof(GLfloat);
-
-    // Tell OpenGL programmable pipeline how to locate vertex position data
-    int vertexLocation = program().attributeLocation("a_position");
-    program().enableAttributeArray(vertexLocation);
-    glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
-
-    // Offset for texture coordinate
-    offset += sizeof(QVector3D);
-
-    // Tell OpenGL programmable pipeline how to locate vertex color data
-    int colorLocation = program().attributeLocation("a_color");
-    program().enableAttributeArray(colorLocation);
-    glFunctions()->glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
-
-    // Offset for texture coordinate
-    offset += sizeof(QVector3D);
-
-    // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
-    int texcoordLocation = program().attributeLocation("a_texcoord");
-    program().enableAttributeArray(texcoordLocation);
-    glFunctions()->glVertexAttribPointer(texcoordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
-    // Draw cube geometry using indices from VBO 1
+    VertexAttributeArrayHelper<SphereNoGeometryShaderVBOData> helper(this);
+    helper.addData(helper()->sphereId, "a_sphereId");
+    helper.addData(helper()->scale, "a_scale");
+    helper.addData(helper()->vertexId, "a_vertexId");
+    helper.addData(helper()->position, "a_position");
+    helper.addData(helper()->color, "a_color");
+    helper.addData(helper()->textureCoord, "a_texCoord");
 
     glFunctions()->glEnable(GL_DEPTH_TEST);
     glFunctions()->glDepthMask(GL_TRUE);
     glFunctions()->glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
     glFunctions()->glDisable(GL_DEPTH_TEST);
-
-    program().disableAttributeArray(vertexLocation);
-    program().disableAttributeArray(colorLocation);
-    program().disableAttributeArray(texcoordLocation);
 }
 
 void SpheresRenderer::renderGeometryShader() {
@@ -420,16 +388,17 @@ void SpheresRenderer::renderGeometryShader() {
 
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]); // Tell OpenGL which VBOs to use
 
-    SphereGeometryShaderVBOData dummy;
-    int location = enableVboObject(dummy, dummy.position, dummy.color, dummy.scale, dummy.sphereId);
+    VertexAttributeArrayHelper<SphereGeometryShaderVBOData> helper(this);
+    helper.addData(helper()->position, 0);
+    helper.addData(helper()->color, 1);
+    helper.addData(helper()->scale, 2);
+    helper.addData(helper()->sphereId, 3);
 
     glFunctions()->glDisable(GL_CULL_FACE);
     glFunctions()->glEnable(GL_DEPTH_TEST);
     glFunctions()->glDepthMask(GL_TRUE);
 
     glFunctions()->glDrawArrays(GL_POINTS, 0, m_vertexCount);
-
-    disableVboObject(location);
 }
 
 void SpheresRenderer::render()

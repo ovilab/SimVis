@@ -52,7 +52,7 @@ QString ShaderBuilder::finalShader()
     contents += "\n// ------  end generated uniforms  ------\n\n";
     contents += "\n// ------  begin generated outputs ------\n\n";
     for(const ShaderOutput *output : m_outputs) {
-        contents += "out " + output->type() + " " + output->name() + ";\n";
+//        contents += "out " + output->type() + " " + output->name() + ";\n";
     }
     contents += "\n// ------  end generated outputs   ------\n\n";
 

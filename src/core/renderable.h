@@ -69,21 +69,6 @@ protected:
     bool geometryShaderIsSupported();
     QString generateGLSLHeader();
 
-    void enableVboAttribute(int location, GLint count, GLenum type, GLsizei stride, quintptr offset);
-    void enableVboObjectMemberHelper(int location, GLsizei stride, quintptr offset, const QVector3D&);
-    void enableVboObjectMemberHelper(int location, GLsizei stride, quintptr offset, float);
-
-    template<typename T>
-    int enableVboObjectHelper(int location, GLsizei stride, quintptr offset, T member);
-
-    template<typename T, typename... Args>
-    int enableVboObjectHelper(int location, GLsizei stride, quintptr offset, T member, Args... args);
-
-    template<typename T, typename... Args>
-    int enableVboObject(T object, Args... args);
-
-    void disableVboObject(int location);
-
 signals:
 
 private:
@@ -99,6 +84,9 @@ private:
     QOpenGLFunctions* m_funcs = 0;
 
     friend class Renderable;
+
+    template<typename U>
+    friend class VertexAttributeArrayHelper;
 };
 
 class Renderable : public QQuickItem
@@ -131,23 +119,74 @@ private:
     Camera* m_camera = 0;
 };
 
-template<typename T>
-inline int RenderableRenderer::enableVboObjectHelper(int location, GLsizei stride, quintptr offset, T member) {
-    enableVboObjectMemberHelper(location, stride, offset, member);
-    return location;
-}
-
-template<typename T, typename... Args>
-inline int RenderableRenderer::enableVboObjectHelper(int location, GLsizei stride, quintptr offset, T member, Args... args)
+template<typename U>
+class VertexAttributeArrayHelper
 {
-    enableVboObjectHelper(location, stride, offset, member);
-    return enableVboObjectHelper(location+1, stride, offset+sizeof(member), args...);
-}
+public:
+    VertexAttributeArrayHelper(RenderableRenderer *renderer)
+        : m_renderer(renderer)
+    {
 
-template<typename T, typename... Args>
-inline int RenderableRenderer::enableVboObject(T object, Args... args)
-{
-    return enableVboObjectHelper(0, sizeof(object), 0, args...);
-}
+    }
+
+    ~VertexAttributeArrayHelper() {
+        for(int i : m_registeredLocations) {
+            m_renderer->program().disableAttributeArray(i);
+        }
+        m_registeredLocations.clear();
+    }
+
+    void enableVboAttribute(GLint count, GLenum type, GLuint location, quintptr offset){
+        m_registeredLocations.append(location);
+        m_renderer->program().enableAttributeArray(location);
+        m_renderer->glFunctions()->glVertexAttribPointer(location, count, type, GL_FALSE, m_stride, (const void *)offset);
+    }
+
+    void enableVboAttribute(const QVector3D&, GLuint location, quintptr offset) {
+        enableVboAttribute(3, GL_FLOAT, location, offset);
+    }
+
+    void enableVboAttribute(const QVector2D&, GLuint location, quintptr offset) {
+        enableVboAttribute(2, GL_FLOAT, location, offset);
+    }
+
+    void enableVboAttribute(const float&, GLuint location, quintptr offset) {
+        enableVboAttribute(1, GL_FLOAT, location, offset);
+    }
+
+    void enableVboAttribute(const int&, GLuint location, quintptr offset) {
+        enableVboAttribute(1, GL_INT, location, offset);
+    }
+
+    template<typename T>
+    void addData(const T &member, GLuint location) {
+        enableVboAttribute(member, location, m_offset);
+        m_location = location;
+        m_offset += sizeof(T);
+    }
+
+    template<typename T>
+    void addData(const T &member, QString location) {
+        int resolvedLocation = m_renderer->program().attributeLocation(location);
+        // TODO consider not adding if location = -1. Requires ensuring offset is still correct.
+        addData(member, resolvedLocation);
+    }
+
+    template<typename T>
+    void addData(const T &member) {
+        m_location += 1;
+        addData(member, m_location);
+    }
+
+    U* operator()() { return nullptr; }
+
+private:
+    RenderableRenderer *m_renderer = nullptr;
+    QVector<int> m_registeredLocations;
+    GLuint m_location = 0;
+    quintptr m_offset = 0;
+    GLsizei m_stride = sizeof(U);
+};
+
 
 #endif // RENDERABLE_H
