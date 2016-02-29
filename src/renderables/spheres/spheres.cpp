@@ -421,7 +421,7 @@ void SpheresRenderer::renderGeometryShader() {
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]); // Tell OpenGL which VBOs to use
 
     SphereGeometryShaderVBOData dummy;
-    enableVboObject(dummy, dummy.position, dummy.color, dummy.scale, dummy.sphereId);
+    int location = enableVboObject(dummy, dummy.position, dummy.color, dummy.scale, dummy.sphereId);
 
     glFunctions()->glDisable(GL_CULL_FACE);
     glFunctions()->glEnable(GL_DEPTH_TEST);
@@ -429,7 +429,7 @@ void SpheresRenderer::renderGeometryShader() {
 
     glFunctions()->glDrawArrays(GL_POINTS, 0, m_vertexCount);
 
-    disableVboObject(dummy, dummy.position, dummy.color, dummy.scale, dummy.sphereId);
+    disableVboObject(location);
 }
 
 void SpheresRenderer::render()

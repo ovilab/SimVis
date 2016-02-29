@@ -279,6 +279,12 @@ void RenderableRenderer::enableVboObjectMemberHelper(int location, GLsizei strid
     enableVboAttribute(location, 1, GL_FLOAT, stride, offset);
 }
 
+void RenderableRenderer::disableVboObject(int location) {
+    for(int i = location; i >= 0; i--) {
+        program().disableAttributeArray(i);
+    }
+}
+
 void RenderableRenderer::addShaderCodeToBase(QOpenGLShader::ShaderType type, QString shaderCode) {
     if(type == QOpenGLShader::Fragment) m_fragmentShaderBase.append(shaderCode);
     else if(type == QOpenGLShader::Vertex) m_vertexShaderBase.append(shaderCode);
