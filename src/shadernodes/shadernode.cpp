@@ -46,11 +46,6 @@ QString ShaderNode::header() const
     return m_header;
 }
 
-QQmlListProperty<VariantShaderNode> ShaderNode::variantNodes()
-{
-    return QQmlListProperty<VariantShaderNode>(this, m_variantNodes);
-}
-
 QString ShaderNode::identifier() const
 {
     return m_identifier;

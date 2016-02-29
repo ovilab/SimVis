@@ -9,7 +9,6 @@
 #include <QSignalMapper>
 
 class ShaderBuilder;
-class VariantShaderNode;
 
 class ShaderNode : public QObject
 {
@@ -22,9 +21,7 @@ class ShaderNode : public QObject
     Q_PROPERTY(QString identifier READ identifier NOTIFY identifierChanged)
     Q_PROPERTY(QObject* parent READ parent WRITE setParent NOTIFY parentChanged)
     Q_PROPERTY(bool requirement READ requirement WRITE setRequirement NOTIFY requirementChanged)
-    Q_PROPERTY(QQmlListProperty<VariantShaderNode> variantNodes READ variantNodes)
     Q_PROPERTY(QQmlListProperty<ShaderNode> dependencies READ dependencies)
-    Q_CLASSINFO("DefaultProperty", "variantNodes")
 
 public:
     explicit ShaderNode(QObject *parent = 0);
@@ -38,7 +35,6 @@ public:
     QString type() const;
     QString result() const;
     QString header() const;
-    QQmlListProperty<VariantShaderNode> variantNodes();
     QString identifier() const;
     void reset() const;
     virtual bool setup(ShaderBuilder* shaderBuilder);
@@ -90,7 +86,6 @@ private:
     QString m_result;
     QString m_resolvedResult;
     QString m_header;
-    QList<VariantShaderNode*> m_variantNodes;
     QString m_identifier;
     ShaderBuilder *m_shaderBuilder = nullptr;
     QSignalMapper mapper;
