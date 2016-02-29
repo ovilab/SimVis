@@ -122,6 +122,8 @@ private:
 template<typename U>
 class VertexAttributeArrayHelper
 {
+    typedef U type;
+
 public:
     VertexAttributeArrayHelper(RenderableRenderer *renderer)
         : m_renderer(renderer)
@@ -139,7 +141,7 @@ public:
     void enableVboAttribute(GLint count, GLenum type, GLuint location, quintptr offset){
         m_registeredLocations.append(location);
         m_renderer->program().enableAttributeArray(location);
-        m_renderer->glFunctions()->glVertexAttribPointer(location, count, type, GL_FALSE, m_stride, (const void *)offset);
+        m_renderer->glFunctions()->glVertexAttribPointer(location, count, type, GL_FALSE, m_stride, reinterpret_cast<const void *>(offset));
     }
 
     void enableVboAttribute(const QVector3D&, GLuint location, quintptr offset) {
@@ -159,9 +161,15 @@ public:
     }
 
     template<typename T>
-    void addData(const T &member, GLuint location) {
-        enableVboAttribute(member, location, m_offset);
+    void addData(const T &member, GLuint location, quintptr offset) {
+        enableVboAttribute(member, location, offset);
         m_location = location;
+        m_offset = offset;
+    }
+
+    template<typename T>
+    void addData(const T &member, GLuint location) {
+        addData(member, location, reinterpret_cast<quintptr>(&member) - reinterpret_cast<quintptr>(this->operator()()));
         m_offset += sizeof(T);
     }
 
@@ -174,8 +182,8 @@ public:
 
     template<typename T>
     void addData(const T &member) {
-        m_location += 1;
         addData(member, m_location);
+        m_location += 1;
     }
 
     U* operator()() { return nullptr; }
