@@ -61,7 +61,7 @@ protected:
     void addShaderCodeToBase(QOpenGLShader::ShaderType type, QString shaderCode);
     void setShaderFromSourceCode(QOpenGLShader::ShaderType type, QString shaderCode);
     void setShaderFromSourceFile(QOpenGLShader::ShaderType type, QString fileName);
-    bool geometryShaderIsSupported();
+    bool isGeometryShadersSupported();
     QString generateGLSLHeader();
 
 signals:
@@ -89,6 +89,7 @@ class Renderable : public QQuickItem
     Q_OBJECT
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged)
     Q_PROPERTY(Camera* camera READ camera WRITE setCamera NOTIFY cameraChanged)
+    Q_PROPERTY(bool isGeometryShaderSupported READ isGeometryShaderSupported NOTIFY isGeometryShaderSupportedChanged)
 
 public:
     explicit Renderable(QQuickItem *parent = 0);
@@ -101,17 +102,24 @@ public:
     bool visible() const;
     Camera* camera() const;
 
+    bool isGeometryShaderSupported() const;
+
 signals:
     void visibleChanged(bool arg);
     void cameraChanged(Camera* arg);
+    void isGeometryShaderSupportedChanged(bool isGeometryShaderSupported);
+
 public slots:
 
     void setVisible(bool arg);
     void setCamera(Camera* arg);
 private:
+    void setGeometryShaderSupported(bool arg);
+
     RenderableRenderer* m_renderer;
     bool m_visible = true;
     Camera* m_camera = 0;
+    bool m_isGeometryShaderSupported = false;
 };
 
 template<typename U>

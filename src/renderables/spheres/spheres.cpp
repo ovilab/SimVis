@@ -45,6 +45,16 @@ ShaderBuilder *Spheres::fragmentShader() const
     return m_fragmentShader;
 }
 
+ShaderBuilder *Spheres::geometryShader() const
+{
+    return m_geometryShader;
+}
+
+ShaderBuilder *Spheres::vertexShader() const
+{
+    return m_vertexShader;
+}
+
 void Spheres::setDirty(bool dirty)
 {
     if (m_dirty == dirty)
@@ -76,6 +86,36 @@ void Spheres::setFragmentShader(ShaderBuilder *fragmentShader)
     markShadersDirty();
     markDirty();
     emit fragmentShaderChanged(fragmentShader);
+}
+
+void Spheres::setGeometryShader(ShaderBuilder *geometryShader)
+{
+    if (m_geometryShader == geometryShader)
+        return;
+    if(m_geometryShader) {
+        disconnect(m_geometryShader, 0, this, 0);
+    }
+    m_geometryShader = geometryShader;
+    connect(m_geometryShader, &ShaderBuilder::finalShaderChanged, this, &Spheres::markShadersDirty);
+    connect(m_geometryShader, &ShaderBuilder::uniformsChanged, this, &Spheres::markDirty);
+    markShadersDirty();
+    markDirty();
+    emit geometryShaderChanged(geometryShader);
+}
+
+void Spheres::setVertexShader(ShaderBuilder *vertexShader)
+{
+    if (m_vertexShader == vertexShader)
+        return;
+    if(m_vertexShader) {
+        disconnect(m_vertexShader, 0, this, 0);
+    }
+    m_vertexShader = vertexShader;
+    connect(m_vertexShader, &ShaderBuilder::finalShaderChanged, this, &Spheres::markShadersDirty);
+    connect(m_vertexShader, &ShaderBuilder::uniformsChanged, this, &Spheres::markDirty);
+    markShadersDirty();
+    markDirty();
+    emit vertexShaderChanged(vertexShader);
 }
 
 QVector<QColor> &Spheres::colors()
@@ -134,15 +174,24 @@ void SpheresRenderer::synchronize(Renderable* renderer)
 
     if(spheres->m_shadersDirty) {
         m_shadersDirty = true;
-        m_fragmentShaderString = spheres->fragmentShader()->finalShader();
+        if(!(spheres->vertexShader() && spheres->geometryShader() && spheres->fragmentShader())) {
+            qWarning() << "SpheresRender::synchronize(): Missing shaders.";
+            return;
+        }
+        m_vertexShaderSource = spheres->vertexShader()->finalShader();
+        m_geometryShaderSource = spheres->geometryShader()->finalShader();
+        m_fragmentShaderSource = spheres->fragmentShader()->finalShader();
         spheres->m_shadersDirty = false;
     }
 
     m_uniforms = spheres->fragmentShader()->uniforms();
 
     if(!m_isInitialized) {
-        if(geometryShaderIsSupported()) m_vboCount = 1;
-        else m_vboCount = 2;
+        if(isGeometryShadersSupported()) {
+            m_vboCount = 1;
+        } else {
+            m_vboCount = 2;
+        }
         generateVBOs();
         m_isInitialized = true;
     }
@@ -273,7 +322,7 @@ void SpheresRenderer::uploadVBOGeometryShader(Spheres* spheres) {
 
 void SpheresRenderer::uploadVBOs(Spheres* spheres)
 {
-    if(geometryShaderIsSupported()) {
+    if(isGeometryShadersSupported()) {
         uploadVBOGeometryShader(spheres);
     } else {
         uploadVBONoGeometryShader(spheres);
@@ -286,22 +335,9 @@ void Spheres::setPositions(QVector<QVector3D> &positions)
 }
 
 void SpheresRenderer::beforeLinkProgram() {
-    if(geometryShaderIsSupported()) {
-        setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/spheres/spheresgs.vsh");
-        setShaderFromSourceFile(QOpenGLShader::Geometry, ":/org.compphys.SimVis/renderables/spheres/spheresgs.gsh");
-        if(m_fragmentShaderString.isEmpty()) {
-            setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/spheres/spheresgs.fsh");
-        } else {
-            setShaderFromSourceCode(QOpenGLShader::Fragment, m_fragmentShaderString);
-        }
-    } else {
-        setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/spheres/spheres.vsh");
-        if(m_fragmentShaderString.isEmpty()) {
-            setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/spheres/spheres.fsh");
-        } else {
-            setShaderFromSourceCode(QOpenGLShader::Fragment, m_fragmentShaderString);
-        }
-    }
+    setShaderFromSourceCode(QOpenGLShader::Vertex, m_vertexShaderSource);
+    setShaderFromSourceCode(QOpenGLShader::Geometry, m_geometryShaderSource);
+    setShaderFromSourceCode(QOpenGLShader::Fragment, m_fragmentShaderSource);
 }
 
 void SpheresRenderer::setUniforms() {
@@ -402,7 +438,7 @@ void SpheresRenderer::render()
     if(m_vertexCount == 0) {
         return;
     }
-    if(geometryShaderIsSupported()) {
+    if(isGeometryShadersSupported()) {
         renderGeometryShader();
     } else {
         renderNoGeometryShader();

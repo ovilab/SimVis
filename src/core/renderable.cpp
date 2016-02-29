@@ -29,6 +29,8 @@ void Renderable::requestSynchronize()
     if(!m_renderer) {
         m_renderer = createRenderer();
     }
+    setGeometryShaderSupported(m_renderer->isGeometryShadersSupported());
+
     m_renderer->m_modelViewMatrix = m_camera->matrix();
     m_renderer->m_projectionMatrix = m_camera->projectionMatrix();
     m_renderer->m_viewVector = m_camera->viewVector().normalized();
@@ -50,6 +52,20 @@ bool Renderable::visible() const
 Camera *Renderable::camera() const
 {
     return m_camera;
+}
+
+bool Renderable::isGeometryShaderSupported() const
+{
+    return m_isGeometryShaderSupported;
+}
+
+void Renderable::setGeometryShaderSupported (bool arg)
+{
+    if (m_isGeometryShaderSupported  == arg)
+        return;
+
+    m_isGeometryShaderSupported  = arg;
+    emit isGeometryShaderSupportedChanged(arg);
 }
 
 void Renderable::setVisible(bool arg)
@@ -243,7 +259,7 @@ void RenderableRenderer::setShaderFromSourceFile(QOpenGLShader::ShaderType type,
     setShaderFromSourceCode(type, shaderCode);
 }
 
-bool RenderableRenderer::geometryShaderIsSupported()
+bool RenderableRenderer::isGeometryShadersSupported()
 {
     return QOpenGLShader::hasOpenGLShaders(QOpenGLShader::Geometry, QOpenGLContext::currentContext());
 }

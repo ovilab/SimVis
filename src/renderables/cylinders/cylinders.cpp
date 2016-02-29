@@ -64,7 +64,7 @@ void CylindersRenderer::geometryShaderMissingError()
 
 void CylindersRenderer::synchronize(Renderable* renderer)
 {
-    if(!geometryShaderIsSupported()) {
+    if(!isGeometryShadersSupported()) {
         geometryShaderMissingError();
         return;
     }
@@ -80,7 +80,7 @@ void CylindersRenderer::synchronize(Renderable* renderer)
 
 void CylindersRenderer::uploadVBOs(Cylinders* cylinders)
 {
-    if(!geometryShaderIsSupported()) {
+    if(!isGeometryShadersSupported()) {
         geometryShaderMissingError();
         return;
     }
@@ -102,7 +102,7 @@ void CylindersRenderer::uploadVBOs(Cylinders* cylinders)
 }
 
 void CylindersRenderer::beforeLinkProgram() {
-    if(!geometryShaderIsSupported()) {
+    if(!isGeometryShadersSupported()) {
         geometryShaderMissingError();
         return;
     }

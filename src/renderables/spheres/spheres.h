@@ -48,7 +48,9 @@ private:
     QVector3D m_upVector;
     QVector3D m_viewVector;
     QVector3D m_rightVector;
-    QString m_fragmentShaderString;
+    QString m_vertexShaderSource;
+    QString m_geometryShaderSource;
+    QString m_fragmentShaderSource;
 
     QVariantMap m_uniforms;
 
@@ -65,6 +67,8 @@ class Spheres : public Renderable
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(bool dirty READ dirty WRITE setDirty NOTIFY dirtyChanged)
     Q_PROPERTY(ShaderBuilder* fragmentShader READ fragmentShader WRITE setFragmentShader NOTIFY fragmentShaderChanged)
+    Q_PROPERTY(ShaderBuilder* geometryShader READ geometryShader WRITE setGeometryShader NOTIFY geometryShaderChanged)
+    Q_PROPERTY(ShaderBuilder* vertexShader READ vertexShader WRITE setVertexShader NOTIFY vertexShaderChanged)
 public:
     Spheres(QQuickItem *parent = 0);
     ~Spheres();
@@ -83,10 +87,18 @@ public:
 
     ShaderBuilder* fragmentShader() const;
 
+    ShaderBuilder* geometryShader() const;
+
+    ShaderBuilder* vertexShader() const;
+
 public slots:
     void setDirty(bool dirty);
 
     void setFragmentShader(ShaderBuilder* fragmentShader);
+
+    void setGeometryShader(ShaderBuilder* geometryShader);
+
+    void setVertexShader(ShaderBuilder* vertexShader);
 
 signals:
     void scaleChanged(bool arg);
@@ -94,6 +106,10 @@ signals:
     void dirtyChanged(bool dirty);
 
     void fragmentShaderChanged(ShaderBuilder* fragmentShader);
+
+    void geometryShaderChanged(ShaderBuilder* geometryShader);
+
+    void vertexShaderChanged(ShaderBuilder* vertexShader);
 
 private slots:
     void markShadersDirty();
@@ -113,6 +129,8 @@ private:
     bool m_shadersDirty = false;
     friend class SpheresRenderer;
     ShaderBuilder* m_fragmentShader = nullptr;
+    ShaderBuilder* m_geometryShader;
+    ShaderBuilder* m_vertexShader;
 };
 
 

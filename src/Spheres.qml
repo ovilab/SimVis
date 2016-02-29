@@ -3,16 +3,17 @@ import SimVis 1.0
 import SimVis.ShaderNodes 1.0
 
 AbstractSpheres {
+    id: spheresRoot
     property alias fragColor: _shader.fragColor
     property alias shader: _shader
 
-//    property var vertexShader: ShaderBuilder {
-//        source: isGeometryShaderSupported ? "..." : "..."
-//    }
+    vertexShader: ShaderBuilder {
+        sourceFile: "qrc:/org.compphys.SimVis/renderables/spheres/" + (spheresRoot.isGeometryShaderSupported ? "spheresgs.vsh" : "spheres.vsh")
+    }
 
-//    property var geometryShader: ShaderBuilder {
-//        source: "..."
-//    }
+    geometryShader: ShaderBuilder {
+        sourceFile: "qrc:/org.compphys.SimVis/renderables/spheres/spheresgs.gsh"
+    }
 
     fragmentShader: ShaderBuilder {
         id: _shader
@@ -77,7 +78,7 @@ AbstractSpheres {
 
         // TODO consider adding support for chaining shaders
         // TODO add functionality to choose input names or shader file based on GLSL version
-        sourceFile: "org.compphys.SimVis/renderables/spheres/spheres.glsl"
+        sourceFile: "qrc:/org.compphys.SimVis/renderables/spheres/spheres.glsl"
     }
 }
 
