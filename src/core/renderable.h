@@ -2,6 +2,8 @@
 #define RENDERABLE_H
 #include "shadereffect.h"
 
+#include <cstdarg>
+
 #include <QObject>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
@@ -61,7 +63,29 @@ protected:
     void setShaderFromSourceFile(QOpenGLShader::ShaderType type, QString fileName);
     bool geometryShaderIsSupported();
     QString generateGLSLHeader();
-    // virtual QVector<QPair<int,int> > supportedGlslVersions() = 0;
+
+    void enableVboAttribute(int location, GLint count, GLenum type, GLsizei stride, quintptr offset);
+
+    void enableVboObjectMemberHelper(int location, GLsizei stride, quintptr offset, const QVector3D&);
+    void enableVboObjectMemberHelper(int location, GLsizei stride, quintptr offset, float);
+
+    template<typename T>
+    void enableVboObjectHelper(int location, GLsizei stride, quintptr offset, T member);
+
+    template<typename T, typename... Args>
+    void enableVboObjectHelper(int location, GLsizei stride, quintptr offset, T member, Args... args);
+
+    template<typename T, typename... Args>
+    void enableVboObject(T object, Args... args);
+
+    template<typename T>
+    void disableVboObjectHelper(int location, T member);
+
+    template<typename T, typename... Args>
+    void disableVboObjectHelper(int location, T member, Args... args);
+
+    template<typename T, typename... Args>
+    void disableVboObject(T object, Args... args);
 signals:
 
 private:
@@ -108,5 +132,41 @@ private:
     bool m_visible = true;
     Camera* m_camera = 0;
 };
+
+template<typename T>
+inline void RenderableRenderer::enableVboObjectHelper(int location, GLsizei stride, quintptr offset, T member) {
+    enableVboObjectMemberHelper(location, stride, offset, member);
+}
+
+template<typename T, typename... Args>
+inline void RenderableRenderer::enableVboObjectHelper(int location, GLsizei stride, quintptr offset, T member, Args... args)
+{
+    enableVboObjectHelper(location, stride, offset, member);
+    enableVboObjectHelper(location+1, stride, offset+sizeof(member), args...);
+}
+
+template<typename T, typename... Args>
+inline void RenderableRenderer::enableVboObject(T object, Args... args)
+{
+    enableVboObjectHelper(0, sizeof(object), 0, args...);
+}
+
+template<typename T>
+inline void RenderableRenderer::disableVboObjectHelper(int location, T member) {
+    program().disableAttributeArray(location);
+}
+
+template<typename T, typename... Args>
+inline void RenderableRenderer::disableVboObjectHelper(int location, T member, Args... args)
+{
+    disableVboObjectHelper(location, member);
+    disableVboObjectHelper(location+1, args...);
+}
+
+template<typename T, typename... Args>
+inline void RenderableRenderer::disableVboObject(T object, Args... args)
+{
+    disableVboObjectHelper(0, args...);
+}
 
 #endif // RENDERABLE_H

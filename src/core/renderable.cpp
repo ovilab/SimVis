@@ -266,6 +266,19 @@ QString RenderableRenderer::generateGLSLHeader()
     return header;
 }
 
+void RenderableRenderer::enableVboAttribute(int location, GLint count, GLenum type, GLsizei stride, quintptr offset) {
+    program().enableAttributeArray(location);
+    glFunctions()->glVertexAttribPointer(location, count, type, GL_FALSE, stride, (const void *)offset);
+}
+
+void RenderableRenderer::enableVboObjectMemberHelper(int location, GLsizei stride, quintptr offset, const QVector3D &) {
+    enableVboAttribute(location, 3, GL_FLOAT, stride, offset);
+}
+
+void RenderableRenderer::enableVboObjectMemberHelper(int location, GLsizei stride, quintptr offset, float) {
+    enableVboAttribute(location, 1, GL_FLOAT, stride, offset);
+}
+
 void RenderableRenderer::addShaderCodeToBase(QOpenGLShader::ShaderType type, QString shaderCode) {
     if(type == QOpenGLShader::Fragment) m_fragmentShaderBase.append(shaderCode);
     else if(type == QOpenGLShader::Vertex) m_vertexShaderBase.append(shaderCode);

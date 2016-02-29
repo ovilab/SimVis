@@ -273,8 +273,11 @@ void SpheresRenderer::uploadVBOGeometryShader(Spheres* spheres) {
 
 void SpheresRenderer::uploadVBOs(Spheres* spheres)
 {
-    if(geometryShaderIsSupported()) uploadVBOGeometryShader(spheres);
-    else uploadVBONoGeometryShader(spheres);
+    if(geometryShaderIsSupported()) {
+        uploadVBOGeometryShader(spheres);
+    } else {
+        uploadVBONoGeometryShader(spheres);
+    }
 }
 
 void Spheres::setPositions(QVector<QVector3D> &positions)
@@ -415,33 +418,10 @@ void SpheresRenderer::renderGeometryShader() {
 
     m_vao->bind();
 
-
-    int positionLocation = 0;
-    int colorLocation = 1;
-    int scaleLocation = 2;
-    int sphereIdLocation = 3;
-
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]); // Tell OpenGL which VBOs to use
 
-
-    quintptr offset = 0;
-
-
-    program().enableAttributeArray(positionLocation);
-    glFunctions()->glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(SphereGeometryShaderVBOData), (const void *)offset);
-    offset += sizeof(SphereGeometryShaderVBOData::position);
-
-    program().enableAttributeArray(colorLocation);
-    glFunctions()->glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(SphereGeometryShaderVBOData), (const void *)offset);
-    offset += sizeof(SphereGeometryShaderVBOData::color);
-
-    program().enableAttributeArray(scaleLocation);
-    glFunctions()->glVertexAttribPointer(scaleLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereGeometryShaderVBOData), (const void *)offset);
-    offset += sizeof(SphereGeometryShaderVBOData::scale);
-
-    program().enableAttributeArray(sphereIdLocation);
-    glFunctions()->glVertexAttribPointer(sphereIdLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereGeometryShaderVBOData), (const void *)offset);
-    offset += sizeof(SphereGeometryShaderVBOData::sphereId);
+    SphereGeometryShaderVBOData dummy;
+    enableVboObject(dummy, dummy.position, dummy.color, dummy.scale, dummy.sphereId);
 
     glFunctions()->glDisable(GL_CULL_FACE);
     glFunctions()->glEnable(GL_DEPTH_TEST);
@@ -449,9 +429,7 @@ void SpheresRenderer::renderGeometryShader() {
 
     glFunctions()->glDrawArrays(GL_POINTS, 0, m_vertexCount);
 
-    program().disableAttributeArray(positionLocation);
-    program().disableAttributeArray(colorLocation);
-    program().disableAttributeArray(scaleLocation);
+    disableVboObject(dummy, dummy.position, dummy.color, dummy.scale, dummy.sphereId);
 }
 
 void SpheresRenderer::render()
