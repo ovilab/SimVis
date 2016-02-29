@@ -386,10 +386,10 @@ void SpheresRenderer::renderGeometryShader() {
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]); // Tell OpenGL which VBOs to use
 
     VertexAttributeArrayHelper<SphereGeometryShaderVBOData> helper(this);
-    helper.addData(helper()->sphereId, 3);
-    helper.addData(helper()->scale, 2);
-    helper.addData(helper()->color, 1);
     helper.addData(helper()->position, 0);
+    helper.addData(helper()->color, 1);
+    helper.addData(helper()->scale, 2);
+    helper.addData(helper()->sphereId, 3);
 
     glFunctions()->glDisable(GL_CULL_FACE);
     glFunctions()->glEnable(GL_DEPTH_TEST);

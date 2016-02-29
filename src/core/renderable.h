@@ -28,11 +28,6 @@ namespace CompPhys {
     };
 }
 
-struct VboEnableHelperData {
-    int location;
-    int size;
-};
-
 class Renderable; class Camera;
 class RenderableRenderer : public QObject
 {
