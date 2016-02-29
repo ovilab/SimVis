@@ -5,12 +5,13 @@ import SimVis.ShaderNodes 1.0
 AbstractSpheres {
     property alias fragColor: _shader.fragColor
     property alias shader: _shader
+
     fragmentShader: ShaderBuilder {
         id: _shader
         property ShaderNode position: ShaderNode {
             type: "vec3"
             name: "position"
-            result: "vertexPosition";
+            result: "position";
         }
         property ShaderNode normal: ShaderNode {
             type: "vec3"
@@ -47,11 +48,13 @@ AbstractSpheres {
             }
         ]
 
+        // TODO consider adding support for chaining shaders
+        // TODO add functionality to choose input names or shader file based on GLSL version
         source: "
-in vec3 color;
-in vec2 texCoord;
-in vec3 vertexPosition;
-in float sphereId;
+layout(location=0) in vec3 color;
+layout(location=1) in vec2 texCoord;
+layout(location=2) in vec3 position;
+layout(location=3) in float sphereId;
 
 //varying highp vec2 texCoord;
 //varying highp vec3 color;

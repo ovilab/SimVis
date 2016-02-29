@@ -288,7 +288,7 @@ void Spheres::setPositions(QVector<QVector3D> &positions)
 void SpheresRenderer::beforeLinkProgram() {
     if(geometryShaderIsSupported()) {
         setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/spheres/spheresgs.vsh");
-        setShaderFromSourceFile(QOpenGLShader::Geometry, ":/org.compphys.SimVis/renderables/spheres/spheres.gsh");
+        setShaderFromSourceFile(QOpenGLShader::Geometry, ":/org.compphys.SimVis/renderables/spheres/spheresgs.gsh");
         if(m_fragmentShaderString.isEmpty()) {
             setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/spheres/spheresgs.fsh");
         } else {
@@ -296,9 +296,8 @@ void SpheresRenderer::beforeLinkProgram() {
         }
     } else {
         setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/spheres/spheres.vsh");
-        setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/spheres/spheres.fsh");
         if(m_fragmentShaderString.isEmpty()) {
-            setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/spheres/spheresgs.fsh");
+            setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/spheres/spheres.fsh");
         } else {
             setShaderFromSourceCode(QOpenGLShader::Fragment, m_fragmentShaderString);
         }
