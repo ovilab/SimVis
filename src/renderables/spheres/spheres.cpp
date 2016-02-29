@@ -174,12 +174,14 @@ void SpheresRenderer::synchronize(Renderable* renderer)
 
     if(spheres->m_shadersDirty) {
         m_shadersDirty = true;
-        if(!(spheres->vertexShader() && spheres->geometryShader() && spheres->fragmentShader())) {
+        if(!(spheres->vertexShader() && spheres->fragmentShader())) {
             qWarning() << "SpheresRender::synchronize(): Missing shaders.";
             return;
         }
         m_vertexShaderSource = spheres->vertexShader()->finalShader();
-        m_geometryShaderSource = spheres->geometryShader()->finalShader();
+        if(spheres->geometryShader()) {
+            m_geometryShaderSource = spheres->geometryShader()->finalShader();
+        }
         m_fragmentShaderSource = spheres->fragmentShader()->finalShader();
         spheres->m_shadersDirty = false;
     }
@@ -336,7 +338,9 @@ void Spheres::setPositions(QVector<QVector3D> &positions)
 
 void SpheresRenderer::beforeLinkProgram() {
     setShaderFromSourceCode(QOpenGLShader::Vertex, m_vertexShaderSource);
-    setShaderFromSourceCode(QOpenGLShader::Geometry, m_geometryShaderSource);
+    if(!m_geometryShaderSource.isEmpty()) {
+        setShaderFromSourceCode(QOpenGLShader::Geometry, m_geometryShaderSource);
+    }
     setShaderFromSourceCode(QOpenGLShader::Fragment, m_fragmentShaderSource);
 }
 
@@ -394,12 +398,12 @@ void SpheresRenderer::renderNoGeometryShader() {
     setUniforms();
 
     VertexAttributeArrayHelper<SphereNoGeometryShaderVBOData> helper(this);
-    helper.addData(helper()->sphereId, "a_sphereId");
-    helper.addData(helper()->scale, "a_scale");
-    helper.addData(helper()->vertexId, "a_vertexId");
-    helper.addData(helper()->position, "a_position");
-    helper.addData(helper()->color, "a_color");
-    helper.addData(helper()->textureCoord, "a_texCoord");
+    helper.addData(helper()->sphereId, "in_sphereId");
+    helper.addData(helper()->scale, "in_scale");
+    helper.addData(helper()->vertexId, "in_vertexId");
+    helper.addData(helper()->position, "in_position");
+    helper.addData(helper()->color, "in_color");
+    helper.addData(helper()->textureCoord, "in_texCoord");
 
     glFunctions()->glEnable(GL_DEPTH_TEST);
     glFunctions()->glDepthMask(GL_TRUE);

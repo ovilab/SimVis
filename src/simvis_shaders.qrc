@@ -39,6 +39,7 @@
         <file>renderables/noiseviewer/noiseviewer.vsh</file>
         <file>shadereffects/shaders/defaultfragment.glsl</file>
         <file>renderables/spheres/spheres_node.vsh</file>
+        <file>renderables/spheres/spheres_node_geom.vsh</file>
         <file>renderables/spheres/spheres_node.gsh</file>
         <file>renderables/spheres/spheres_node.fsh</file>
     </qresource>

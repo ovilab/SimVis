@@ -7,9 +7,11 @@ AbstractSpheres {
     property alias fragColor: _shader.fragColor
     property alias shader: _shader
 
-    vertexShader: ShaderBuilder {
-        property string filename: "spheres_node.vsh" // change this if geometry shader is not supported
-        sourceFile: "qrc:/org.compphys.SimVis/renderables/spheres/" + filename
+    vertexShader: spheresRoot.isGeometryShaderSupported ? vertexShaderGeometry : vertexShaderNoGeometry
+
+    ShaderBuilder {
+        id: vertexShaderGeometry
+        sourceFile: "qrc:/org.compphys.SimVis/renderables/spheres/spheres_node_geom.vsh"
         shaderType: ShaderBuilder.Vertex
         inputs: [
             ShaderOutput {
@@ -29,10 +31,46 @@ AbstractSpheres {
                 name: "in_sphereId"
             }
         ]
-        outputs: geometryShader.inputs
+        outputs: _geometryShader.inputs
     }
 
-    geometryShader: ShaderBuilder {
+    ShaderBuilder {
+        id: vertexShaderNoGeometry
+        sourceFile: "qrc:/org.compphys.SimVis/renderables/spheres/spheres_node.vsh"
+        shaderType: ShaderBuilder.Vertex
+        inputs: [
+            ShaderOutput {
+                type: "vec3"
+                name: "in_position"
+            },
+            ShaderOutput {
+                type: "vec3"
+                name: "in_color"
+            },
+            ShaderOutput {
+                type: "vec2"
+                name: "in_texCoord"
+            },
+            ShaderOutput {
+                type: "float"
+                name: "in_sphereId"
+            },
+            ShaderOutput {
+                type: "float"
+                name: "in_scale"
+            },
+            ShaderOutput {
+                type: "float"
+                name: "in_vertexId"
+            }
+        ]
+        outputs: fragmentShader.inputs
+    }
+
+    geometryShader: spheresRoot.isGeometryShaderSupported ? _geometryShader : null
+
+    ShaderBuilder {
+        id: _geometryShader
         sourceFile: "qrc:/org.compphys.SimVis/renderables/spheres/spheres_node.gsh"
         shaderType: ShaderBuilder.Geometry
         inputs: [

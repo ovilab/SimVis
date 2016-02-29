@@ -20,4 +20,5 @@ include(../package.pri)
 
 DISTFILES = qmldir \
     core/simvisplugin.json \
-    renderables/spheres/spheres_node.vsh
+    renderables/spheres/spheres_node.vsh \
+    renderables/spheres/spheres_node_geom.vsh
