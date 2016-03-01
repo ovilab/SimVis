@@ -13,58 +13,12 @@ AbstractSpheres {
         id: vertexShaderGeometry
         sourceFile: "qrc:/org.compphys.SimVis/renderables/spheres/spheres_node_geom.vsh"
         shaderType: ShaderBuilder.Vertex
-        inputs: [
-            ShaderOutput {
-                type: "vec3"
-                name: "in_position"
-            },
-            ShaderOutput {
-                type: "vec3"
-                name: "in_color"
-            },
-            ShaderOutput {
-                type: "float"
-                name: "in_scale"
-            },
-            ShaderOutput {
-                type: "float"
-                name: "in_sphereId"
-            }
-        ]
-        outputs: _geometryShader.inputs
     }
 
     ShaderBuilder {
         id: vertexShaderNoGeometry
         sourceFile: "qrc:/org.compphys.SimVis/renderables/spheres/spheres_node.vsh"
         shaderType: ShaderBuilder.Vertex
-        inputs: [
-            ShaderOutput {
-                type: "vec3"
-                name: "in_position"
-            },
-            ShaderOutput {
-                type: "vec3"
-                name: "in_color"
-            },
-            ShaderOutput {
-                type: "vec2"
-                name: "in_texCoord"
-            },
-            ShaderOutput {
-                type: "float"
-                name: "in_sphereId"
-            },
-            ShaderOutput {
-                type: "float"
-                name: "in_scale"
-            },
-            ShaderOutput {
-                type: "float"
-                name: "in_vertexId"
-            }
-        ]
-        outputs: fragmentShader.inputs
     }
 
     geometryShader: spheresRoot.isGeometryShaderSupported ? _geometryShader : null
@@ -73,25 +27,6 @@ AbstractSpheres {
         id: _geometryShader
         sourceFile: "qrc:/org.compphys.SimVis/renderables/spheres/spheres_node.gsh"
         shaderType: ShaderBuilder.Geometry
-        inputs: [
-            ShaderOutput {
-                type: "vec3"
-                name: "vs_position"
-            },
-            ShaderOutput {
-                type: "vec3"
-                name: "vs_color"
-            },
-            ShaderOutput {
-                type: "float"
-                name: "vs_scale"
-            },
-            ShaderOutput {
-                type: "float"
-                name: "vs_sphereId"
-            }
-        ]
-        outputs: fragmentShader.inputs
     }
 
     fragmentShader: ShaderBuilder {
@@ -133,29 +68,10 @@ AbstractSpheres {
 
         sourceFile: "qrc:/org.compphys.SimVis/renderables/spheres/spheres_node.fsh"
 
-        inputs: [
-            ShaderOutput {
-                type: "vec3"
-                name: "color"
-            },
-            ShaderOutput {
-                type: "vec2"
-                name: "texCoord"
-            },
-            ShaderOutput {
-                type: "vec3"
-                name: "position"
-            },
-            ShaderOutput {
-                type: "float"
-                name: "sphereId"
-            }
-        ]
-
         outputs: [
             ShaderOutput {
                 type: "vec4"
-                name: "gl_FragColor"
+                name: "cp_FragColor"
                 value: _shader.fragColor
             }
         ]

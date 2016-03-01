@@ -1,3 +1,14 @@
+cp_in vec3 vs_position[1];
+cp_in vec3 vs_color[1];
+cp_in float vs_scale[1];
+cp_in float vs_sphereId[1];
+
+cp_out vec3 position;
+cp_out vec3 normal;
+cp_out vec2 texCoord;
+cp_out vec3 color;
+cp_out float sphereId;
+
 #ifdef ADDPERIODICCOPIES
 layout(invocations=27) in;
 #endif

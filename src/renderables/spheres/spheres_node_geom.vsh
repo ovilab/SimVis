@@ -1,3 +1,13 @@
+cp_in vec3 in_position;
+cp_in vec3 in_color;
+cp_in float in_scale;
+cp_in float in_sphereId;
+
+cp_out vec3 vs_position;
+cp_out vec3 vs_color;
+cp_out float vs_scale;
+cp_out float vs_sphereId;
+
 void main(void)
 {
     vs_position = in_position;

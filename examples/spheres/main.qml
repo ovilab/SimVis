@@ -56,6 +56,7 @@ ApplicationWindow {
                     }
                     Light {
                         position: Qt.vector3d(-50.0, 0.0, 0.0)
+                        color: "yellow"
                     }
                 }
             }

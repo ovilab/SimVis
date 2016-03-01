@@ -1,4 +1,16 @@
-// BEGIN spheres.vsh
+cp_in vec3 in_position;
+cp_in vec3 in_color;
+cp_in vec2 in_texCoord;
+cp_in float in_sphereId;
+cp_in float in_scale;
+cp_in float in_vertexId;
+
+cp_out vec3 position;
+cp_out vec3 normal;
+cp_out vec2 texCoord;
+cp_out vec3 color;
+cp_out float sphereId;
+
 uniform highp vec3 cp_upPlusRightHalf;
 uniform highp vec3 cp_upMinusRightHalf;
 

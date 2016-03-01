@@ -54,7 +54,7 @@ QString ShaderBuilder::finalShader()
     }
     contents += "\n// ------           inputs         ------\n\n";
     for(const ShaderOutput *input : m_inputs) {
-        contents += "in " + input->type() + " " + input->name();
+        contents += "cp_in " + input->type() + " " + input->name();
 
         // TODO add support for other input types and thus other numbers of elements in inputs
         if(m_shaderType == ShaderType::Geometry) {
@@ -64,7 +64,10 @@ QString ShaderBuilder::finalShader()
     }
     contents += "\n// ------           outputs        ------\n\n";
     for(const ShaderOutput *output : m_outputs) {
-        contents += "out " + output->type() + " " + output->name() + ";\n";
+        if(output->name() == "cp_FragColor") {
+            continue;
+        }
+        contents += "cp_out " + output->type() + " " + output->name() + ";\n";
     }
 
     QString setup = "";
@@ -82,7 +85,7 @@ QString ShaderBuilder::finalShader()
         if(!value) {
             continue;
         }
-        setup += output->name() + " = " + value->convert(output->type()) + ";\n";
+        setup += output->name() + " = " + ShaderUtils::convert(value->type(), output->type(), value->identifier()) + ";\n";
     }
     setup += "\n// ------    end generated body    ------\n\n";
 

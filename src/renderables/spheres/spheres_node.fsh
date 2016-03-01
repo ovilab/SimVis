@@ -1,3 +1,9 @@
+cp_in vec3 position;
+cp_in vec3 normal;
+cp_in vec2 texCoord;
+cp_in vec3 color;
+cp_in float sphereId;
+
 void main(void) {
     highp float x = texCoord.s;
     highp float y = texCoord.t;
