@@ -1,4 +1,4 @@
-#include "mysimulator.h"
+#include "trianglessimulator.h"
 #include <SimVis/TriangleCollection>
 #include <QDebug>
 MySimulator::MySimulator()

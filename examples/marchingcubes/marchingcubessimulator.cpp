@@ -1,4 +1,4 @@
-#include "mysimulator.h"
+#include "marchingcubessimulator.h"
 #include <SimVis/MarchingCubes>
 #include <cmath>
 MyWorker::MyWorker() {

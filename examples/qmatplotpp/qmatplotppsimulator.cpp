@@ -1,4 +1,4 @@
-#include "simplesimulator.h"
+#include "qmatrplotppsimulator.h"
 #include <QVector3D>
 #include <QVector2D>
 

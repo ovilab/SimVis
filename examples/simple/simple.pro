@@ -4,10 +4,11 @@ CONFIG += c++11
 QT += qml quick widgets opengl openglextensions
 
 SOURCES += \
-    main.cpp \
-    simplesimulator.cpp
+    simplesimulator.cpp \
+    main_simple.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += \
+    simple_qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

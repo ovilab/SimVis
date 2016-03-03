@@ -4,11 +4,12 @@ CONFIG += c++11
 QT += qml quick widgets opengl openglextensions
 
 SOURCES += \
-    main.cpp \
-    mysimulator.cpp \
-    perlinnoise.cpp
+    perlinnoise.cpp \
+    main_marchingcubes.cpp \
+    marchingcubessimulator.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += \
+    marchingcubes_qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -17,5 +18,5 @@ QML_IMPORT_PATH =
 include(../examples_vendor.pri)
 
 HEADERS += \
-    mysimulator.h \
-    perlinnoise.h
+    perlinnoise.h \
+    marchingcubessimulator.h

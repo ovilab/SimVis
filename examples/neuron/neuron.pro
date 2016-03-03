@@ -4,10 +4,12 @@ CONFIG += c++11
 
 QT += qml quick widgets
 
-SOURCES += main.cpp \
-    neuronreader.cpp
+SOURCES += \
+    neuronreader.cpp \
+    main_neuron.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += \
+    neuron_qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

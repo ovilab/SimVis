@@ -4,10 +4,11 @@ CONFIG += c++11
 QT += qml quick widgets opengl openglextensions
 
 SOURCES += \
-    main.cpp \
-    mysimulator.cpp
+    main_triangles.cpp \
+    trianglessimulator.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += \
+    triangles_qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -16,6 +17,6 @@ QML_IMPORT_PATH =
 include(../examples_vendor.pri)
 
 HEADERS += \
-    mysimulator.h
+    trianglessimulator.h
 
 DISTFILES +=

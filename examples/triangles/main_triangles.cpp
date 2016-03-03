@@ -2,7 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QtQml>
 
-#include "mysimulator.h"
+#include "trianglessimulator.h"
 
 #include <vendor.h>
 

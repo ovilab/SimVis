@@ -1,5 +1,5 @@
-#ifndef MYSIMULATOR_H
-#define MYSIMULATOR_H
+#ifndef MARCHINGCUBESSIMULATOR_H
+#define MARCHINGCUBESSIMULATOR_H
 #include "perlinnoise.h"
 
 #include <SimVis/Simulator>
@@ -57,4 +57,4 @@ private:
     MySimulator::Geometry m_geometry = MySimulator::SINUS;
 };
 
-#endif // MYSIMULATOR_H
+#endif // MARCHINGCUBESSIMULATOR_H

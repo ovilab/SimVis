@@ -4,10 +4,11 @@ CONFIG += c++11
 QT += qml quick widgets opengl openglextensions
 
 SOURCES += \
-    main.cpp \
-    mysimulator.cpp
+    spheressimulator.cpp \
+    main_spheres.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += \
+    spheres_qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -16,6 +17,6 @@ QML_IMPORT_PATH =
 include(../examples_vendor.pri)
 
 HEADERS += \
-    mysimulator.h
+    spheressimulator.h
 
 DISTFILES +=

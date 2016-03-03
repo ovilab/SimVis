@@ -9,6 +9,7 @@
 namespace qpm {
 
 void init(const QCoreApplication &app, QQmlEngine &engine) {
+    Q_UNUSED(app);
     // Add qml components
     engine.addImportPath(QStringLiteral("qrc:/"));
 

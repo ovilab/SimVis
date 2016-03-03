@@ -2,13 +2,13 @@
 #include <QQmlApplicationEngine>
 #include <QtQml>
 
-#include "simplesimulator.h"
+#include "spheressimulator.h"
 
 #include <vendor.h>
 
 int main(int argc, char *argv[])
 {
-    qmlRegisterType<SimpleSimulator>("SimpleSimulator", 1, 0, "SimpleSimulator");
+    qmlRegisterType<MySimulator>("MySimulator", 1, 0, "MySimulator");
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;

@@ -1,8 +1,8 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QtQml>
-
-#include "mysimulator.h"
+#include <cmath>
+#include "marchingcubessimulator.h"
 
 #include <vendor.h>
 

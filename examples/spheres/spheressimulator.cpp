@@ -1,4 +1,4 @@
-#include "mysimulator.h"
+#include "spheressimulator.h"
 #include <QDebug>
 #include <SimVis/Spheres>
 MySimulator::MySimulator()

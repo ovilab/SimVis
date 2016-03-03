@@ -4,10 +4,12 @@ CONFIG += c++11
 
 QT += qml quick widgets
 
-SOURCES += main.cpp \
-    cylindersimulator.cpp
+SOURCES += \
+    cylindersimulator.cpp \
+    main_cylinders.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += \
+    cylinders_qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

@@ -1,14 +1,14 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QtQml>
-#include <cmath>
-#include "mysimulator.h"
+
+#include "qmatrplotppsimulator.h"
 
 #include <vendor.h>
 
 int main(int argc, char *argv[])
 {
-    qmlRegisterType<MySimulator>("MySimulator", 1, 0, "MySimulator");
+    qmlRegisterType<SimpleSimulator>("SimpleSimulator", 1, 0, "SimpleSimulator");
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
