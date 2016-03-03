@@ -87,8 +87,8 @@ private:
     QVector3D m_max;
     QColor m_color;
     Mode m_mode = FRONT_AND_BACK;
-    bool m_shadersDirty = false;
-    bool m_dirty = false;
+    bool m_hasDirtyShaders = false;
+    bool m_hasDirtyData = false;
     bool m_hasScalarField = false;
     bool m_hasContinuousScalarField = false;
     function<float(const QVector3D point)> m_scalarFieldEvaluator;

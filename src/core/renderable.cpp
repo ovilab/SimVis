@@ -41,6 +41,23 @@ void Renderable::requestSynchronize()
     m_renderer->m_modelViewMatrixInverse = m_renderer->m_modelViewMatrix.inverted();
     m_renderer->m_projectionMatrixInverse = m_renderer->m_projectionMatrix.inverted();
     m_renderer->copyShaderEffects(this);
+
+    if(m_hasDirtyShaders) {
+        m_renderer->m_shadersDirty = true;
+        if(!vertexShader() || !fragmentShader()) {
+            qWarning() << "Renderable::requestSynchronize(): Missing shaders.";
+            return;
+        }
+        m_renderer->m_vertexShaderSource = vertexShader()->finalShader();
+        if(geometryShader()) {
+            m_renderer->m_geometryShaderSource = geometryShader()->finalShader();
+        }
+        m_renderer->m_fragmentShaderSource = fragmentShader()->finalShader();
+        m_hasDirtyShaders = false;
+    }
+
+    m_renderer->m_uniforms = fragmentShader()->uniforms();
+
     m_renderer->synchronize(this);
 }
 
@@ -57,6 +74,21 @@ Camera *Renderable::camera() const
 bool Renderable::isGeometryShaderSupported() const
 {
     return m_isGeometryShaderSupported;
+}
+
+ShaderBuilder *Renderable::fragmentShader() const
+{
+    return m_fragmentShader;
+}
+
+ShaderBuilder *Renderable::geometryShader() const
+{
+    return m_geometryShader;
+}
+
+ShaderBuilder *Renderable::vertexShader() const
+{
+    return m_vertexShader;
 }
 
 void Renderable::setGeometryShaderSupported (bool arg)
@@ -84,6 +116,88 @@ void Renderable::setCamera(Camera *arg)
 
     m_camera = arg;
     emit cameraChanged(arg);
+}
+
+void Renderable::triggerDirtyShaders() {
+    setDirtyShaders(true);
+}
+
+void Renderable::triggerDirtyData()
+{
+    setDirtyData(true);
+}
+
+bool Renderable::hasDirtyData() const
+{
+    return m_hasDirtyData;
+}
+
+bool Renderable::hasDirtyShaders() const
+{
+    return m_hasDirtyShaders;
+}
+
+void Renderable::setFragmentShader(ShaderBuilder *fragmentShader)
+{
+    if (m_fragmentShader == fragmentShader)
+        return;
+    if(m_fragmentShader) {
+        disconnect(m_fragmentShader, 0, this, 0);
+    }
+    m_fragmentShader = fragmentShader;
+    connect(m_fragmentShader, &ShaderBuilder::finalShaderChanged, this, &Renderable::triggerDirtyShaders);
+    connect(m_fragmentShader, &ShaderBuilder::uniformsChanged, this, &Renderable::triggerDirtyData);
+    triggerDirtyShaders();
+    triggerDirtyData();
+    emit fragmentShaderChanged(fragmentShader);
+}
+
+void Renderable::setGeometryShader(ShaderBuilder *geometryShader)
+{
+    if (m_geometryShader == geometryShader)
+        return;
+    if(m_geometryShader) {
+        disconnect(m_geometryShader, 0, this, 0);
+    }
+    m_geometryShader = geometryShader;
+    connect(m_geometryShader, &ShaderBuilder::finalShaderChanged, this, &Renderable::triggerDirtyShaders);
+    connect(m_geometryShader, &ShaderBuilder::uniformsChanged, this, &Renderable::triggerDirtyData);
+    triggerDirtyShaders();
+    triggerDirtyData();
+    emit geometryShaderChanged(geometryShader);
+}
+
+void Renderable::setVertexShader(ShaderBuilder *vertexShader)
+{
+    if (m_vertexShader == vertexShader)
+        return;
+    if(m_vertexShader) {
+        disconnect(m_vertexShader, 0, this, 0);
+    }
+    m_vertexShader = vertexShader;
+    connect(m_vertexShader, &ShaderBuilder::finalShaderChanged, this, &Renderable::triggerDirtyShaders);
+    connect(m_vertexShader, &ShaderBuilder::uniformsChanged, this, &Renderable::triggerDirtyData);
+    triggerDirtyShaders();
+    triggerDirtyData();
+    emit vertexShaderChanged(vertexShader);
+}
+
+void Renderable::setDirtyData(bool hasDirtyData)
+{
+    if (m_hasDirtyData == hasDirtyData)
+        return;
+
+    m_hasDirtyData = hasDirtyData;
+    emit hasDirtyDataChanged(hasDirtyData);
+}
+
+void Renderable::setDirtyShaders(bool hasDirtyShaders)
+{
+    if (m_hasDirtyShaders == hasDirtyShaders)
+        return;
+
+    m_hasDirtyShaders = hasDirtyShaders;
+    emit hasDirtyShadersChanged(hasDirtyShaders);
 }
 
 RenderableRenderer::RenderableRenderer()
@@ -142,6 +256,12 @@ void RenderableRenderer::prepareAndRender()
 
         addShaderCodeToBase(QOpenGLShader::Fragment, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/defaultfragment.glsl"));
 
+        setShaderFromSourceCode(QOpenGLShader::Vertex, m_vertexShaderSource);
+        if(!m_geometryShaderSource.isEmpty()) {
+            setShaderFromSourceCode(QOpenGLShader::Geometry, m_geometryShaderSource);
+        }
+        setShaderFromSourceCode(QOpenGLShader::Fragment, m_fragmentShaderSource);
+
         beforeLinkProgram();
         m_program.link();
         m_shadersDirty = false;
@@ -178,6 +298,41 @@ void RenderableRenderer::prepareAndRender()
     m_program.setUniformValue("cp_numberOfLights", numberOfLights);
     float oneOverNumberOfLights = (numberOfLights > 0) ? 1.0/numberOfLights : 10000.0;
     m_program.setUniformValue("cp_oneOverNumberOfLights", oneOverNumberOfLights);
+
+    for(QString uniformName : m_uniforms.keys()) {
+        QVariant value = m_uniforms.value(uniformName);
+        QByteArray nameArray = uniformName.toUtf8();
+        const char* name = nameArray.constData();
+        switch(value.type()) {
+        case QVariant::Bool:
+            program().setUniformValue(name, value.toBool());
+            break;
+        case QVariant::Int:
+            program().setUniformValue(name, value.toFloat());
+            break;
+        case QVariant::Double:
+            program().setUniformValue(name, value.toFloat());
+            break;
+        case QVariant::Vector2D:
+            program().setUniformValue(name, value.value<QVector2D>());
+            break;
+        case QVariant::Vector3D:
+            program().setUniformValue(name, value.value<QVector3D>());
+            break;
+        case QVariant::Vector4D:
+            program().setUniformValue(name, value.value<QVector4D>());
+            break;
+        case QVariant::Color:
+            program().setUniformValue(name, value.value<QColor>());
+            break;
+        case QVariant::String:
+            program().setUniformValue(name, QColor(value.toString()));
+            break;
+        default:
+            qWarning() << "Cannot set uniform value because the type is unknown:" << value;
+            break;
+        }
+    }
 
     render();
     m_program.release();

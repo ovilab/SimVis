@@ -3,7 +3,6 @@
 #include <SimVis/Spheres>
 MySimulator::MySimulator()
 {
-
 }
 
 double MySimulator::dt() const
@@ -60,7 +59,7 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
     Spheres *spheres = qobject_cast<Spheres*>(renderableObject);
     if(spheres) {
         spheres->positions() = m_positions;
-        spheres->setDirty(true);
+        spheres->triggerDirtyData();
         return;
     }
 }

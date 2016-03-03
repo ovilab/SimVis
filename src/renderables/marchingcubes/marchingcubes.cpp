@@ -75,7 +75,7 @@ QVector3D MarchingCubes::max() const
 
 bool MarchingCubes::dirty() const
 {
-    return m_dirty;
+    return m_hasDirtyData;
 }
 
 QVector3D MarchingCubes::numVoxels() const
@@ -120,10 +120,10 @@ void MarchingCubes::setMax(QVector3D arg)
 
 void MarchingCubes::setDirty(bool arg)
 {
-    if (m_dirty == arg)
+    if (m_hasDirtyData == arg)
         return;
 
-    m_dirty = arg;
+    m_hasDirtyData = arg;
     emit dirtyChanged(arg);
 }
 
@@ -235,9 +235,9 @@ void MarchingCubesRenderer::synchronize(Renderable *renderable)
         marchingCubes->setDirty(false);
     }
 
-    if(marchingCubes->m_shadersDirty) {
+    if(marchingCubes->m_hasDirtyShaders) {
         m_shadersDirty = true;
-        marchingCubes->m_shadersDirty = false;
+        marchingCubes->m_hasDirtyShaders = false;
     }
     marchingCubes->setNumberOfTriangles(2*m_generator.m_trianglesFront.size());
     marchingCubes->setNumberOfLines(6*m_generator.m_lines.size());

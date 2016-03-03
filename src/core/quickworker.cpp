@@ -30,7 +30,7 @@ void QuickWorker::synchronizeRenderer(Renderable *renderableObject)
     Spheres* spheres = qobject_cast<Spheres*>(renderableObject);
     if(spheres) {
         spheres->setPositions(m_positions);
-        spheres->setDirty(true);
+        spheres->triggerDirtyData();
         return;
     }
 }

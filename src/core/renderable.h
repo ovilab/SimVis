@@ -1,6 +1,7 @@
 #ifndef RENDERABLE_H
 #define RENDERABLE_H
 #include "shadereffect.h"
+#include "../shadernodes/shaderbuilder.h"
 
 #include <cstdarg>
 
@@ -54,6 +55,9 @@ protected:
     QString m_fragmentShaderBase;
     QString m_geometryShaderBase;
     QString m_vertexShaderBase;
+    QString m_vertexShaderSource;
+    QString m_geometryShaderSource;
+    QString m_fragmentShaderSource;
     QOpenGLShaderProgram& program();
     QOpenGLFunctions* glFunctions();
     QString contentFromFile(QString fileName);
@@ -71,12 +75,13 @@ private:
     void removeShader(QOpenGLShader::ShaderType type);
     void copyShaderEffects(Renderable *renderable);
 
-    virtual void beforeLinkProgram() = 0;
+    virtual void beforeLinkProgram() {}
     virtual void synchronize(Renderable* renderable) = 0;
     virtual void render() = 0;
 
     QOpenGLShaderProgram m_program;
     QOpenGLFunctions* m_funcs = 0;
+    QVariantMap m_uniforms;
 
     friend class Renderable;
 
@@ -90,6 +95,9 @@ class Renderable : public QQuickItem
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged)
     Q_PROPERTY(Camera* camera READ camera WRITE setCamera NOTIFY cameraChanged)
     Q_PROPERTY(bool isGeometryShaderSupported READ isGeometryShaderSupported NOTIFY isGeometryShaderSupportedChanged)
+    Q_PROPERTY(ShaderBuilder* fragmentShader READ fragmentShader WRITE setFragmentShader NOTIFY fragmentShaderChanged)
+    Q_PROPERTY(ShaderBuilder* geometryShader READ geometryShader WRITE setGeometryShader NOTIFY geometryShaderChanged)
+    Q_PROPERTY(ShaderBuilder* vertexShader READ vertexShader WRITE setVertexShader NOTIFY vertexShaderChanged)
 
 public:
     explicit Renderable(QQuickItem *parent = 0);
@@ -104,15 +112,35 @@ public:
 
     bool isGeometryShaderSupported() const;
 
+    ShaderBuilder* fragmentShader() const;
+    ShaderBuilder* geometryShader() const;
+    ShaderBuilder* vertexShader() const;
+
+    void setDirty(bool dirty);
+    bool hasDirtyData() const;
+    bool hasDirtyShaders() const;
+
 signals:
     void visibleChanged(bool arg);
     void cameraChanged(Camera* arg);
     void isGeometryShaderSupportedChanged(bool isGeometryShaderSupported);
+    void fragmentShaderChanged(ShaderBuilder* fragmentShader);
+    void geometryShaderChanged(ShaderBuilder* geometryShader);
+    void vertexShaderChanged(ShaderBuilder* vertexShader);
+    void hasDirtyDataChanged(bool hasDirtyData);
+    void hasDirtyShadersChanged(bool hasDirtyShaders);
 
 public slots:
-
     void setVisible(bool arg);
     void setCamera(Camera* arg);
+    void setFragmentShader(ShaderBuilder* fragmentShader);
+    void setGeometryShader(ShaderBuilder* geometryShader);
+    void setVertexShader(ShaderBuilder* vertexShader);
+    void setDirtyData(bool hasDirtyData);
+    void setDirtyShaders(bool hasDirtyShaders);
+    void triggerDirtyShaders();
+    void triggerDirtyData();
+
 private:
     void setGeometryShaderSupported(bool arg);
 
@@ -120,6 +148,11 @@ private:
     bool m_visible = true;
     Camera* m_camera = 0;
     bool m_isGeometryShaderSupported = false;
+    ShaderBuilder* m_fragmentShader = nullptr;
+    ShaderBuilder* m_geometryShader = nullptr;
+    ShaderBuilder* m_vertexShader = nullptr;
+    bool m_hasDirtyData = false;
+    bool m_hasDirtyShaders = false;
 };
 
 template<typename U>

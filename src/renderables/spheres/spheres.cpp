@@ -35,89 +35,6 @@ void Spheres::setScales(const QVector<float> &scales)
     m_scales = scales;
 }
 
-bool Spheres::dirty() const
-{
-    return m_dirty;
-}
-
-ShaderBuilder *Spheres::fragmentShader() const
-{
-    return m_fragmentShader;
-}
-
-ShaderBuilder *Spheres::geometryShader() const
-{
-    return m_geometryShader;
-}
-
-ShaderBuilder *Spheres::vertexShader() const
-{
-    return m_vertexShader;
-}
-
-void Spheres::setDirty(bool dirty)
-{
-    if (m_dirty == dirty)
-        return;
-
-    m_dirty = dirty;
-    emit dirtyChanged(dirty);
-}
-
-void Spheres::markShadersDirty() {
-    m_shadersDirty = true;
-}
-
-void Spheres::markDirty()
-{
-    setDirty(true);
-}
-
-void Spheres::setFragmentShader(ShaderBuilder *fragmentShader)
-{
-    if (m_fragmentShader == fragmentShader)
-        return;
-    if(m_fragmentShader) {
-        disconnect(m_fragmentShader, 0, this, 0);
-    }
-    m_fragmentShader = fragmentShader;
-    connect(m_fragmentShader, &ShaderBuilder::finalShaderChanged, this, &Spheres::markShadersDirty);
-    connect(m_fragmentShader, &ShaderBuilder::uniformsChanged, this, &Spheres::markDirty);
-    markShadersDirty();
-    markDirty();
-    emit fragmentShaderChanged(fragmentShader);
-}
-
-void Spheres::setGeometryShader(ShaderBuilder *geometryShader)
-{
-    if (m_geometryShader == geometryShader)
-        return;
-    if(m_geometryShader) {
-        disconnect(m_geometryShader, 0, this, 0);
-    }
-    m_geometryShader = geometryShader;
-    connect(m_geometryShader, &ShaderBuilder::finalShaderChanged, this, &Spheres::markShadersDirty);
-    connect(m_geometryShader, &ShaderBuilder::uniformsChanged, this, &Spheres::markDirty);
-    markShadersDirty();
-    markDirty();
-    emit geometryShaderChanged(geometryShader);
-}
-
-void Spheres::setVertexShader(ShaderBuilder *vertexShader)
-{
-    if (m_vertexShader == vertexShader)
-        return;
-    if(m_vertexShader) {
-        disconnect(m_vertexShader, 0, this, 0);
-    }
-    m_vertexShader = vertexShader;
-    connect(m_vertexShader, &ShaderBuilder::finalShaderChanged, this, &Spheres::markShadersDirty);
-    connect(m_vertexShader, &ShaderBuilder::uniformsChanged, this, &Spheres::markDirty);
-    markShadersDirty();
-    markDirty();
-    emit vertexShaderChanged(vertexShader);
-}
-
 QVector<QColor> &Spheres::colors()
 {
     return m_colors;
@@ -172,22 +89,6 @@ void SpheresRenderer::synchronize(Renderable* renderer)
     m_viewVector = spheres->camera()->viewVector().normalized();
     m_rightVector = QVector3D::crossProduct(m_viewVector, m_upVector);
 
-    if(spheres->m_shadersDirty) {
-        m_shadersDirty = true;
-        if(!(spheres->vertexShader() && spheres->fragmentShader())) {
-            qWarning() << "SpheresRender::synchronize(): Missing shaders.";
-            return;
-        }
-        m_vertexShaderSource = spheres->vertexShader()->finalShader();
-        if(spheres->geometryShader()) {
-            m_geometryShaderSource = spheres->geometryShader()->finalShader();
-        }
-        m_fragmentShaderSource = spheres->fragmentShader()->finalShader();
-        spheres->m_shadersDirty = false;
-    }
-
-    m_uniforms = spheres->fragmentShader()->uniforms();
-
     if(!m_isInitialized) {
         if(isGeometryShadersSupported()) {
             m_vboCount = 1;
@@ -202,7 +103,7 @@ void SpheresRenderer::synchronize(Renderable* renderer)
 }
 
 void SpheresRenderer::uploadVBONoGeometryShader(Spheres* spheres) {
-    if(!spheres->dirty() || spheres->m_positions.size() == 0) {
+    if(!spheres->hasDirtyData() || spheres->m_positions.size() == 0) {
         return;
     }
     float scale = spheres->scale();
@@ -265,7 +166,7 @@ void SpheresRenderer::uploadVBONoGeometryShader(Spheres* spheres) {
         indices [6*i + 5] = 4*i+0;
     }
 
-    spheres->setDirty(false);
+    spheres->setDirtyData(false);
 
     // Transfer vertex data to VBO 0
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
@@ -284,7 +185,7 @@ void SpheresRenderer::uploadVBOGeometryShader(Spheres* spheres) {
     QVector<float>& scales = spheres->m_scales;
     QVector<SphereGeometryShaderVBOData>& vertices = spheres->m_verticesGeometryShader;
 
-    if(positions.size() < 1 || !spheres->dirty()) {
+    if(positions.size() < 1 || !spheres->hasDirtyData()) {
         return;
     }
 
@@ -309,7 +210,7 @@ void SpheresRenderer::uploadVBOGeometryShader(Spheres* spheres) {
             vertices[i].scale = spheres->scale();
         }
     }
-    spheres->setDirty(false);
+    spheres->setDirtyData(false);
 
     if(vertices.size() < 1) {
         return;
@@ -336,51 +237,6 @@ void Spheres::setPositions(QVector<QVector3D> &positions)
     m_positions = positions;
 }
 
-void SpheresRenderer::beforeLinkProgram() {
-    setShaderFromSourceCode(QOpenGLShader::Vertex, m_vertexShaderSource);
-    if(!m_geometryShaderSource.isEmpty()) {
-        setShaderFromSourceCode(QOpenGLShader::Geometry, m_geometryShaderSource);
-    }
-    setShaderFromSourceCode(QOpenGLShader::Fragment, m_fragmentShaderSource);
-}
-
-void SpheresRenderer::setUniforms() {
-    for(QString uniformName : m_uniforms.keys()) {
-        QVariant value = m_uniforms.value(uniformName);
-        QByteArray nameArray = uniformName.toUtf8();
-        const char* name = nameArray.constData();
-        switch(value.type()) {
-        case QVariant::Bool:
-            program().setUniformValue(name, value.toBool());
-            break;
-        case QVariant::Int:
-            program().setUniformValue(name, value.toFloat());
-            break;
-        case QVariant::Double:
-            program().setUniformValue(name, value.toFloat());
-            break;
-        case QVariant::Vector2D:
-            program().setUniformValue(name, value.value<QVector2D>());
-            break;
-        case QVariant::Vector3D:
-            program().setUniformValue(name, value.value<QVector3D>());
-            break;
-        case QVariant::Vector4D:
-            program().setUniformValue(name, value.value<QVector4D>());
-            break;
-        case QVariant::Color:
-            program().setUniformValue(name, value.value<QColor>());
-            break;
-        case QVariant::String:
-            program().setUniformValue(name, QColor(value.toString()));
-            break;
-        default:
-            qWarning() << "Cannot set uniform value because the type is unknown:" << value;
-            break;
-        }
-    }
-}
-
 void SpheresRenderer::renderNoGeometryShader() {
     if(!program().isLinked()) {
         return;
@@ -394,8 +250,6 @@ void SpheresRenderer::renderNoGeometryShader() {
     QVector3D upPlusRightHalf = (m_upVector + m_rightVector)*0.5;
     program().setUniformValue("cp_upMinusRightHalf", upMinusRightHalf);
     program().setUniformValue("cp_upPlusRightHalf", upPlusRightHalf);
-
-    setUniforms();
 
     VertexAttributeArrayHelper<SphereNoGeometryShaderVBOData> helper(this);
     helper.addData(helper()->sphereId, "in_sphereId");
@@ -417,8 +271,6 @@ void SpheresRenderer::renderGeometryShader() {
     }
 
     QOpenGLFunctions funcs(QOpenGLContext::currentContext());
-
-    setUniforms();
 
     m_vao->bind();
 

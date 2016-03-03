@@ -65,7 +65,7 @@ private:
     QVector<CylinderVBOData> m_cylinders;
 
     friend class CylindersRenderer;
-    bool m_dirty = false;
+    bool m_hasDirtyData = false;
     float m_radius = 0.025;
 };
 

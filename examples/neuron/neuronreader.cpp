@@ -34,7 +34,7 @@ void NeuronWorker::synchronizeRenderer(Renderable *renderable)
     Spheres *spheres = qobject_cast<Spheres*>(renderable);
     if(spheres) {
         spheres->setPositions(m_spheres);
-        spheres->setDirty(true);
+        spheres->triggerDirtyData();
     }
 }
 

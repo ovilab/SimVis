@@ -39,7 +39,6 @@ public:
 private:
     virtual void synchronize(Renderable *) override;
     virtual void render() override;
-    virtual void beforeLinkProgram() override;
 
     void uploadVBOs(Spheres* spheres);
     bool m_isInitialized = false;
@@ -48,11 +47,6 @@ private:
     QVector3D m_upVector;
     QVector3D m_viewVector;
     QVector3D m_rightVector;
-    QString m_vertexShaderSource;
-    QString m_geometryShaderSource;
-    QString m_fragmentShaderSource;
-
-    QVariantMap m_uniforms;
 
     void uploadVBONoGeometryShader(Spheres *spheres);
     void uploadVBOGeometryShader(Spheres *spheres);
@@ -65,10 +59,6 @@ class Spheres : public Renderable
     Q_OBJECT
     Q_PROPERTY(float scale READ scale WRITE setScale NOTIFY scaleChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
-    Q_PROPERTY(bool dirty READ dirty WRITE setDirty NOTIFY dirtyChanged)
-    Q_PROPERTY(ShaderBuilder* fragmentShader READ fragmentShader WRITE setFragmentShader NOTIFY fragmentShaderChanged)
-    Q_PROPERTY(ShaderBuilder* geometryShader READ geometryShader WRITE setGeometryShader NOTIFY geometryShaderChanged)
-    Q_PROPERTY(ShaderBuilder* vertexShader READ vertexShader WRITE setVertexShader NOTIFY vertexShaderChanged)
 public:
     Spheres(QQuickItem *parent = 0);
     ~Spheres();
@@ -83,37 +73,11 @@ public:
     void setColors(const QVector<QColor> &colors);
     QVector<float> &scales();
     void setScales(const QVector<float> &scales);
-    bool dirty() const;
-
-    ShaderBuilder* fragmentShader() const;
-
-    ShaderBuilder* geometryShader() const;
-
-    ShaderBuilder* vertexShader() const;
-
-public slots:
-    void setDirty(bool dirty);
-
-    void setFragmentShader(ShaderBuilder* fragmentShader);
-
-    void setGeometryShader(ShaderBuilder* geometryShader);
-
-    void setVertexShader(ShaderBuilder* vertexShader);
 
 signals:
     void scaleChanged(bool arg);
     void colorChanged(QColor arg);
-    void dirtyChanged(bool dirty);
 
-    void fragmentShaderChanged(ShaderBuilder* fragmentShader);
-
-    void geometryShaderChanged(ShaderBuilder* geometryShader);
-
-    void vertexShaderChanged(ShaderBuilder* vertexShader);
-
-private slots:
-    void markShadersDirty();
-    void markDirty();
 private:
     QVector3D vectorFromColor(const QColor &color);
     QVector<SphereNoGeometryShaderVBOData> m_verticesNoGeometryShader;
@@ -125,12 +89,7 @@ private:
     QVector<float> m_scales;
     QColor m_color = QColor(0.8, 0.7, 0.5, 1.0);
     float m_scale = 1.0;
-    bool m_dirty = false;
-    bool m_shadersDirty = false;
     friend class SpheresRenderer;
-    ShaderBuilder* m_fragmentShader = nullptr;
-    ShaderBuilder* m_geometryShader;
-    ShaderBuilder* m_vertexShader;
 };
 
 

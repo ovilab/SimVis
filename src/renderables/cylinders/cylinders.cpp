@@ -18,7 +18,7 @@ CylindersRenderer *Cylinders::createRenderer()
 
 bool Cylinders::dirty() const
 {
-    return m_dirty;
+    return m_hasDirtyData;
 }
 
 float Cylinders::radius() const
@@ -28,10 +28,10 @@ float Cylinders::radius() const
 
 void Cylinders::setDirty(bool dirty)
 {
-    if (m_dirty == dirty)
+    if (m_hasDirtyData == dirty)
         return;
 
-    m_dirty = dirty;
+    m_hasDirtyData = dirty;
     emit dirtyChanged(dirty);
 }
 
