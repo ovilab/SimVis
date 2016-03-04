@@ -15,7 +15,7 @@ SimulatorWorker *CylinderSimulator::createWorker()
 CylinderWorker::CylinderWorker()
 {
     m_cylinders.resize(100);
-    double spread = 20.0;
+    double spread = 30.0;
     for(CylinderVBOData &cylinder : m_cylinders) {
         float x = ((2.0*rand() / double(RAND_MAX))-1.0)*spread;
         float y = ((2.0*rand() / double(RAND_MAX))-1.0)*spread;

@@ -38,14 +38,14 @@ ApplicationWindow {
                 normal: Simplex {
                     normal: cylinders.shader.normal
                     position: cylinders.shader.position
-                    scale: 4.0
-                    strength: 0.5
+                    scale: 8.0
+                    strength: 0.2
                 }
 
                 lights: ShaderGroup {
                     Light {
                         position: Qt.vector3d(5.0, 0.0, 0.0)
-                        color: "red"
+                        color: "steelblue"
                     }
                     Light {
                         position: Qt.vector3d(-3.0, -2.0, 0.0)
