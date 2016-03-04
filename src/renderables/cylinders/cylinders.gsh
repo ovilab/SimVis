@@ -16,16 +16,19 @@ out float radius;
 out float radiusA;
 out float radiusB;
 out vec3 base;
-out vec3 end_cyl;
+out vec3 end;
 out vec3 color;
+out vec3 v1;
+out vec3 v2;
+out vec3 worldPosition;
 
 void main(void) {
     mat4 MV = cp_modelViewMatrix;
     mat4 MVP = cp_modelViewProjectionMatrix;
     mat4 P = cp_projectionMatrix;
 
-    vec3 v1 = vs_vertex1Position[0];
-    vec3 v2 = vs_vertex2Position[0];
+    v1 = vs_vertex1Position[0];
+    v2 = vs_vertex2Position[0];
 
     vec3 delta = v2 - v1;
     vec3 deltaNormalized = normalize(delta);
@@ -62,7 +65,7 @@ void main(void) {
     // NOTE: dividing by w here is typically not necessary
     // w is seldom modified by model view matrices
     base = mvv1.xyz / mvv1.w;
-    end_cyl = mvv2.xyz / mvv2.w;
+    end = mvv2.xyz / mvv2.w;
 
     vec3 cameraToV1 = cp_cameraPosition - v1;
     vec3 cameraToV2 = cp_cameraPosition - v2;
@@ -96,6 +99,7 @@ void main(void) {
     for(int i = 0; i < 6; i++) {
         color = vec3(1.0, 1.0, 1.0);
         modelViewPosition = (MV*vec4(vertices[i], 1.0)).xyz;
+        worldPosition = vertices[i];
         gl_Position = P*MV*vec4(vertices[i], 1.0);
         texCoord = texCoords[i];
         EmitVertex();
