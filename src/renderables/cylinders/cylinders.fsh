@@ -1,16 +1,16 @@
-in vec2 texCoord;
-in vec3 modelViewPosition;
-in vec3 base;
-in vec3 end_cyl;
-in vec3 color;
+cp_in vec2 texCoord;
+cp_in vec3 modelViewPosition;
+cp_in vec3 base;
+cp_in vec3 end_cyl;
+cp_in vec3 color;
 //in float radius;
-in float radiusA;
-in float radiusB;
-in float da;
-in mat3 cylinderBasis;
-in mat3 cylinderWorldBasis;
+cp_in float radiusA;
+cp_in float radiusB;
+cp_in float da;
+cp_in mat3 cylinderBasis;
+cp_in mat3 cylinderWorldBasis;
 
-out vec4 fragcolor;
+//out vec4 fragcolor;
 
 void main(void) {
     vec3 ray_origin = vec3(0.0, 0.0, 0.0); // in modelview space
@@ -151,5 +151,9 @@ void main(void) {
         }
         normal = worldAxis;
     }
-    fragcolor = defaultFragment(normal, cyl_point_world, color);
+
+    vec3 position = cyl_point_world;
+
+    $setupShaderNodes();
+//    fragcolor = defaultFragment(normal, cyl_point_world, color);
 }

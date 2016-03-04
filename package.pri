@@ -7,7 +7,6 @@ INCLUDEPATH += $$PWD/src
 QML_IMPORT_PATH += $$PWD/src/imports/
 
 RESOURCES += \
-             $$PWD/src/simvis_qml.qrc \
     $$PWD/src/simvis_shaders.qrc \
     $$PWD/src/imports/simvis_imports.qrc
 

@@ -26,7 +26,6 @@ public:
 private:
     virtual void synchronize(Renderable *) override;
     virtual void render() override;
-    virtual void beforeLinkProgram() override;
 
     float m_radius = 0.1;
     void uploadVBOs(Cylinders* Cylinders);

@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>Spheres.qml</file>
-    </qresource>
-</RCC>

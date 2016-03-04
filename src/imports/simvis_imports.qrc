@@ -15,5 +15,7 @@
         <file>SimVis/ShaderNodes/Sum.qml</file>
         <file>SimVis/ShaderNodes/Light.qml</file>
         <file>SimVis/ShaderNodes/Clamp.qml</file>
+        <file>SimVis/Spheres.qml</file>
+        <file>SimVis/Cylinders.qml</file>
     </qresource>
 </RCC>

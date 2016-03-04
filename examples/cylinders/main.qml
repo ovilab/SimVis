@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.2
 
 import CylinderSimulator 1.0
 import SimVis 1.0
+import SimVis.ShaderNodes 1.0
 
 ApplicationWindow {
     title: qsTr("Cylinders")
@@ -26,28 +27,41 @@ ApplicationWindow {
         }
 
         Cylinders {
+            id: cylinders
             visible: true
             scale: 1.0
             radius: 1.2
-
-            Light {
-                id: light2
-                ambientColor: "blue"
-                specularColor: "white"
-                diffuseColor: "cyan"
-                ambientIntensity: 0.1
-                diffuseIntensity: 1.0
+            fragColor: Diffuse {
+                position: cylinders.shader.position
+                color: Qt.vector3d(0.6, 0.8, 1.0)
                 specularIntensity: 1.0
-                shininess: 40.0
-                attenuation: 0.001
-                position: Qt.vector3d(0.0, 20.0, -20.0)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
-            }
+                normal: Simplex {
+                    normal: cylinders.shader.normal
+                    position: cylinders.shader.position
+                    scale: 4.0
+                    strength: 0.5
+                }
 
-            SimplexBump {
-                id: simplexBump
-                enabled: true
-                intensity: 0.03
-                scale: 5.0
+                lights: ShaderGroup {
+                    Light {
+                        position: Qt.vector3d(5.0, 0.0, 0.0)
+                        color: "red"
+                    }
+                    Light {
+                        position: Qt.vector3d(-3.0, -2.0, 0.0)
+                        color: "white"
+                    }
+                    Light {
+                        position: Qt.vector3d(20.0, -20.0, 0.0)
+                        strength: 1.0
+                        color: "white"
+                    }
+                    Light {
+                        position: Qt.vector3d(-20.0, 20.0, 0.0)
+                        strength: 1.0
+                        color: "white"
+                    }
+                }
             }
         }
     }

@@ -4,10 +4,13 @@ ShaderNode {
     property var normal: Qt.vector3d(1.0, 0.0, 0.0)
     property var position: Qt.vector3d(0.0, 0.0, 0.0)
     property var scale: 1.0
-    property var intensity: 0.2
+    property var strength: 1.0
+
+    property var _strength: strength / 5.0
+
     type: normal.type
     name: "simplex"
-    result: "simplexbump($(normal, vec3), $(position, vec3), $(scale, float), $(intensity, float))"
+    result: "simplexbump($(normal, vec3), $(position, vec3), $(scale, float), $(_strength, float))"
     header: "
 // GLSL textureless classic 4D noise \"cnoise\",
 // with an RSL-style periodic variant \"pnoise\".

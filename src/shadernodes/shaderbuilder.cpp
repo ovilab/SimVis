@@ -20,6 +20,7 @@ QString ShaderBuilder::source() const
 
 QString ShaderBuilder::finalShader()
 {
+    qDebug() << "Request for final " << m_outputs.count();
     for(QSignalMapper *mapper : m_mappers) {
         disconnect(this, 0, mapper, SLOT(map()));
         disconnect(mapper, SIGNAL(mapped(int)), this, SLOT(updateUniform(int)));
@@ -97,7 +98,8 @@ QString ShaderBuilder::finalShader()
         setup.replace(QRegularExpression("\n"), "\n" + indentMatch.captured(1));
     }
     QString originalSource = m_source;
-    contents += originalSource.replace(QRegularExpression(matchString), setup);
+    originalSource.replace(QRegularExpression(matchString), setup);
+    contents += originalSource;
 
     for(const ShaderOutput *output : m_outputs) {
         ShaderNode *value = output->value();
@@ -186,7 +188,7 @@ void ShaderBuilder::setSource(QString source)
 {
     if (m_source == source)
         return;
-
+    qDebug() << "Source changed!";
     m_source = source;
     emit finalShaderChanged();
     emit sourceChanged(source);

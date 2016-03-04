@@ -101,16 +101,6 @@ void CylindersRenderer::uploadVBOs(Cylinders* cylinders)
     m_vertexCount = vertices.size();
 }
 
-void CylindersRenderer::beforeLinkProgram() {
-    if(!isGeometryShadersSupported()) {
-        geometryShaderMissingError();
-        return;
-    }
-    setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/cylinders/cylinders.vsh");
-    setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/cylinders/cylinders.fsh");
-    setShaderFromSourceFile(QOpenGLShader::Geometry, ":/org.compphys.SimVis/renderables/cylinders/cylinders.gsh");
-}
-
 void CylindersRenderer::render()
 {
     m_vao->bind();

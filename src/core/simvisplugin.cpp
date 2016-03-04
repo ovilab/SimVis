@@ -53,7 +53,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<NoiseViewer>("SimVis", 1, 0, "NoiseViewer");
     qmlRegisterType<PeriodicCopies>("SimVis", 1, 0, "PeriodicCopies");
     qmlRegisterType<Slice>("SimVis", 1, 0, "Slice");
-    qmlRegisterType<Cylinders>("SimVis", 1, 0, "Cylinders");
+    qmlRegisterType<Cylinders>("SimVis", 1, 0, "AbstractCylinders");
     qmlRegisterType<Lines>("SimVis", 1, 0, "Lines");
     qmlRegisterType<ShaderNode>("SimVis", 1, 0, "ShaderNode");
     qmlRegisterType<ShaderBuilder>("SimVis", 1, 0, "ShaderBuilder");

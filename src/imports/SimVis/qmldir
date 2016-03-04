@@ -1,1 +1,3 @@
 module SimVis
+Cylinders 1.0 Cylinders.qml
+Spheres 1.0 Spheres.qml
