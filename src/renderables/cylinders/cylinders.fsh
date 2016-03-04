@@ -82,19 +82,11 @@ void main(void) {
     // the normal is the gradient of the function defining the cone shape
     // This is found in cone space as
     //      grad = vec3(2.0*x, 2.0*y, -(rd/l*r1 + 2*rd^2/l^2*z))
-//    vec3 cylNormal = vec3(2.0*cyl_point.x,
-//                          2.0*cyl_point.y,
-//                          -(rd/l*r1 + 2.0*(rd*rd/(l*l)) * cyl_point.z));
     vec3 cylNormal = vec3(2.0*cyl_point.x,
                           2.0*cyl_point.y,
                           (2.0*(r1-r2)*(r1*(l - cyl_point.z) + r2*cyl_point.z))/(l*l));
-//    vec3 cylNormal = vec3(2.0*cyl_point.x,
-//                          2.0*cyl_point.y,
-//                          0.0);
     // we transform this to real space by using our basis matrix
     vec3 normal = cylinderWorldBasis * cylNormal;
-//    normal = tmp_point - dot(tmp_point, axis) * axis;
-//    normal = (cp_modelViewProjectionMatrix*vec4(normal, 0.0)).xyz;
     normal = normalize(normal);
 
     // test front cap
