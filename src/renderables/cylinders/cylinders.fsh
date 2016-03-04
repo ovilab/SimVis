@@ -16,6 +16,10 @@ cp_in vec3 v2;
 
 //out vec4 fragcolor;
 
+float square(vec3 a) {
+    return dot(a, a);
+}
+
 void main(void) {
     vec3 rayOrigin = vec3(0.0, 0.0, 0.0); // in modelview space
     vec3 rayTarget = modelViewPosition; // in modelview space
@@ -76,46 +80,77 @@ void main(void) {
     }
     cp_FragColor = vec4(0.0, 1.0, 1.0, 1.0);
 
-    float dist1 = (-b + sqrt(d))/(2.0*a); // solution t
+    float distSide = (-b + sqrt(d))/(2.0*a); // solution t
     // ray-plane intersection
     // d = ((p0 - E) . n) / (D . n)
-    float dist2 = dot(base - rayTarget, axis) / dot(rayDirection, axis);
-    float dist3 = dot(end - rayTarget, axis) / dot(rayDirection, axis);
+    float distBase = dot(base - rayTarget, axis) / dot(rayDirection, axis);
+    float distEnd = dot(end - rayTarget, axis) / dot(rayDirection, axis);
 
-    // point of intersection on cylinder surface
-    vec3 newPoint1 = rayTarget + dist1 * rayDirection;
-    vec3 newPoint2 = rayTarget + dist2 * rayDirection;
-    vec3 newPoint3 = rayTarget + dist3 * rayDirection;
+    // produce the possible points of the solutions
+    vec3 sidePoint = rayTarget + distSide * rayDirection;
+    vec3 basePoint = rayTarget + distBase * rayDirection;
+    vec3 endPoint = rayTarget + distEnd * rayDirection;
 
-    float distanceFromBase2 = length(newPoint2 - base);
-    float distanceFromBase3 = length(newPoint3 - end);
+    float baseDistance = square(basePoint - base);
+    float endDistance = square(endPoint - end);
 
-    float distance1 = length(newPoint1);
-    float distance2 = length(newPoint2);
-    float distance3 = length(newPoint3);
+    float screenSideDistance = square(sidePoint);
+    float screenBaseDistance = square(basePoint);
+    float screenEndDistance = square(endPoint);
 
-    bool doCapTests = true;
+    bool isSideSolution = true;
 
     vec3 normal;
-    float dist = dist1;
-    if(distance2 <= distance1 && distance2 <= distance3 && distanceFromBase2 < r1) {
-        dist = dist2;
-        doCapTests = false;
+    float dist = distSide;
+
+    // first, test if the end cap planes are closer to the
+    // screen than the solution to the cone equation
+    // this is unlikely, but is necessary to ensure that we
+    // don't get solutions beyond the cone epicenter ><
+    if((screenBaseDistance <= screenSideDistance && screenBaseDistance <= screenEndDistance) && baseDistance < r1*r1) {
+        dist = distBase;
+        isSideSolution = false;
         normal = worldAxis;
     }
-    if(distance3 <= distance1 && distance3 <= distance2 && distanceFromBase3 < r2) {
-        dist = dist3;
-        doCapTests = false;
+    if(screenEndDistance <= screenSideDistance && screenEndDistance <= screenBaseDistance && endDistance < r2*r2) {
+        dist = distEnd;
+        isSideSolution = false;
         normal = -worldAxis;
     }
+    if(isSideSolution) {
+        // we didn't find a cap plane that was closer,
+        // so we check if the point on the side is outside the
+        // length of the cylinder, i.e. outside the two caps.
+        // To do this, we check the angle between the point of
+        // intersection - cylinder end vector and a cap plane normal
+        // (which is the cylinder axis)
+        // if cos angle < 0, the point is outside of cylinder
+        if(dot(sidePoint - base, axis) < 0.0) {
+            dist = distBase;
+            isSideSolution = false;
+            normal = worldAxis;
+            if(baseDistance > r1*r1) {
+                discard;
+            }
+        }
+        if(dot(sidePoint - end, -axis) < 0.0) {
+            dist = distEnd;
+            isSideSolution = false;
+            normal = -worldAxis;
+            if(endDistance > r2*r2) {
+                discard;
+            }
+        }
+    }
 
-    vec3 newPoint = rayTarget + dist * rayDirection;
-
-    // The new point in cylinder space
+    // use the found solution to produce the final version
+    // of the point in cylinder space
     vec3 cylPoint = E + D * dist;
     vec3 cylPointWorld = cylinderWorldBasis * cylPoint;
 
-    if(doCapTests) {
+    if(isSideSolution) {
+        // we didn't find a solution that returned one of the caps
+        // and must calculate the normal.
         // the normal is the gradient of the function defining the cone shape
         // This is found in cone space as
         //      grad = vec3(2.0*x, 2.0*y, -(rd/l*r1 + 2*rd^2/l^2*z))
@@ -125,33 +160,6 @@ void main(void) {
         // we transform this to real space by using our basis matrix
         normal = cylinderWorldBasis * cylNormal;
         normal = normalize(normal);
-    }
-
-    // to calculate caps, simply check the angle between
-    // the point of intersection - cylinder end vector
-    // and a cap plane normal (which is the cylinder cylinder_axis)
-    // if the angle < 0, the point is outside of cylinder
-    if(doCapTests) {
-        // test caps
-        float bottom_cap_test = dot(newPoint - base, axis);
-        float top_cap_test = dot(newPoint - end, -axis);
-        if (bottom_cap_test < 0.0) {
-            vec3 pointB = rayTarget + rayDirection * dist2;
-            vec3 diffFromBase = pointB - base;
-            if (dot(diffFromBase, diffFromBase) > r1*r1)  {
-                discard;
-            }
-            cylPointWorld = cylinderWorldBasis * (E + D * dist2);
-            normal = worldAxis;
-        } else if (top_cap_test < 0.0) {
-            vec3 pointB = rayTarget + rayDirection * dist3;
-            vec3 diffFromEnd = pointB - end;
-            if (dot(diffFromEnd, diffFromEnd) > r2*r2)  {
-                discard;
-            }
-            cylPointWorld = cylinderWorldBasis * (E + D * dist3);
-            normal = -worldAxis;
-        }
     }
 
     vec3 position = cylPointWorld;
