@@ -94,16 +94,19 @@ void main(void) {
     float distance2 = length(newPoint2);
     float distance3 = length(newPoint3);
 
+    bool doCapTests = true;
+
+    vec3 normal;
     float dist = dist1;
     if(distance2 <= distance1 && distance2 <= distance3 && distanceFromBase2 < r1) {
         dist = dist2;
-        cp_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
-        return;
+        doCapTests = false;
+        normal = worldAxis;
     }
     if(distance3 <= distance1 && distance3 <= distance2 && distanceFromBase3 < r2) {
         dist = dist3;
-        cp_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-        return;
+        doCapTests = false;
+        normal = -worldAxis;
     }
 
     vec3 newPoint = rayTarget + dist * rayDirection;
@@ -112,60 +115,46 @@ void main(void) {
     vec3 cylPoint = E + D * dist;
     vec3 cylPointWorld = cylinderWorldBasis * cylPoint;
 
-    // the normal is the gradient of the function defining the cone shape
-    // This is found in cone space as
-    //      grad = vec3(2.0*x, 2.0*y, -(rd/l*r1 + 2*rd^2/l^2*z))
-    vec3 cylNormal = vec3(2.0*cylPoint.x,
-                          2.0*cylPoint.y,
-                          (2.0*(r1-r2)*(r1*(l - cylPoint.z) + r2*cylPoint.z))/(l*l));
-    // we transform this to real space by using our basis matrix
-    vec3 normal = cylinderWorldBasis * cylNormal;
-    normal = normalize(normal);
+    if(doCapTests) {
+        // the normal is the gradient of the function defining the cone shape
+        // This is found in cone space as
+        //      grad = vec3(2.0*x, 2.0*y, -(rd/l*r1 + 2*rd^2/l^2*z))
+        vec3 cylNormal = vec3(2.0*cylPoint.x,
+                              2.0*cylPoint.y,
+                              (2.0*(r1-r2)*(r1*(l - cylPoint.z) + r2*cylPoint.z))/(l*l));
+        // we transform this to real space by using our basis matrix
+        normal = cylinderWorldBasis * cylNormal;
+        normal = normalize(normal);
+    }
 
     // to calculate caps, simply check the angle between
     // the point of intersection - cylinder end vector
     // and a cap plane normal (which is the cylinder cylinder_axis)
     // if the angle < 0, the point is outside of cylinder
-
-    // test caps
-    float bottom_cap_test = dot(newPoint - base, axis);
-    float top_cap_test = dot(newPoint - end, -axis);
-//    bool bottomIsCloser = (length(base) < length(end) && length(newPoint - end) > length(end - base));
-//    bool topIsCloser = (length(end) < length(base) && length(newPoint - base) > length(end - base));
-//    if ((top_cap_test < 0.0 || topIsCloser) && !bottomIsCloser) {
-    if (top_cap_test < 0.0) {
-        // ray-plane intersection
-        // d = ((p0 - E) . n) / (D . n)
-//        vec3 p0 = end;
-//        float dist2 = dot(end - rayTarget, axis) / dot(rayDirection, axis);
-        vec3 pointB = rayTarget + rayDirection * dist3;
-        vec3 diffFromEnd = pointB - end;
-        // within the cap radius?
-        if (dot(diffFromEnd, diffFromEnd) > r2*r2)  {
-            discard;
+    if(doCapTests) {
+        // test caps
+        float bottom_cap_test = dot(newPoint - base, axis);
+        float top_cap_test = dot(newPoint - end, -axis);
+        if (bottom_cap_test < 0.0) {
+            vec3 pointB = rayTarget + rayDirection * dist2;
+            vec3 diffFromBase = pointB - base;
+            if (dot(diffFromBase, diffFromBase) > r1*r1)  {
+                discard;
+            }
+            cylPointWorld = cylinderWorldBasis * (E + D * dist2);
+            normal = worldAxis;
+        } else if (top_cap_test < 0.0) {
+            vec3 pointB = rayTarget + rayDirection * dist3;
+            vec3 diffFromEnd = pointB - end;
+            if (dot(diffFromEnd, diffFromEnd) > r2*r2)  {
+                discard;
+            }
+            cylPointWorld = cylinderWorldBasis * (E + D * dist3);
+            normal = -worldAxis;
         }
-        cylPointWorld = cylinderWorldBasis * (E + D * dist3);
-        normal = -worldAxis;
-        cp_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-//    } else if ((bottom_cap_test < 0.0 || bottomIsCloser) && !topIsCloser) {
-    } else if (bottom_cap_test < 0.0) {
-        // ray-plane intersection
-        // d = ((p0 - E) . n) / (D . n)
-//        vec3 p0 = base;
-//        float dist2 = dot(p0 - rayTarget, axis) / dot(rayDirection, axis);
-        vec3 pointB = rayTarget + rayDirection * dist2;
-        vec3 diffFromBase = pointB - base;
-        // within the cap radius?
-        if (dot(diffFromBase, diffFromBase) > r1*r1)  {
-            discard;
-        }
-        cylPointWorld = cylinderWorldBasis * (E + D * dist2);
-        normal = worldAxis;
-        cp_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
     }
 
-//    vec3 position = cylPointWorld;
+    vec3 position = cylPointWorld;
 
-//    setupShaderNodes();
-//    fragcolor = defaultFragment(normal, cylPointWorld, color);
+    $setupShaderNodes();
 }
