@@ -21,7 +21,10 @@ void main(void) {
     vec3 axis = cylinderBasis[2];
     vec3 worldAxis = cylinderWorldBasis[2];
 
-    // Ray origin in cylinder space
+    // Ray target in cylinder space
+    vec3 cylTarget = ray_target * basis;
+
+    // Direction from base to hitpoint in model view space
     vec3 diff = ray_target - base;
 
     // Ray origin in cylinder basis
@@ -72,80 +75,81 @@ void main(void) {
 
     // point of intersection on cylinder surface
     vec3 new_point = ray_target + dist * ray_direction;
-
     vec3 tmp_point = new_point - base;
 
+    vec3 newCylPoint = cylTarget + dist * D;
+
     // The new point in cylinder space
-    vec3 cyl_point = E + D * dist;
-    vec3 cyl_point_world = cylinderWorldBasis * cyl_point;
+    vec3 cylPoint = E + D * dist;
+    vec3 cylPoint_world = cylinderWorldBasis * cylPoint;
 
     // the normal is the gradient of the function defining the cone shape
     // This is found in cone space as
     //      grad = vec3(2.0*x, 2.0*y, -(rd/l*r1 + 2*rd^2/l^2*z))
-    vec3 cylNormal = vec3(2.0*cyl_point.x,
-                          2.0*cyl_point.y,
-                          (2.0*(r1-r2)*(r1*(l - cyl_point.z) + r2*cyl_point.z))/(l*l));
+    vec3 cylNormal = vec3(2.0*cylPoint.x,
+                          2.0*cylPoint.y,
+                          (2.0*(r1-r2)*(r1*(l - cylPoint.z) + r2*cylPoint.z))/(l*l));
     // we transform this to real space by using our basis matrix
     vec3 normal = cylinderWorldBasis * cylNormal;
     normal = normalize(normal);
 
-    // test front cap
-    float cap_test = dot((new_point - base), axis);
+    // cylinder space
+    vec3 cylBase = (base - base) * basis;
+    vec3 cylEnd = (end_cyl - base)  * basis;
+    vec3 cylAxis = axis * basis;
+
+//    cp_FragColor = vec4(abs(cylEnd), 1.0);
+//    return;
 
     // to calculate caps, simply check the angle between
     // the point of intersection - cylinder end vector
     // and a cap plane normal (which is the cylinder cylinder_axis)
     // if the angle < 0, the point is outside of cylinder
-    // test front cap
 
-    // flat
-    if (cap_test < 0.0)
+    // test bottom cap
+    float bottom_cap_test = dot(cylPoint - cylBase, cylAxis);
+    if (bottom_cap_test < 0.0)
     {
         // ray-plane intersection
-        float dNV = dot(-axis, ray_direction);
-        if (dNV < 0.0) {
-            //        fragcolor = vec4(1.0, 1.0, 0.2, 1.0);
-            //        return;
-            discard;
+        // d = ((p0 - E) . n) / (D . n)
+        float dNV = dot(D, cylAxis);
+        if (dNV > 0.0) {
+//            discard;
         }
-        float near = dot(-axis, (base)) / dNV;
-        new_point = ray_direction * near + ray_origin;
+        vec3 p0 = cylBase;
+        float dist2 = dot(p0-E, cylAxis) / dNV;
+        vec3 cylPointB = E + D * dist2;
+        cylPoint_world = cylinderWorldBasis * cylPointB;
         // within the cap radius?
-        if (dot(new_point - base, new_point-base) > r1*r1)  {
-            //        fragcolor = vec4(1.0, 1.0, 1.0, 1.0);
-            //        return;
+        if (dot(cylPointB, cylPointB) > r1*r1)  {
             discard;
         }
         normal = -worldAxis;
     }
 
-    // test end cap
-
-    cap_test = dot((new_point - end_cyl), axis);
-
-    // flat
-    if (cap_test > 0.0)
+    // test top cap
+    float top_cap_test = dot(cylPoint - cylEnd, -cylAxis);
+    if (top_cap_test < 0.0)
     {
         // ray-plane intersection
-        float dNV = dot(axis, ray_direction);
-        if (dNV < 0.0) {
-            //          fragcolor = vec4(1.0, 0.3, 1.0, 1.0);
-            //          return;
-            discard;
+        // d = ((p0 - E) . n) / (D . n)
+        float dNV = dot(D, cylAxis);
+        if (dNV > 0.0) {
+//            discard;
         }
-        float near = dot(axis, end_cyl) / dNV;
-        new_point = ray_direction * near + ray_origin;
+        vec3 p0 = cylEnd;
+        float dist2 = dot(p0-E, cylAxis) / dNV;
+        vec3 cylPointB = E + D * dist2;
+        cylPoint_world = cylinderWorldBasis * cylPointB;
         // within the cap radius?
-        if (dot(new_point - end_cyl, new_point-base) > r2*r2) {
-            //          fragcolor = vec4(0.2, 0.5, 0.5, 1.0);
-            //          return;
+        if (dot(cylPointB, cylPointB) > r2*r2)  {
             discard;
         }
-        normal = worldAxis;
+        normal = -worldAxis;
     }
 
-    vec3 position = cyl_point_world;
+    vec3 position = cylPoint_world;
 
     $setupShaderNodes();
-//    fragcolor = defaultFragment(normal, cyl_point_world, color);
+//    fragcolor = defaultFragment(normal, cylPoint_world, color);
 }

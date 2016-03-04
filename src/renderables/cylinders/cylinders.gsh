@@ -44,9 +44,14 @@ void main(void) {
     vec3 outward = cross(deltaNormalized, right);
     outward = normalize(outward);
 
-    cylinderBasis = mat3(normalize(cp_normalMatrix * outward), // U
-                         normalize(cp_normalMatrix * right), // V
-                         normalize(cp_normalMatrix * deltaNormalized)); // axis
+    // multiplying with normal matrix is the same as multiplying
+    // with the upper 3x3 part of the modelview matrix,
+    // except that it doesn't change vector lengths
+    // and preserves normals when the modelview matrix has
+    // non-uniform scaling
+    cylinderBasis = mat3(cp_normalMatrix * outward, // U
+                         cp_normalMatrix * right, // V
+                         cp_normalMatrix * deltaNormalized); // axis
 
     cylinderWorldBasis = mat3(normalize(outward), // U
                          normalize(right), // V
