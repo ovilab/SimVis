@@ -79,9 +79,6 @@ void main(void) {
 
     // point of intersection on cylinder surface
     vec3 newPoint = rayTarget + dist * rayDirection;
-    vec3 tmpPoint = newPoint - base;
-
-    vec3 newCylPoint = cylTarget + dist * D;
 
     // The new point in cylinder space
     vec3 cylPoint = E + D * dist;
@@ -96,14 +93,6 @@ void main(void) {
     // we transform this to real space by using our basis matrix
     vec3 normal = cylinderWorldBasis * cylNormal;
     normal = normalize(normal);
-
-    // cylinder space
-    vec3 cylBase = vec3(0.0, 0.0, 0.0);
-    vec3 cylAxis = axis * basis;
-    vec3 cylEnd = cylAxis * length(v2 - v1);
-
-//    cp_FragColor = vec4(abs(cylEnd), 1.0);
-//    return;
 
     // to calculate caps, simply check the angle between
     // the point of intersection - cylinder end vector
