@@ -110,12 +110,12 @@ void main(void) {
     if((screenBaseDistance <= screenSideDistance && screenBaseDistance <= screenEndDistance) && baseDistance < r1*r1) {
         dist = distBase;
         isSideSolution = false;
-        normal = worldAxis;
+        normal = -worldAxis;
     }
     if(screenEndDistance <= screenSideDistance && screenEndDistance <= screenBaseDistance && endDistance < r2*r2) {
         dist = distEnd;
         isSideSolution = false;
-        normal = -worldAxis;
+        normal = worldAxis;
     }
     if(isSideSolution) {
         // we didn't find a cap plane that was closer,
@@ -128,7 +128,7 @@ void main(void) {
         if(dot(sidePoint - base, axis) < 0.0) {
             dist = distBase;
             isSideSolution = false;
-            normal = worldAxis;
+            normal = -worldAxis;
             if(baseDistance > r1*r1) {
                 discard;
             }
@@ -136,7 +136,7 @@ void main(void) {
         if(dot(sidePoint - end, -axis) < 0.0) {
             dist = distEnd;
             isSideSolution = false;
-            normal = -worldAxis;
+            normal = worldAxis;
             if(endDistance > r2*r2) {
                 discard;
             }
