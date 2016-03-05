@@ -6,7 +6,7 @@ ShaderNode {
     property var color: "white"
     property var strength: 1.0
     property var position: Qt.vector3d(0.0, 0.0, 0.0)
-    property var attenuation: 0.001
+    property var attenuation: 0.0001
     property var gamma: 1.0
 
     name: "light"

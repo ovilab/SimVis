@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.2
 
 import NeuroML 1.0
 import SimVis 1.0
+import SimVis.ShaderNodes 1.0
 
 ApplicationWindow {
     title: qsTr("Hello World")
@@ -29,21 +30,27 @@ ApplicationWindow {
         }
 
         Cylinders {
+            id: cylinders
             visible: true
             scale: 1.0
             radius: 1.2
 
-            Light {
-                id: light2
-                ambientColor: "blue"
-                specularColor: "white"
-                diffuseColor: "cyan"
-                ambientIntensity: 0.1
-                diffuseIntensity: 1.0
-                specularIntensity: 1.0
-                shininess: 40.0
-                attenuation: 0.001
-                position: Qt.vector3d(0.0, 0.0, 30.0)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
+            fragColor: Diffuse {
+                position: cylinders.shader.position
+                color: Qt.vector3d(1.0, 1.0, 1.0)
+                specularIntensity: 0.4
+                normal: cylinders.shader.normal
+
+                lights: ShaderGroup {
+                    Light {
+                        position: Qt.vector3d(50.0, 50.0, -50.0)
+                        color: "white"
+                    }
+                    Light {
+                        position: Qt.vector3d(50.0, -50.0, 50.0)
+                        color: "white"
+                    }
+                }
             }
         }
     }
