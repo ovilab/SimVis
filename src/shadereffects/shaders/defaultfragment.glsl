@@ -1,17 +1,15 @@
-highp vec4 defaultFragment(highp vec3 normal, highp vec3 vertexPosition, highp vec3 color)
-{
-    highp vec3 light = vec3(1.0, 1.0, 1.0);
-#ifdef SIMPLEXBUMP
-    normal = simplexbump(normal, normal);
-#endif
+// BEGIN defaultfragment.glsl
+#if __VERSION__ >= 130
 
-#ifdef DEFAULTLIGHT
-    light = defaultLight(normal, vertexPosition, color);
-#endif
+#define cp_in in
+#define cp_out out
+out vec4 cp_FragColor;
 
-#ifdef SKYBOXREFLECTION
-    light += skyboxReflection(normal, vertexPosition);
-#endif
+#else
 
-    return vec4(color*light, 1.0);
-}
+#define cp_in varying
+#define cp_out
+#define cp_FragColor gl_FragColor
+
+#endif
+// END defaultfragment.glsl

@@ -234,27 +234,28 @@ void RenderableRenderer::prepareAndRender()
 
         if(!QOpenGLContext::currentContext()->isOpenGLES()) {
             addShaderCodeToBase(QOpenGLShader::Fragment, generateGLSLHeader());
-            addShaderCodeToBase(QOpenGLShader::Vertex, generateGLSLHeader());
             addShaderCodeToBase(QOpenGLShader::Geometry, generateGLSLHeader());
+            addShaderCodeToBase(QOpenGLShader::Vertex, generateGLSLHeader());
         }
 
         addShaderCodeToBase(QOpenGLShader::Fragment, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/default.glsl"));
-        addShaderCodeToBase(QOpenGLShader::Vertex, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/default.glsl"));
+        addShaderCodeToBase(QOpenGLShader::Fragment, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/defaultfragment.glsl"));
         addShaderCodeToBase(QOpenGLShader::Geometry, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/default.glsl"));
+        addShaderCodeToBase(QOpenGLShader::Geometry, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/defaultgeometry.glsl"));
+        addShaderCodeToBase(QOpenGLShader::Vertex, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/default.glsl"));
+        addShaderCodeToBase(QOpenGLShader::Vertex, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/defaultvertex.glsl"));
 
         for(ShaderEffect *shaderEffect : m_shaderEffects) {
             if(shaderEffect->enabled()) {
                 // Defines must come before library
                 addShaderCodeToBase(QOpenGLShader::Fragment, shaderEffect->fragmentShaderDefines());
-                addShaderCodeToBase(QOpenGLShader::Vertex, shaderEffect->vertexShaderDefines());
-                addShaderCodeToBase(QOpenGLShader::Geometry, shaderEffect->geometryShaderDefines());
                 addShaderCodeToBase(QOpenGLShader::Fragment, shaderEffect->fragmentShaderLibrary());
+                addShaderCodeToBase(QOpenGLShader::Vertex, shaderEffect->vertexShaderDefines());
                 addShaderCodeToBase(QOpenGLShader::Vertex, shaderEffect->vertexShaderLibrary());
+                addShaderCodeToBase(QOpenGLShader::Geometry, shaderEffect->geometryShaderDefines());
                 addShaderCodeToBase(QOpenGLShader::Geometry, shaderEffect->geometryShaderLibrary());
             }
         }
-
-        addShaderCodeToBase(QOpenGLShader::Fragment, contentFromFile(":/org.compphys.SimVis/shadereffects/shaders/defaultfragment.glsl"));
 
         setShaderFromSourceCode(QOpenGLShader::Vertex, m_vertexShaderSource);
         if(!m_geometryShaderSource.isEmpty()) {

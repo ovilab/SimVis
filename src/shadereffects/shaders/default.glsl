@@ -4,17 +4,11 @@
 
 #if __VERSION__ >= 130
 
-#define cp_in in
-#define cp_out out
 #define cp_texture texture
-out vec4 cp_FragColor;
 
 #else
 
-#define cp_in varying
-#define cp_in attribute
 #define cp_texture texture2D
-#define cp_FragColor gl_FragColor
 
 #endif
 

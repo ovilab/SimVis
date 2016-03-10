@@ -42,5 +42,7 @@
         <file>renderables/spheres/spheres_node_geom.vsh</file>
         <file>renderables/spheres/spheres_node.gsh</file>
         <file>renderables/spheres/spheres_node.fsh</file>
+        <file>shadereffects/shaders/defaultgeometry.glsl</file>
+        <file>shadereffects/shaders/defaultvertex.glsl</file>
     </qresource>
 </RCC>
