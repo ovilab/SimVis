@@ -1,18 +1,18 @@
 // BEGIN trianglecollection.vsh
 uniform highp float normalVectorSign;
-layout(location=0) in vec4 a_position;
-layout(location=1) in vec3 a_normal;
-layout(location=2) in vec3 a_color;
+layout(location=0) cp_in vec3 in_position;
+layout(location=1) cp_in vec3 in_normal;
+layout(location=2) cp_in vec3 in_color;
 
-out highp vec3 normal;
-out highp vec3 color;
-out highp vec3 vertexPosition;
+cp_out highp vec3 vs_normal;
+cp_out highp vec3 vs_color;
+cp_out highp vec3 vs_position;
 
 void main() {
-    vertexPosition = a_position.xyz;
-    normal = a_normal*normalVectorSign;
-    color = a_color;
+    vs_position = in_position.xyz;
+    vs_normal = in_normal*normalVectorSign;
+    vs_color = in_color;
 
-    gl_Position = cp_modelViewProjectionMatrix*a_position;
+    gl_Position = cp_modelViewProjectionMatrix*vec4(in_position, 1.0);
 }
 // END trianglecollection.vsh

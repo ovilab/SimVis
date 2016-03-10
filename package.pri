@@ -23,8 +23,6 @@ SOURCES += \
     $$PWD/src/core/lookattransform.cpp \
     $$PWD/src/renderables/billboards/billboards.cpp \
     $$PWD/src/renderables/points/points.cpp \
-    $$PWD/src/renderables/marchingcubes/marchingcubes.cpp \
-    $$PWD/src/renderables/marchingcubes/marchingcubesgenerator.cpp \
     $$PWD/src/core/shadereffect.cpp \
     $$PWD/src/shadereffects/simplexbump.cpp \
     $$PWD/src/shadereffects/simplextexture.cpp \
@@ -42,7 +40,9 @@ SOURCES += \
     $$PWD/src/shadernodes/shadernode.cpp \
     $$PWD/src/shadernodes/shaderbuilder.cpp \
     $$PWD/src/shadernodes/shaderoutput.cpp \
-    $$PWD/src/shadernodes/shadergroup.cpp
+    $$PWD/src/shadernodes/shadergroup.cpp \
+    $$PWD/src/generators/marchingcubes/marchingcubes.cpp \
+    $$PWD/src/generators/marchingcubes/marchingcubesgenerator.cpp
 
 HEADERS += \
     $$PWD/src/core/navigator.h \
@@ -60,8 +60,6 @@ HEADERS += \
     $$PWD/src/core/lookattransform_p.h \
     $$PWD/src/renderables/billboards/billboards.h \
     $$PWD/src/renderables/points/points.h \
-    $$PWD/src/renderables/marchingcubes/marchingcubes.h \
-    $$PWD/src/renderables/marchingcubes/marchingcubesgenerator.h \
     $$PWD/src/SimVis/Billboards \
     $$PWD/src/SimVis/Points \
     $$PWD/src/SimVis/MarchingCubes \
@@ -90,7 +88,9 @@ HEADERS += \
     $$PWD/src/shadernodes/shadernode.h \
     $$PWD/src/shadernodes/shaderbuilder.h \
     $$PWD/src/shadernodes/shaderoutput.h \
-    $$PWD/src/shadernodes/shadergroup.h
+    $$PWD/src/shadernodes/shadergroup.h \
+    $$PWD/src/generators/marchingcubes/marchingcubes.h \
+    $$PWD/src/generators/marchingcubes/marchingcubesgenerator.h
 
 
 

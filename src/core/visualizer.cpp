@@ -73,8 +73,8 @@ void Visualizer::handleWindowChanged(QQuickWindow *win)
     if(win) {
         QSurfaceFormat format = win->format();
         format.setProfile(QSurfaceFormat::CoreProfile);
-        format.setMajorVersion(2);
-        format.setMinorVersion(1);
+        format.setMajorVersion(4);
+        format.setMinorVersion(3);
         win->setFormat(format);
         win->setClearBeforeRendering(false);
     }

@@ -1,4 +1,4 @@
 module SimVis
 Cylinders 1.0 Cylinders.qml
 Spheres 1.0 Spheres.qml
-MarchingCubes 1.0 MarchingCubes.qml
+Mesh 1.0 Mesh.qml

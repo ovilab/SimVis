@@ -3,17 +3,17 @@ layout(location=1) in vec3 in_color;
 layout(location=2) in float in_scale;
 layout(location=3) in float in_sphereId;
 
-layout(location=0) out vec3 color;
-layout(location=1) out float scale;
-layout(location=2) out vec3 position;
-layout(location=3) out float sphereId;
+out vec3 vs_color;
+out float vs_scale;
+out vec3 vs_position;
+out float vs_sphereId;
 
 void main(void)
 {
-    position = in_position;
-    color = in_color;
-    scale = in_scale;
-    sphereId = in_sphereId;
+    vs_position = in_position;
+    vs_color = in_color;
+    vs_scale = in_scale;
+    vs_sphereId = in_sphereId;
 
-    gl_Position = cp_modelViewProjectionMatrix * vec4(position, 1.0);
+    gl_Position = cp_modelViewProjectionMatrix * vec4(in_position, 1.0);
 }

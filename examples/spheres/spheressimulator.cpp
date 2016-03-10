@@ -26,7 +26,6 @@ SimulatorWorker *MySimulator::createWorker()
 
 MyWorker::MyWorker()
 {
-    using namespace SimVis;
     m_positions.resize(50000);
     m_velocities.resize(m_positions.size());
     double size = 100;

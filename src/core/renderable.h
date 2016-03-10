@@ -51,7 +51,7 @@ protected:
     QVector3D m_rightVector;
     QVector3D m_cameraPosition;
     QVector<GLuint> m_vboIds;
-    QOpenGLVertexArrayObject *m_vao;
+    QOpenGLVertexArrayObject *m_vao = nullptr;
     QString m_fragmentShaderBase;
     QString m_geometryShaderBase;
     QString m_vertexShaderBase;
