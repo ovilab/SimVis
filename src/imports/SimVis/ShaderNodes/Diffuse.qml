@@ -43,13 +43,13 @@ highp vec3 diffuseLight(Light light, highp vec3 normal, highp vec3 vertexPositio
 
     highp vec3 surfaceToCamera = normalize(cp_cameraPosition - vertexPosition);
 
-   /* DIFFUSE */
+    /* DIFFUSE */
     highp float diffuseCoefficient1 = max(0.0, dot(normal, surfaceToLight));
     // smooths the edges of the light (for some reason)
     diffuseCoefficient1 *= diffuseCoefficient1;
     lightVector += light.color*light.strength*diffuseColor.rgb*diffuseCoefficient1*diffuseIntensity*attenuationFactor;
 
-   /* AMBIENTDIFFUSE */
+    /* AMBIENTDIFFUSE */
     highp float diffuseCoefficient2 = max(0.0, dot(normal, surfaceToCamera));
     lightVector += light.color*light.strength*ambientColor.rgb*ambientIntensity*(vec3(diffuseCoefficient2)*0.9 + 0.1*vec3(1.0));
 

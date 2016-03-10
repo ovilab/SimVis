@@ -8,7 +8,7 @@ ShaderNode {
 
     property var _strength: strength / 5.0
 
-    type: normal.type
+    type: "vec3"
     name: "simplex"
     result: "simplexbump($(normal, vec3), $(position, vec3), $(scale, float), $(_strength, float))"
     header: "

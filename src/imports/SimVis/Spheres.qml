@@ -4,8 +4,7 @@ import SimVis.ShaderNodes 1.0
 
 AbstractSpheres {
     id: spheresRoot
-    property alias fragColor: _shader.fragColor
-    property alias shader: _shader
+    property alias fragColor: _fragmentShader.fragColor
 
     vertexShader: spheresRoot.isGeometryShaderSupported ? vertexShaderGeometry : vertexShaderNoGeometry
 
@@ -30,40 +29,44 @@ AbstractSpheres {
     }
 
     fragmentShader: ShaderBuilder {
-        id: _shader
+        id: _fragmentShader
 
         // TODO add readonly or some other way to show that these are only for others to read
         shaderType: ShaderBuilder.Fragment
+
+        // inputs
         property ShaderNode position: ShaderNode {
             type: "vec3"
             name: "position"
-            result: "position";
+            result: "position"
         }
         property ShaderNode normal: ShaderNode {
             type: "vec3"
             name: "normal"
-            result: "normal";
+            result: "normal"
         }
         property ShaderNode texCoord: ShaderNode {
             type: "vec2"
             name: "texCoord"
-            result: "texCoord";
+            result: "texCoord"
         }
         property ShaderNode color: ShaderNode {
             type: "vec3"
             name: "color"
-            result: "color";
+            result: "color"
         }
         property ShaderNode sphereId: ShaderNode {
             type: "float"
             name: "sphereId"
-            result: "sphereId";
+            result: "sphereId"
         }
 
+        // outputs
+        // TODO fix this so that it can be var
         property ShaderNode fragColor: Diffuse {
-            position: shader.position
-            color: shader.normal
-            normal: shader.normal
+            position: _fragmentShader.position
+            color: _fragmentShader.normal
+            normal: _fragmentShader.normal
         }
 
         sourceFile: "qrc:/org.compphys.SimVis/renderables/spheres/spheres_node.fsh"
@@ -72,7 +75,7 @@ AbstractSpheres {
             ShaderOutput {
                 type: "vec4"
                 name: "cp_FragColor"
-                value: _shader.fragColor
+                value: _fragmentShader.fragColor
             }
         ]
 
