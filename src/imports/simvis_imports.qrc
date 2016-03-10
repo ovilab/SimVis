@@ -17,5 +17,6 @@
         <file>SimVis/ShaderNodes/Clamp.qml</file>
         <file>SimVis/Spheres.qml</file>
         <file>SimVis/Cylinders.qml</file>
+        <file>SimVis/MarchingCubes.qml</file>
     </qresource>
 </RCC>

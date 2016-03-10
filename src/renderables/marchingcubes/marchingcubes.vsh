@@ -1,18 +1,17 @@
 // BEGIN marchingcubes.vsh
-uniform highp float lightFalloffDistance;
 uniform highp float normalVectorSign;
 uniform highp float scale;
 
-attribute highp vec4 a_position;
-attribute highp vec3 a_normal;
-attribute highp vec3 a_color;
+cp_in vec4 a_position;
+cp_in vec3 a_normal;
+cp_in vec3 a_color;
 
-varying highp vec3 normal;
-varying highp vec3 color;
-varying highp vec3 vertexPosition;
+cp_out vec3 normal;
+cp_out vec3 color;
+cp_out vec3 position;
 
 void main() {
-    vertexPosition = a_position.xyz;
+    position = a_position.xyz;
     highp vec4 scaledPosition = vec4(a_position.xyz*scale, a_position.w);
 
     normal = a_normal*normalVectorSign;

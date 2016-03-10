@@ -2,6 +2,7 @@ import QtQuick 2.2
 import QtQuick.Controls 1.1
 import MySimulator 1.0
 import SimVis 1.0
+import SimVis.ShaderNodes 1.0
 
 ApplicationWindow {
     id: applicationRoot
@@ -35,11 +36,11 @@ ApplicationWindow {
             camera: camera
         }
 
-        SkyBox {
-            id: skybox
-            camera: camera
-            texture: ":/cubemap.jpg"
-        }
+//        SkyBox {
+//            id: skybox
+//            camera: camera
+//            texture: ":/cubemap.jpg"
+//        }
 
         MarchingCubes {
             id: marchingCubes
@@ -47,43 +48,49 @@ ApplicationWindow {
             min: Qt.vector3d(-Math.PI, -Math.PI, -Math.PI)
             max: Qt.vector3d(Math.PI, Math.PI, Math.PI)
             threshold: 0.0
+            mode: MarchingCubes.FRONT_AND_BACK
             color: "#fd20c1"
-
-            SimplexBump {
-                id: simplexBump
-                enabled: false
-                intensity: 0.1
-                scale: 1.0
+            fragmentColor: Mix {
+                value1: Qt.vector3d(1.0, 0.0, 0.3)
+                value2: Qt.vector3d(1.0, 0.3, 0.3)
+                mix: 0.5
             }
 
-            Light {
-                id: light
-                ambient: true
-                diffuse: true
-                specular: true
-                ambientColor: color
-                specularColor: "white"
-                diffuseColor: color
-                ambientIntensity: 0.1
-                diffuseIntensity: 1.0
-                specularIntensity: 1.0
-                shininess: 30.0
-                attenuation: 0.01
-                position: camera.position
-            }
+//            SimplexBump {
+//                id: simplexBump
+//                enabled: false
+//                intensity: 0.1
+//                scale: 1.0
+//            }
 
-            SkyBoxReflection {
-                id: reflection
-                skybox: skybox
-                reflectivity: 0.2
-            }
+//            Light {
+//                id: light
+//                ambient: true
+//                diffuse: true
+//                specular: true
+//                ambientColor: color
+//                specularColor: "white"
+//                diffuseColor: color
+//                ambientIntensity: 0.1
+//                diffuseIntensity: 1.0
+//                specularIntensity: 1.0
+//                shininess: 30.0
+//                attenuation: 0.01
+//                position: camera.position
+//            }
 
-            SimplexTexture {
-                id: simplexTexture
-                scale: 1.0
-                enabled: false
-                timeDependent: true
-            }
+//            SkyBoxReflection {
+//                id: reflection
+//                skybox: skybox
+//                reflectivity: 0.2
+//            }
+
+//            SimplexTexture {
+//                id: simplexTexture
+//                scale: 1.0
+//                enabled: false
+//                timeDependent: true
+//            }
         }
     }
 

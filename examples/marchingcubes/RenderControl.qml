@@ -14,121 +14,121 @@ Rectangle {
         focus = visible
     }
 
-    GroupBox {
-        id: renderingMode
-        width: parent.width
-        height: 66
-        title: qsTr("Rendering mode")
+//    GroupBox {
+//        id: renderingMode
+//        width: parent.width
+//        height: 66
+//        title: qsTr("Rendering mode")
 
-        Button {
-            id: rendering
-            text: "Lines"
-            onClicked: {
-                marchingCubes.mode = MarchingCubes.LINES
-            }
-        }
+//        Button {
+//            id: rendering
+//            text: "Lines"
+//            onClicked: {
+//                marchingCubes.mode = MarchingCubes.LINES
+//            }
+//        }
 
-        Button {
-            id: rendering1
-            anchors.left: rendering.right
-            text: "Triangles"
-            onClicked: {
-                marchingCubes.mode = MarchingCubes.FRONT_AND_BACK
-            }
-        }
-    }
+//        Button {
+//            id: rendering1
+//            anchors.left: rendering.right
+//            text: "Triangles"
+//            onClicked: {
+//                marchingCubes.mode = MarchingCubes.FRONT_AND_BACK
+//            }
+//        }
+//    }
 
-    GroupBox {
-        id: texture
-        anchors.top: renderingMode.bottom
-        width: parent.width
-        height: renderingMode.height
-        title: qsTr("Texture")
+//    GroupBox {
+//        id: texture
+//        anchors.top: renderingMode.bottom
+//        width: parent.width
+//        height: renderingMode.height
+//        title: qsTr("Texture")
 
-        Button {
-            id: textureNone
-            text: "None"
-            onClicked: {
-                simplexTexture.enabled = false
-                simplexTexture.timeDependent = false
-            }
-        }
+//        Button {
+//            id: textureNone
+//            text: "None"
+//            onClicked: {
+//                simplexTexture.enabled = false
+//                simplexTexture.timeDependent = false
+//            }
+//        }
 
-        Button {
-            id: textureSimplex
-            anchors.left: textureNone.right
-            text: "Simplex"
-            onClicked: {
-                simplexTexture.enabled = true
-                simplexTexture.timeDependent = false
-            }
-        }
+//        Button {
+//            id: textureSimplex
+//            anchors.left: textureNone.right
+//            text: "Simplex"
+//            onClicked: {
+//                simplexTexture.enabled = true
+//                simplexTexture.timeDependent = false
+//            }
+//        }
 
-        Button {
-            id: textureSimplexTime
-            anchors.left: textureSimplex.right
-            text: "Simplex(t)"
-            onClicked: {
-                simplexTexture.enabled = true
-                simplexTexture.timeDependent = true
-            }
-        }
-    }
+//        Button {
+//            id: textureSimplexTime
+//            anchors.left: textureSimplex.right
+//            text: "Simplex(t)"
+//            onClicked: {
+//                simplexTexture.enabled = true
+//                simplexTexture.timeDependent = true
+//            }
+//        }
+//    }
 
-    GroupBox {
-        id: bump
-        anchors.top: texture.bottom
-        width: parent.width
-        height: 82
-        title: qsTr("Simplex bump")
+//    GroupBox {
+//        id: bump
+//        anchors.top: texture.bottom
+//        width: parent.width
+//        height: 82
+//        title: qsTr("Simplex bump")
 
-        CheckBox {
-            id: bumpEnabled
-            text: "Enabled"
-            checked: simplexBump.enabled
-            onCheckedChanged: {
-                if(simplexBump != null) {
-                    simplexBump.enabled = checked
-                }
-            }
-        }
+//        CheckBox {
+//            id: bumpEnabled
+//            text: "Enabled"
+//            checked: simplexBump.enabled
+//            onCheckedChanged: {
+//                if(simplexBump != null) {
+//                    simplexBump.enabled = checked
+//                }
+//            }
+//        }
 
-        Label {
-            id: strengthLabel
-            anchors.top: bumpEnabled.bottom
-            text: qsTr("Strength")
-        }
+//        Label {
+//            id: strengthLabel
+//            anchors.top: bumpEnabled.bottom
+//            text: qsTr("Strength")
+//        }
 
-        Slider {
-            id: bumpIntensity
-            anchors.top: strengthLabel.top
-            anchors.left: strengthLabel.right
-            anchors.leftMargin: 5
-            minimumValue: 0.0
-            maximumValue: 0.5
-            value: simplexBump.intensity
-            onValueChanged: simplexBump.intensity = value
-        }
+//        Slider {
+//            id: bumpIntensity
+//            anchors.top: strengthLabel.top
+//            anchors.left: strengthLabel.right
+//            anchors.leftMargin: 5
+//            minimumValue: 0.0
+//            maximumValue: 0.5
+//            value: simplexBump.intensity
+//            onValueChanged: simplexBump.intensity = value
+//        }
 
 
-        Label {
-            id: scaleLabel
-            anchors.top: strengthLabel.bottom
-            width: strengthLabel.width
-            text: qsTr("Scale")
-        }
+//        Label {
+//            id: scaleLabel
+//            anchors.top: strengthLabel.bottom
+//            width: strengthLabel.width
+//            text: qsTr("Scale")
+//        }
 
-        Slider {
-            id: bumpScale
-            anchors.top: scaleLabel.top
-            anchors.left: scaleLabel.right
-            anchors.leftMargin: 5
-            minimumValue: 0.0
-            maximumValue: 5.0
-            value: simplexBump.scale
-            onValueChanged: simplexBump.scale = value
-        }
-    }
+//        Slider {
+//            id: bumpScale
+//            anchors.top: scaleLabel.top
+//            anchors.left: scaleLabel.right
+//            anchors.leftMargin: 5
+//            minimumValue: 0.0
+//            maximumValue: 5.0
+//            value: simplexBump.scale
+//            onValueChanged: simplexBump.scale = value
+//        }
+//    }
 
     Button {
         id: okButton

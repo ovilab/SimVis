@@ -37,7 +37,7 @@ void SimVisPlugin::registerTypes(const char *uri)
                                           "Cannot create abstract type Simulator. This must be subclassed.");
     qmlRegisterType<Billboards>("SimVis", 1, 0, "Billboards");
     qmlRegisterType<Spheres>("SimVis", 1, 0, "AbstractSpheres");
-    qmlRegisterType<MarchingCubes>("SimVis", 1, 0, "MarchingCubes");
+    qmlRegisterType<MarchingCubes>("SimVis", 1, 0, "AbstractMarchingCubes");
     qmlRegisterType<Points>("SimVis", 1, 0, "Points");
     qmlRegisterType<Visualizer>("SimVis", 1, 0, "Visualizer");
     qmlRegisterType<Camera>("SimVis", 1, 0, "Camera");
