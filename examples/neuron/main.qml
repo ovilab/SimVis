@@ -44,11 +44,15 @@ ApplicationWindow {
                 lights: ShaderGroup {
                     Light {
                         position: Qt.vector3d(50.0, 50.0, -50.0)
-                        color: "white"
+                        strength: 0.3
                     }
                     Light {
                         position: Qt.vector3d(50.0, -50.0, 50.0)
-                        color: "white"
+                        strength: 0.3
+                    }
+                    Light {
+                        position: camera.position
+                        strength: 0.3
                     }
                 }
             }

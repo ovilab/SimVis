@@ -150,18 +150,6 @@ ApplicationWindow {
                 }
             }
 
-            //            Row {
-            //                Text {
-            //                    text: "Mix 2:"
-            //                }
-            //                Slider {
-            //                    id: mixSlider2
-            //                    minimumValue: 0.0
-            //                    maximumValue: 1.0
-            //                    value: 0.5
-            //                }
-            //            }
-
         }
     }
 
