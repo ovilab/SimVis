@@ -28,12 +28,12 @@ QString ShaderBuilder::finalShader()
     qDeleteAll(m_mappers);
     m_uniforms.clear();
     // Verify all that all outputs have values
-    for(const ShaderOutput *output : m_outputs) {
-        ShaderNode *value = output->value();
+    for(ShaderOutput *output : m_outputs) {
+        ShaderNode *value = output->node();
         if(!value) {
             continue;
         }
-        bool success = output->value()->setup(this);
+        bool success = output->node()->setup(this);
         if(!success) {
             qWarning() << "ShaderBuilder::finalShader(): Shader construction failed.";
             return QString();
@@ -42,8 +42,8 @@ QString ShaderBuilder::finalShader()
 
     QString contents = "";
     contents += "\n// ------  begin generated header  ------\n\n";
-    for(const ShaderOutput *output : m_outputs) {
-        ShaderNode *value = output->value();
+    for(ShaderOutput *output : m_outputs) {
+        ShaderNode *value = output->node();
         if(!value) {
             continue;
         }
@@ -64,7 +64,7 @@ QString ShaderBuilder::finalShader()
         contents += ";\n";
     }
     contents += "\n// ------           outputs        ------\n\n";
-    for(const ShaderOutput *output : m_outputs) {
+    for(ShaderOutput *output : m_outputs) {
         if(output->name() == "cp_FragColor") {
             continue;
         }
@@ -73,16 +73,16 @@ QString ShaderBuilder::finalShader()
 
     QString setup = "";
     setup += "\n// ------   begin generated body   ------\n\n";
-    for(const ShaderOutput *output : m_outputs) {
-        ShaderNode *value = output->value();
+    for(ShaderOutput *output : m_outputs) {
+        ShaderNode *value = output->node();
         if(!value) {
             continue;
         }
         setup += value->generateBody();
     }
     setup += "\n// ------    output assignments    ------\n\n";
-    for(const ShaderOutput *output : m_outputs) {
-        ShaderNode *value = output->value();
+    for(ShaderOutput *output : m_outputs) {
+        ShaderNode *value = output->node();
         if(!value) {
             continue;
         }
@@ -101,8 +101,8 @@ QString ShaderBuilder::finalShader()
     originalSource.replace(QRegularExpression(matchString), setup);
     contents += originalSource;
 
-    for(const ShaderOutput *output : m_outputs) {
-        ShaderNode *value = output->value();
+    for(ShaderOutput *output : m_outputs) {
+        ShaderNode *value = output->node();
         if(!value) {
             continue;
         }

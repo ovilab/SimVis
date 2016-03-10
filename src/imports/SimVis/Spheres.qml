@@ -4,7 +4,7 @@ import SimVis.ShaderNodes 1.0
 
 AbstractSpheres {
     id: spheresRoot
-    property alias fragColor: _fragmentShader.fragColor
+    property alias fragmentColor: _fragColor.value
 
     vertexShader: spheresRoot.isGeometryShaderSupported ? vertexShaderGeometry : vertexShaderNoGeometry
 
@@ -61,21 +61,20 @@ AbstractSpheres {
             result: "sphereId"
         }
 
-        // outputs
-        // TODO fix this so that it can be var
-        property ShaderNode fragColor: Diffuse {
-            position: _fragmentShader.position
-            color: _fragmentShader.normal
-            normal: _fragmentShader.normal
-        }
-
         sourceFile: "qrc:/org.compphys.SimVis/renderables/spheres/spheres_node.fsh"
 
         outputs: [
             ShaderOutput {
+                id: _fragColor
                 type: "vec4"
                 name: "cp_FragColor"
-                value: _fragmentShader.fragColor
+                value: Diffuse {
+                    position: _fragmentShader.position
+                    normal: _fragmentShader.normal
+                    lights: ShaderGroup {
+                        Light {}
+                    }
+                }
             }
         ]
 

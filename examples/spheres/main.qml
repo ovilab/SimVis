@@ -38,26 +38,11 @@ ApplicationWindow {
             id: spheres
             visible: true
             scale: scaleSlider.value
-
-            fragColor: Diffuse {
+            fragmentColor: Diffuse {
                 position: spheres.fragmentShader.position
-                color: Qt.vector3d(0.2, 0.8, 1.0)
-                specularColor: "white"
-                hardness: mixSlider.value * 10
-                normal: Simplex {
-                    normal: spheres.fragmentShader.normal
-                    position: spheres.fragmentShader.normal
-                    scale: 2.0
-                }
-
+                normal: spheres.fragmentShader.normal
                 lights: ShaderGroup {
-                    Light {
-                        position: Qt.vector3d(50.0, 0.0, 0.0)
-                    }
-                    Light {
-                        position: Qt.vector3d(-50.0, 0.0, 0.0)
-                        color: "yellow"
-                    }
+                    Light {}
                 }
             }
         }
