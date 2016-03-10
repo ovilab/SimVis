@@ -1,47 +1,39 @@
 #ifndef MARCHINGCUBESSIMULATOR_H
 #define MARCHINGCUBESSIMULATOR_H
-#include "perlinnoise.h"
 
 #include <SimVis/Simulator>
 #include <SimVis/QuickWorker>
+#include <SimVis/MarchingCubes>
 #include <QVector3D>
+#include <generators/marchingcubes/marchingcubesgenerator.h>
 
 class MyWorker;
 class MySimulator : public Simulator
 {
     Q_OBJECT
-    Q_ENUMS(Geometry)
-    Q_PROPERTY(Geometry geometry READ geometry WRITE setGeometry NOTIFY geometryChanged)
+    Q_PROPERTY(MarchingCubes* marchingCubes READ marchingCubes WRITE setMarchingCubes NOTIFY marchingCubesChanged)
+
 public:
-    enum Geometry
-    {
-        SPHERE,
-        SINUS,
-        CUBE,
-        PERLIN
-    };
-    Geometry geometry() const;
+    MarchingCubes* marchingCubes() const;
 
 public slots:
-    void setGeometry(Geometry arg);
+    void setMarchingCubes(MarchingCubes* marchingCubes);
 
 signals:
-    void geometryChanged(Geometry arg);
+    void marchingCubesChanged(MarchingCubes* marchingCubes);
 
 protected:
     SimulatorWorker *createWorker();
 
 private:
-    Geometry m_geometry = SINUS;
-    bool m_willSetScalarField = true;
     friend class MyWorker;
+    MarchingCubes* m_marchingCubes = nullptr;
 };
 
 class MyWorker : public QuickWorker
 {
     Q_OBJECT
 public:
-
     MyWorker();
 
 public slots:
@@ -52,9 +44,7 @@ private:
     virtual void synchronizeSimulator(Simulator *simulator) override;
     virtual void work() override;
     virtual void synchronizeRenderer(Renderable *renderableObject) override;
-    bool m_willSetScalarField = true;
-    PerlinNoise m_perlin;
-    MySimulator::Geometry m_geometry = MySimulator::SINUS;
+    MarchingCubesGenerator m_marchingCubesGenerator;
 };
 
 #endif // MARCHINGCUBESSIMULATOR_H

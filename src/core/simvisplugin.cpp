@@ -5,7 +5,7 @@
 #include "../renderables/spheres/spheres.h"
 #include "../renderables/cylinders/cylinders.h"
 #include "../renderables/lines/lines.h"
-#include "../renderables/marchingcubes/marchingcubes.h"
+#include "../generators/marchingcubes/marchingcubes.h"
 #include "../renderables/skybox/skybox.h"
 #include "visualizer.h"
 #include "camera.h"
@@ -36,7 +36,6 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<Simulator>("SimVis", 1, 0, "Simulator",
                                           "Cannot create abstract type Simulator. This must be subclassed.");
     qmlRegisterType<Billboards>("SimVis", 1, 0, "Billboards");
-    qmlRegisterType<Spheres>("SimVis", 1, 0, "AbstractSpheres");
     qmlRegisterType<MarchingCubes>("SimVis", 1, 0, "MarchingCubes");
     qmlRegisterType<Points>("SimVis", 1, 0, "Points");
     qmlRegisterType<Visualizer>("SimVis", 1, 0, "Visualizer");
@@ -49,7 +48,6 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<Light>("SimVis", 1, 0, "RenderableLight");
     qmlRegisterType<SkyBox>("SimVis", 1, 0, "SkyBox");
     qmlRegisterType<SkyBoxReflection>("SimVis", 1, 0, "SkyBoxReflection");
-    qmlRegisterType<TriangleCollection>("SimVis", 1, 0, "TriangleCollection");
     qmlRegisterType<NoiseViewer>("SimVis", 1, 0, "NoiseViewer");
     qmlRegisterType<PeriodicCopies>("SimVis", 1, 0, "PeriodicCopies");
     qmlRegisterType<Slice>("SimVis", 1, 0, "Slice");
@@ -59,6 +57,8 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<ShaderBuilder>("SimVis", 1, 0, "ShaderBuilder");
     qmlRegisterType<ShaderOutput>("SimVis", 1, 0, "ShaderOutput");
     qmlRegisterType<ShaderGroup>("SimVis", 1, 0, "ShaderGroup");
+    qmlRegisterType<Spheres>("SimVis", 1, 0, "AbstractSpheres");
+    qmlRegisterType<TriangleCollection>("SimVis", 1, 0, "AbstractTriangleCollection");
 }
 
 void SimVisPlugin::initializeEngine(QQmlEngine *engine, const char *uri)

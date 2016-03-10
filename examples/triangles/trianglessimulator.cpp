@@ -20,7 +20,7 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
 {
     TriangleCollection* triangleCollection = qobject_cast<TriangleCollection*>(renderableObject);
     if(triangleCollection) {
-        triangleCollection->data.resize(vertices.size());
+        triangleCollection->vertices.resize(vertices.size());
         triangleCollection->dirty = true;
         for(int i=0; i<vertices.size()/3; i++) {
             QVector3D &p1 = vertices[3*i+0];
@@ -29,9 +29,9 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
             QVector3D normal = QVector3D::crossProduct((p1-p2), (p1-p3)).normalized();
             QVector3D color(1.0, 1.0, 1.0);
             for(int j=0; j<3; j++) {
-                triangleCollection->data[3*i+j].vertex = vertices[3*i+j];
-                triangleCollection->data[3*i+j].color = color;
-                triangleCollection->data[3*i+j].normal = normal;
+                triangleCollection->vertices[3*i+j].vertex = vertices[3*i+j];
+                triangleCollection->vertices[3*i+j].color = color;
+                triangleCollection->vertices[3*i+j].normal = normal;
             }
         }
         return;

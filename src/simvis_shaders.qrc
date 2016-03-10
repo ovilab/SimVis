@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/org.compphys.SimVis">
-        <file>renderables/marchingcubes/marchingcubes.vsh</file>
-        <file>renderables/marchingcubes/marchingcubes.fsh</file>
         <file>renderables/billboards/billboards.vsh</file>
         <file>renderables/billboards/billboards.fsh</file>
         <file>shadereffects/shaders/perlin3.glsl</file>

@@ -74,7 +74,7 @@ void Visualizer::handleWindowChanged(QQuickWindow *win)
         QSurfaceFormat format = win->format();
         format.setProfile(QSurfaceFormat::CoreProfile);
         format.setMajorVersion(4);
-        format.setMinorVersion(1);
+        format.setMinorVersion(3);
         win->setFormat(format);
         win->setClearBeforeRendering(false);
     }

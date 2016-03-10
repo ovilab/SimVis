@@ -14,8 +14,8 @@ RenderableRenderer *TriangleCollection::createRenderer()
 
 void TriangleCollectionRenderer::beforeLinkProgram()
 {
-    setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/trianglecollection/trianglecollection.fsh");
-    setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/trianglecollection/trianglecollection.vsh");
+//    setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/trianglecollection/trianglecollection.fsh");
+//    setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/trianglecollection/trianglecollection.vsh");
 }
 
 void TriangleCollectionRenderer::synchronize(Renderable *renderable)
@@ -34,7 +34,6 @@ void TriangleCollectionRenderer::synchronize(Renderable *renderable)
 
 void TriangleCollectionRenderer::render()
 {
-    using namespace SimVis;
     if(numberOfTriangles == 0) {
         return;
     }
@@ -88,34 +87,45 @@ void TriangleCollectionRenderer::render()
 
 void TriangleCollectionRenderer::uploadVBO(TriangleCollection *triangleCollection)
 {
-    using namespace SimVis;
-    numberOfTriangles = triangleCollection->data.size()/3;
-    if(triangleCollection->data.size() == 0) return;
+    numberOfTriangles = triangleCollection->vertices.size()/3;
+    if(triangleCollection->vertices.size() == 0) return;
     // Transfer vertex data to VBO 0
     m_vao->bind();
 
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
-    glFunctions()->glBufferData(GL_ARRAY_BUFFER, triangleCollection->data.size() * sizeof(TriangleCollectionVBOData), &triangleCollection->data[0], GL_STATIC_DRAW);
+    glFunctions()->glBufferData(GL_ARRAY_BUFFER, triangleCollection->vertices.size() * sizeof(TriangleCollectionVBOData), &triangleCollection->vertices[0], GL_STATIC_DRAW);
 
-    QVector<Triangle> triangles;
-    triangles.resize(numberOfTriangles);
-    for(int i=0; i<numberOfTriangles; i++) {
-        triangles[i].vertexIndices[0] = 3*i+0;
-        triangles[i].vertexIndices[1] = 3*i+1;
-        triangles[i].vertexIndices[2] = 3*i+2;
+    if(triangleCollection->m_trianglesFront.size()==0) {
+        QVector<Triangle> triangles;
+        triangles.resize(numberOfTriangles);
+        for(int i=0; i<numberOfTriangles; i++) {
+            triangles[i].vertexIndices[0] = 3*i+0;
+            triangles[i].vertexIndices[1] = 3*i+1;
+            triangles[i].vertexIndices[2] = 3*i+2;
+        }
+
+        // Transfer index data for front triangles to VBO 1
+        glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
+        glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangles.size() * sizeof(Triangle), &triangles[0], GL_STATIC_DRAW);
+
+        for(int i=0; i<numberOfTriangles; i++) {
+            triangles[i].vertexIndices[0] = 3*i+0;
+            triangles[i].vertexIndices[1] = 3*i+2;
+            triangles[i].vertexIndices[2] = 3*i+1;
+        }
+
+        // Transfer index data for back triangles to VBO 2
+        glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[2]);
+        glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangles.size() * sizeof(Triangle), &triangles[0], GL_STATIC_DRAW);
+    } else {
+
+        // Transfer index data for front triangles to VBO 1
+        glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
+        glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangleCollection->m_trianglesFront.size() * sizeof(Triangle), &triangleCollection->m_trianglesFront[0], GL_STATIC_DRAW);
+
+        // Transfer index data for back triangles to VBO 2
+        glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[2]);
+        glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangleCollection->m_trianglesBack.size() * sizeof(Triangle), &triangleCollection->m_trianglesBack[0], GL_STATIC_DRAW);
+        numberOfTriangles = triangleCollection->m_trianglesBack.size();
     }
-
-    // Transfer index data for front triangles to VBO 1
-    glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
-    glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangles.size() * sizeof(Triangle), &triangles[0], GL_STATIC_DRAW);
-
-    for(int i=0; i<numberOfTriangles; i++) {
-        triangles[i].vertexIndices[0] = 3*i+0;
-        triangles[i].vertexIndices[1] = 3*i+2;
-        triangles[i].vertexIndices[2] = 3*i+1;
-    }
-
-    // Transfer index data for back triangles to VBO 2
-    glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[2]);
-    glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangles.size() * sizeof(Triangle), &triangles[0], GL_STATIC_DRAW);
 }

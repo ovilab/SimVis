@@ -1,7 +1,7 @@
-cp_in vec3 in_position;
-cp_in vec3 in_color;
-cp_in float in_scale;
-cp_in float in_sphereId;
+layout(location=0) cp_in vec3 in_position;
+layout(location=1) cp_in vec3 in_color;
+layout(location=2) cp_in float in_scale;
+layout(location=3) cp_in float in_sphereId;
 
 cp_out vec3 vs_position;
 cp_out vec3 vs_color;

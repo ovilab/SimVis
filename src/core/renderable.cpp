@@ -56,7 +56,9 @@ void Renderable::requestSynchronize()
         m_hasDirtyShaders = false;
     }
 
-    m_renderer->m_uniforms = fragmentShader()->uniforms();
+    if(fragmentShader()) {
+        m_renderer->m_uniforms = fragmentShader()->uniforms();
+    }
 
     m_renderer->synchronize(this);
 }
