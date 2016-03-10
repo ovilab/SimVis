@@ -4,7 +4,7 @@ import SimVis.ShaderNodes 1.0
 
 AbstractSpheres {
     id: spheresRoot
-    property alias fragmentColor: _fragColor.value
+    property alias fragmentColor: _fragmentColor.value
 
     vertexShader: spheresRoot.isGeometryShaderSupported ? vertexShaderGeometry : vertexShaderNoGeometry
 
@@ -65,7 +65,7 @@ AbstractSpheres {
 
         outputs: [
             ShaderOutput {
-                id: _fragColor
+                id: _fragmentColor
                 type: "vec4"
                 name: "cp_FragColor"
                 value: StandardMaterial {

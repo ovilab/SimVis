@@ -20,7 +20,6 @@ QString ShaderBuilder::source() const
 
 QString ShaderBuilder::finalShader()
 {
-    qDebug() << "Request for final " << m_outputs.count();
     for(QSignalMapper *mapper : m_mappers) {
         disconnect(this, 0, mapper, SLOT(map()));
         disconnect(mapper, SIGNAL(mapped(int)), this, SLOT(updateUniform(int)));
@@ -29,13 +28,9 @@ QString ShaderBuilder::finalShader()
     m_uniforms.clear();
     // Verify all that all outputs have values
     for(ShaderOutput *output : m_outputs) {
-        ShaderNode *value = output->node();
-        if(!value) {
-            continue;
-        }
         bool success = output->node()->setup(this);
         if(!success) {
-            qWarning() << "ShaderBuilder::finalShader(): Shader construction failed.";
+            qWarning() << "ShaderBuilder::finalShader(): One of the shader nodes failed during setup.";
             return QString();
         }
     }
@@ -43,11 +38,7 @@ QString ShaderBuilder::finalShader()
     QString contents = "";
     contents += "\n// ------  begin generated header  ------\n\n";
     for(ShaderOutput *output : m_outputs) {
-        ShaderNode *value = output->node();
-        if(!value) {
-            continue;
-        }
-        contents += value->generateHeader();
+        contents += output->node()->generateHeader();
     }
     contents += "\n// ------          uniforms        ------\n\n";
     for(const UniformValue &uniform : m_uniforms) {
@@ -74,19 +65,16 @@ QString ShaderBuilder::finalShader()
     QString setup = "";
     setup += "\n// ------   begin generated body   ------\n\n";
     for(ShaderOutput *output : m_outputs) {
-        ShaderNode *value = output->node();
-        if(!value) {
-            continue;
-        }
-        setup += value->generateBody();
+        setup += output->node()->generateBody();
     }
     setup += "\n// ------    output assignments    ------\n\n";
     for(ShaderOutput *output : m_outputs) {
-        ShaderNode *value = output->node();
-        if(!value) {
-            continue;
-        }
-        setup += output->name() + " = " + ShaderUtils::convert(value->type(), output->type(), value->identifier()) + ";\n";
+        setup += output->name()
+                + " = "
+                + ShaderUtils::convert(output->node()->type(),
+                                       output->type(),
+                                       output->node()->identifier())
+                + ";\n";
     }
     setup += "\n// ------    end generated body    ------\n\n";
 
@@ -188,7 +176,6 @@ void ShaderBuilder::setSource(QString source)
 {
     if (m_source == source)
         return;
-    qDebug() << "Source changed!";
     m_source = source;
     emit finalShaderChanged();
     emit sourceChanged(source);

@@ -31,7 +31,7 @@ ApplicationWindow {
             visible: true
             scale: 1.0
             radius: 1.2
-            fragColor: StandardMaterial {
+            fragmentColor: StandardMaterial {
                 position: cylinders.shader.position
                 color: Qt.vector3d(0.6, 0.8, 1.0)
                 specularIntensity: 1.0

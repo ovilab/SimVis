@@ -4,7 +4,7 @@ import SimVis.ShaderNodes 1.0
 
 AbstractCylinders {
     id: cylindersRoot
-    property alias fragColor: _shader.fragColor
+    property alias fragmentColor: _shader.fragmentColor
     property alias shader: _shader
 
     vertexShader: ShaderBuilder {
@@ -43,7 +43,7 @@ AbstractCylinders {
             result: "color";
         }
 
-        property ShaderNode fragColor: StandardMaterial {
+        property ShaderNode fragmentColor: StandardMaterial {
             position: shader.position
             color: shader.normal
             normal: shader.normal
