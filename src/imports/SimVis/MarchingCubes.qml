@@ -37,7 +37,7 @@ AbstractMarchingCubes {
 
 //        // outputs
 //        // TODO fix this so that it can be var
-//        property ShaderNode fragColor: Diffuse {
+//        property ShaderNode fragColor: StandardMaterial {
 //            position: _fragmentShader.position
 //            color: _fragmentShader.normal
 //            normal: _fragmentShader.normal

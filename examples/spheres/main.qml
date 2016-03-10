@@ -38,7 +38,7 @@ ApplicationWindow {
             id: spheres
             visible: true
             scale: scaleSlider.value
-            fragmentColor: Diffuse {
+            fragmentColor: StandardMaterial {
                 position: spheres.fragmentShader.position
                 normal: spheres.fragmentShader.normal
                 lights: ShaderGroup {

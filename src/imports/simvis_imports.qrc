@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>SimVis/qmldir</file>
         <file>SimVis/ShaderNodes/Add.qml</file>
-        <file>SimVis/ShaderNodes/Diffuse.qml</file>
         <file>SimVis/ShaderNodes/Geometry.qml</file>
         <file>SimVis/ShaderNodes/Mix.qml</file>
         <file>SimVis/ShaderNodes/MainForm.ui.qml</file>
@@ -19,5 +18,7 @@
         <file>SimVis/Cylinders.qml</file>
         <file>SimVis/MarchingCubes.qml</file>
         <file>SimVis/Mesh.qml</file>
+        <file>SimVis/ShaderNodes/StandardMaterial.qml</file>
+        <file>SimVis/ShaderNodes/shaders/standard_material.glsl</file>
     </qresource>
 </RCC>

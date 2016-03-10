@@ -7,6 +7,7 @@
 #include <QQmlListProperty>
 #include <QJSValue>
 #include <QSignalMapper>
+#include <QUrl>
 
 class ShaderBuilder;
 
@@ -19,6 +20,7 @@ class ShaderNode : public QObject
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(QString header READ header WRITE setHeader NOTIFY headerChanged)
     Q_PROPERTY(QString identifier READ identifier NOTIFY identifierChanged)
+    Q_PROPERTY(QUrl headerFile READ headerFile WRITE setHeaderFile NOTIFY headerFileChanged)
     Q_PROPERTY(QObject* parent READ parent WRITE setParent NOTIFY parentChanged)
     Q_PROPERTY(bool requirement READ requirement WRITE setRequirement NOTIFY requirementChanged)
     Q_PROPERTY(QQmlListProperty<ShaderNode> dependencies READ dependencies)
@@ -38,18 +40,12 @@ public:
     QString identifier() const;
     void reset() const;
     virtual bool setup(ShaderBuilder* shaderBuilder);
-
     ShaderBuilder *shaderBuilder() const;
     void setShaderBuilder(ShaderBuilder *shaderBuilder);
-
     QString source() const;
-
     bool requirement() const;
-
-    QQmlListProperty<ShaderNode> dependencies()
-    {
-        return QQmlListProperty<ShaderNode>(this, m_declaredDependencies);
-    }
+    QQmlListProperty<ShaderNode> dependencies();
+    QUrl headerFile() const;
 
 signals:
     void nameChanged(QString name);
@@ -57,12 +53,10 @@ signals:
     void resultChanged(QString result);
     void headerChanged(QString header);
     void identifierChanged(QString identifier);
-
     void sourceChanged(QString source);
-
     void requirementChanged(bool requirement);
-
     void parentChanged(QObject* parent);
+    void headerFileChanged(QUrl headerFile);
 
 public slots:
     void setName(QString name);
@@ -70,8 +64,8 @@ public slots:
     void setResult(QString result);
     void setHeader(QString header);
     void setSource(QString source);
-
     void setRequirement(bool requirement);
+    void setHeaderFile(QUrl headerFile);
 
 protected:
     mutable bool m_hasGeneratedHeader = false;
@@ -92,6 +86,7 @@ private:
     QString m_source;
     QString m_resolvedSource;
     bool m_requirement = true;
+    QUrl m_headerFile;
 };
 
 #endif // SHADERNODE_H

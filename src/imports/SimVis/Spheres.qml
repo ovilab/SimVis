@@ -68,7 +68,7 @@ AbstractSpheres {
                 id: _fragColor
                 type: "vec4"
                 name: "cp_FragColor"
-                value: Diffuse {
+                value: StandardMaterial {
                     position: _fragmentShader.position
                     normal: _fragmentShader.normal
                     lights: ShaderGroup {

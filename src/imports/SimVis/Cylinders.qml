@@ -43,7 +43,7 @@ AbstractCylinders {
             result: "color";
         }
 
-        property ShaderNode fragColor: Diffuse {
+        property ShaderNode fragColor: StandardMaterial {
             position: shader.position
             color: shader.normal
             normal: shader.normal
