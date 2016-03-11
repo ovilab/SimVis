@@ -34,9 +34,11 @@ void MyWorker::synchronizeSimulator(Simulator *simulator) {
 
 void MyWorker::work() {
     // DO WORK
+    m_marchingCubesGenerator.setHasContinuousField(true);
     m_marchingCubesGenerator.setScalarFieldEvaluator([](const QVector3D p) {
-        return sin(pow(p.x(), p.y()) + 2*p.z()) + p.x()*p.y();
-        // return p.length();
+        // return p.x();
+        return p.length();
+        // return sin(pow(p.x(), p.y()) + 2*p.z()) + p.x()*p.y();
     });
     m_marchingCubesGenerator.setColorEvaluator([](const QVector3D point) {
         return QVector3D(1.0, 0.0, 0.0);
@@ -46,14 +48,11 @@ void MyWorker::work() {
 
 void MyWorker::synchronizeRenderer(Renderable *renderable)
 {
-    if(m_marchingCubesGenerator.validSurface()) {
-        TriangleCollection* triangleCollection = qobject_cast<TriangleCollection*>(renderable);
-        if(triangleCollection) {
-            triangleCollection->vertices = m_marchingCubesGenerator.data();
-            triangleCollection->m_trianglesBack = m_marchingCubesGenerator.trianglesBack();
-            triangleCollection->m_trianglesFront = m_marchingCubesGenerator.trianglesFront();
-            triangleCollection->dirty = true;
-        }
+    TriangleCollection* triangleCollection = qobject_cast<TriangleCollection*>(renderable);
+    if(triangleCollection) {
+        triangleCollection->vertices = m_marchingCubesGenerator.data();
+//        triangleCollection->m_trianglesBack = m_marchingCubesGenerator.trianglesBack();
+//        triangleCollection->m_trianglesFront = m_marchingCubesGenerator.trianglesFront();
+        triangleCollection->dirty = true;
     }
-
 }

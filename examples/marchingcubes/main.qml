@@ -57,8 +57,8 @@ ApplicationWindow {
 
     Slider {
         id: thresholdSlider
-        minimumValue: -2
-        maximumValue: 2
-        value: 0.0
+        minimumValue: -5
+        maximumValue: 5
+        value: 3.0
     }
 }

@@ -21,6 +21,7 @@
 
 using std::function;
 
+
 struct Vertex {
     QVector3D coordinates;
     float value;
@@ -28,6 +29,10 @@ struct Vertex {
     float y() { return coordinates.y(); }
     float z() { return coordinates.z(); }
 };
+
+typedef struct {
+   Vertex points[3];
+} TRIANGLE;
 
 struct Edge {
     Vertex *point1;
@@ -61,6 +66,7 @@ struct CubeVertices {
     Vertex v_111; // Corresponds to vertex 6
     Vertex v_101; // Corresponds to vertex 7
     Vertex v_100; // Corresponds to vertex 3
+    QVector<Vertex*> array;
 };
 
 struct Cube {
@@ -68,13 +74,7 @@ struct Cube {
     CubeEdges edges;
 };
 
-struct TriangleLines {
-    unsigned int vertexIndices[6];
-};
-
 typedef std::map<unsigned int, QVector3D> VertexMap;
-
-class MarchingCubesRenderer;
 
 class MarchingCubesGenerator {
 protected:
@@ -83,17 +83,15 @@ protected:
     QVector3D m_resolution;
     float m_threshold = 0.0;
     bool m_dirty = true;
-    bool m_validSurface = false;
     bool m_hasColorEvaluator = false;
     bool m_hasContinuousField = false;
     QVector3D m_color;
     function<float(const QVector3D point)> m_scalarFieldEvaluator;
     function<QVector3D(const QVector3D point)> m_colorEvaluator;
-    QVector<TriangleCollectionVBOData> m_data;
-    QVector<Triangle> m_trianglesFront;
-    QVector<Triangle> m_trianglesBack;
-    QVector<TriangleLines> m_lines;
     VertexMap m_edgeMap; // Maps getEdgeID's to QVector3D's intersecting the edge
+    QVector<TriangleCollectionVBOData> m_data;
+    QVector<Triangle>  m_trianglesFront;
+    QVector<Triangle> m_trianglesBack;
     void updateCube(Cube &cube, const QVector3D &minValues, const QVector3D &vertexIndices, const QVector3D &delta);
     Cube createCube();
     void calculateNormals();
@@ -101,8 +99,6 @@ protected:
     unsigned int getVertexID(unsigned int i, unsigned int j, unsigned int k);
     QVector3D calculateIntersection(Edge &edge);
     void deleteSurface();
-
-    friend class MarchingCubesRenderer;
     void calculateNormal(TriangleCollectionVBOData &point);
 public:
     MarchingCubesGenerator();
@@ -131,6 +127,15 @@ public:
     QVector<TriangleCollectionVBOData> data() const;
     QVector<Triangle> trianglesBack() const;
     QVector<Triangle> trianglesFront() const;
+    void generateSurface2();
+    bool getHasContinuousField() const;
+    void setHasContinuousField(bool hasContinuousField);
+    bool getHasColorEvaluator() const;
+    void setHasColorEvaluator(bool hasColorEvaluator);
+
+private:
+    Vertex vertexInterp(Vertex &p1, Vertex &p2);
+    int polygoniseTri(const Cube &cube, TRIANGLE *tri, int v0, int v1, int v2, int v3);
 };
 
 #endif // MARCHINGCUBESGENERATOR_H

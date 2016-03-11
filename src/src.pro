@@ -24,3 +24,6 @@ DISTFILES = qmldir \
     renderables/spheres/spheres_node_geom.vsh \
     shadereffects/shaders/defaultvertex.glsl \
     shadereffects/shaders/defaultgeometry.glsl
+
+HEADERS += \
+    generators/marchingcubes/marchingcubestables.h

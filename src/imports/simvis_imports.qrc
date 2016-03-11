@@ -19,5 +19,8 @@
         <file>SimVis/Cylinders.qml</file>
         <file>SimVis/MarchingCubes.qml</file>
         <file>SimVis/Mesh.qml</file>
+        <file>../generators/marchingcubes/marchingcubes.vsh</file>
+        <file>../generators/marchingcubes/marchingcubes.gsh</file>
+        <file>../generators/marchingcubes/marchingcubes.fsh</file>
     </qresource>
 </RCC>
