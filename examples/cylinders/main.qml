@@ -51,6 +51,11 @@ ApplicationWindow {
                         position: Qt.vector3d(-5.0, 5.0, 0.0)
                         color: "white"
                     }
+                    Light {
+                        position: camera.position
+                        strength: 0.3
+                        attenuation: 0.0
+                    }
                 }
             }
         }
