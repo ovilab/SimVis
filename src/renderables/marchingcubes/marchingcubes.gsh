@@ -3,6 +3,7 @@ layout( triangle_strip, max_vertices = 64 ) out;
 
 in vec3 vs_position[1];
 out vec3 position;
+out vec3 normal;
 
 uniform float threshold;
 uniform float dr;
@@ -118,39 +119,44 @@ void main(void) {
     /* Emit triangles*/
     int triangleStartIndex = cubeindex;
     for (int i=0; triTableValue(cubeindex, i) != -1; i+=3) {
-        vec3 p;
+        vec3 p1 = vertlist[triTableValue(cubeindex, i)];
+        vec3 n1 = calculateNormal(p1);
+        vec3 p2 = vertlist[triTableValue(cubeindex, i+1)];
+        vec3 n2 = calculateNormal(p2);
+        vec3 p3 = vertlist[triTableValue(cubeindex, i+2)];
+        vec3 n3 = calculateNormal(p3);
 
         // front face
-        p = vertlist[triTableValue(cubeindex, i)];
-        position = p;
-        gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
+        position = p1;
+        normal = n1;
+        gl_Position = cp_modelViewProjectionMatrix*vec4(p1, 1.0);
         EmitVertex();
 
-        p = vertlist[triTableValue(cubeindex, i+1)];
-        position = p;
-        gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
+        position = p2;
+        normal = n2;
+        gl_Position = cp_modelViewProjectionMatrix*vec4(p2, 1.0);
         EmitVertex();
 
-        p = vertlist[triTableValue(cubeindex, i+2)];
-        position = p;
-        gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
+        position = p3;
+        normal = n3;
+        gl_Position = cp_modelViewProjectionMatrix*vec4(p3, 1.0);
         EmitVertex();
         EndPrimitive();
 
         // back face
-        p = vertlist[triTableValue(cubeindex, i+2)];
-        position = p;
-        gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
+        position = p3;
+        normal = n3;
+        gl_Position = cp_modelViewProjectionMatrix*vec4(p3, 1.0);
         EmitVertex();
 
-        p = vertlist[triTableValue(cubeindex, i+1)];
-        position = p;
-        gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
+        position = p2;
+        normal = n2;
+        gl_Position = cp_modelViewProjectionMatrix*vec4(p2, 1.0);
         EmitVertex();
 
-        p = vertlist[triTableValue(cubeindex, i)];
-        position = p;
-        gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
+        position = p1;
+        normal = n1;
+        gl_Position = cp_modelViewProjectionMatrix*vec4(p1, 1.0);
         EmitVertex();
         EndPrimitive();
     }
