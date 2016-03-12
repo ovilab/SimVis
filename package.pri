@@ -42,7 +42,8 @@ SOURCES += \
     $$PWD/src/shadernodes/shaderoutput.cpp \
     $$PWD/src/shadernodes/shadergroup.cpp \
     $$PWD/src/generators/marchingcubes/marchingcubes.cpp \
-    $$PWD/src/generators/marchingcubes/marchingcubesgenerator.cpp
+    $$PWD/src/generators/marchingcubes/marchingcubesgenerator.cpp \
+    $$PWD/src/renderables/marchingcubes/marchingcubesgs.cpp
 
 HEADERS += \
     $$PWD/src/core/navigator.h \
@@ -90,7 +91,8 @@ HEADERS += \
     $$PWD/src/shadernodes/shaderoutput.h \
     $$PWD/src/shadernodes/shadergroup.h \
     $$PWD/src/generators/marchingcubes/marchingcubes.h \
-    $$PWD/src/generators/marchingcubes/marchingcubesgenerator.h
+    $$PWD/src/generators/marchingcubes/marchingcubesgenerator.h \
+    $$PWD/src/renderables/marchingcubes/marchingcubesgs.h
 
 
 

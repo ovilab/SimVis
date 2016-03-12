@@ -40,18 +40,22 @@ ApplicationWindow {
             nearPlane: 0.1
         }
 
-        Mesh {
-            id: triangles
-            fragmentColor: Diffuse {
-                position: triangles.fragmentShader.position
-                color: "blue"
-                normal: triangles.fragmentShader.normal
-                lights: ShaderGroup {
-                    Light {
-                        position: camera.position
-                    }
-                }
-            }
+//        Mesh {
+//            id: triangles
+//            fragmentColor: Diffuse {
+//                position: triangles.fragmentShader.position
+//                color: "blue"
+//                normal: triangles.fragmentShader.normal
+//                lights: ShaderGroup {
+//                    Light {
+//                        position: camera.position
+//                    }
+//                }
+//            }
+//        }
+
+        MarchingCubesGS {
+
         }
     }
 

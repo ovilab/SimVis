@@ -42,5 +42,8 @@
         <file>renderables/spheres/spheres_node.fsh</file>
         <file>shadereffects/shaders/defaultgeometry.glsl</file>
         <file>shadereffects/shaders/defaultvertex.glsl</file>
+        <file>renderables/marchingcubes/marchingcubes.vsh</file>
+        <file>renderables/marchingcubes/marchingcubes.gsh</file>
+        <file>renderables/marchingcubes/marchingcubes.fsh</file>
     </qresource>
 </RCC>

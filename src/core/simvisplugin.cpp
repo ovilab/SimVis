@@ -24,6 +24,7 @@
 #include "../shadernodes/shaderbuilder.h"
 #include "../shadernodes/shaderoutput.h"
 #include "../shadernodes/shadergroup.h"
+#include "../renderables/marchingcubes/marchingcubesgs.h"
 
 #include <qqml.h>
 #include <QQmlEngine>
@@ -57,6 +58,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<ShaderBuilder>("SimVis", 1, 0, "ShaderBuilder");
     qmlRegisterType<ShaderOutput>("SimVis", 1, 0, "ShaderOutput");
     qmlRegisterType<ShaderGroup>("SimVis", 1, 0, "ShaderGroup");
+    qmlRegisterType<MarchingCubesGS>("SimVis", 1, 0, "MarchingCubesGS");
     qmlRegisterType<Spheres>("SimVis", 1, 0, "AbstractSpheres");
     qmlRegisterType<TriangleCollection>("SimVis", 1, 0, "AbstractTriangleCollection");
 }
