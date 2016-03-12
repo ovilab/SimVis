@@ -122,43 +122,46 @@ void main(void) {
         int triangleStartIndex = cubeindex;
         for (int i=0; triTableValue(cubeindex, i) != -1; i+=3) {
             vec3 p1 = vertlist[triTableValue(cubeindex, i)];
+            vec4 mvp_p1 = cp_modelViewProjectionMatrix*vec4(p1, 1.0);
             vec3 n1 = calculateNormal(p1);
             vec3 p2 = vertlist[triTableValue(cubeindex, i+1)];
+            vec4 mvp_p2 = cp_modelViewProjectionMatrix*vec4(p2, 1.0);
             vec3 n2 = calculateNormal(p2);
             vec3 p3 = vertlist[triTableValue(cubeindex, i+2)];
+            vec4 mvp_p3 = cp_modelViewProjectionMatrix*vec4(p3, 1.0);
             vec3 n3 = calculateNormal(p3);
 
             // front face
             position = p1;
             normal = n1;
-            gl_Position = cp_modelViewProjectionMatrix*vec4(p1, 1.0);
+            gl_Position = mvp_p1;
             EmitVertex();
 
             position = p2;
             normal = n2;
-            gl_Position = cp_modelViewProjectionMatrix*vec4(p2, 1.0);
+            gl_Position = mvp_p2;
             EmitVertex();
 
             position = p3;
             normal = n3;
-            gl_Position = cp_modelViewProjectionMatrix*vec4(p3, 1.0);
+            gl_Position = mvp_p3;
             EmitVertex();
             EndPrimitive();
 
             // back face
             position = p3;
-            normal = n3;
-            gl_Position = cp_modelViewProjectionMatrix*vec4(p3, 1.0);
+            normal = -n3;
+            gl_Position = mvp_p3;
             EmitVertex();
 
             position = p2;
-            normal = n2;
-            gl_Position = cp_modelViewProjectionMatrix*vec4(p2, 1.0);
+            normal = -n2;
+            gl_Position = mvp_p2;
             EmitVertex();
 
             position = p1;
-            normal = n1;
-            gl_Position = cp_modelViewProjectionMatrix*vec4(p1, 1.0);
+            normal = -n1;
+            gl_Position = mvp_p1;
             EmitVertex();
             EndPrimitive();
         }
