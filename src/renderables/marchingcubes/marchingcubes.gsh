@@ -1,6 +1,7 @@
-uniform float threshold;
-uniform float delta;
+float threshold = 0.8;
+float delta = 0.2;
 uniform sampler2D triangleTable;
+out vec2 texCoord;
 
 float eval(vec3 p) {
     return dot(p,p);
@@ -8,7 +9,7 @@ float eval(vec3 p) {
 
 //Get triangle table value
 int triTableValue(int i, int j){
-    return int(texelFetch(triangleTable, ivec2(j, i), 0).r);
+    return int(texelFetch(triangleTable, ivec2(i, j), 0).r * 255) - 1;
 }
 
 struct GridCell {
@@ -143,8 +144,9 @@ void main(void) {
             vertlist[11] = linterp(threshold,grid.p[3],grid.p[7],grid.val[3],grid.val[7]);
 
         /* Emit triangles*/
-        int triangleStartIndex = cubeindex*16;
-        for (int i=0; triTableValue(triangleStartIndex, i) != -1; i+=3) {
+        int triangleStartIndex = cubeindex;
+        int count = 0;
+        for (int i=0; triTableValue(cubeindex, i) != -1; i+=3) {
             vec3 p = vertlist[triTableValue(cubeindex, i)];
             gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
             EmitVertex();
@@ -155,6 +157,29 @@ void main(void) {
 
             p = vertlist[triTableValue(cubeindex, i+2)];
             gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
+            EmitVertex();
+            EndPrimitive();
+
+            count += 1;
+            if(count > 6000) {
+                break;
+            }
+        }
+        if(cubeindex > 0 && cubeindex < 255) {
+            vec3 p = vec3(2.0, 0.0, 0.0);
+            gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
+            texCoord = vec2(1.0, 0.0);
+            EmitVertex();
+
+            p = vec3(-triTableValue(8, 1), 0.0, 0.0);
+//            p = vec3(0.0, 0.0, 0.0);
+            gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
+            texCoord = vec2(0.0, 0.0);
+            EmitVertex();
+
+            p = vec3(2.0, 1.0, 0.0);
+            gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
+            texCoord = vec2(0.0, 1.0);
             EmitVertex();
             EndPrimitive();
         }

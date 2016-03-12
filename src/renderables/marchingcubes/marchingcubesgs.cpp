@@ -2,6 +2,7 @@
 
 void MarchingCubesGSRenderer::uploadVBO()
 {
+    qDebug() << "Upload VBO";
     m_numberOfVoxels = m_voxelsPerDimension*m_voxelsPerDimension*m_voxelsPerDimension;
 
     QVector<QVector3D> vertices;
@@ -25,17 +26,29 @@ void MarchingCubesGSRenderer::uploadVBO()
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
     glFunctions()->glBufferData(GL_ARRAY_BUFFER, m_numberOfVoxels * sizeof(QVector3D), &vertices.front(), GL_STATIC_DRAW);
     createTriangleTable();
-    m_triangleTableTexture = new QOpenGLTexture(QOpenGLTexture::Target2D);
-    m_triangleTableTexture->setSize(256,16);
-    m_triangleTableTexture->setMagnificationFilter(QOpenGLTexture::Nearest);
-    m_triangleTableTexture->setMinificationFilter(QOpenGLTexture::Nearest);
-    m_triangleTableTexture->setWrapMode(QOpenGLTexture::ClampToEdge);
-    m_triangleTableTexture->allocateStorage(QOpenGLTexture::Red_Integer, QOpenGLTexture::Int8);
-    m_triangleTableTexture->setData(QOpenGLTexture::Red_Integer, QOpenGLTexture::Int8, m_triangleTable);
+
+    QImage img(QSize(256, 16), QImage::Format_ARGB32);
+    for(int i = 0; i < 256; i++) {
+        for(int j = 0; j < 16; j++) {
+            img.setPixel(i, j, QColor(m_triangleTable[i*16 + j] + 1, 0, 0).rgba());
+        }
+    }
+
+//    m_triangleTableTexture = new QOpenGLTexture(QImage("/tmp/cat.jpg")); //, QOpenGLTexture::DontGenerateMipMaps);
+    m_triangleTableTexture = new QOpenGLTexture(img, QOpenGLTexture::DontGenerateMipMaps);
+//    m_triangleTableTexture = new QOpenGLTexture(img);
+//    m_triangleTableTexture->setSize(256,16);
+//    m_triangleTableTexture->setMagnificationFilter(QOpenGLTexture::Nearest);
+//    m_triangleTableTexture->setMinificationFilter(QOpenGLTexture::Nearest);
+//    m_triangleTableTexture->setWrapMode(QOpenGLTexture::ClampToEdge);
+//    m_triangleTableTexture->allocateStorage(QOpenGLTexture::Red_Integer, QOpenGLTexture::Int8);
+//    m_triangleTableTexture->setData(img);
+//    m_triangleTableTexture->setData(QOpenGLTexture::Red_Integer, QOpenGLTexture::Int8, m_triangleTable);
 }
 
 void MarchingCubesGSRenderer::createTriangleTable()
 {
+    qDebug() << "Create triangle table";
     const int triangleTable[256][16] = {
         {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
         {0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
