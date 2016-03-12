@@ -28,7 +28,12 @@ ApplicationWindow {
         camera: camera
         backgroundColor: "gray"
         navigator: navigator
-        TrackballNavigator {
+//        TrackballNavigator {
+//            id: navigator
+//            anchors.fill: parent
+//            camera: camera
+//        }
+        FlyModeNavigator {
             id: navigator
             anchors.fill: parent
             camera: camera
