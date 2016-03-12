@@ -55,14 +55,14 @@ ApplicationWindow {
 //        }
 
         MarchingCubesGS {
-
+            threshold: thresholdSlider.value
         }
     }
 
     Slider {
         id: thresholdSlider
-        minimumValue: -2
-        maximumValue: 2
+        minimumValue: -5
+        maximumValue: 5
         value: 0.0
     }
 }
