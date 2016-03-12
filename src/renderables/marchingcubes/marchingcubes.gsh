@@ -1,5 +1,5 @@
 uniform float threshold;
-uniform vec3 delta;
+uniform float delta;
 uniform sampler2D triangleTable;
 
 float eval(vec3 p) {
@@ -79,13 +79,13 @@ void main(void) {
     );
 
     vec3 v_000 = vs_position[0];                        // Corresponds to vertex 0
-    vec3 v_001 = v_000 + vec3(0.0, 0.0, delta.z);       // Corresponds to vertex 4
-    vec3 v_011 = v_000 + vec3(0.0, delta.yz);           // Corresponds to vertex 5
-    vec3 v_010 = v_000 + vec3(0.0, delta.y, 0.0);       // Corresponds to vertex 1
-    vec3 v_110 = v_000 + vec3(delta.xy, 0.0);           // Corresponds to vertex 2
+    vec3 v_001 = v_000 + vec3(0.0, 0.0, delta);       // Corresponds to vertex 4
+    vec3 v_011 = v_000 + vec3(0.0, delta, delta);           // Corresponds to vertex 5
+    vec3 v_010 = v_000 + vec3(0.0, delta, 0.0);       // Corresponds to vertex 1
+    vec3 v_110 = v_000 + vec3(delta, delta, 0.0);           // Corresponds to vertex 2
     vec3 v_111 = v_000 + delta;                         // Corresponds to vertex 6
-    vec3 v_101 = v_000 + vec3(delta.x, 0.0, delta.z);   // Corresponds to vertex 7
-    vec3 v_100 = v_000 + vec3(delta.x, 0.0, 0.0);       // Corresponds to vertex 3
+    vec3 v_101 = v_000 + vec3(delta, 0.0, delta);   // Corresponds to vertex 7
+    vec3 v_100 = v_000 + vec3(delta, 0.0, 0.0);       // Corresponds to vertex 3
 
 
     GridCell grid;

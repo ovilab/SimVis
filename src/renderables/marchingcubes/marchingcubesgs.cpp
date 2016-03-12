@@ -341,6 +341,7 @@ void MarchingCubesGSRenderer::synchronize(Renderable *renderable)
             uploadVBO();
             m_isInitialized = true;
         }
+        m_threshold = mc->threshold();
     }
 }
 
@@ -353,6 +354,7 @@ void MarchingCubesGSRenderer::render()
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]); // Tell OpenGL which VBOs to use
     float dr = m_scale / m_voxelsPerDimension;
     program().setUniformValue("dr", dr);
+    program().setUniformValue("threshold", m_threshold);
     program().enableAttributeArray(positionLocation);
     glFunctions()->glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D), 0);
 
