@@ -9,7 +9,7 @@ float delta = 0.2;
 uniform sampler2D triangleTable;
 
 float eval(vec3 p) {
-    return sin(p.x) + cos(p.y) + sin(p.z);
+    return sin(2.0 * p.x) + cos(2.0 * p.y) + sin(2.0 * p.z); // + cos(cp_time);
 }
 
 //Get triangle table value
@@ -117,30 +117,18 @@ void main(void) {
     /* Cube is entirely in/out of the surface */
     if(edgeTable[cubeindex] != 0) {
         /* Find the vertices where the surface intersects the cube */
-        if ( (edgeTable[cubeindex] & 1)>0)
-            vertlist[0] = linterp(threshold,grid.p[0],grid.p[1],grid.val[0],grid.val[1]);
-        if ( (edgeTable[cubeindex] & 2)>0)
-            vertlist[1] = linterp(threshold,grid.p[1],grid.p[2],grid.val[1],grid.val[2]);
-        if ( (edgeTable[cubeindex] & 4)>0)
-            vertlist[2] = linterp(threshold,grid.p[2],grid.p[3],grid.val[2],grid.val[3]);
-        if ( (edgeTable[cubeindex] & 8)>0)
-            vertlist[3] = linterp(threshold,grid.p[3],grid.p[0],grid.val[3],grid.val[0]);
-        if ( (edgeTable[cubeindex] & 16)>0)
-            vertlist[4] = linterp(threshold,grid.p[4],grid.p[5],grid.val[4],grid.val[5]);
-        if ( (edgeTable[cubeindex] & 32)>0)
-            vertlist[5] = linterp(threshold,grid.p[5],grid.p[6],grid.val[5],grid.val[6]);
-        if ( (edgeTable[cubeindex] & 64)>0)
-            vertlist[6] = linterp(threshold,grid.p[6],grid.p[7],grid.val[6],grid.val[7]);
-        if ( (edgeTable[cubeindex] & 128)>0)
-            vertlist[7] = linterp(threshold,grid.p[7],grid.p[4],grid.val[7],grid.val[4]);
-        if ( (edgeTable[cubeindex] & 256)>0)
-            vertlist[8] = linterp(threshold,grid.p[0],grid.p[4],grid.val[0],grid.val[4]);
-        if ( (edgeTable[cubeindex] & 512)>0)
-            vertlist[9] = linterp(threshold,grid.p[1],grid.p[5],grid.val[1],grid.val[5]);
-        if ( (edgeTable[cubeindex] & 1024)>0)
-            vertlist[10] = linterp(threshold,grid.p[2],grid.p[6],grid.val[2],grid.val[6]);
-        if ( (edgeTable[cubeindex] & 2048)>0)
-            vertlist[11] = linterp(threshold,grid.p[3],grid.p[7],grid.val[3],grid.val[7]);
+        vertlist[0] = linterp(threshold,grid.p[0],grid.p[1],grid.val[0],grid.val[1]);
+        vertlist[1] = linterp(threshold,grid.p[1],grid.p[2],grid.val[1],grid.val[2]);
+        vertlist[2] = linterp(threshold,grid.p[2],grid.p[3],grid.val[2],grid.val[3]);
+        vertlist[3] = linterp(threshold,grid.p[3],grid.p[0],grid.val[3],grid.val[0]);
+        vertlist[4] = linterp(threshold,grid.p[4],grid.p[5],grid.val[4],grid.val[5]);
+        vertlist[5] = linterp(threshold,grid.p[5],grid.p[6],grid.val[5],grid.val[6]);
+        vertlist[6] = linterp(threshold,grid.p[6],grid.p[7],grid.val[6],grid.val[7]);
+        vertlist[7] = linterp(threshold,grid.p[7],grid.p[4],grid.val[7],grid.val[4]);
+        vertlist[8] = linterp(threshold,grid.p[0],grid.p[4],grid.val[0],grid.val[4]);
+        vertlist[9] = linterp(threshold,grid.p[1],grid.p[5],grid.val[1],grid.val[5]);
+        vertlist[10] = linterp(threshold,grid.p[2],grid.p[6],grid.val[2],grid.val[6]);
+        vertlist[11] = linterp(threshold,grid.p[3],grid.p[7],grid.val[3],grid.val[7]);
 
         /* Emit triangles*/
         int triangleStartIndex = cubeindex;

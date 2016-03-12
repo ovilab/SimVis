@@ -34,15 +34,15 @@ void MarchingCubesGSRenderer::uploadVBO()
         }
     }
 
-//    m_triangleTableTexture = new QOpenGLTexture(QImage("/tmp/cat.jpg")); //, QOpenGLTexture::DontGenerateMipMaps);
     m_triangleTableTexture = new QOpenGLTexture(img, QOpenGLTexture::DontGenerateMipMaps);
-//    m_triangleTableTexture = new QOpenGLTexture(img);
+
+    // alternative method:
+//    m_triangleTableTexture = new QOpenGLTexture(QOpenGLTexture::Target2D);
 //    m_triangleTableTexture->setSize(256,16);
 //    m_triangleTableTexture->setMagnificationFilter(QOpenGLTexture::Nearest);
 //    m_triangleTableTexture->setMinificationFilter(QOpenGLTexture::Nearest);
 //    m_triangleTableTexture->setWrapMode(QOpenGLTexture::ClampToEdge);
 //    m_triangleTableTexture->allocateStorage(QOpenGLTexture::Red_Integer, QOpenGLTexture::Int8);
-//    m_triangleTableTexture->setData(img);
 //    m_triangleTableTexture->setData(QOpenGLTexture::Red_Integer, QOpenGLTexture::Int8, m_triangleTable);
 }
 

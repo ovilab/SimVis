@@ -7,7 +7,7 @@ class MarchingCubesGSRenderer : public RenderableRenderer
 {
     Q_OBJECT
 private:
-    int m_voxelsPerDimension = 64;
+    int m_voxelsPerDimension = 128;
     int m_numberOfVoxels = 0;
     float m_scale = 10;
     float m_threshold = 0.0;
