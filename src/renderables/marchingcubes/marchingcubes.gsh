@@ -1,10 +1,15 @@
+layout( points ) in;
+layout( triangle_strip, max_vertices = 64 ) out;
+
+in vec3 vs_position[1];
+out vec3 position;
+
 float threshold = 0.8;
 float delta = 0.2;
 uniform sampler2D triangleTable;
-out vec2 texCoord;
 
 float eval(vec3 p) {
-    return dot(p,p);
+    return sin(p.x) + cos(p.y) + sin(p.z);
 }
 
 //Get triangle table value
@@ -36,12 +41,6 @@ vec3 linterp(float threshold, vec3 p1, vec3 p2, float valp1, float valp2)
 
    return(p);
 }
-
-layout( points ) in;
-layout( triangle_strip, max_vertices = 4 ) out;
-
-in vec3 vs_position[1];
-out vec3 position;
 
 void main(void) {
     int edgeTable[256] = int[](
@@ -145,41 +144,40 @@ void main(void) {
 
         /* Emit triangles*/
         int triangleStartIndex = cubeindex;
-        int count = 0;
         for (int i=0; triTableValue(cubeindex, i) != -1; i+=3) {
-            vec3 p = vertlist[triTableValue(cubeindex, i)];
+            vec3 p;
+
+            // front face
+            p = vertlist[triTableValue(cubeindex, i)];
+            position = p;
             gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
             EmitVertex();
 
             p = vertlist[triTableValue(cubeindex, i+1)];
+            position = p;
             gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
             EmitVertex();
 
             p = vertlist[triTableValue(cubeindex, i+2)];
+            position = p;
             gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
             EmitVertex();
             EndPrimitive();
 
-            count += 1;
-            if(count > 6000) {
-                break;
-            }
-        }
-        if(cubeindex > 0 && cubeindex < 255) {
-            vec3 p = vec3(2.0, 0.0, 0.0);
+            // back face
+            p = vertlist[triTableValue(cubeindex, i+2)];
+            position = p;
             gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
-            texCoord = vec2(1.0, 0.0);
             EmitVertex();
 
-            p = vec3(-triTableValue(8, 1), 0.0, 0.0);
-//            p = vec3(0.0, 0.0, 0.0);
+            p = vertlist[triTableValue(cubeindex, i+1)];
+            position = p;
             gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
-            texCoord = vec2(0.0, 0.0);
             EmitVertex();
 
-            p = vec3(2.0, 1.0, 0.0);
+            p = vertlist[triTableValue(cubeindex, i)];
+            position = p;
             gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
-            texCoord = vec2(0.0, 1.0);
             EmitVertex();
             EndPrimitive();
         }
