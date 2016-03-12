@@ -8,7 +8,7 @@ float eval(vec3 p) {
 
 //Get triangle table value
 int triTableValue(int i, int j){
-    return int(texelFetch(triangleTable, ivec2(j, i)).r);
+    return int(texelFetch(triangleTable, ivec2(j, i), 0).r);
 }
 
 struct GridCell {
@@ -144,19 +144,19 @@ void main(void) {
 
         /* Emit triangles*/
         int triangleStartIndex = cubeindex*16;
-//        for (int i=0; triangleTable[triangleStartIndex+i] != -1; i+=3) {
-//            vec3 p = vertlist[triTable[cubeindex][i  ]];
-//            gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
-//            EmitVertex();
+        for (int i=0; triTableValue(triangleStartIndex, i) != -1; i+=3) {
+            vec3 p = vertlist[triTableValue(cubeindex, i)];
+            gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
+            EmitVertex();
 
-//            p = vertlist[triTable[cubeindex][i+1]];
-//            gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
-//            EmitVertex();
+            p = vertlist[triTableValue(cubeindex, i+1)];
+            gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
+            EmitVertex();
 
-//            p = vertlist[triTable[cubeindex][i+2]];
-//            gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
-//            EmitVertex();
-//            EndPrimitive();
-//        }
+            p = vertlist[triTableValue(cubeindex, i+2)];
+            gl_Position = cp_modelViewProjectionMatrix*vec4(p, 1.0);
+            EmitVertex();
+            EndPrimitive();
+        }
     }
 }
