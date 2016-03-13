@@ -38,7 +38,7 @@ ApplicationWindow {
             id: spheres
             visible: true
             scale: scaleSlider.value
-            fragmentColor: Diffuse {
+            fragmentColor: StandardMaterial {
                 position: spheres.fragmentShader.position
                 normal: spheres.fragmentShader.normal
                 lights: ShaderGroup {
@@ -149,18 +149,6 @@ ApplicationWindow {
                     text: mixSlider4.value.toFixed(2)
                 }
             }
-
-            //            Row {
-            //                Text {
-            //                    text: "Mix 2:"
-            //                }
-            //                Slider {
-            //                    id: mixSlider2
-            //                    minimumValue: 0.0
-            //                    maximumValue: 1.0
-            //                    value: 0.5
-            //                }
-            //            }
 
         }
     }

@@ -35,7 +35,7 @@ AbstractTriangleCollection {
 
         // outputs
         // TODO fix this so that it can be var
-        property ShaderNode fragmentColor: Diffuse {
+        property ShaderNode fragmentColor: StandardMaterial {
             position: _fragmentShader.position
             color: "blue"
             normal: _fragmentShader.normal

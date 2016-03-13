@@ -8,6 +8,8 @@
 #include <QMetaProperty>
 #include <QRegularExpression>
 #include <QSignalMapper>
+#include <QQmlFile>
+#include <QFile>
 
 ShaderNode::ShaderNode(QObject *parent)
     : QObject(parent)
@@ -259,19 +261,33 @@ void ShaderNode::setHeader(QString header)
 void ShaderNode::setSource(QString source)
 {
     if (m_source == source)
-            return;
+        return;
 
-        m_source = source;
-        emit sourceChanged(source);
+    m_source = source;
+    emit sourceChanged(source);
 }
 
 void ShaderNode::setRequirement(bool requirement)
 {
     if (m_requirement == requirement)
-            return;
+        return;
 
-        m_requirement = requirement;
-        emit requirementChanged(requirement);
+    m_requirement = requirement;
+    emit requirementChanged(requirement);
+}
+
+void ShaderNode::setHeaderFile(QUrl headerFile)
+{
+    if (m_headerFile == headerFile)
+        return;
+
+    QString fileName = QQmlFile::urlToLocalFileOrQrc(headerFile);
+    QFile file(fileName);
+    file.open(QFile::ReadOnly);
+    setHeader(file.readAll());
+
+    m_headerFile = headerFile;
+    emit headerFileChanged(headerFile);
 }
 
 ShaderBuilder *ShaderNode::shaderBuilder() const
@@ -308,4 +324,14 @@ QString ShaderNode::source() const
 bool ShaderNode::requirement() const
 {
     return m_requirement;
+}
+
+QQmlListProperty<ShaderNode> ShaderNode::dependencies()
+{
+    return QQmlListProperty<ShaderNode>(this, m_declaredDependencies);
+}
+
+QUrl ShaderNode::headerFile() const
+{
+    return m_headerFile;
 }

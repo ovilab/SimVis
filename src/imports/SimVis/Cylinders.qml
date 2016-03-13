@@ -4,7 +4,7 @@ import SimVis.ShaderNodes 1.0
 
 AbstractCylinders {
     id: cylindersRoot
-    property alias fragColor: _shader.fragColor
+    property alias fragmentColor: shaderOutput.value
     property alias shader: _shader
 
     vertexShader: ShaderBuilder {
@@ -43,19 +43,18 @@ AbstractCylinders {
             result: "color";
         }
 
-        property ShaderNode fragColor: Diffuse {
-            position: shader.position
-            color: shader.normal
-            normal: shader.normal
-        }
-
         sourceFile: "qrc:/org.compphys.SimVis/renderables/cylinders/cylinders.fsh"
 
         outputs: [
             ShaderOutput {
+                id: shaderOutput
                 type: "vec4"
                 name: "cp_FragColor"
-                value: _shader.fragColor
+                value: StandardMaterial {
+                    position: shader.position
+                    color: shader.normal
+                    normal: shader.normal
+                }
             }
         ]
 

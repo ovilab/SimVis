@@ -4,7 +4,6 @@ SUBDIRS += \
     simple \
     marchingcubes \
     functionsurface \
-    qmatplotpp \
     triangles \
     neuron \
     cylinders

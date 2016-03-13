@@ -332,7 +332,7 @@ void RenderableRenderer::prepareAndRender()
             program().setUniformValue(name, QColor(value.toString()));
             break;
         default:
-            qWarning() << "Cannot set uniform value because the type is unknown:" << value;
+            qWarning() << "WARNING: Cannot set value for uniform" << uniformName << "because the type is unknown:" << value;
             break;
         }
     }
