@@ -9,8 +9,9 @@ uniform float threshold;
 uniform float dr;
 uniform sampler2D triangleTable;
 
-float eval(vec3 p) {
-    return sin(2.0 * p.x - p.y*p.z) + cos(2.0 * p.y) + sin(2.0 * p.z)*cos(2.0*p.y) + cos(cp_time) + sin(cos(cp_time)*tan(cp_time));
+float eval(vec3 position) {
+    $setupShaderNodes();
+    return shaderNodeResult;
 }
 
 vec3 calculateNormal(vec3 p) {
@@ -32,7 +33,7 @@ vec3 calculateNormal(vec3 p) {
     normal.x = (fPlusX - fMinusX) * oneOverTwoH;
     normal.y = (fPlusY - fMinusY) * oneOverTwoH;
     normal.z = (fPlusZ - fMinusZ) * oneOverTwoH;
-    normalize(normal);
+    normal = normalize(normal);
     return normal;
 }
 

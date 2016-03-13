@@ -5,13 +5,13 @@
 
 #include <QObject>
 
-class ShaderOutputPassthroughNode : public ShaderNode
+class ShaderOutputNode : public ShaderNode
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
 
 public:
-    ShaderOutputPassthroughNode(QObject *parent = 0);
+    ShaderOutputNode(QObject *parent = 0);
     QVariant value() const;
 
 public slots:
@@ -55,7 +55,7 @@ private:
     QString m_name;
     QString m_type;
     QVariant m_value;
-    ShaderOutputPassthroughNode m_node;
+    ShaderOutputNode m_node;
 };
 
 #endif // SHADEROUTPUT_H

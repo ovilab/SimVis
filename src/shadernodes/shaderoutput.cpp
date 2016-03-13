@@ -56,25 +56,38 @@ void ShaderOutput::setValue(const QVariant &value)
     emit valueChanged(value);
 }
 
-ShaderOutputPassthroughNode::ShaderOutputPassthroughNode(QObject *parent) :
+ShaderOutputNode::ShaderOutputNode(QObject *parent) :
     ShaderNode(parent)
 {
-    setName("passthrough");
+    setName("outputnode");
     setResult("$value");
 }
 
-QVariant ShaderOutputPassthroughNode::value() const
+QVariant ShaderOutputNode::value() const
 {
     return m_value;
 }
 
-void ShaderOutputPassthroughNode::setValue(QVariant value)
+void ShaderOutputNode::setValue(QVariant value)
 {
     if (m_value == value)
         return;
 
-    setType(ShaderUtils::glslType(value));
+    ShaderNode *oldNode = qvariant_cast<ShaderNode*>(m_value);
+    if(oldNode) {
+        disconnect(oldNode, &ShaderNode::typeChanged, this, &ShaderOutputNode::setType);
+    }
 
     m_value = value;
+
+    ShaderNode *node = qvariant_cast<ShaderNode*>(value);
+    if(node) {
+        setType(node->type());
+        connect(node, &ShaderNode::typeChanged, this, &ShaderOutputNode::setType);
+    }
+    else {
+        setType(ShaderUtils::glslType(value));
+    }
+
     emit valueChanged(value);
 }

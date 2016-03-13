@@ -18,7 +18,6 @@ private:
     void createTriangleTable();
     // RenderableRenderer interface
 private:
-    virtual void beforeLinkProgram();
     virtual void synchronize(Renderable *renderable);
     virtual void render();
 };

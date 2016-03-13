@@ -4,8 +4,8 @@ import SimVis.ShaderNodes 1.0
 
 AbstractMarchingCubes {
     id: functionSurfaceRoot
-    property alias fragmentColor: _shader.fragmentColor
-    property alias shader: _shader
+    property alias fragmentColor: shaderOutput.value
+    property alias definition: geometryEval.value
 
     vertexShader: ShaderBuilder {
         sourceFile: "qrc:/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.vsh"
@@ -13,15 +13,34 @@ AbstractMarchingCubes {
     }
 
     geometryShader: ShaderBuilder {
+
+        property ShaderNode position: ShaderNode {
+            type: "vec3"
+            name: "position"
+            result: "position"
+        }
+
         sourceFile: "qrc:/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.gsh"
         shaderType: ShaderBuilder.Geometry
+
+        outputs: [
+            ShaderOutput {
+                id: geometryEval
+                type: "float"
+                name: "shaderNodeResult"
+                value: ShaderNode {
+                    property var position: geometryShader.position
+                    name: "position"
+                    type: "float"
+                    result: "sin(2.0 * $position.x - $position.y*$position.z) + cos(2.0 * $position.y) + sin(2.0 * $position.z)*cos(2.0*$position.y) + cos(cp_time) + sin(cos(cp_time)*tan(cp_time));"
+                }
+            }
+        ]
     }
 
     fragmentShader: ShaderBuilder {
         id: _shader
 
-        // TODO add readonly or some other way to show that these are only for others to read
-        shaderType: ShaderBuilder.Fragment
         property ShaderNode position: ShaderNode {
             type: "vec3"
             name: "position"
@@ -32,30 +51,20 @@ AbstractMarchingCubes {
             name: "normal"
             result: "normal";
         }
-        property ShaderNode texCoord: ShaderNode {
-            type: "vec2"
-            name: "texCoord"
-            result: "texCoord";
-        }
-        property ShaderNode color: ShaderNode {
-            type: "vec3"
-            name: "color"
-            result: "color";
-        }
-
-        property ShaderNode fragmentColor: Diffuse {
-            position: shader.position
-            color: shader.normal
-            normal: shader.normal
-        }
 
         sourceFile: "qrc:/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.fsh"
+        shaderType: ShaderBuilder.Fragment
 
         outputs: [
             ShaderOutput {
+                id: shaderOutput
                 type: "vec4"
-                name: "cp_fragColor"
-                value: _shader.fragmentColor
+                name: "cp_FragColor"
+                value: StandardMaterial {
+                    position: fragmentShader.position
+                    color: "steelblue"
+                    normal: fragmentShader.normal
+                }
             }
         ]
 

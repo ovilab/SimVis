@@ -33,11 +33,6 @@ ApplicationWindow {
             anchors.fill: parent
             camera: camera
         }
-//        FlyModeNavigator {
-//            id: navigator
-//            anchors.fill: parent
-//            camera: camera
-//        }
 
         Camera {
             id: camera
@@ -45,22 +40,28 @@ ApplicationWindow {
             nearPlane: 0.1
         }
 
-//        Mesh {
-//            id: triangles
-//            fragmentColor: Diffuse {
-//                position: triangles.fragmentShader.position
-//                color: "blue"
-//                normal: triangles.fragmentShader.normal
-//                lights: ShaderGroup {
-//                    Light {
-//                        position: camera.position
-//                    }
-//                }
-//            }
-//        }
-
         FunctionSurface {
+            id: surface
             threshold: thresholdSlider.value
+//            definition: Function {
+//                input: surface.geometryShader.position
+//                result: "sin(2.0 * $input.x - $input.y*$input.z) + cos(2.0 * $input.y) + sin(2.0 * $input.z)*cos(2.0*$input.y) + cos(cp_time) + sin(cos(cp_time)*tan(cp_time));"
+//            }
+            definition: Mix {
+                value1: ShaderNode {
+                    type: "float"
+                    result: "sin(2.0);"
+                }
+                value2: ShaderNode {
+                    type: "float"
+                    result: "sin(2.0);"
+                }
+                mix: 0.5
+            }
+//            definition: ShaderNode {
+//                type: "float"
+//                result: "sin(2.0);"
+//            }
         }
     }
 

@@ -337,13 +337,6 @@ void MarchingCubesGS::setThreshold(float threshold)
     emit thresholdChanged(threshold);
 }
 
-void MarchingCubesGSRenderer::beforeLinkProgram()
-{
-    setShaderFromSourceFile(QOpenGLShader::Vertex, ":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.vsh");
-    setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.fsh");
-    setShaderFromSourceFile(QOpenGLShader::Geometry, ":/org.compphys.SimVis/renderables/marchingcubes/marchingcubes.gsh");
-}
-
 void MarchingCubesGSRenderer::synchronize(Renderable *renderable)
 {
     MarchingCubesGS *mc = qobject_cast<MarchingCubesGS*>(renderable);
