@@ -22,7 +22,7 @@ Window {
 
         Mesh {
             id: triangles
-            fragmentColor: Diffuse {
+            fragmentColor: StandardMaterial {
                 position: triangles.fragmentShader.position
                 color: "blue"
                 normal: triangles.fragmentShader.normal
