@@ -100,6 +100,8 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
         while(matches.hasNext()) {
             QRegularExpressionMatch match = matches.next();
             QString propertyName = match.captured(1);
+            // GLSL doesn't allow double underscores. Use name without underscores for identifiers.
+            QString propertyNameNoUnderscores = QString(propertyName).replace("_", "");
             if(alreadyReplaced.contains(propertyName)) {
                 continue;
             }
@@ -119,7 +121,7 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
             int propertyIndex = metaObject()->indexOfProperty(propertyNameArray.constData());
             if(propertyIndex < 0) {
                 // No connected property, assume internal variable that just needs a unique name
-                QString propertylessIdentifier = propertyName + "_" + ShaderUtils::generateName();
+                QString propertylessIdentifier = propertyNameNoUnderscores + "_" + ShaderUtils::generateName();
                 QRegularExpression namedRegex("\\$(\\(\\s*)?" + propertyName + "(\\s*,\\s*[_a-zA-Z0-9]+\\s*\\))?");
                 sourceContent.replace(namedRegex, propertylessIdentifier);
                 alreadyReplaced.append(propertyName);
@@ -183,7 +185,7 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
                     break;
                 }
 
-                targetIdentifier = uniformPrefix + "_" + propertyName + "_" + ShaderUtils::generateName();
+                targetIdentifier = uniformPrefix + "_" + propertyNameNoUnderscores + "_" + ShaderUtils::generateName();
                 sourceType = glslType(value);
                 if(!metaProperty.hasNotifySignal()) {
                     qWarning() << "ShaderNode: property" << propertyName << "has no notification signal in" << this << "object with name" << name();
@@ -209,7 +211,7 @@ QString ShaderNode::generateBody() const
         return QString();
     }
     if(m_type.isEmpty()) {
-        qWarning() << "WARNING: ShaderNode" << m_name << m_identifier << "is missing type.";
+        qWarning() << "WARNING: ShaderNode" << m_name << "is missing type.";
         return QString();
     }
     QString body = "";
@@ -241,7 +243,8 @@ void ShaderNode::setName(QString name)
         return;
 
     m_name = name;
-    m_identifier = name + "_" + ShaderUtils::generateName();
+    // GLSL doesn't allow double underscores in names. Remove all before generating an identifier name.
+    m_identifier = QString(name).replace("_", "") + "_" + ShaderUtils::generateName();
 
     emit identifierChanged(m_identifier);
     emit nameChanged(name);
