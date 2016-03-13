@@ -67,8 +67,6 @@ void Renderable::requestSynchronize()
         const QVariantMap &geometryUniforms = geometryShader()->uniforms();
         for(const QString &key : geometryUniforms.keys()) {
             m_renderer->m_uniforms[key] = geometryUniforms[key];
-
-            qDebug() << "Set" << key << "to" << m_renderer->m_uniforms[key];
         }
     }
     if(vertexShader()) {
