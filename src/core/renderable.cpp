@@ -56,8 +56,26 @@ void Renderable::requestSynchronize()
         m_hasDirtyShaders = false;
     }
 
+    m_renderer->m_uniforms.clear();
     if(fragmentShader()) {
-        m_renderer->m_uniforms = fragmentShader()->uniforms();
+        const QVariantMap &fragmentUniforms = fragmentShader()->uniforms();
+        for(const QString &key : fragmentUniforms.keys()) {
+            m_renderer->m_uniforms[key] = fragmentUniforms[key];
+        }
+    }
+    if(geometryShader()) {
+        const QVariantMap &geometryUniforms = geometryShader()->uniforms();
+        for(const QString &key : geometryUniforms.keys()) {
+            m_renderer->m_uniforms[key] = geometryUniforms[key];
+
+            qDebug() << "Set" << key << "to" << m_renderer->m_uniforms[key];
+        }
+    }
+    if(vertexShader()) {
+        const QVariantMap &vertexUniforms = vertexShader()->uniforms();
+        for(const QString &key : vertexUniforms.keys()) {
+            m_renderer->m_uniforms[key] = vertexUniforms[key];
+        }
     }
 
     m_renderer->synchronize(this);

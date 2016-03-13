@@ -167,7 +167,23 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
                 targetIdentifier = node->identifier();
                 sourceType = node->type();
             } else {
-                targetIdentifier = propertyName + "_" + ShaderUtils::generateName();
+                // make a uniform
+                QString uniformPrefix = "uniform";
+                switch(shaderBuilder->shaderType()) {
+                case ShaderBuilder::ShaderType::Fragment:
+                    uniformPrefix = "fragment_uniform";
+                    break;
+                case ShaderBuilder::ShaderType::Geometry:
+                    uniformPrefix = "geometry_uniform";
+                    break;
+                case ShaderBuilder::ShaderType::Vertex:
+                    uniformPrefix = "vertex_uniform";
+                    break;
+                default:
+                    break;
+                }
+
+                targetIdentifier = uniformPrefix + "_" + propertyName + "_" + ShaderUtils::generateName();
                 sourceType = glslType(value);
                 if(!metaProperty.hasNotifySignal()) {
                     qWarning() << "ShaderNode: property" << propertyName << "has no notification signal in" << this << "object with name" << name();
