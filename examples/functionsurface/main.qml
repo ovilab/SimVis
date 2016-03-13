@@ -48,20 +48,33 @@ ApplicationWindow {
 //                result: "sin(2.0 * $input.x - $input.y*$input.z) + cos(2.0 * $input.y) + sin(2.0 * $input.z)*cos(2.0*$input.y) + cos(cp_time) + sin(cos(cp_time)*tan(cp_time));"
 //            }
             definition: Mix {
-                value1: ShaderNode {
-                    type: "float"
-                    result: "sin(2.0);"
+                value1: Sine {
+                    value: surface.geometryShader.position
                 }
-                value2: ShaderNode {
-                    type: "float"
-                    result: "sin(2.0);"
+                value2: Sine {
+                    value: visualizer.time
                 }
                 mix: 0.5
             }
-//            definition: ShaderNode {
-//                type: "float"
-//                result: "sin(2.0);"
-//            }
+            fragmentColor: StandardMaterial {
+                normal: surface.fragmentShader.normal
+                position: surface.fragmentShader.position
+                color: "purple"
+                lights: ShaderGroup {
+                    Light {
+                        position: Qt.vector3d(-50, -50, -50)
+                        strength: 0.6
+                    }
+                    Light {
+                        position: camera.position
+                        strength: 0.6
+                    }
+                    Light {
+                        position: Qt.vector3d(50, 0, 50)
+                        strength: 0.6
+                    }
+                }
+            }
         }
     }
 
