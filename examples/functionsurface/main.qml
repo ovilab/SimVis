@@ -28,7 +28,7 @@ ApplicationWindow {
         camera: camera
         backgroundColor: "gray"
         navigator: navigator
-        TrackballNavigator {
+        FlyModeNavigator {
             id: navigator
             anchors.fill: parent
             camera: camera
@@ -43,19 +43,20 @@ ApplicationWindow {
         FunctionSurface {
             id: surface
             threshold: thresholdSlider.value
-//            definition: Function {
-//                input: surface.geometryShader.position
-//                result: "sin(2.0 * $input.x - $input.y*$input.z) + cos(2.0 * $input.y) + sin(2.0 * $input.z)*cos(2.0*$input.y) + cos(cp_time) + sin(cos(cp_time)*tan(cp_time));"
-//            }
-            definition: Mix {
-                value1: Sine {
-                    value: surface.geometryShader.position
-                }
-                value2: Sine {
-                    value: visualizer.time
-                }
-                mix: 0.5
+            definition: Function {
+                input: surface.geometryShader.position
+                // result: "sin(2.0 * $input.x - $input.y*$input.z) + cos(2.0 * $input.y) + sin(2.0 * $input.z)*cos(2.0*$input.y) + cos(cp_time) + sin(cos(cp_time)*tan(cp_time));"
+                result: "cos($input.x)*cos($input.x) + cos($input.y)*cos($input.y) + cos($input.z)*cos($input.z);"
             }
+//            definition: Mix {
+//                value1: Sine {
+//                    value: surface.geometryShader.position
+//                }
+//                value2: Sine {
+//                    value: 1.0
+//                }
+//                mix: 0.5
+//            }
             fragmentColor: StandardMaterial {
                 normal: surface.fragmentShader.normal
                 position: surface.fragmentShader.position

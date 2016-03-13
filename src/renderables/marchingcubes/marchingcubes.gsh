@@ -67,9 +67,9 @@ vec3 linterp(float threshold, vec3 p1, vec3 p2, float valp1, float valp2)
 }
 
 void main(void) {
-    if( dot( (vs_position[0] - cp_cameraPosition), cp_viewVector) > 0) {
-        // vec3 v_000 = vs_position[0] + cp_cameraPosition;                        // Corresponds to vertex 0
-        vec3 v_000 = vs_position[0];                        // Corresponds to vertex 0
+    // if( dot( (vs_position[0] - cp_cameraPosition), cp_viewVector) > 0) {
+        vec3 v_000 = vs_position[0] + cp_cameraPosition;                        // Corresponds to vertex 0
+        // vec3 v_000 = vs_position[0];                        // Corresponds to vertex 0
         vec3 v_001 = v_000 + vec3(0.0, 0.0, dr);       // Corresponds to vertex 4
         vec3 v_011 = v_000 + vec3(0.0, dr, dr);           // Corresponds to vertex 5
         vec3 v_010 = v_000 + vec3(0.0, dr, 0.0);       // Corresponds to vertex 1
@@ -166,5 +166,5 @@ void main(void) {
             EmitVertex();
             EndPrimitive();
         }
-    }
+    // }
 }

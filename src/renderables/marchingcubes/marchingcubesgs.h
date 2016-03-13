@@ -9,7 +9,7 @@ class MarchingCubesGSRenderer : public RenderableRenderer
 private:
     int m_voxelsPerDimension = 32;
     int m_numberOfVoxels = 0;
-    float m_scale = 10;
+    float m_scale = 16;
     float m_threshold = 0.0;
     void uploadVBO();
     bool m_isInitialized = false;
