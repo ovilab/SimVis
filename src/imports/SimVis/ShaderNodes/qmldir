@@ -5,6 +5,7 @@ Function 1.0 Function.qml
 Lerp 1.0 Lerp.qml
 Light 1.0 Light.qml
 Mix 1.0 Mix.qml
+Multiply 1.0 Multiply.qml
 OutputValue 1.0 OutputValue.qml
 ShaderDefinition 1.0 ShaderDefinition.qml
 Simplex 1.0 Simplex.qml

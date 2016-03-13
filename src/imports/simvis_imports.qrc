@@ -21,5 +21,6 @@
         <file>SimVis/ShaderNodes/StandardMaterial.qml</file>
         <file>SimVis/ShaderNodes/shaders/standard_material.glsl</file>
         <file>SimVis/ShaderNodes/Function.qml</file>
+        <file>SimVis/ShaderNodes/Multiply.qml</file>
     </qresource>
 </RCC>
