@@ -9,7 +9,7 @@ ApplicationWindow {
     visible: true
     width: 1600
     height: 900
-    title: qsTr("Marching cubes demo")
+    title: qsTr("Function surface demo")
 
     MySimulator {
         id: simulator
@@ -33,6 +33,11 @@ ApplicationWindow {
             anchors.fill: parent
             camera: camera
         }
+//        FlyModeNavigator {
+//            id: navigator
+//            anchors.fill: parent
+//            camera: camera
+//        }
 
         Camera {
             id: camera
@@ -40,25 +45,29 @@ ApplicationWindow {
             nearPlane: 0.1
         }
 
-        Mesh {
-            id: triangles
-            fragmentColor: StandardMaterial {
-                position: triangles.fragmentShader.position
-                color: "blue"
-                normal: triangles.fragmentShader.normal
-                lights: ShaderGroup {
-                    Light {
-                        position: camera.position
-                    }
-                }
-            }
+//        Mesh {
+//            id: triangles
+//            fragmentColor: Diffuse {
+//                position: triangles.fragmentShader.position
+//                color: "blue"
+//                normal: triangles.fragmentShader.normal
+//                lights: ShaderGroup {
+//                    Light {
+//                        position: camera.position
+//                    }
+//                }
+//            }
+//        }
+
+        FunctionSurface {
+            threshold: thresholdSlider.value
         }
     }
 
     Slider {
         id: thresholdSlider
-        minimumValue: -2
-        maximumValue: 2
+        minimumValue: -5
+        maximumValue: 5
         value: 0.0
     }
 }

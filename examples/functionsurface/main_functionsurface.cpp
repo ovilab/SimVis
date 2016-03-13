@@ -2,7 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QtQml>
 #include <cmath>
-#include "marchingcubessimulator.h"
+#include "functionsurfacesimulator.h"
 
 #include <vendor.h>
 

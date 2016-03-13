@@ -3,6 +3,7 @@ SUBDIRS += \
     spheres \
     simple \
     marchingcubes \
+    functionsurface \
     qmatplotpp \
     triangles \
     neuron \

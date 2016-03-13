@@ -4,11 +4,11 @@ CONFIG += c++11
 QT += qml quick widgets opengl openglextensions
 
 SOURCES += \
-    main_marchingcubes.cpp \
-    marchingcubessimulator.cpp
+    main_functionsurface.cpp \
+    functionsurfacesimulator.cpp
 
 RESOURCES += \
-    marchingcubes_qml.qrc
+    functionsurface_qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -17,4 +17,4 @@ QML_IMPORT_PATH =
 include(../examples_vendor.pri)
 
 HEADERS += \
-    marchingcubessimulator.h
+    functionsurfacesimulator.h
