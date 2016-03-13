@@ -19,5 +19,6 @@
         <file>SimVis/Cylinders.qml</file>
         <file>SimVis/MarchingCubes.qml</file>
         <file>SimVis/Mesh.qml</file>
+        <file>SimVis/FunctionSurface.qml</file>
     </qresource>
 </RCC>

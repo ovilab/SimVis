@@ -58,7 +58,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<ShaderBuilder>("SimVis", 1, 0, "ShaderBuilder");
     qmlRegisterType<ShaderOutput>("SimVis", 1, 0, "ShaderOutput");
     qmlRegisterType<ShaderGroup>("SimVis", 1, 0, "ShaderGroup");
-    qmlRegisterType<MarchingCubesGS>("SimVis", 1, 0, "MarchingCubesGS");
+    qmlRegisterType<MarchingCubesGS>("SimVis", 1, 0, "AbstractMarchingCubes");
     qmlRegisterType<Spheres>("SimVis", 1, 0, "AbstractSpheres");
     qmlRegisterType<TriangleCollection>("SimVis", 1, 0, "AbstractTriangleCollection");
 }

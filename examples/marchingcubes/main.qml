@@ -28,16 +28,16 @@ ApplicationWindow {
         camera: camera
         backgroundColor: "gray"
         navigator: navigator
-//        TrackballNavigator {
-//            id: navigator
-//            anchors.fill: parent
-//            camera: camera
-//        }
-        FlyModeNavigator {
+        TrackballNavigator {
             id: navigator
             anchors.fill: parent
             camera: camera
         }
+//        FlyModeNavigator {
+//            id: navigator
+//            anchors.fill: parent
+//            camera: camera
+//        }
 
         Camera {
             id: camera
@@ -59,7 +59,7 @@ ApplicationWindow {
 //            }
 //        }
 
-        MarchingCubesGS {
+        FunctionSurface {
             threshold: thresholdSlider.value
         }
     }
