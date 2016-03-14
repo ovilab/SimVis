@@ -28,12 +28,9 @@ Entity {
                         }
                     ]
                     shaderProgram: ShaderProgram {
-//                        vertexShaderCode: loadSource("qrc:/instanced.vert")
-//                        geometryShaderCode: loadSource("qrc:/instanced.geom")
-//                        fragmentShaderCode: loadSource("qrc:/instanced.frag")
-
-                        vertexShaderCode: loadSource("qrc:/regular.vert")
-                        fragmentShaderCode: loadSource("qrc:/regular.frag")
+                        vertexShaderCode: loadSource("qrc:/instanced.vert")
+                        geometryShaderCode: loadSource("qrc:/instanced.geom")
+                        fragmentShaderCode: loadSource("qrc:/instanced.frag")
                     }
                 }
             }
@@ -41,29 +38,23 @@ Entity {
     }
     GeometryRenderer {
         id: cylinderMeshInstanced
-        enabled: instanceCount != 0
-        //        primitiveType: GeometryRenderer.Points
-        instanceCount: 20000 // TODO make instanceCount depend on buffer/simulator
-//        geometry: PointGeometry {
+        primitiveType: GeometryRenderer.Points
+//        instanceCount: 100 // TODO make instanceCount depend on buffer/simulator
+        geometry: PointGeometry {
 //            attributes: [
 //                instanceDataAttribute
 //            ]
-//        }
-        geometry: SphereGeometry {
-            attributes: [
-                instanceDataAttribute
-            ]
         }
 
-        Attribute {
-            id: instanceDataAttribute
-            name: "pos"
-            attributeType: Attribute.VertexAttribute
-            dataType: Attribute.Float
-            dataSize: 3
-            divisor: 1
-            buffer: simulator.positionBuffer
-        }
+//        Attribute {
+//            id: instanceDataAttribute
+//            name: "pos"
+//            attributeType: Attribute.VertexAttribute
+//            dataType: Attribute.Float
+//            dataSize: 3
+//            divisor: 1
+//            buffer: simulator.positionBuffer
+//        }
     }
     Entity {
         components: [

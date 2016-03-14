@@ -63,7 +63,7 @@ Scene3D {
 
         MySimulator {
             id: simulator
-            dt: 0.01
+            dt: 0.001
         }
 
         Entity {

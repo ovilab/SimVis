@@ -27,9 +27,9 @@ SimulatorWorker *MySimulator::createWorker()
 
 MyWorker::MyWorker()
 {
-    m_positions.resize(50000);
+    m_positions.resize(100);
     m_velocities.resize(m_positions.size());
-    double size = 100;
+    double size = 10;
     for(int i=0; i<m_positions.size(); i++) {
         float x = ((2.0*rand() / double(RAND_MAX))-1.0)*size;
         float y = ((2.0*rand() / double(RAND_MAX))-1.0)*size;
