@@ -24,4 +24,6 @@ HEADERS += \
     instancebuffer.h \
     pointgeometry.h
 
-DISTFILES +=
+DISTFILES += \
+    regular.frag \
+    regular.vert

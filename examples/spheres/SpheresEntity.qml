@@ -16,8 +16,8 @@ Entity {
                 graphicsApiFilter {
                     api: GraphicsApiFilter.OpenGL
                     profile: GraphicsApiFilter.CoreProfile
-                    minorVersion: 4
-                    majorVersion: 1
+                    minorVersion: 3
+                    majorVersion: 3
                 }
                 renderPasses: RenderPass {
                     bindings: [
@@ -28,9 +28,12 @@ Entity {
                         }
                     ]
                     shaderProgram: ShaderProgram {
-                        vertexShaderCode: loadSource("qrc:/instanced.vert")
-                        geometryShaderCode: loadSource("qrc:/instanced.geom")
-                        fragmentShaderCode: loadSource("qrc:/instanced.frag")
+//                        vertexShaderCode: loadSource("qrc:/instanced.vert")
+//                        geometryShaderCode: loadSource("qrc:/instanced.geom")
+//                        fragmentShaderCode: loadSource("qrc:/instanced.frag")
+
+                        vertexShaderCode: loadSource("qrc:/regular.vert")
+                        fragmentShaderCode: loadSource("qrc:/regular.frag")
                     }
                 }
             }
@@ -39,13 +42,19 @@ Entity {
     GeometryRenderer {
         id: cylinderMeshInstanced
         enabled: instanceCount != 0
-        primitiveType: GeometryRenderer.Points
+        //        primitiveType: GeometryRenderer.Points
         instanceCount: 20000 // TODO make instanceCount depend on buffer/simulator
-        geometry: PointGeometry {
+//        geometry: PointGeometry {
+//            attributes: [
+//                instanceDataAttribute
+//            ]
+//        }
+        geometry: SphereGeometry {
             attributes: [
                 instanceDataAttribute
             ]
         }
+
         Attribute {
             id: instanceDataAttribute
             name: "pos"
