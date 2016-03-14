@@ -15,3 +15,4 @@ StandardMaterial 1.0 StandardMaterial.qml
 Sum 1.0 Sum.qml
 UniformValue 1.0 UniformValue.qml
 Value 1.0 Value.qml
+Noise 1.0 Noise.qml

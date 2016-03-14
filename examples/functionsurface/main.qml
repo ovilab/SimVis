@@ -48,6 +48,11 @@ ApplicationWindow {
                 // result: "sin(2.0 * $input.x - $input.y*$input.z) + cos(2.0 * $input.y) + sin(2.0 * $input.z)*cos(2.0*$input.y) + cos(cp_time) + sin(cos(cp_time)*tan(cp_time));"
                 result: "cos($input.x)*cos($input.x) + cos($input.y)*cos($input.y) + cos($input.z)*cos($input.z);"
             }
+//            definition: Noise {
+//                position: surface.geometryShader.position
+//                scale: scaleSlider.value
+//            }
+
 //            definition: Mix {
 //                value1: Sine {
 //                    value: surface.geometryShader.position
@@ -79,10 +84,18 @@ ApplicationWindow {
         }
     }
 
-    Slider {
-        id: thresholdSlider
-        minimumValue: -5
-        maximumValue: 5
-        value: 0.0
+    Column {
+        Slider {
+            id: thresholdSlider
+            minimumValue: -5
+            maximumValue: 5
+            value: 0.0
+        }
+        Slider {
+            id: scaleSlider
+            minimumValue: 0.1
+            maximumValue: 5
+            value: 1.0
+        }
     }
 }
