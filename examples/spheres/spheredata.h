@@ -3,14 +3,16 @@
 
 #include <QObject>
 #include <Qt3DRender/QBuffer>
+#include <Qt3DCore/QNode>
 
-class SphereData : public QObject
+class SphereData : public Qt3DCore::QNode
 {
     Q_OBJECT
     Q_PROPERTY(Qt3DRender::QBuffer* buffer READ buffer CONSTANT)
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
-    explicit SphereData(QObject *parent = 0);
+    explicit SphereData(QNode *parent = 0);
+    virtual ~SphereData();
 
     Qt3DRender::QBuffer* buffer();
     void setPositions(QVector<QVector3D> positions);
@@ -23,8 +25,10 @@ signals:
 public slots:
 
 private:
-    Qt3DRender::QBuffer m_buffer;
+    Qt3DRender::QBuffer *m_buffer;
     int m_count;
+
+    QT3D_CLONEABLE(SphereData)
 };
 
 #endif // SPHEREDATA_H

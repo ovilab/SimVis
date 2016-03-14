@@ -10,6 +10,7 @@
 #include <QQuickItem>
 
 #include <Qt3DRender/QBuffer>
+#include <Qt3DCore/QEntity>
 
 class Renderable;
 class Simulator;
@@ -33,12 +34,13 @@ private:
     friend class Visualizer;
 };
 
-class Simulator : public QObject
+class Simulator : public Qt3DCore::QNode
 {
     Q_OBJECT
 public:
-    explicit Simulator(QObject *parent = 0);
+    explicit Simulator(QNode *parent = 0);
     virtual ~Simulator();
+
 protected:
     virtual SimulatorWorker *createWorker() = 0;
 

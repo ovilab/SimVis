@@ -1,7 +1,7 @@
 #include "simulator.h"
 
-Simulator::Simulator(QObject *parent)
-    : QObject(parent)
+Simulator::Simulator(QNode *parent)
+    : QNode(parent)
 {
     connect(&m_timer, &QTimer::timeout, this, &Simulator::step);
     m_timer.start(1);

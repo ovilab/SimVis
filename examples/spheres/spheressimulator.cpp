@@ -1,8 +1,15 @@
 #include "spheressimulator.h"
 #include <QDebug>
 #include <SimVis/Spheres>
-MySimulator::MySimulator()
+MySimulator::MySimulator(QNode *parent)
+    : Simulator(parent)
+    , m_sphereData(new SphereData(this))
 {
+}
+
+MySimulator::~MySimulator()
+{
+    delete m_sphereData;
 }
 
 double MySimulator::dt() const

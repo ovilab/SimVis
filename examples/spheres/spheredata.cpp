@@ -4,15 +4,20 @@
 
 using Qt3DRender::QBuffer;
 
-SphereData::SphereData(QObject *parent)
-    : QObject(parent)
+SphereData::SphereData(QNode *parent)
+    : QNode(parent)
+    , m_buffer(new QBuffer(QBuffer::VertexBuffer, this))
 {
+}
 
+SphereData::~SphereData()
+{
+    delete m_buffer;
 }
 
 Qt3DRender::QBuffer *SphereData::buffer()
 {
-    return &m_buffer;
+    return m_buffer;
 }
 
 void SphereData::setPositions(QVector<QVector3D> positions)
@@ -24,7 +29,7 @@ void SphereData::setPositions(QVector<QVector3D> positions)
         *posData = pos;
         ++posData;
     }
-    m_buffer.setData(ba);
+    m_buffer->setData(ba);
     m_count = positions.count();
     emit countChanged(m_count);
 }

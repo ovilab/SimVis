@@ -34,11 +34,13 @@ class MySimulator : public Simulator
     Q_PROPERTY(SphereData* sphereData READ sphereData CONSTANT)
 
 public:
-    MySimulator();
+    MySimulator(QNode *parent = 0);
+    virtual ~MySimulator();
+
     double dt() const;
     SphereData* sphereData()
     {
-        return &m_sphereData;
+        return m_sphereData;
     }
 
 public slots:
@@ -52,7 +54,9 @@ protected:
 
 private:
     double m_dt = 0.05;
-    SphereData m_sphereData;
+    SphereData *m_sphereData;
+
+    QT3D_CLONEABLE(MySimulator)
 
 };
 
