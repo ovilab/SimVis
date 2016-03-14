@@ -2,10 +2,13 @@ TEMPLATE = app
 CONFIG += c++11
 
 QT += qml quick widgets opengl openglextensions
+QT += qml quick 3dcore 3drender 3dinput 3dquick
 
 SOURCES += \
     spheressimulator.cpp \
-    main_spheres.cpp
+    main_spheres.cpp \
+    instancebuffer.cpp \
+    pointgeometry.cpp
 
 RESOURCES += \
     spheres_qml.qrc
@@ -17,6 +20,8 @@ QML_IMPORT_PATH =
 include(../examples_vendor.pri)
 
 HEADERS += \
-    spheressimulator.h
+    spheressimulator.h \
+    instancebuffer.h \
+    pointgeometry.h
 
 DISTFILES +=

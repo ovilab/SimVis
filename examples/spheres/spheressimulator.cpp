@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <SimVis/Spheres>
 MySimulator::MySimulator()
+    : m_positionBuffer(new Qt3DRender::QBuffer(Qt3DRender::QBuffer::VertexBuffer, 0))
 {
 }
 
@@ -39,7 +40,6 @@ MyWorker::MyWorker()
         m_positions[i] = QVector3D(x,y,z);
         m_velocities[i] = QVector3D(vx,vy,vz);
     }
-
 }
 
 void MyWorker::synchronizeSimulator(Simulator *simulator)
@@ -49,6 +49,16 @@ void MyWorker::synchronizeSimulator(Simulator *simulator)
         // Synchronize data between QML thread and computing thread (MySimulator is on QML, MyWorker is computing thread).
         // This is for instance data from user through GUI (sliders, buttons, text fields etc)
         dt = mySimulator->dt();
+
+        QByteArray ba;
+        ba.resize(m_positions.size() * sizeof(QVector3D));
+
+        QVector3D *posData = reinterpret_cast<QVector3D *>(ba.data());
+        for(const QVector3D &pos : m_positions) {
+            *posData = pos;
+            ++posData;
+        }
+        mySimulator->positionBuffer()->setData(ba);
     }
 }
 

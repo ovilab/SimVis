@@ -6,6 +6,8 @@
 #include <QVector>
 #include <QVector3D>
 
+#include <Qt3DRender/QBuffer>
+
 class MyWorker : public SimulatorWorker
 {
     Q_OBJECT
@@ -26,10 +28,16 @@ class MySimulator : public Simulator
 {
     Q_OBJECT
     Q_PROPERTY(double dt READ dt WRITE setDt NOTIFY dtChanged)
+    Q_PROPERTY(Qt3DRender::QBuffer* positionBuffer READ positionBuffer CONSTANT)
 
 public:
     MySimulator();
     double dt() const;
+
+    Qt3DRender::QBuffer* positionBuffer() const
+    {
+        return m_positionBuffer;
+    }
 
 public slots:
     void setDt(double dt);
@@ -42,6 +50,7 @@ protected:
 
 private:
     double m_dt = 0.05;
+    Qt3DRender::QBuffer *m_positionBuffer;
 
 };
 
