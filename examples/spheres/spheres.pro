@@ -1,8 +1,7 @@
 TEMPLATE = app
 CONFIG += c++11
 
-QT += qml quick widgets opengl openglextensions
-QT += qml quick 3dcore 3drender 3dinput 3dquick
+QT += widgets opengl openglextensions qml quick 3dcore 3drender 3dinput 3dquick
 
 SOURCES += \
     spheressimulator.cpp \

@@ -3,6 +3,8 @@ message(pwd: $$PWD)
 message(shadowed_pwd: $$shadowed($$PWD))
 message(out_pwd: $$OUT_PWD)
 
+QT += widgets opengl openglextensions qml quick 3dcore 3drender 3dinput 3dquick
+
 INCLUDEPATH += $$PWD/src
 QML_IMPORT_PATH += $$PWD/src/imports/
 
