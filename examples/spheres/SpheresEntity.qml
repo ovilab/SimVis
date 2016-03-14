@@ -28,12 +28,6 @@ Entity {
         ]
         effect: Effect {
             techniques: Technique {
-                graphicsApiFilter {
-                    api: GraphicsApiFilter.OpenGL
-                    profile: GraphicsApiFilter.CoreProfile
-                    minorVersion: 3
-                    majorVersion: 3
-                }
                 renderPasses: RenderPass {
                     bindings: [
                         ParameterMapping {
