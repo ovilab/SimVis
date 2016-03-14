@@ -8,11 +8,14 @@
 
 #include <Qt3DRender/QBuffer>
 
+#include "spheredata.h"
+
 class MyWorker : public SimulatorWorker
 {
     Q_OBJECT
 public:
     MyWorker();
+
 private:
     // SimulatorWorker interface
     virtual void synchronizeSimulator(Simulator *simulator);
@@ -28,15 +31,14 @@ class MySimulator : public Simulator
 {
     Q_OBJECT
     Q_PROPERTY(double dt READ dt WRITE setDt NOTIFY dtChanged)
-    Q_PROPERTY(Qt3DRender::QBuffer* positionBuffer READ positionBuffer CONSTANT)
+    Q_PROPERTY(SphereData* sphereData READ sphereData CONSTANT)
 
 public:
     MySimulator();
     double dt() const;
-
-    Qt3DRender::QBuffer* positionBuffer() const
+    SphereData* sphereData()
     {
-        return m_positionBuffer;
+        return &m_sphereData;
     }
 
 public slots:
@@ -50,7 +52,7 @@ protected:
 
 private:
     double m_dt = 0.05;
-    Qt3DRender::QBuffer *m_positionBuffer;
+    SphereData m_sphereData;
 
 };
 

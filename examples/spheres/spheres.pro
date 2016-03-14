@@ -8,7 +8,8 @@ SOURCES += \
     spheressimulator.cpp \
     main_spheres.cpp \
     instancebuffer.cpp \
-    pointgeometry.cpp
+    pointgeometry.cpp \
+    spheredata.cpp
 
 RESOURCES += \
     spheres_qml.qrc
@@ -22,7 +23,8 @@ include(../examples_vendor.pri)
 HEADERS += \
     spheressimulator.h \
     instancebuffer.h \
-    pointgeometry.h
+    pointgeometry.h \
+    spheredata.h
 
 DISTFILES += \
     regular.frag \

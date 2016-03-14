@@ -38,7 +38,7 @@ class Simulator : public QObject
     Q_OBJECT
 public:
     explicit Simulator(QObject *parent = 0);
-    ~Simulator();
+    virtual ~Simulator();
 protected:
     virtual SimulatorWorker *createWorker() = 0;
 

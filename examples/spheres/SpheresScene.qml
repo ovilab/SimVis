@@ -7,12 +7,7 @@ import QtQuick.Scene3D 2.0
 import MySimulator 1.0
 
 Scene3D {
-    anchors.fill: parent
-    anchors.margins: 10
-    focus: true
     aspects: "input"
-
-
     Entity {
 
 
@@ -28,7 +23,7 @@ Scene3D {
 
         SpheresEntity {
             camera: frameGraph.camera
-            simulator: simulator
+            sphereData: simulator.sphereData
         }
 
         MySimulator {

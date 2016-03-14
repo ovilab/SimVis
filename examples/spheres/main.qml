@@ -21,6 +21,8 @@ Item {
     visible: true
 
     SpheresScene {
+        anchors.fill: parent
+        focus: true
     }
 }
 

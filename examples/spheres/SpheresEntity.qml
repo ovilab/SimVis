@@ -8,7 +8,7 @@ import MySimulator 1.0
 
 Entity {
     id: spheresRoot
-    property var simulator
+    property SphereData sphereData
     property Camera camera
     Material {
         id: spheresGeometryShaderTechnique
@@ -30,11 +30,11 @@ Entity {
             techniques: Technique {
                 renderPasses: RenderPass {
                     bindings: [
-//                        ParameterMapping {
-//                            parameterName: "pos"
-//                            shaderVariableName: "pos"
-//                            bindingType: ParameterMapping.Attribute
-//                        },
+                        ParameterMapping {
+                            parameterName: "pos"
+                            shaderVariableName: "pos"
+                            bindingType: ParameterMapping.Attribute
+                        },
                         ParameterMapping {
                             parameterName: "viewVector"
                             shaderVariableName: "viewVector"
@@ -63,22 +63,22 @@ Entity {
     GeometryRenderer {
         id: cylinderMeshInstanced
         primitiveType: GeometryRenderer.Points
-//        instanceCount: 100 // TODO make instanceCount depend on buffer/simulator
+        instanceCount: sphereData.count
         geometry: PointGeometry {
-//            attributes: [
-//                instanceDataAttribute
-//            ]
+            attributes: [
+                instanceDataAttribute
+            ]
         }
 
-//        Attribute {
-//            id: instanceDataAttribute
-//            name: "pos"
-//            attributeType: Attribute.VertexAttribute
-//            dataType: Attribute.Float
-//            dataSize: 3
-//            divisor: 1
-//            buffer: simulator.positionBuffer
-//        }
+        Attribute {
+            id: instanceDataAttribute
+            name: "pos"
+            attributeType: Attribute.VertexAttribute
+            dataType: Attribute.Float
+            dataSize: 3
+            divisor: 1
+            buffer: sphereData.buffer
+        }
     }
     Entity {
         components: [
