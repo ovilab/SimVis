@@ -37,7 +37,7 @@
 #include "instancebuffer.h"
 
 #include <QtGui/qvector3d.h>
-
+#include <cmath>
 static const int rowCount = 2;
 static const int colCount = 100;
 static const int sliceCount = 100;

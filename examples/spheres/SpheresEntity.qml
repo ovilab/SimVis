@@ -17,7 +17,7 @@ Entity {
                     api: GraphicsApiFilter.OpenGL
                     profile: GraphicsApiFilter.CoreProfile
                     minorVersion: 4
-                    majorVersion: 1
+                    majorVersion: 3
                 }
                 renderPasses: RenderPass {
                     bindings: [
