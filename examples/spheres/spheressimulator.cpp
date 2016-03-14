@@ -62,13 +62,6 @@ void MyWorker::synchronizeSimulator(Simulator *simulator)
 
 void MyWorker::synchronizeRenderer(Renderable *renderableObject)
 {
-    // Synchronize with renderables.
-    Spheres *spheres = qobject_cast<Spheres*>(renderableObject);
-    if(spheres) {
-        spheres->positions() = m_positions;
-        spheres->triggerDirtyData();
-        return;
-    }
 }
 
 void MyWorker::work()

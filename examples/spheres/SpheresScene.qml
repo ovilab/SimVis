@@ -9,8 +9,6 @@ import MySimulator 1.0
 Scene3D {
     aspects: "input"
     Entity {
-
-
         Configuration  {
             controlledCamera: frameGraph.camera
         }
