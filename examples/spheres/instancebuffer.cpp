@@ -37,28 +37,36 @@
 #include "instancebuffer.h"
 
 #include <QtGui/qvector3d.h>
-#include <cmath>
-static const int rowCount = 2;
-static const int colCount = 100;
-static const int sliceCount = 100;
 
-static const int maxInstanceCount = rowCount * colCount * sliceCount;
+static const int rowCount = 20;
+static const int colCount = 20;
+static const int maxInstanceCount = rowCount * colCount;
 
 InstanceBuffer::InstanceBuffer(Qt3DCore::QNode *parent)
     : Qt3DRender::QBuffer(QBuffer::VertexBuffer, parent)
     , m_instanceCount(maxInstanceCount)
 {
-    setFactor(1.0);
+    // Create some per instance data - position of each instance
+    QByteArray ba;
+    ba.resize(maxInstanceCount * sizeof(QVector3D));
+    QVector3D *posData = reinterpret_cast<QVector3D *>(ba.data());
+    for (int j = 0; j < rowCount; ++j) {
+        const float z = float(j);
+        for (int i = 0; i < colCount; ++i) {
+            const float x = float(i);
+            const QVector3D pos(x, 0.0f, z);
+            *posData = pos;
+            ++posData;
+        }
+    }
+
+    // Put the data into the buffer
+    setData(ba);
 }
 
 int InstanceBuffer::instanceCount() const
 {
     return m_instanceCount;
-}
-
-float InstanceBuffer::factor() const
-{
-    return m_factor;
 }
 
 void InstanceBuffer::setInstanceCount(int instanceCount)
@@ -68,36 +76,5 @@ void InstanceBuffer::setInstanceCount(int instanceCount)
 
     m_instanceCount = instanceCount;
     emit instanceCountChanged(instanceCount);
-}
-
-void InstanceBuffer::setFactor(float factor)
-{
-    if (m_factor == factor)
-        return;
-
-    m_factor = factor;
-
-    // Create some per instance data - position of each instance
-    QByteArray ba;
-    ba.resize(maxInstanceCount * sizeof(QVector3D));
-
-    QVector3D *posData = reinterpret_cast<QVector3D *>(ba.data());
-    for (int k = 0; k < sliceCount; ++k) {
-        const float z = float(k);
-        for (int j = 0; j < rowCount; ++j) {
-            const float y = float(j);
-            for (int i = 0; i < colCount; ++i) {
-                const float x = float(i);
-                const QVector3D pos(x, sin(0.1*x + 0.5 * factor) + sin(0.1*z + 0.2*factor) + y, z);
-                *posData = pos;
-                ++posData;
-            }
-        }
-    }
-
-    // Put the data into the buffer
-    setData(ba);
-
-    emit factorChanged(factor);
 }
 

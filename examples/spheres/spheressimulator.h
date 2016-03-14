@@ -54,7 +54,7 @@ protected:
 
 private:
     double m_dt = 0.05;
-    SphereData *m_sphereData;
+    SphereData *m_sphereData = nullptr;
 
     QT3D_CLONEABLE(MySimulator)
 

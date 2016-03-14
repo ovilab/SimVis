@@ -25,8 +25,8 @@ signals:
 public slots:
 
 private:
-    Qt3DRender::QBuffer *m_buffer;
-    int m_count;
+    Qt3DRender::QBuffer *m_buffer = nullptr;
+    int m_count = 0;
 
     QT3D_CLONEABLE(SphereData)
 };

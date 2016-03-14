@@ -29,6 +29,6 @@ Scene3D {
             dt: 0.001
         }
 
-//        Chest {}
+        Chest {}
     }
 }

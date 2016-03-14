@@ -43,28 +43,20 @@ class InstanceBuffer : public Qt3DRender::QBuffer
 {
     Q_OBJECT
     Q_PROPERTY(int instanceCount READ instanceCount WRITE setInstanceCount NOTIFY instanceCountChanged)
-    Q_PROPERTY(float factor READ factor WRITE setFactor NOTIFY factorChanged)
 
 public:
     InstanceBuffer(Qt3DCore::QNode *parent = 0);
 
     int instanceCount() const;
 
-    float factor() const;
-
 public slots:
     void setInstanceCount(int instanceCount);
-
-    void setFactor(float factor);
 
 signals:
     void instanceCountChanged(int instanceCount);
 
-    void factorChanged(float factor);
-
 private:
     int m_instanceCount;
-    float m_factor = 0.0;
 };
 
 #endif // INSTANCEBUFFER_H

@@ -34,29 +34,27 @@ Entity {
                             parameterName: "pos"
                             shaderVariableName: "pos"
                             bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "viewVector"
-                            shaderVariableName: "viewVector"
-                            bindingType: ParameterMapping.Uniform
-                        },
-                        ParameterMapping {
-                            parameterName: "upVector"
-                            shaderVariableName: "upVector"
-                            bindingType: ParameterMapping.Uniform
-                        },
-                        ParameterMapping {
-                            parameterName: "rightVector"
-                            shaderVariableName: "rightVector"
-                            bindingType: ParameterMapping.Uniform
                         }
+//                        ParameterMapping {
+//                            parameterName: "viewVector"
+//                            shaderVariableName: "viewVector"
+//                            bindingType: ParameterMapping.Uniform
+//                        },
+//                        ParameterMapping {
+//                            parameterName: "upVector"
+//                            shaderVariableName: "upVector"
+//                            bindingType: ParameterMapping.Uniform
+//                        },
+//                        ParameterMapping {
+//                            parameterName: "rightVector"
+//                            shaderVariableName: "rightVector"
+//                            bindingType: ParameterMapping.Uniform
+//                        }
                     ]
                     shaderProgram: ShaderProgram {
-//                        vertexShaderCode: loadSource("qrc:/instanced.vert")
-//                        geometryShaderCode: loadSource("qrc:/instanced.geom")
-//                        fragmentShaderCode: loadSource("qrc:/instanced.frag")
-                        vertexShaderCode: loadSource("qrc:/regular.vert")
-                        fragmentShaderCode: loadSource("qrc:/regular.frag")
+                        vertexShaderCode: loadSource("qrc:/instanced.vert")
+                        geometryShaderCode: loadSource("qrc:/instanced.geom")
+                        fragmentShaderCode: loadSource("qrc:/instanced.frag")
                     }
                 }
             }
@@ -64,19 +62,15 @@ Entity {
     }
     GeometryRenderer {
         id: cylinderMeshInstanced
-//        primitiveType: GeometryRenderer.Points
+        primitiveType: GeometryRenderer.Points
+        enabled: instanceCount != 0
         instanceCount: sphereData.count
-        geometry: CylinderGeometry {
+
+        geometry: PointGeometry {
             attributes: [
                 instanceDataAttribute
             ]
         }
-
-//        geometry: PointGeometry {
-//            attributes: [
-//                instanceDataAttribute
-//            ]
-//        }
 
         Attribute {
             id: instanceDataAttribute
@@ -88,6 +82,7 @@ Entity {
             buffer: sphereData.buffer
         }
     }
+
     Entity {
         components: [
             cylinderMeshInstanced,
