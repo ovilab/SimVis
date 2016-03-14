@@ -39,6 +39,16 @@ Entity {
                             parameterName: "viewVector"
                             shaderVariableName: "viewVector"
                             bindingType: ParameterMapping.Uniform
+                        },
+                        ParameterMapping {
+                            parameterName: "upVector"
+                            shaderVariableName: "upVector"
+                            bindingType: ParameterMapping.Uniform
+                        },
+                        ParameterMapping {
+                            parameterName: "rightVector"
+                            shaderVariableName: "rightVector"
+                            bindingType: ParameterMapping.Uniform
                         }
                     ]
                     shaderProgram: ShaderProgram {
