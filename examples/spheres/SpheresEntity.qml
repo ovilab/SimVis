@@ -3,14 +3,29 @@ import Qt3D.Render 2.0
 
 import QtQuick 2.0 as QQ2
 
-import SimVis 1.0
+import SimVis 1.0 as SimVis
 import MySimulator 1.0
 
 Entity {
     id: spheresRoot
     property var simulator
+    property Camera camera
     Material {
         id: spheresGeometryShaderTechnique
+        parameters: [
+            Parameter {
+                name: "viewVector"
+                value: camera ? camera.viewVector.normalized() : Qt.vector3d(1.0, 0.0, 0.0)
+            },
+            Parameter {
+                name: "upVector"
+                value: camera ? camera.upVector.normalized() : Qt.vector3d(0.0, 1.0, 0.0)
+            },
+            Parameter {
+                name: "rightVector"
+                value: camera ? camera.viewVector.normalized().crossProduct(camera.upVector.normalized()) : Qt.vector3d(0.0, 0.0, 1.0)
+            }
+        ]
         effect: Effect {
             techniques: Technique {
                 graphicsApiFilter {
@@ -25,6 +40,11 @@ Entity {
                             parameterName: "pos"
                             shaderVariableName: "pos"
                             bindingType: ParameterMapping.Attribute
+                        },
+                        ParameterMapping {
+                            parameterName: "viewVector"
+                            shaderVariableName: "viewVector"
+                            bindingType: ParameterMapping.Uniform
                         }
                     ]
                     shaderProgram: ShaderProgram {
@@ -39,22 +59,22 @@ Entity {
     GeometryRenderer {
         id: cylinderMeshInstanced
         primitiveType: GeometryRenderer.Points
-//        instanceCount: 100 // TODO make instanceCount depend on buffer/simulator
+        instanceCount: 100 // TODO make instanceCount depend on buffer/simulator
         geometry: PointGeometry {
-//            attributes: [
-//                instanceDataAttribute
-//            ]
+            attributes: [
+                instanceDataAttribute
+            ]
         }
 
-//        Attribute {
-//            id: instanceDataAttribute
-//            name: "pos"
-//            attributeType: Attribute.VertexAttribute
-//            dataType: Attribute.Float
-//            dataSize: 3
-//            divisor: 1
-//            buffer: simulator.positionBuffer
-//        }
+        Attribute {
+            id: instanceDataAttribute
+            name: "pos"
+            attributeType: Attribute.VertexAttribute
+            dataType: Attribute.Float
+            dataSize: 3
+            divisor: 1
+            buffer: simulator.positionBuffer
+        }
     }
     Entity {
         components: [

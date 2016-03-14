@@ -93,7 +93,6 @@ void PointGeometry::init()
     m_indexAttribute->setAttributeType(QAttribute::IndexAttribute);
     m_indexAttribute->setDataType(QAttribute::UnsignedShort);
     m_indexAttribute->setBuffer(m_indexBuffer);
-
     m_indexAttribute->setCount(indexCount);
 
     m_vertexBuffer->setBufferFunctor(QBufferFunctorPtr(new PointVertexDataFunctor()));
