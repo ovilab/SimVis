@@ -56,9 +56,33 @@ Scene3D {
                 }
             }
         ]
+
         SpheresEntity {
             simulator: MySimulator {
-                dt: 0.1
+                dt: 0.01
+            }
+        }
+
+        Entity {
+            components: [ transform, mesh, diffuseMaterial ]
+
+            Transform {
+                id: transform
+                scale: 0.03
+                rotation: fromAxisAndAngle(Qt.vector3d(1, 0, 0), 0.0)
+                translation: Qt.vector3d(10, 0, 0)
+            }
+
+            Mesh {
+                id: mesh
+                source: "Chest.obj"
+            }
+
+            DiffuseMapMaterial {
+                id: diffuseMaterial
+                diffuse: "diffuse.webp"
+                specular: Qt.rgba( 0.2, 0.2, 0.2, 1.0 )
+                shininess: 2.0
             }
         }
     }

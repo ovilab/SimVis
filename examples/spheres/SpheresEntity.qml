@@ -40,7 +40,7 @@ Entity {
         id: cylinderMeshInstanced
         enabled: instanceCount != 0
         primitiveType: GeometryRenderer.Points
-        instanceCount: 200 // TODO make instanceCount depend on buffer/simulator
+        instanceCount: 20000 // TODO make instanceCount depend on buffer/simulator
         geometry: PointGeometry {
             attributes: [
                 instanceDataAttribute

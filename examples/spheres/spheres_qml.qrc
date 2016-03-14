@@ -6,5 +6,7 @@
         <file>instanced.geom</file>
         <file>instanced.vert</file>
         <file>SpheresScene.qml</file>
+        <file>Chest.obj</file>
+        <file>diffuse.webp</file>
     </qresource>
 </RCC>

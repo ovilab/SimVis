@@ -22,5 +22,4 @@ ApplicationWindow {
 
     SpheresScene {
     }
-
 }
