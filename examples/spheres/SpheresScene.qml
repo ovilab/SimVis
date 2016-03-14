@@ -12,7 +12,9 @@ Scene3D {
     focus: true
     aspects: "input"
 
+
     Entity {
+
 
         Configuration  {
             controlledCamera: frameGraph.camera

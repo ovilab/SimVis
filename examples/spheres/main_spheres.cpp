@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QQuickView>
 #include <QtQml>
 
 #include "spheressimulator.h"
@@ -15,9 +16,15 @@ int main(int argc, char *argv[])
     qmlRegisterType<PointGeometry>("MySimulator", 1, 0, "PointGeometry");
     QApplication app(argc, argv);
 
-    QQmlApplicationEngine engine;
-    qpm::init(app, engine);
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    QQuickView view;
+    qpm::init(app, *view.engine());
+    QSurfaceFormat format;
+    format.setMajorVersion(4);
+    format.setMinorVersion(3);
+    format.setProfile(QSurfaceFormat::CoreProfile);
+    view.setFormat(format);
+    view.setSource(QUrl("qrc:/main.qml"));
+    view.show();
 
     return app.exec();
 }

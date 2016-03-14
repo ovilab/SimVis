@@ -13,9 +13,9 @@ import QtQuick.Scene3D 2.0
 import Qt3D.Core 2.0 as Core
 import Qt3D.Render 2.0 as Render
 
-ApplicationWindow {
+Item {
     id: applicationRoot
-    title: qsTr("Spheres in an harmonic oscillator - SimVis example")
+//    title: qsTr("Spheres in an harmonic oscillator - SimVis example")
     width: 1650
     height: 900
     visible: true
@@ -23,3 +23,4 @@ ApplicationWindow {
     SpheresScene {
     }
 }
+
