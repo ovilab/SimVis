@@ -58,9 +58,12 @@ Scene3D {
         ]
 
         SpheresEntity {
-            simulator: MySimulator {
-                dt: 0.01
-            }
+            simulator: simulator
+        }
+
+        MySimulator {
+            id: simulator
+            dt: 0.001
         }
 
         Entity {

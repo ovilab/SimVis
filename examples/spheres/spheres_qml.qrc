@@ -8,5 +8,7 @@
         <file>SpheresScene.qml</file>
         <file>Chest.obj</file>
         <file>diffuse.webp</file>
+        <file>regular.frag</file>
+        <file>regular.vert</file>
     </qresource>
 </RCC>

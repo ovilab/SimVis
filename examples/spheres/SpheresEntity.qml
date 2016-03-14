@@ -38,23 +38,23 @@ Entity {
     }
     GeometryRenderer {
         id: cylinderMeshInstanced
-        enabled: instanceCount != 0
         primitiveType: GeometryRenderer.Points
-        instanceCount: 20000 // TODO make instanceCount depend on buffer/simulator
+//        instanceCount: 100 // TODO make instanceCount depend on buffer/simulator
         geometry: PointGeometry {
-            attributes: [
-                instanceDataAttribute
-            ]
+//            attributes: [
+//                instanceDataAttribute
+//            ]
         }
-        Attribute {
-            id: instanceDataAttribute
-            name: "pos"
-            attributeType: Attribute.VertexAttribute
-            dataType: Attribute.Float
-            dataSize: 3
-            divisor: 1
-            buffer: simulator.positionBuffer
-        }
+
+//        Attribute {
+//            id: instanceDataAttribute
+//            name: "pos"
+//            attributeType: Attribute.VertexAttribute
+//            dataType: Attribute.Float
+//            dataSize: 3
+//            divisor: 1
+//            buffer: simulator.positionBuffer
+//        }
     }
     Entity {
         components: [
