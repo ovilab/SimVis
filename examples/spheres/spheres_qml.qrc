@@ -1,11 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-<!--        <file>face_1_1024.png</file>
-        <file>face_2_1024.png</file>
-        <file>face_3_1024.png</file>
-        <file>face_4_1024.png</file>
-        <file>face_5_1024.png</file>
-        <file>face_6_1024.png</file>-->
+        <file>SpheresEntity.qml</file>
+        <file>instanced.frag</file>
+        <file>instanced.geom</file>
+        <file>instanced.vert</file>
+        <file>SpheresScene.qml</file>
     </qresource>
 </RCC>

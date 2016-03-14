@@ -1,11 +1,11 @@
 TEMPLATE = subdirs
 SUBDIRS += \
     spheres \
-    simple \
-    marchingcubes \
-    functionsurface \
-    triangles \
-    neuron \
-    cylinders
+#    simple \
+#    marchingcubes \
+#    functionsurface \
+#    triangles \
+#    neuron \
+#    cylinders
 
 CONFIG += ordered
