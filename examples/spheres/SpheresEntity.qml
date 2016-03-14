@@ -52,9 +52,11 @@ Entity {
                         }
                     ]
                     shaderProgram: ShaderProgram {
-                        vertexShaderCode: loadSource("qrc:/instanced.vert")
-                        geometryShaderCode: loadSource("qrc:/instanced.geom")
-                        fragmentShaderCode: loadSource("qrc:/instanced.frag")
+//                        vertexShaderCode: loadSource("qrc:/instanced.vert")
+//                        geometryShaderCode: loadSource("qrc:/instanced.geom")
+//                        fragmentShaderCode: loadSource("qrc:/instanced.frag")
+                        vertexShaderCode: loadSource("qrc:/regular.vert")
+                        fragmentShaderCode: loadSource("qrc:/regular.frag")
                     }
                 }
             }
@@ -62,13 +64,19 @@ Entity {
     }
     GeometryRenderer {
         id: cylinderMeshInstanced
-        primitiveType: GeometryRenderer.Points
+//        primitiveType: GeometryRenderer.Points
         instanceCount: sphereData.count
-        geometry: PointGeometry {
+        geometry: CylinderGeometry {
             attributes: [
                 instanceDataAttribute
             ]
         }
+
+//        geometry: PointGeometry {
+//            attributes: [
+//                instanceDataAttribute
+//            ]
+//        }
 
         Attribute {
             id: instanceDataAttribute
