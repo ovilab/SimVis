@@ -1,6 +1,6 @@
 #version 410 core
 
-uniform vec4 lightPosition = vec4( 0.0, 0.0, 0.0, 1.0 );
+uniform vec4 lightPosition = vec4( 1.0, 1.0, 1.0, 1.0 );
 uniform vec3 lightIntensity = vec3( 1.0, 1.0, 1.0 );
 
 uniform vec3 ka = vec3(0.1, 0.1, 0.1);                            // Ambient reflectivity

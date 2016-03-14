@@ -30,11 +30,11 @@ Entity {
             techniques: Technique {
                 renderPasses: RenderPass {
                     bindings: [
-                        ParameterMapping {
-                            parameterName: "pos"
-                            shaderVariableName: "pos"
-                            bindingType: ParameterMapping.Attribute
-                        },
+//                        ParameterMapping {
+//                            parameterName: "pos"
+//                            shaderVariableName: "pos"
+//                            bindingType: ParameterMapping.Attribute
+//                        },
                         ParameterMapping {
                             parameterName: "viewVector"
                             shaderVariableName: "viewVector"
@@ -53,22 +53,22 @@ Entity {
     GeometryRenderer {
         id: cylinderMeshInstanced
         primitiveType: GeometryRenderer.Points
-        instanceCount: 100 // TODO make instanceCount depend on buffer/simulator
+//        instanceCount: 100 // TODO make instanceCount depend on buffer/simulator
         geometry: PointGeometry {
-            attributes: [
-                instanceDataAttribute
-            ]
+//            attributes: [
+//                instanceDataAttribute
+//            ]
         }
 
-        Attribute {
-            id: instanceDataAttribute
-            name: "pos"
-            attributeType: Attribute.VertexAttribute
-            dataType: Attribute.Float
-            dataSize: 3
-            divisor: 1
-            buffer: simulator.positionBuffer
-        }
+//        Attribute {
+//            id: instanceDataAttribute
+//            name: "pos"
+//            attributeType: Attribute.VertexAttribute
+//            dataType: Attribute.Float
+//            dataSize: 3
+//            divisor: 1
+//            buffer: simulator.positionBuffer
+//        }
     }
     Entity {
         components: [
