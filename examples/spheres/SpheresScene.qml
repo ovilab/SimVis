@@ -17,7 +17,7 @@ Scene3D {
         components: [
             StandardFrameGraph {
                 id: frameGraph
-                camera.position: Qt.vector3d(0.0, 0.0, 1000.0)
+                camera.position: Qt.vector3d(0.0, 0.0, 200.0)
             }
         ]
 
@@ -29,7 +29,7 @@ Scene3D {
 
         MySimulator {
             id: simulator
-            dt: 0.1
+            dt: 0.01
         }
 
 //        Chest {}

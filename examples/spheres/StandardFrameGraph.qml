@@ -10,7 +10,7 @@ FrameGraph {
     id: frameGraph
     property Camera camera: Camera {
         projectionType: CameraLens.PerspectiveProjection
-        fieldOfView: 22.5
+        fieldOfView: 50
         aspectRatio: 16/9
         nearPlane : 0.1
         farPlane : 10000.0
