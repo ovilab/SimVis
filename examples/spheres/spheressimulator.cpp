@@ -38,7 +38,8 @@ MyWorker::MyWorker()
         float vx = ((2.0*rand() / double(RAND_MAX))-1.0);
         float vy = ((2.0*rand() / double(RAND_MAX))-1.0);
         float vz = ((2.0*rand() / double(RAND_MAX))-1.0);
-        m_positions[i] = QVector3D(x,y,z);
+        QVector3D pos(x,y,z);
+        m_positions[i] = pos + pos.normalized() * 5;
         m_velocities[i] = QVector3D(vx,vy,vz);
     }
 }

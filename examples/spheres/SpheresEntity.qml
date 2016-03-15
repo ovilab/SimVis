@@ -11,6 +11,8 @@ import MySimulator 1.0
 Entity {
     id: spheresRoot
     property real variable: 0.0
+    property alias fragmentColor: _fragmentColor.value
+    property alias fragmentBuilder: _fragmentBuilder
     property SphereData sphereData
     property Camera camera
     Material {
@@ -29,7 +31,6 @@ Entity {
                 value: camera ? camera.viewVector.normalized().crossProduct(camera.upVector.normalized()) : Qt.vector3d(0.0, 0.0, 1.0)
             }
         ]
-//        parameters: builder.parameters
         effect: Effect {
             techniques: Technique {
                 renderPasses: RenderPass {
@@ -47,20 +48,15 @@ Entity {
 
                     ]
                     shaderProgram: ShaderProgram {
-                        //                        vertexShaderCode: loadSource("qrc:/instanced.vert")
-                        //                        geometryShaderCode: loadSource("qrc:/instanced.geom")
-                        //                        fragmentShaderCode: loadSource("qrc:/instanced.frag")
-
                         vertexShaderCode: loadSource("qrc:/spheres.vert")
-//                        fragmentShaderCode: loadSource("qrc:/spheres.frag")
-                        fragmentShaderCode: builder.finalShader
+                        fragmentShaderCode: _fragmentBuilder.finalShader
 
                         onFragmentShaderCodeChanged: {
                             console.log(fragmentShaderCode)
                         }
                     }
                     ShaderBuilder {
-                            id: builder
+                            id: _fragmentBuilder
 
                             material: spheresGeometryShaderTechnique
 
@@ -102,26 +98,14 @@ Entity {
                                     type: "vec4"
                                     name: "fragColor"
                                     value: StandardMaterial {
-                                        position: builder.position
-                                        normal: builder.normal
+                                        position: _fragmentBuilder.position
+                                        normal: _fragmentBuilder.normal
                                         lights: ShaderGroup {
                                             Nodes.Light {}
-                                            Nodes.Light {
-                                                position: camera.position
-                                                strength: 0.1
-                                            }
                                         }
                                     }
-//                                    value: Mix {
-//                                        value1: "blue"
-//                                        value2: "green"
-//                                        mix: variable
-//                                    }
                                 }
                             ]
-
-                            // TODO consider adding support for chaining shaders
-                            // TODO add functionality to choose input names or shader file based on GLSL version
                         }
                 }
             }
@@ -139,15 +123,6 @@ Entity {
             ]
         }
 
-//        geometry: PlaneGeometry {
-//            resolution: Qt.size(2, 2)
-//            height: 1.0
-//            width: 1.0
-//            attributes: [
-//                instanceDataAttribute
-//            ]
-//        }
-
         Attribute {
             id: instanceDataAttribute
             name: "pos"
@@ -158,19 +133,6 @@ Entity {
             buffer: sphereData.buffer
         }
     }
-//    Transform {
-//        id: transform
-//        property vector3d cross: camera.viewVector.normalized().crossProduct(Qt.vector3d(0, 1, 0))
-//        rotation: fromAxisAndAngle(cross.normalized(), 180/Math.PI*Math.asin(cross.length()))
-//        onRotationChanged: {
-//            console.log("INFO:")
-//            console.log(180/Math.PI*Math.asin(cross.length()))
-//            console.log(cross.normalized())
-//            console.log(rotation)
-//        }
-
-////        rotation: fromAxisAndAngle(cross.normalized(), variable)
-//    }
     Entity {
         components: [
             cylinderMeshInstanced,
