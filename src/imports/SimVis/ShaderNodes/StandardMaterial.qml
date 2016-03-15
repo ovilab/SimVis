@@ -23,7 +23,7 @@ ShaderNode {
         var output = ""
         output += "$this = vec3(0.0, 0.0, 0.0);\n"
         for(var i in lights.nodes) {
-            output += "$this += standardMaterialLight($lights[" + i + "], $(normal, vec3), $(position, vec3),\n"
+            output += "$this += standardMaterialLight($lights[" + i + "], $(normal, vec3), $(position, vec3), eyePosition,\n"
             output += "             $(ambientColor, vec3), $(diffuseColor, vec3), $(specularColor, vec3),\n"
             output += "             $(ambientIntensity, float), $(diffuseIntensity, float), $(specularIntensity, float),\n"
             output += "             $(hardness, float));\n"

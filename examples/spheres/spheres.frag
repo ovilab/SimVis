@@ -1,4 +1,5 @@
 #version 410 core
+#pragma shadernodes header
 
 uniform vec4 lightPosition = vec4( 1.0, 1.0, 1.0, 1.0 );
 uniform vec3 lightIntensity = vec3( 1.0, 1.0, 1.0 );
@@ -11,7 +12,7 @@ in vec3 position;
 in vec3 color;
 in vec2 texCoord;
 
-out vec4 fragColor;
+//out vec4 fragColor;
 
 uniform mat4 modelView;
 uniform vec3 eyePosition;
@@ -48,6 +49,7 @@ void main(void) {
         float z = sqrt(1.0 - r2); // Equation for sphere, x^2 + y^2 + z^2 = R^2
         vec3 normal = x*rightVector + y*upVector - z*viewVector;
 
-        fragColor = vec4( adsModel( position, normalize( normal ) ), 1.0 );
+//        fragColor = vec4( adsModel( position, normalize( normal ) ), 1.0 );
+        $setupShaderNodes();
     }
 }

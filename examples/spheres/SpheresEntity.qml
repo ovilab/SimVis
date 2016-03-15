@@ -1,9 +1,11 @@
+import SimVis 1.0
+import SimVis.ShaderNodes 1.0
+import SimVis.ShaderNodes 1.0 as Nodes
+
 import Qt3D.Core 2.0
 import Qt3D.Render 2.0
 
 import QtQuick 2.0 as QQ2
-
-import SimVis 1.0 as SimVis
 import MySimulator 1.0
 
 Entity {
@@ -27,6 +29,7 @@ Entity {
                 value: camera ? camera.viewVector.normalized().crossProduct(camera.upVector.normalized()) : Qt.vector3d(0.0, 0.0, 1.0)
             }
         ]
+//        parameters: builder.parameters
         effect: Effect {
             techniques: Technique {
                 renderPasses: RenderPass {
@@ -49,8 +52,77 @@ Entity {
                         //                        fragmentShaderCode: loadSource("qrc:/instanced.frag")
 
                         vertexShaderCode: loadSource("qrc:/spheres.vert")
-                        fragmentShaderCode: loadSource("qrc:/spheres.frag")
+//                        fragmentShaderCode: loadSource("qrc:/spheres.frag")
+                        fragmentShaderCode: builder.finalShader
+
+                        onFragmentShaderCodeChanged: {
+                            console.log(fragmentShaderCode)
+                        }
                     }
+                    ShaderBuilder {
+                            id: builder
+
+                            material: spheresGeometryShaderTechnique
+
+                            // TODO add readonly or some other way to show that these are only for others to read
+                            shaderType: ShaderBuilder.Fragment
+
+                            // inputs
+                            property ShaderNode position: ShaderNode {
+                                type: "vec3"
+                                name: "position"
+                                result: "position"
+                            }
+                            property ShaderNode normal: ShaderNode {
+                                type: "vec3"
+                                name: "normal"
+                                result: "normal"
+                            }
+                            property ShaderNode texCoord: ShaderNode {
+                                type: "vec2"
+                                name: "texCoord"
+                                result: "texCoord"
+                            }
+                            property ShaderNode color: ShaderNode {
+                                type: "vec3"
+                                name: "color"
+                                result: "color"
+                            }
+                            property ShaderNode sphereId: ShaderNode {
+                                type: "float"
+                                name: "sphereId"
+                                result: "sphereId"
+                            }
+
+                            sourceFile: "qrc:/spheres.frag"
+
+                            outputs: [
+                                ShaderOutput {
+                                    id: _fragmentColor
+                                    type: "vec4"
+                                    name: "fragColor"
+                                    value: StandardMaterial {
+                                        position: builder.position
+                                        normal: builder.normal
+                                        lights: ShaderGroup {
+                                            Nodes.Light {}
+                                            Nodes.Light {
+                                                position: camera.position
+                                                strength: 0.1
+                                            }
+                                        }
+                                    }
+//                                    value: Mix {
+//                                        value1: "blue"
+//                                        value2: "green"
+//                                        mix: variable
+//                                    }
+                                }
+                            ]
+
+                            // TODO consider adding support for chaining shaders
+                            // TODO add functionality to choose input names or shader file based on GLSL version
+                        }
                 }
             }
         }

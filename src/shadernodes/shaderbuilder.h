@@ -10,6 +10,10 @@
 #include <QUrl>
 #include <QVariantList>
 
+#include <Qt3DRender/QMaterial>
+
+using namespace Qt3DRender;
+
 class VariantShaderNode;
 
 struct UniformValue
@@ -19,6 +23,7 @@ struct UniformValue
     QString identifier;
     QVariant value;
     QString type;
+    QParameter *parameter;
 };
 
 class ShaderBuilder : public QObject
@@ -31,6 +36,7 @@ class ShaderBuilder : public QObject
     Q_PROPERTY(QQmlListProperty<ShaderOutput> inputs READ inputs CONSTANT)
     Q_PROPERTY(QQmlListProperty<ShaderOutput> outputs READ outputs CONSTANT)
     Q_PROPERTY(ShaderType shaderType READ shaderType WRITE setShaderType NOTIFY shaderTypeChanged)
+    Q_PROPERTY(QMaterial* material READ material WRITE setMaterial NOTIFY materialChanged)
 
 public:
     explicit ShaderBuilder(QObject *parent = 0);
@@ -61,6 +67,11 @@ public:
         return m_shaderType;
     }
 
+    QMaterial* material() const
+    {
+        return m_material;
+    }
+
 signals:
     void sourceChanged(QString source);
     void finalShaderChanged();
@@ -69,6 +80,8 @@ signals:
     void sourceFileChanged(QUrl sourceFile);
 
     void shaderTypeChanged(ShaderType shaderType);
+
+    void materialChanged(QMaterial* material);
 
 public slots:
     void setSource(QString source);
@@ -86,6 +99,15 @@ public slots:
         emit shaderTypeChanged(shaderType);
     }
 
+    void setMaterial(QMaterial* material)
+    {
+        if (m_material == material)
+            return;
+
+        m_material = material;
+        emit materialChanged(material);
+    }
+
 private:
     QString glslType(QVariant value) const;
 
@@ -96,6 +118,8 @@ private:
     QList<QSignalMapper*> m_mappers;
     QUrl m_sourceFile;
     ShaderType m_shaderType = ShaderType::Vertex;
+    QMaterial* m_material = nullptr;
+    QList<QParameter*> m_parameters;
 };
 
 #endif // SHADERBUILDER_H

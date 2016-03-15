@@ -24,11 +24,13 @@ Item {
         id: scene
         anchors.fill: parent
         focus: true
-        variable: slider.value * 180
+        variable: slider.value
     }
 
     Slider {
         id: slider
+        minimumValue: 0.0
+        maximumValue: 1.0
     }
     Text {
 //        text: scene.rotation

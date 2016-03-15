@@ -8,6 +8,9 @@
 #include <QQmlEngine>
 #include <QQmlFile>
 #include <QFile>
+#include <QColor>
+
+#include <Qt3DRender/QParameter>
 
 ShaderBuilder::ShaderBuilder(QObject *parent) : QObject(parent)
 {
@@ -25,6 +28,13 @@ QString ShaderBuilder::finalShader()
         disconnect(mapper, SIGNAL(mapped(int)), this, SLOT(updateUniform(int)));
     }
     qDeleteAll(m_mappers);
+    if(m_material) {
+        qDebug() << "Removing parameters";
+        for(UniformValue &uniformValue : m_uniforms) {
+            m_material->removeParameter(uniformValue.parameter);
+            delete uniformValue.parameter;
+        }
+    }
     m_uniforms.clear();
     // Verify all that all outputs have values
     for(ShaderOutput *output : m_outputs) {
@@ -35,31 +45,31 @@ QString ShaderBuilder::finalShader()
         }
     }
 
-    QString contents = "";
-    contents += "\n// ------  begin generated header  ------\n\n";
+    QString header = "";
+    header += "\n// ------  begin generated header  ------\n\n";
     for(ShaderOutput *output : m_outputs) {
-        contents += output->node()->generateHeader();
+        header += output->node()->generateHeader();
     }
-    contents += "\n// ------          uniforms        ------\n\n";
+    header += "\n// ------          uniforms        ------\n\n";
     for(const UniformValue &uniform : m_uniforms) {
-        contents += "uniform " + uniform.type + " " + uniform.identifier + ";\n";
+        header += "uniform " + uniform.type + " " + uniform.identifier + ";\n";
     }
-    contents += "\n// ------           inputs         ------\n\n";
+    header += "\n// ------           inputs         ------\n\n";
     for(const ShaderOutput *input : m_inputs) {
-        contents += "cp_in " + input->type() + " " + input->name();
+        header += "in " + input->type() + " " + input->name();
 
         // TODO add support for other input types and thus other numbers of elements in inputs
         if(m_shaderType == ShaderType::Geometry) {
-            contents += "[1]";
+            header += "[1]";
         }
-        contents += ";\n";
+        header += ";\n";
     }
-    contents += "\n// ------           outputs        ------\n\n";
+    header += "\n// ------           outputs        ------\n\n";
     for(ShaderOutput *output : m_outputs) {
         if(output->name() == "cp_FragColor") {
             continue;
         }
-        contents += "cp_out " + output->type() + " " + output->name() + ";\n";
+        header += "out " + output->type() + " " + output->name() + ";\n";
     }
 
     QString setup = "";
@@ -85,9 +95,9 @@ QString ShaderBuilder::finalShader()
     if(indentMatch.hasMatch()) {
         setup.replace(QRegularExpression("\n"), "\n" + indentMatch.captured(1));
     }
-    QString originalSource = m_source;
-    originalSource.replace(QRegularExpression(matchString), setup);
-    contents += originalSource;
+    QString contents = m_source;
+    contents.replace(QRegularExpression("#pragma shadernodes header"), header);
+    contents.replace(QRegularExpression(matchString), setup);
 
     for(ShaderOutput *output : m_outputs) {
         ShaderNode *value = output->node();
@@ -95,6 +105,13 @@ QString ShaderBuilder::finalShader()
             continue;
         }
         value->reset();
+    }
+
+    if(m_material) {
+        qDebug() << "Adding parameters";
+        for(UniformValue &uniformValue : m_uniforms) {
+            m_material->addParameter(uniformValue.parameter);
+        }
     }
 
     return contents;
@@ -123,6 +140,14 @@ void ShaderBuilder::addUniform(ShaderNode *node, const QString &propertyName, co
     uniform.identifier = identifier;
     uniform.value = value;
     uniform.type = glslType(value);
+    QParameter* param = new QParameter();
+    param->setName(identifier);
+    if(value.type() == QVariant::String) {
+        param->setValue(QColor(value.toString()));
+    } else {
+        param->setValue(value);
+    }
+    uniform.parameter = param;
     m_uniforms.append(uniform);
 
     QSignalMapper *mapper = new QSignalMapper;
@@ -149,6 +174,7 @@ void ShaderBuilder::updateUniform(int i)
     QByteArray propertyNameArray = uniform.propertyName.toUtf8();
     QVariant value = uniform.node->property(propertyNameArray.constData());;
     uniform.value = value;
+    uniform.parameter->setValue(value);
     QString type = glslType(value);
     if(type != uniform.type) {
         uniform.type = type;

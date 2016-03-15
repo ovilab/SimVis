@@ -33,7 +33,7 @@ highp vec3 gamma(highp vec3 color, highp float gamma) {
     return pow(color, vec3(1.0/gamma));
 }
 
-highp vec3 applyLight(Light light, highp vec3 normal, highp vec3 vertexPosition, highp vec3 color) {
+highp vec3 applyLight(Light light, highp vec3 normal, highp vec3 vertexPosition, vec3 cameraPosition, highp vec3 color) {
     highp vec3 lightVector = vec3(0.0);
 
 #if defined(DEFAULTLIGHTSPECULAR) || defined(DEFAULTLIGHTDIFFUSE)
@@ -42,7 +42,7 @@ highp vec3 applyLight(Light light, highp vec3 normal, highp vec3 vertexPosition,
 #endif
 
 #if defined(DEFAULTLIGHTSPECULAR) || defined(DEFAULTLIGHTAMBIENT)
-    highp vec3 surfaceToCamera = normalize(cp_cameraPosition - vertexPosition);
+    highp vec3 surfaceToCamera = normalize(cameraPosition - vertexPosition);
 #endif
 
    /* DIFFUSE */
