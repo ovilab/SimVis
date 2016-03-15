@@ -40,19 +40,7 @@ Scene3D {
         ]
 
         Entity {
-            Material {
-                id: material
-                effect: Effect {
-                    techniques: Technique {
-                        renderPasses: RenderPass {
-                            shaderProgram: ShaderProgram {
-                                vertexShaderCode: loadSource("qrc:/shader.vert")
-                                fragmentShaderCode: fragmentBuilder.finalShader
-                            }
-                        }
-                    }
-                }
-            }
+
             CylinderMesh {
                 id: cylinderMesh
                 radius: 2.0
@@ -60,22 +48,21 @@ Scene3D {
                 rings: 64
                 slices: 32
             }
-            StandardShaderBuilder {
-                id: fragmentBuilder
-                material: material
+            ShaderBuilderMaterial {
+                id: material
                 fragmentColor: StandardMaterial {
                     diffuseColor: "lightblue"
                     specularColor: "white"
                     ambientColor: "white"
                     ambientIntensity: 0.1
 
-                    position: fragmentBuilder.position
+                    position: material.position
                     normal: Mix {
                         id: mix1
-                        value1: fragmentBuilder.normal
+                        value1: material.normal
                         value2: Simplex {
-                            normal: fragmentBuilder.normal
-                            position: fragmentBuilder.position
+                            normal: material.normal
+                            position: material.position
                         }
                         mix: 0.5
                     }
