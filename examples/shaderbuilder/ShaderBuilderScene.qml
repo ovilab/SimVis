@@ -34,7 +34,7 @@ Scene3D {
                 id: frameGraph
                 activeFrameGraph: ForwardRenderer {
                     camera: camera
-                    clearColor: "#123"
+                    clearColor: "#012"
                 }
             }
         ]
