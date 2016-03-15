@@ -8,6 +8,7 @@ import MySimulator 1.0
 
 Entity {
     id: spheresRoot
+    property real variable: 0.0
     property SphereData sphereData
     property Camera camera
     Material {
@@ -34,27 +35,21 @@ Entity {
                             parameterName: "pos"
                             shaderVariableName: "pos"
                             bindingType: ParameterMapping.Attribute
+                        },
+                        ParameterMapping {
+                            parameterName: "vertexId"
+                            shaderVariableName: "vertexId"
+                            bindingType: ParameterMapping.Attribute
                         }
-//                        ParameterMapping {
-//                            parameterName: "viewVector"
-//                            shaderVariableName: "viewVector"
-//                            bindingType: ParameterMapping.Uniform
-//                        },
-//                        ParameterMapping {
-//                            parameterName: "upVector"
-//                            shaderVariableName: "upVector"
-//                            bindingType: ParameterMapping.Uniform
-//                        },
-//                        ParameterMapping {
-//                            parameterName: "rightVector"
-//                            shaderVariableName: "rightVector"
-//                            bindingType: ParameterMapping.Uniform
-//                        }
+
                     ]
                     shaderProgram: ShaderProgram {
-                        vertexShaderCode: loadSource("qrc:/instanced.vert")
-                        geometryShaderCode: loadSource("qrc:/instanced.geom")
-                        fragmentShaderCode: loadSource("qrc:/instanced.frag")
+                        //                        vertexShaderCode: loadSource("qrc:/instanced.vert")
+                        //                        geometryShaderCode: loadSource("qrc:/instanced.geom")
+                        //                        fragmentShaderCode: loadSource("qrc:/instanced.frag")
+
+                        vertexShaderCode: loadSource("qrc:/spheres.vert")
+                        fragmentShaderCode: loadSource("qrc:/spheres.frag")
                     }
                 }
             }
@@ -62,7 +57,7 @@ Entity {
     }
     GeometryRenderer {
         id: cylinderMeshInstanced
-        primitiveType: GeometryRenderer.Points
+        primitiveType: GeometryRenderer.TriangleStrip
         enabled: instanceCount != 0
         instanceCount: sphereData.count
 
@@ -71,6 +66,15 @@ Entity {
                 instanceDataAttribute
             ]
         }
+
+//        geometry: PlaneGeometry {
+//            resolution: Qt.size(2, 2)
+//            height: 1.0
+//            width: 1.0
+//            attributes: [
+//                instanceDataAttribute
+//            ]
+//        }
 
         Attribute {
             id: instanceDataAttribute
@@ -82,7 +86,19 @@ Entity {
             buffer: sphereData.buffer
         }
     }
+//    Transform {
+//        id: transform
+//        property vector3d cross: camera.viewVector.normalized().crossProduct(Qt.vector3d(0, 1, 0))
+//        rotation: fromAxisAndAngle(cross.normalized(), 180/Math.PI*Math.asin(cross.length()))
+//        onRotationChanged: {
+//            console.log("INFO:")
+//            console.log(180/Math.PI*Math.asin(cross.length()))
+//            console.log(cross.normalized())
+//            console.log(rotation)
+//        }
 
+////        rotation: fromAxisAndAngle(cross.normalized(), variable)
+//    }
     Entity {
         components: [
             cylinderMeshInstanced,

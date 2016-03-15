@@ -8,6 +8,7 @@ import MySimulator 1.0
 
 Scene3D {
     aspects: "input"
+    property alias variable: spheresEntity.variable
     Entity {
         Configuration  {
             controlledCamera: frameGraph.camera
@@ -20,6 +21,7 @@ Scene3D {
         ]
 
         SpheresEntity {
+            id: spheresEntity
             camera: frameGraph.camera
             sphereData: simulator.sphereData
         }
@@ -29,6 +31,6 @@ Scene3D {
             dt: 0.001
         }
 
-        Chest {}
+//        Chest {}
     }
 }

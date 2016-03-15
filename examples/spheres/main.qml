@@ -21,8 +21,17 @@ Item {
     visible: true
 
     SpheresScene {
+        id: scene
         anchors.fill: parent
         focus: true
+        variable: slider.value * 180
+    }
+
+    Slider {
+        id: slider
+    }
+    Text {
+//        text: scene.rotation
     }
 }
 

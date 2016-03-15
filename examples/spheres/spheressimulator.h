@@ -35,12 +35,11 @@ class MySimulator : public Simulator
 
 public:
     MySimulator(QNode *parent = 0);
-    virtual ~MySimulator();
 
     double dt() const;
     SphereData* sphereData()
     {
-        return m_sphereData;
+        return m_sphereData.data();
     }
 
 public slots:
@@ -54,7 +53,7 @@ protected:
 
 private:
     double m_dt = 0.05;
-    SphereData *m_sphereData = nullptr;
+    QScopedPointer<SphereData> m_sphereData;
 
     QT3D_CLONEABLE(MySimulator)
 

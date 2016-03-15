@@ -64,6 +64,7 @@ protected:
 
 private:
     Qt3DRender::QAttribute *m_positionAttribute;
+    Qt3DRender::QAttribute *m_idAttribute;
     Qt3DRender::QAttribute *m_normalAttribute;
     Qt3DRender::QAttribute *m_texCoordAttribute;
     Qt3DRender::QAttribute *m_indexAttribute;

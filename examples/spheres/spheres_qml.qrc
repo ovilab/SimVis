@@ -12,5 +12,7 @@
         <file>regular.vert</file>
         <file>StandardFrameGraph.qml</file>
         <file>Chest.qml</file>
+        <file>spheres.frag</file>
+        <file>spheres.vert</file>
     </qresource>
 </RCC>

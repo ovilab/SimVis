@@ -10,14 +10,9 @@ SphereData::SphereData(QNode *parent)
 {
 }
 
-SphereData::~SphereData()
-{
-    delete m_buffer;
-}
-
 Qt3DRender::QBuffer *SphereData::buffer()
 {
-    return m_buffer;
+    return m_buffer.data();
 }
 
 void SphereData::setPositions(QVector<QVector3D> positions)

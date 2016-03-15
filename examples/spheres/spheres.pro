@@ -27,4 +27,6 @@ HEADERS += \
 
 DISTFILES += \
     regular.frag \
-    regular.vert
+    regular.vert \
+    spheres.frag \
+    spheres.vert

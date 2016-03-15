@@ -12,7 +12,6 @@ class SphereData : public Qt3DCore::QNode
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
     explicit SphereData(QNode *parent = 0);
-    virtual ~SphereData();
 
     Qt3DRender::QBuffer* buffer();
     void setPositions(QVector<QVector3D> positions);
@@ -25,7 +24,7 @@ signals:
 public slots:
 
 private:
-    Qt3DRender::QBuffer *m_buffer = nullptr;
+    QScopedPointer<Qt3DRender::QBuffer> m_buffer;
     int m_count = 0;
 
     QT3D_CLONEABLE(SphereData)
