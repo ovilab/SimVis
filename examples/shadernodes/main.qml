@@ -18,7 +18,7 @@ Item {
     height: 900
     visible: true
 
-    ShaderBuilderScene {
+    ShaderNodesScene {
         id: scene
         anchors.fill: parent
         focus: true

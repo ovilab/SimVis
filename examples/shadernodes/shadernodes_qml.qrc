@@ -3,7 +3,7 @@
         <file>main.qml</file>
         <file>shader.frag</file>
         <file>shader.vert</file>
-        <file>ShaderBuilderScene.qml</file>
         <file>ShaderBuilderMaterial.qml</file>
+        <file>ShaderNodesScene.qml</file>
     </qresource>
 </RCC>

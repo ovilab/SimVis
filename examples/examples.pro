@@ -1,7 +1,7 @@
 TEMPLATE = subdirs
 SUBDIRS += \
     spheres \
-    shaderbuilder \
+    shadernodes \
 #    simple \
 #    marchingcubes \
 #    functionsurface \
