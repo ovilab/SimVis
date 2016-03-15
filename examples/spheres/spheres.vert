@@ -1,8 +1,9 @@
 #version 410
 
 in vec3 vertexPosition;
-in vec3 pos;
+in vec2 vertexTexCoord;
 in float vertexId;
+in vec3 pos;
 
 uniform vec3 viewVector;
 uniform vec3 upVector;
@@ -18,13 +19,7 @@ void main() {
 
     position = vertexPosition + pos;
 
-    texCoord = vec2(0.0, 0.0);
-    vec2 up = vec2(0.0, 1.0);
-    vec2 right = vec2(1.0, 0.0);
-    texCoord += (-up - right)*(float(vertexId==0.0));
-    texCoord += (-up + right)*(float(vertexId==1.0));
-    texCoord += (up - right)*(float(vertexId==2.0));
-    texCoord += (up + right)*(float(vertexId==3.0));
+    texCoord = vertexTexCoord;
 
     position += 0.5*(-upVector - rightVector)*(a_scale*float(vertexId==0.0));
     position += 0.5*(-upVector + rightVector)*(a_scale*float(vertexId==1.0));

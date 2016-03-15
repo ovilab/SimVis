@@ -18,7 +18,7 @@ public:
     {
         const int verticesCount = 4;
         // vec3 pos
-        const quint32 vertexSize = (3+1) * sizeof(float);
+        const quint32 vertexSize = (3+2+1) * sizeof(float);
 
         QByteArray verticesData;
         verticesData.resize(vertexSize*verticesCount);
@@ -28,6 +28,9 @@ public:
         *verticesPtr++ = 0.0;
         *verticesPtr++ = 0.0;
 
+        *verticesPtr++ = -1.0;
+        *verticesPtr++ = -1.0;
+
         *verticesPtr++ = 0.0;
 
         *verticesPtr++ = 0.0;
@@ -35,16 +38,25 @@ public:
         *verticesPtr++ = 0.0;
 
         *verticesPtr++ = 1.0;
+        *verticesPtr++ = -1.0;
+
+        *verticesPtr++ = 1.0;
 
         *verticesPtr++ = 0.0;
         *verticesPtr++ = 0.0;
         *verticesPtr++ = 0.0;
+
+        *verticesPtr++ = -1.0;
+        *verticesPtr++ = 1.0;
 
         *verticesPtr++ = 2.0;
 
         *verticesPtr++ = 0.0;
         *verticesPtr++ = 0.0;
         *verticesPtr++ = 0.0;
+
+        *verticesPtr++ = 1.0;
+        *verticesPtr++ = 1.0;
 
         *verticesPtr++ = 3.0;
 
@@ -98,11 +110,12 @@ void PointGeometry::init()
 {
     m_positionAttribute = new QAttribute(this);
     m_texCoordAttribute = new QAttribute(this);
+    m_idAttribute = new QAttribute(this);
     m_indexAttribute = new QAttribute(this);
     m_vertexBuffer = new QBuffer(QBuffer::VertexBuffer, this);
     m_indexBuffer = new QBuffer(QBuffer::IndexBuffer, this);
 
-    const quint32 elementSize = (3+1);
+    const quint32 elementSize = (3+2+1);
     const quint32 stride = elementSize * sizeof(float);
     const int vertexCount = 5;
     const int indexCount = 5;
@@ -115,14 +128,23 @@ void PointGeometry::init()
     m_positionAttribute->setByteStride(stride);
     m_positionAttribute->setCount(vertexCount);
 
-    m_texCoordAttribute->setName("vertexId");
+    m_texCoordAttribute->setName(QAttribute::defaultTextureCoordinateAttributeName());
     m_texCoordAttribute->setDataType(QAttribute::Float);
-    m_texCoordAttribute->setDataSize(1);
+    m_texCoordAttribute->setDataSize(2);
     m_texCoordAttribute->setAttributeType(QAttribute::VertexAttribute);
     m_texCoordAttribute->setBuffer(m_vertexBuffer);
     m_texCoordAttribute->setByteStride(stride);
     m_texCoordAttribute->setByteOffset(3 * sizeof(float));
     m_texCoordAttribute->setCount(vertexCount);
+
+    m_idAttribute->setName("vertexId");
+    m_idAttribute->setDataType(QAttribute::Float);
+    m_idAttribute->setDataSize(1);
+    m_idAttribute->setAttributeType(QAttribute::VertexAttribute);
+    m_idAttribute->setBuffer(m_vertexBuffer);
+    m_idAttribute->setByteStride(stride);
+    m_idAttribute->setByteOffset((3 + 2) * sizeof(float));
+    m_idAttribute->setCount(vertexCount);
 
     m_indexAttribute->setAttributeType(QAttribute::IndexAttribute);
     m_indexAttribute->setDataType(QAttribute::UnsignedShort);
@@ -134,6 +156,7 @@ void PointGeometry::init()
 
     addAttribute(m_positionAttribute);
     addAttribute(m_texCoordAttribute);
+    addAttribute(m_idAttribute);
     addAttribute(m_indexAttribute);
 }
 

@@ -23,7 +23,9 @@ uniform vec3 upVector;
 vec3 adsModel( const in vec3 pos, const in vec3 n )
 {
     // Calculate the vector from the light to the fragment
-    vec3 s = normalize( vec3( lightPosition ) - pos );
+//    vec3 s = normalize( vec3( lightPosition ) - pos );
+    vec3 lightpos = eyePosition;
+    vec3 s = normalize(vec3(lightpos) - pos);
 
     // Calculate the vector from the fragment to the eye position
     // (origin since this is in "eye" or "camera" space)
