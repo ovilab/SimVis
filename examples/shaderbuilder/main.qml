@@ -24,6 +24,7 @@ Item {
         focus: true
         mix1: slider1.value
         mix2: slider2.value
+        mix3: slider3.value
     }
 
     Rectangle {
@@ -48,6 +49,17 @@ Item {
             }
             Slider {
                 id: slider2
+                minimumValue: 0.0
+                maximumValue: 1.0
+                value: 0.0
+            }
+        }
+        Row {
+            Text {
+                text: "Displacement mix"
+            }
+            Slider {
+                id: slider3
                 minimumValue: 0.0
                 maximumValue: 1.0
                 value: 0.0

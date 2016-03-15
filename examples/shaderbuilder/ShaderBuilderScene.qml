@@ -11,6 +11,7 @@ import QtQuick.Scene3D 2.0
 Scene3D {
     property alias mix1: mix1.mix
     property alias mix2: mix2.mix
+    property alias mix3: mix3.mix
     aspects: "input"
     Entity {
         Camera {
@@ -40,7 +41,6 @@ Scene3D {
         ]
 
         Entity {
-
             CylinderMesh {
                 id: cylinderMesh
                 radius: 2.0
@@ -50,19 +50,31 @@ Scene3D {
             }
             ShaderBuilderMaterial {
                 id: material
+                vertexPosition: Add {
+                    value1: material.vertex.position
+                    value2: Mix {
+                        id: mix3
+                        value1: Qt.vector3d(0.0, 0.0, 0.0)
+                        value2: Simplex {
+                            normal: material.vertex.normal
+                            position: material.vertex.position
+                        }
+                        mix: 0.0
+                    }
+                }
                 fragmentColor: StandardMaterial {
                     diffuseColor: "lightblue"
                     specularColor: "white"
                     ambientColor: "white"
                     ambientIntensity: 0.1
 
-                    position: material.position
+                    position: material.fragment.position
                     normal: Mix {
                         id: mix1
-                        value1: material.normal
+                        value1: material.fragment.normal
                         value2: Simplex {
-                            normal: material.normal
-                            position: material.position
+                            normal: material.fragment.normal
+                            position: material.fragment.position
                         }
                         mix: 0.5
                     }

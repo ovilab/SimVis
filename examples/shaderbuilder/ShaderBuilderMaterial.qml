@@ -12,19 +12,54 @@ Material {
     id: materialRoot
 
     property alias fragmentColor: _fragmentColor.value
-    property alias position: shaderBuilder.position
-    property alias normal: shaderBuilder.normal
-    property alias texCoord: shaderBuilder.texCoord
+    property alias vertexPosition: _position.value
+
+    property alias vertex: vertexShaderBuilder
+    property alias fragment: shaderBuilder
 
     effect: Effect {
         techniques: Technique {
             renderPasses: RenderPass {
                 shaderProgram: ShaderProgram {
-                    vertexShaderCode: loadSource("qrc:/shader.vert")
+                    vertexShaderCode: vertexShaderBuilder.finalShader
                     fragmentShaderCode: shaderBuilder.finalShader
                 }
             }
         }
+    }
+    ShaderBuilder {
+        id: vertexShaderBuilder
+
+        shaderType: ShaderBuilder.Fragment
+        material: materialRoot
+
+        // inputs
+        property ShaderNode position: ShaderNode {
+            type: "vec3"
+            name: "vertexPosition"
+            result: "vertexPosition"
+        }
+        property ShaderNode normal: ShaderNode {
+            type: "vec3"
+            name: "vertexNormal"
+            result: "vertexNormal"
+        }
+        property ShaderNode texCoord: ShaderNode {
+            type: "vec2"
+            name: "vertexTexCoord"
+            result: "vertexTexCoord"
+        }
+
+        sourceFile: "qrc:/shader.vert"
+
+        outputs: [
+            ShaderOutput {
+                id: _position
+                type: "vec3"
+                name: "position"
+                value: vertexShaderBuilder.position
+            }
+        ]
     }
     ShaderBuilder {
         id: shaderBuilder
