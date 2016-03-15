@@ -190,7 +190,6 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
                 if(!metaProperty.hasNotifySignal()) {
                     qWarning() << "ShaderNode: property" << propertyName << "has no notification signal in" << this << "object with name" << name();
                 }
-                qDebug() << "Making uniform" << targetIdentifier;
                 shaderBuilder->addUniform(this, propertyName, targetIdentifier, value, metaProperty);
             }
             // replaces '$property' or '$(property, type)'

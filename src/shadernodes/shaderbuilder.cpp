@@ -29,7 +29,6 @@ QString ShaderBuilder::finalShader()
     }
     qDeleteAll(m_mappers);
     if(m_material) {
-        qDebug() << "Removing parameters";
         for(UniformValue &uniformValue : m_uniforms) {
             m_material->removeParameter(uniformValue.parameter);
             delete uniformValue.parameter;
@@ -108,7 +107,6 @@ QString ShaderBuilder::finalShader()
     }
 
     if(m_material) {
-        qDebug() << "Adding parameters";
         for(UniformValue &uniformValue : m_uniforms) {
             m_material->addParameter(uniformValue.parameter);
         }

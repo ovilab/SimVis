@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>shader.frag</file>
+        <file>shader.vert</file>
+        <file>ShaderBuilderScene.qml</file>
+        <file>StandardShaderBuilder.qml</file>
+    </qresource>
+</RCC>
