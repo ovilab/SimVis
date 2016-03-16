@@ -9,9 +9,12 @@ import QtQuick 2.0 as QQ2
 import QtQuick.Scene3D 2.0
 
 Scene3D {
-    property alias bumpMix: bumpNode.mix
-    property alias colorMix: colorNode.mix
-    property alias displacementMix: displacementNode.mix
+    property real bumpMix: 0.5
+    property real colorMix: 0.0
+    property real displacementMix: 0.0
+    property real blurMix: 0.0
+    property real scaleMix: 0.0
+    property real detailMix: 0.0
     aspects: "input"
     Entity {
         Camera {
@@ -41,59 +44,60 @@ Scene3D {
         ]
 
         Entity {
-            CylinderMesh {
-                id: cylinderMesh
-                radius: 2.0
-                length: 10.0
+            SphereMesh {
+                id: mesh
+                radius: 4.0
                 rings: 64
                 slices: 32
             }
             ShaderBuilderMaterial {
                 id: material
-                vertexPosition: Add {
-                    value1: material.vertex.position
-                    value2: Mix {
-                        id: displacementNode
-                        value1: Qt.vector3d(0.0, 0.0, 0.0)
-                        value2: Simplex {}
-                        mix: 0.0
+                vertexPosition: Displacement {
+                    value: Noise {
+                        scale: scaleMix
+                        detail: detailMix
+                        value: material.vertex.position
                     }
+                    strength: displacementMix
                 }
+
                 fragmentColor: StandardMaterial {
-                    diffuseColor: ImageTexture {
-                        source: "test.png"
-                    }
+                    diffuseColor: "steelblue"
 
                     ambientIntensity: 0.1
+                    ambientColor: diffuseColor
 
-                    normal: Mix {
-                        id: bumpNode
-                        value1: material.fragment.normal
-                        value2: Simplex {}
-                        mix: 0.5
+                    normal: NormalMap {
+                        value: Noise {
+                            scale: scaleMix
+                            detail: detailMix
+                            value: material.fragment.position
+                        }
+                        strength: bumpMix
                     }
 
                     lights: ShaderGroup {
                         Nodes.Light {
-                            position: Qt.vector3d(-5.0, 5.0, -5.0)
+                            position: Qt.vector3d(-5.0, 0.0, -5.0)
+                            attenuation: 0.001
                         }
                         Nodes.Light {
-                            position: Qt.vector3d(5.0, 5.0, -5.0)
+                            position: Qt.vector3d(5.0, 0.0, -5.0)
+                            attenuation: 0.001
                         }
                         Nodes.Light {
                             position: Qt.vector3d(-10.0, 2.0, 10.0)
                             color: Mix {
-                                id: colorNode
                                 value1: "steelblue"
                                 value2: "purple"
-                                mix: 0.0
+                                mix: colorMix
                             }
                         }
                     }
                 }
             }
             components: [
-                cylinderMesh,
+                mesh,
                 material
             ]
         }

@@ -25,6 +25,9 @@ Item {
         bumpMix: bumpSlider.value
         colorMix: colorSlider.value
         displacementMix: displacementSlider.value
+        blurMix: blurSlider.value
+        detailMix: detailSlider.value
+        scaleMix: scaleSlider.value
     }
 
     Rectangle {
@@ -62,7 +65,40 @@ Item {
                 id: displacementSlider
                 minimumValue: 0.0
                 maximumValue: 1.0
+                value: 0.2
+            }
+        }
+        Row {
+            Text {
+                text: "Blur mix"
+            }
+            Slider {
+                id: blurSlider
+                minimumValue: 0.0
+                maximumValue: 0.2
                 value: 0.0
+            }
+        }
+        Row {
+            Text {
+                text: "Noise detail"
+            }
+            Slider {
+                id: detailSlider
+                minimumValue: 0.0
+                maximumValue: 10.0
+                value: 1.0
+            }
+        }
+        Row {
+            Text {
+                text: "Noise scale"
+            }
+            Slider {
+                id: scaleSlider
+                minimumValue: 0.0
+                maximumValue: 10.0
+                value: 1.0
             }
         }
     }
