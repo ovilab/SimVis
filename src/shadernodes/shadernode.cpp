@@ -2,6 +2,7 @@
 #include "shaderbuilder.h"
 #include "shaderutils.h"
 #include "shadergroup.h"
+#include "shaderbuilderbinding.h"
 
 #include <QDebug>
 #include <QJSValueIterator>

@@ -11,8 +11,12 @@ ShaderNode {
     property var specularIntensity: 0.4
     property var hardness: 10.0
 
-    property var normal: Qt.vector3d(0.0, 0.0, 0.0)
-    property var position: Qt.vector3d(0.0, 0.0, 0.0)
+    property var normal: ShaderBuilderBinding {
+        property: "normal"
+    }
+    property var position: ShaderBuilderBinding {
+        property: "position"
+    }
     property ShaderGroup lights: ShaderGroup {
         Light {}
     }

@@ -71,6 +71,7 @@ protected:
     mutable bool m_hasGeneratedHeader = false;
     mutable bool m_hasGeneratedBody = false;
     mutable bool m_hasSetup = false;
+    QString m_resolvedSource;
     QList<ShaderNode*> m_dependencies;
     QList<ShaderNode*> m_declaredDependencies;
 
@@ -84,7 +85,6 @@ private:
     ShaderBuilder *m_shaderBuilder = nullptr;
     QSignalMapper mapper;
     QString m_source;
-    QString m_resolvedSource;
     bool m_requirement = true;
     QUrl m_headerFile;
 };

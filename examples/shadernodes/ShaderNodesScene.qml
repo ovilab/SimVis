@@ -68,7 +68,6 @@ Scene3D {
                     ambientColor: "white"
                     ambientIntensity: 0.1
 
-                    position: material.fragment.position
                     normal: Mix {
                         id: bumpNode
                         value1: material.fragment.normal
