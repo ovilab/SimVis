@@ -9,7 +9,7 @@
  * in the instanced ShaderBuilder.
  */
 
-ShaderBuilderBinding::ShaderBuilderBinding(QObject *parent)
+ShaderBuilderBinding::ShaderBuilderBinding(Qt3DCore::QNode *parent)
     : ShaderNode(parent)
 {
     setName("builderbinding");

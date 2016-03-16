@@ -15,7 +15,8 @@
 
 using Qt3DRender::QTexture2D;
 
-ShaderBuilder::ShaderBuilder(QObject *parent) : QObject(parent)
+ShaderBuilder::ShaderBuilder(QNode *parent)
+    : QNode(parent)
 {
 }
 

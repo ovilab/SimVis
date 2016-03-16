@@ -9,9 +9,11 @@
 #include <QSignalMapper>
 #include <QUrl>
 
+#include <Qt3DCore/QNode>
+
 class ShaderBuilder;
 
-class ShaderNode : public QObject
+class ShaderNode : public Qt3DCore::QNode
 {
     Q_OBJECT
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
@@ -21,12 +23,11 @@ class ShaderNode : public QObject
     Q_PROPERTY(QString header READ header WRITE setHeader NOTIFY headerChanged)
     Q_PROPERTY(QString identifier READ identifier NOTIFY identifierChanged)
     Q_PROPERTY(QUrl headerFile READ headerFile WRITE setHeaderFile NOTIFY headerFileChanged)
-    Q_PROPERTY(QObject* parent READ parent WRITE setParent NOTIFY parentChanged)
     Q_PROPERTY(bool requirement READ requirement WRITE setRequirement NOTIFY requirementChanged)
     Q_PROPERTY(QQmlListProperty<ShaderNode> dependencies READ dependencies)
 
 public:
-    explicit ShaderNode(QObject *parent = 0);
+    explicit ShaderNode(Qt3DCore::QNode *parent = 0);
 
     Q_INVOKABLE virtual QString generateHeader() const;
     Q_INVOKABLE virtual QString generateBody() const;
@@ -87,6 +88,8 @@ private:
     QString m_source;
     bool m_requirement = true;
     QUrl m_headerFile;
+
+    QT3D_CLONEABLE(ShaderNode)
 };
 
 #endif // SHADERNODE_H

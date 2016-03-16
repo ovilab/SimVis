@@ -10,6 +10,7 @@
 #include <QUrl>
 #include <QVariantList>
 
+#include <Qt3DCore/QNode>
 #include <Qt3DRender/QMaterial>
 
 using namespace Qt3DRender;
@@ -26,7 +27,7 @@ struct UniformValue
     QParameter *parameter;
 };
 
-class ShaderBuilder : public QObject
+class ShaderBuilder : public Qt3DCore::QNode
 {
     Q_OBJECT
     Q_ENUMS(ShaderType)
@@ -39,7 +40,7 @@ class ShaderBuilder : public QObject
     Q_PROPERTY(QMaterial* material READ material WRITE setMaterial NOTIFY materialChanged)
 
 public:
-    explicit ShaderBuilder(QObject *parent = 0);
+    explicit ShaderBuilder(QNode *parent = 0);
 
     QString source() const;
     QString finalShader();
@@ -120,6 +121,8 @@ private:
     ShaderType m_shaderType = ShaderType::Vertex;
     QMaterial* m_material = nullptr;
     QList<QParameter*> m_parameters;
+
+    QT3D_CLONEABLE(ShaderBuilder)
 };
 
 #endif // SHADERBUILDER_H

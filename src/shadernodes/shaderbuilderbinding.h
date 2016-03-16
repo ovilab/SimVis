@@ -5,6 +5,8 @@
 
 #include <QObject>
 
+#include <Qt3DCore/QNode>
+
 class ShaderBuilderBinding : public ShaderNode
 {
     Q_OBJECT
@@ -12,7 +14,7 @@ class ShaderBuilderBinding : public ShaderNode
     Q_PROPERTY(QVariant defaultValue READ defaultValue WRITE setDefaultValue NOTIFY defaultValueChanged)
 
 public:
-    explicit ShaderBuilderBinding(QObject *parent = 0);
+    explicit ShaderBuilderBinding(Qt3DCore::QNode *parent = 0);
 
     virtual bool setup(ShaderBuilder *shaderBuilder) override;
     QVariant defaultValue() const;
@@ -31,6 +33,8 @@ public slots:
 private:
     QString m_property;
     QVariant m_defaultValue = 0.0;
+
+    QT3D_CLONEABLE(ShaderBuilderBinding)
 };
 
 #endif // SHADERBUILDERBINDING_H

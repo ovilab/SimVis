@@ -61,12 +61,9 @@ Scene3D {
                 }
                 fragmentColor: StandardMaterial {
                     diffuseColor: ImageTexture {
-                        texture: diffuseTexture
-                        texCoord: material.fragment.texCoord
+                        source: "test.png"
                     }
 
-                    specularColor: "white"
-                    ambientColor: "white"
                     ambientIntensity: 0.1
 
                     normal: Mix {
@@ -79,6 +76,9 @@ Scene3D {
                     lights: ShaderGroup {
                         Nodes.Light {
                             position: Qt.vector3d(-5.0, 5.0, -5.0)
+                        }
+                        Nodes.Light {
+                            position: Qt.vector3d(5.0, 5.0, -5.0)
                         }
                         Nodes.Light {
                             position: Qt.vector3d(-10.0, 2.0, 10.0)
@@ -96,18 +96,6 @@ Scene3D {
                 cylinderMesh,
                 material
             ]
-        }
-        Texture2D {
-            id: diffuseTexture
-            minificationFilter: Texture.LinearMipMapLinear
-            magnificationFilter: Texture.Linear
-            wrapMode {
-                x: WrapMode.Repeat
-                y: WrapMode.Repeat
-            }
-            generateMipMaps: true
-            maximumAnisotropy: 16.0
-            TextureImage { source: "test.png" }
         }
     }
 }

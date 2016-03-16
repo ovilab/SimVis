@@ -1,6 +1,7 @@
 #include "shadergroup.h"
 
-ShaderGroup::ShaderGroup(QObject *parent) : QObject(parent)
+ShaderGroup::ShaderGroup(Qt3DCore::QNode *parent)
+    : Qt3DCore::QNode(parent)
 {
 
 }

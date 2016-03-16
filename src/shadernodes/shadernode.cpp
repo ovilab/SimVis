@@ -12,8 +12,8 @@
 #include <QQmlFile>
 #include <QFile>
 
-ShaderNode::ShaderNode(QObject *parent)
-    : QObject(parent)
+ShaderNode::ShaderNode(Qt3DCore::QNode *parent)
+    : Qt3DCore::QNode(parent)
 {
     setName("unnamed");
 }

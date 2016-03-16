@@ -5,13 +5,15 @@
 
 #include <QObject>
 
+#include <Qt3DCore/QNode>
+
 class ShaderOutputNode : public ShaderNode
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
 
 public:
-    ShaderOutputNode(QObject *parent = 0);
+    ShaderOutputNode(Qt3DCore::QNode *parent = 0);
     QVariant value() const;
 
 public slots:
@@ -22,9 +24,11 @@ signals:
 
 private:
     QVariant m_value;
+
+    QT3D_CLONEABLE(ShaderOutputNode)
 };
 
-class ShaderOutput : public QObject
+class ShaderOutput : public Qt3DCore::QNode
 {
     Q_OBJECT
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
@@ -32,7 +36,7 @@ class ShaderOutput : public QObject
     Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
 
 public:
-    explicit ShaderOutput(QObject *parent = 0);
+    explicit ShaderOutput(Qt3DCore::QNode *parent = 0);
 
     QString name() const;
     QString type() const;
@@ -56,6 +60,8 @@ private:
     QString m_type;
     QVariant m_value;
     ShaderOutputNode m_node;
+
+    QT3D_CLONEABLE(ShaderOutput)
 };
 
 #endif // SHADEROUTPUT_H

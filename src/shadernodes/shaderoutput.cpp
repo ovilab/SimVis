@@ -3,7 +3,8 @@
 
 #include <QVector3D>
 
-ShaderOutput::ShaderOutput(QObject *parent) : QObject(parent)
+ShaderOutput::ShaderOutput(Qt3DCore::QNode *parent)
+    : Qt3DCore::QNode(parent)
 {
 }
 
@@ -56,7 +57,7 @@ void ShaderOutput::setValue(const QVariant &value)
     emit valueChanged(value);
 }
 
-ShaderOutputNode::ShaderOutputNode(QObject *parent) :
+ShaderOutputNode::ShaderOutputNode(Qt3DCore::QNode *parent) :
     ShaderNode(parent)
 {
     setName("outputnode");
