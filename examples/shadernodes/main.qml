@@ -22,9 +22,9 @@ Item {
         id: scene
         anchors.fill: parent
         focus: true
-        mix1: slider1.value
-        mix2: slider2.value
-        mix3: slider3.value
+        bumpMix: bumpSlider.value
+        colorMix: colorSlider.value
+        displacementMix: displacementSlider.value
     }
 
     Rectangle {
@@ -34,10 +34,10 @@ Item {
         id: column
         Row {
             Text {
-                text: "Noise mix"
+                text: "Bump mix"
             }
             Slider {
-                id: slider1
+                id: bumpSlider
                 minimumValue: 0.0
                 maximumValue: 1.0
                 value: 0.5
@@ -48,7 +48,7 @@ Item {
                 text: "Color mix"
             }
             Slider {
-                id: slider2
+                id: colorSlider
                 minimumValue: 0.0
                 maximumValue: 1.0
                 value: 0.0
@@ -59,7 +59,7 @@ Item {
                 text: "Displacement mix"
             }
             Slider {
-                id: slider3
+                id: displacementSlider
                 minimumValue: 0.0
                 maximumValue: 1.0
                 value: 0.0

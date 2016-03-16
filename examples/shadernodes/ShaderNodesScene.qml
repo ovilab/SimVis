@@ -9,9 +9,9 @@ import QtQuick 2.0 as QQ2
 import QtQuick.Scene3D 2.0
 
 Scene3D {
-    property alias mix1: mix1.mix
-    property alias mix2: mix2.mix
-    property alias mix3: mix3.mix
+    property alias bumpMix: bumpNode.mix
+    property alias colorMix: colorNode.mix
+    property alias displacementMix: displacementNode.mix
     aspects: "input"
     Entity {
         Camera {
@@ -53,7 +53,7 @@ Scene3D {
                 vertexPosition: Add {
                     value1: material.vertex.position
                     value2: Mix {
-                        id: mix3
+                        id: displacementNode
                         value1: Qt.vector3d(0.0, 0.0, 0.0)
                         value2: Simplex {
                             normal: material.vertex.normal
@@ -70,7 +70,7 @@ Scene3D {
 
                     position: material.fragment.position
                     normal: Mix {
-                        id: mix1
+                        id: bumpNode
                         value1: material.fragment.normal
                         value2: Simplex {
                             normal: material.fragment.normal
@@ -86,7 +86,7 @@ Scene3D {
                         Nodes.Light {
                             position: Qt.vector3d(-10.0, 2.0, 10.0)
                             color: Mix {
-                                id: mix2
+                                id: colorNode
                                 value1: "steelblue"
                                 value2: "purple"
                                 mix: 0.0
