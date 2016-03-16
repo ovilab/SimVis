@@ -23,6 +23,9 @@ Material {
                 shaderProgram: ShaderProgram {
                     vertexShaderCode: vertexShaderBuilder.finalShader
                     fragmentShaderCode: shaderBuilder.finalShader
+                    onFragmentShaderCodeChanged: {
+//                        console.log(fragmentShaderCode)
+                    }
                 }
             }
         }

@@ -11,6 +11,9 @@
 #include <QColor>
 
 #include <Qt3DRender/QParameter>
+#include <Qt3DRender/QTexture2D>
+
+using Qt3DRender::QTexture2D;
 
 ShaderBuilder::ShaderBuilder(QObject *parent) : QObject(parent)
 {

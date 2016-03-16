@@ -23,5 +23,6 @@
         <file>SimVis/ShaderNodes/Function.qml</file>
         <file>SimVis/ShaderNodes/Multiply.qml</file>
         <file>SimVis/ShaderNodes/Noise.qml</file>
+        <file>SimVis/ShaderNodes/ImageTexture.qml</file>
     </qresource>
 </RCC>

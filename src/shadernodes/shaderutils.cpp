@@ -4,6 +4,9 @@
 
 #include <QDebug>
 #include <QJSEngine>
+#include <Qt3DRender/QTexture2D>
+
+using Qt3DRender::QTexture2D;
 
 int ShaderUtils::m_nameCounter = 0;
 QMutex ShaderUtils::m_nameMutex;
@@ -13,6 +16,10 @@ QString ShaderUtils::glslType(const QVariant &value)
     ShaderNode *node = qvariant_cast<ShaderNode*>(value);
     if(node) {
         return node->type();
+    }
+    QTexture2D *texture = qvariant_cast<QTexture2D*>(value);
+    if(texture) {
+        return "sampler2D";
     }
     switch(value.type()) {
     case QVariant::Bool:
@@ -57,6 +64,7 @@ QString ShaderUtils::convert(const QString &sourceType, const QString &targetTyp
         {"vec4", "vec4(" + v + ", " + v + ", " + v + ", 1.0)"}
     };
 
+    // conversions from->to->implementation
     QVariantMap conversions{
         {"bool", scalar},
         {"int", scalar},
@@ -80,8 +88,15 @@ QString ShaderUtils::convert(const QString &sourceType, const QString &targetTyp
                 {"vec2", v + ".xy"},
                 {"vec3", v + ".xyz"}
             }
+        },
+        {"sampler2D", QVariantMap {
+                {"float", "texture(" + v + ", vec2(0.0, 0.0)).r"},
+                {"vec2", "texture(" + v + ", vec2(0.0, 0.0)).rg"},
+                {"vec3", "texture(" + v + ", vec2(0.0, 0.0)).rgb"},
+                {"vec4", "texture(" + v + ", vec2(0.0, 0.0)).rgba"}
+            }
         }
-    };
+        };
     if(conversions.contains(sourceType)) {
         QVariantMap typeConversions = conversions[sourceType].toMap();
         if(typeConversions.contains(targetType)) {

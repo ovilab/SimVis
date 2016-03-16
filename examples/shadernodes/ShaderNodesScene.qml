@@ -60,7 +60,11 @@ Scene3D {
                     }
                 }
                 fragmentColor: StandardMaterial {
-                    diffuseColor: "lightblue"
+                    diffuseColor: ImageTexture {
+                        texture: diffuseTexture
+                        texCoord: material.fragment.texCoord
+                    }
+
                     specularColor: "white"
                     ambientColor: "white"
                     ambientIntensity: 0.1
@@ -92,6 +96,18 @@ Scene3D {
                 cylinderMesh,
                 material
             ]
+        }
+        Texture2D {
+            id: diffuseTexture
+            minificationFilter: Texture.LinearMipMapLinear
+            magnificationFilter: Texture.Linear
+            wrapMode {
+                x: WrapMode.Repeat
+                y: WrapMode.Repeat
+            }
+            generateMipMaps: true
+            maximumAnisotropy: 16.0
+            TextureImage { source: "test.png" }
         }
     }
 }
