@@ -62,23 +62,19 @@ Scene3D {
                 }
 
                 fragmentColor: StandardMaterial {
-                    diffuseColor: Noise {
-                        scale: scaleMix
-                        detail: detailMix
-                        value: material.fragment.position
-                    }
+                    diffuseColor: "steelblue"
 
                     ambientIntensity: 0.1
                     ambientColor: diffuseColor
 
-//                    normal: NormalMap {
-//                        value: Noise {
-//                            scale: scaleMix
-//                            detail: detailMix
-//                            value: material.fragment.position
-//                        }
-//                        strength: bumpMix
-//                    }
+                    normal: NormalMap {
+                        value: Noise {
+                            scale: scaleMix
+                            detail: detailMix
+                            value: material.fragment.position
+                        }
+                        strength: bumpMix
+                    }
 
                     lights: ShaderGroup {
                         Nodes.Light {
