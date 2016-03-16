@@ -9,7 +9,6 @@
         <file>SimVis/ShaderNodes/Perlin.qml</file>
         <file>SimVis/ShaderNodes/Sine.qml</file>
         <file>SimVis/ShaderNodes/qmldir</file>
-        <file>SimVis/ShaderNodes/Simplex.qml</file>
         <file>SimVis/ShaderNodes/Split.qml</file>
         <file>SimVis/ShaderNodes/Sum.qml</file>
         <file>SimVis/ShaderNodes/Light.qml</file>
@@ -22,11 +21,12 @@
         <file>SimVis/ShaderNodes/shaders/standard_material.glsl</file>
         <file>SimVis/ShaderNodes/Function.qml</file>
         <file>SimVis/ShaderNodes/Multiply.qml</file>
-        <file>SimVis/ShaderNodes/Noise.qml</file>
         <file>SimVis/ShaderNodes/ImageTexture.qml</file>
         <file>SimVis/ShaderNodes/Subtract.qml</file>
         <file>SimVis/ShaderNodes/Bump.qml</file>
         <file>SimVis/ShaderNodes/NormalMap.qml</file>
         <file>SimVis/ShaderNodes/Displacement.qml</file>
+        <file>SimVis/ShaderNodes/Noise.qml</file>
+        <file>SimVis/ShaderNodes/Simplex.qml</file>
     </qresource>
 </RCC>
