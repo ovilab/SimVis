@@ -80,7 +80,12 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
     }
 
     if(!m_requirement) {
-        qWarning() << "ShaderNode::setup(): Requirement for" << this << name() << "is not satisfied.";
+        qWarning() << "ERROR: ShaderNode::setup(): Requirement for" << this << name() << "is not satisfied.";
+        return false;
+    }
+
+    if(m_type.isEmpty()) {
+        qWarning() << "ERROR: ShaderNode::setup(): " << name() << "is missing type.";
         return false;
     }
 
@@ -212,7 +217,7 @@ QString ShaderNode::generateBody() const
         return QString();
     }
     if(m_type.isEmpty()) {
-        qWarning() << "WARNING: ShaderNode" << m_name << "is missing type.";
+        qWarning() << "WARNING: ShaderNode::generateBody(): " << m_name << "is missing type.";
         return QString();
     }
     QString body = "";

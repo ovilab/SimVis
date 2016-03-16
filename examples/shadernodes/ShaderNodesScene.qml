@@ -55,10 +55,7 @@ Scene3D {
                     value2: Mix {
                         id: displacementNode
                         value1: Qt.vector3d(0.0, 0.0, 0.0)
-                        value2: Simplex {
-                            normal: material.vertex.normal
-                            position: material.vertex.position
-                        }
+                        value2: Simplex {}
                         mix: 0.0
                     }
                 }
@@ -71,10 +68,7 @@ Scene3D {
                     normal: Mix {
                         id: bumpNode
                         value1: material.fragment.normal
-                        value2: Simplex {
-                            normal: material.fragment.normal
-                            position: material.fragment.position
-                        }
+                        value2: Simplex {}
                         mix: 0.5
                     }
 

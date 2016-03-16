@@ -1,8 +1,14 @@
 import SimVis 1.0
 
 ShaderNode {
-    property var normal: Qt.vector3d(1.0, 0.0, 0.0)
-    property var position: Qt.vector3d(0.0, 0.0, 0.0)
+    property var normal: ShaderBuilderBinding {
+        property: "normal"
+        defaultValue: Qt.vector3d(0.0, 0.0, 1.0)
+    }
+    property var position: ShaderBuilderBinding {
+        property: "position"
+        defaultValue: Qt.vector3d(0.0, 0.0, 0.0)
+    }
     property var scale: 1.0
     property var strength: 1.0
 

@@ -88,7 +88,8 @@ QString ShaderUtils::convert(const QString &sourceType, const QString &targetTyp
             return "(" + typeConversions[targetType].toString() + ")";
         }
     }
-    qWarning() << "ShaderUtils::convert(): No known conversion from " << sourceType << " to " << targetType;
+    qWarning() << "WARNING: ShaderUtils::convert(): No known conversion from "
+               << sourceType << " to " << targetType << ". Will return value directly.";
     return v;
 }
 

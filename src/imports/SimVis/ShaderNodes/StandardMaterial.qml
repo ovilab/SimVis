@@ -13,9 +13,11 @@ ShaderNode {
 
     property var normal: ShaderBuilderBinding {
         property: "normal"
+        defaultValue: Qt.vector3d(0.0, 0.0, 1.0)
     }
     property var position: ShaderBuilderBinding {
         property: "position"
+        defaultValue: Qt.vector3d(0.0, 0.0, 0.0)
     }
     property ShaderGroup lights: ShaderGroup {
         Light {}

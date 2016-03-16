@@ -39,7 +39,7 @@ QString ShaderBuilder::finalShader()
     for(ShaderOutput *output : m_outputs) {
         bool success = output->node()->setup(this);
         if(!success) {
-            qWarning() << "ShaderBuilder::finalShader(): One of the shader nodes failed during setup.";
+            qWarning() << "ERROR: ShaderBuilder::finalShader(): One of the shader nodes failed during setup.";
             return QString();
         }
     }
