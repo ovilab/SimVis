@@ -53,50 +53,28 @@ QString ShaderBuilder::finalShader()
     for(const UniformValue &uniform : m_uniforms) {
         header += "uniform " + uniform.type + " " + uniform.identifier + ";\n";
     }
-    header += "\n// ------           inputs         ------\n\n";
-    for(const ShaderOutput *input : m_inputs) {
-        header += "in " + input->type() + " " + input->name();
+    header += "\n// ------   end generated header   ------\n\n";
 
-        // TODO add support for other input types and thus other numbers of elements in inputs
-        if(m_shaderType == ShaderType::Geometry) {
-            header += "[1]";
-        }
-        header += ";\n";
-    }
-    header += "\n// ------           outputs        ------\n\n";
+    QString body = "";
+    body += "\n// ------   begin generated body   ------\n\n";
     for(ShaderOutput *output : m_outputs) {
-        if(output->name() == "cp_FragColor") {
-            continue;
-        }
-        header += "out " + output->type() + " " + output->name() + ";\n";
+        body += output->node()->generateBody();
     }
-
-    QString setup = "";
-    setup += "\n// ------   begin generated body   ------\n\n";
+    body += "\n// ------    output assignments    ------\n\n";
     for(ShaderOutput *output : m_outputs) {
-        setup += output->node()->generateBody();
-    }
-    setup += "\n// ------    output assignments    ------\n\n";
-    for(ShaderOutput *output : m_outputs) {
-        setup += output->name()
+        body += output->name()
                 + " = "
                 + ShaderUtils::convert(output->node()->type(),
                                        output->type(),
                                        output->node()->identifier())
                 + ";\n";
     }
-    setup += "\n// ------    end generated body    ------\n\n";
+    body += "\n// ------    end generated body    ------\n\n";
+    body.replace(QRegularExpression("\n"), "\n    ");
 
-    QString matchString = "\\$setupShaderNodes\\(\\);?";
-
-    QRegularExpression indentRegex("^( *)" + matchString, QRegularExpression::PatternOption::MultilineOption);
-    QRegularExpressionMatch indentMatch = indentRegex.match(m_source);
-    if(indentMatch.hasMatch()) {
-        setup.replace(QRegularExpression("\n"), "\n" + indentMatch.captured(1));
-    }
     QString contents = m_source;
     contents.replace(QRegularExpression("#pragma shadernodes header"), header);
-    contents.replace(QRegularExpression(matchString), setup);
+    contents.replace(QRegularExpression("#pragma shadernodes body"), body);
 
     for(ShaderOutput *output : m_outputs) {
         ShaderNode *value = output->node();
