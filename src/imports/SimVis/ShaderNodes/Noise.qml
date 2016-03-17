@@ -1,7 +1,7 @@
 import SimVis 1.0
 
 ShaderNode {
-    property var value: ShaderBuilderBinding {
+    property var vector: ShaderBuilderBinding {
         property: "texCoord"
     }
 
@@ -10,7 +10,7 @@ ShaderNode {
 
     type: "vec3"
     name: "noise"
-    result: "noise3($(value, vec3), $(scale, float), $(detail, float));"
+    result: "noise3($(vector, vec3), $(scale, float), $(detail, float));"
     header: "
         float hash( float n ) { return fract(sin(n)*753.5453123); }
         float noise( vec3 x)

@@ -32,7 +32,7 @@ AbstractCylinders {
             name: "normal"
             result: "normal";
         }
-        property ShaderNode texCoord: ShaderNode {
+        property ShaderNode textureCoordinate: ShaderNode {
             type: "vec2"
             name: "texCoord"
             result: "texCoord";

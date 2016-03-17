@@ -3,8 +3,8 @@ import Qt3D.Render 2.0
 
 ShaderNode {
     property alias source: textureImage.source
-    property var texCoord: ShaderBuilderBinding {
-        property: "texCoord"
+    property var vector: ShaderBuilderBinding {
+        property: "textureCoordinate"
     }
 
     property var texture: Texture2D {
@@ -26,7 +26,7 @@ ShaderNode {
     type: "vec4"
     result: {
         if(glslType(texture) === "sampler2D") {
-            return "texture($texture, $(texCoord, vec2))"
+            return "texture($texture, $(vector, vec2))"
         }
         return "$(texture, " + type + ")"
     }

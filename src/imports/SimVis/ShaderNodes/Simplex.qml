@@ -1,8 +1,8 @@
 import SimVis 1.0
 
 ShaderNode {
-    property var value: ShaderBuilderBinding {
-        property: "texCoord"
+    property var vector: ShaderBuilderBinding {
+        property: "textureCoordinate"
         defaultValue: Qt.vector3d(0.0, 0.0, 0.0)
     }
     property var scale: 1.0
@@ -11,7 +11,7 @@ ShaderNode {
 
     type: "vec3"
     name: "simplex"
-    result: "simplexNoise($(value, vec3), $(scale, float), $(strength, float), $(detail, float))"
+    result: "simplexNoise($(vector, vec3), $(scale, float), $(strength, float), $(detail, float))"
     header: "
 // GLSL textureless classic 4D noise \"cnoise\",
 // with an RSL-style periodic variant \"pnoise\".

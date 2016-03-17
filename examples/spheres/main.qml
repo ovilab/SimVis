@@ -8,6 +8,7 @@ import MySimulator 1.0
 import SimVis 1.0
 import SimVis.ShaderNodes 1.0
 import QtQuick.Scene3D 2.0
+import QtMultimedia 5.5
 
 Item {
     id: applicationRoot
@@ -33,12 +34,15 @@ Item {
     }
     MouseArea {
         anchors.fill: parent
+        propagateComposedEvents: true
         hoverEnabled: true
         onMouseXChanged: {
             scene.chest.translation.x = mouse.x / 1000
+            mouse.accepted = false
         }
         onMouseYChanged: {
             scene.chest.translation.y = mouse.y / 1000
+            mouse.accepted = false
         }
     }
 }

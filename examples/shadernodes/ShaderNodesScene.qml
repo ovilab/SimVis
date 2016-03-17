@@ -53,10 +53,10 @@ Scene3D {
             ShaderBuilderMaterial {
                 id: material
                 vertexPosition: Displacement {
-                    value: Noise {
+                    vector: Noise {
                         scale: scaleMix
                         detail: detailMix
-                        value: material.vertex.position
+                        vector: material.vertex.position
                     }
                     strength: displacementMix
                 }
@@ -68,10 +68,10 @@ Scene3D {
                     ambientColor: diffuseColor
 
                     normal: NormalMap {
-                        value: Simplex {
+                        color: Simplex {
                             scale: scaleMix
                             detail: detailMix
-                            value: material.fragment.position
+                            vector: material.fragment.position
                         }
                         strength: bumpMix
                     }

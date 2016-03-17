@@ -10,7 +10,7 @@ import MySimulator 1.0
 
 Entity {
     id: spheresRoot
-    property real variable: 0.0
+    property var variable: 0.0
     property alias fragmentColor: _fragmentColor.value
     property alias fragmentBuilder: _fragmentBuilder
     property alias normal: _fragmentBuilder.normal
@@ -76,7 +76,7 @@ Entity {
                             name: "normal"
                             result: "normal"
                         }
-                        property ShaderNode texCoord: ShaderNode {
+                        property ShaderNode textureCoordinate: ShaderNode {
                             type: "vec2"
                             name: "texCoord"
                             result: "texCoord"
