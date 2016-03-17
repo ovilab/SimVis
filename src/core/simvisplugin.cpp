@@ -20,6 +20,7 @@
 #include "../renderables/noiseviewer/noiseviewer.h"
 #include "../shadereffects/periodiccopies.h"
 #include "../shadereffects/slice.h"
+#include "../shadernodes/bumpnode.h"
 #include "../shadernodes/shadernode.h"
 #include "../shadernodes/shaderbuilder.h"
 #include "../shadernodes/shaderoutput.h"
@@ -59,6 +60,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<ShaderBuilder>("SimVis", 1, 0, "ShaderBuilder");
     qmlRegisterType<ShaderOutput>("SimVis", 1, 0, "ShaderOutput");
     qmlRegisterType<ShaderGroup>("SimVis", 1, 0, "ShaderGroup");
+    qmlRegisterType<BumpNode>("SimVis.ShaderNodes", 1, 0, "BumpNode");
     qmlRegisterType<ShaderBuilderBinding>("SimVis", 1, 0, "ShaderBuilderBinding");
     qmlRegisterType<MarchingCubesGS>("SimVis", 1, 0, "AbstractMarchingCubes");
     qmlRegisterType<Spheres>("SimVis", 1, 0, "AbstractSpheres");

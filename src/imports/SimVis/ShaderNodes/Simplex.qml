@@ -8,10 +8,14 @@ ShaderNode {
     property var scale: 1.0
     property var strength: 1.0
     property var detail: 1.0
+    property var offset: Qt.vector3d(0.0, 0.0, 0.0)
 
     type: "vec3"
-    name: "simplex"
-    result: "simplexNoise($(vector, vec3), $(scale, float), $(strength, float), $(detail, float))"
+    name: {
+        console.log("Setting name")
+        return "simplex"
+    }
+    result: "simplexNoise($(vector, vec3) + $(offset, vec3), $(scale, float), $(strength, float), $(detail, float))"
     header: "
 // GLSL textureless classic 4D noise \"cnoise\",
 // with an RSL-style periodic variant \"pnoise\".

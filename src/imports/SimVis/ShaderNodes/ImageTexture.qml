@@ -6,6 +6,7 @@ ShaderNode {
     property var vector: ShaderBuilderBinding {
         property: "textureCoordinate"
     }
+    property var offset: Qt.vector2d(0, 0)
 
     property var texture: Texture2D {
         id: diffuseTexture
@@ -26,7 +27,7 @@ ShaderNode {
     type: "vec4"
     result: {
         if(glslType(texture) === "sampler2D") {
-            return "texture($texture, $(vector, vec2))"
+            return "texture($texture, $(vector, vec2) + $(offset, vec2))"
         }
         return "$(texture, " + type + ")"
     }

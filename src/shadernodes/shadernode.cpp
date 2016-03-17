@@ -97,6 +97,15 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
 
     m_dependencies.clear();
 
+    QVariantMap mappings = m_mappings;
+    for(int i = 0; i < metaObject()->propertyCount(); i++) {
+        QString propertyName = metaObject()->property(i).name();
+        if(mappings.contains(propertyName)) {
+            continue;
+        }
+        mappings.insert(propertyName, metaObject()->property(i).read(this));
+    }
+
     bool success = true;
     if(!sourceContent.isEmpty()) {
         // matches '$property' or '$(property, type)'
@@ -123,9 +132,7 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
                 alreadyReplaced.append(propertyName);
                 continue;
             }
-            QByteArray propertyNameArray = propertyName.toUtf8();
-            int propertyIndex = metaObject()->indexOfProperty(propertyNameArray.constData());
-            if(propertyIndex < 0) {
+            if(!mappings.contains(propertyName)) {
                 // No connected property, assume internal variable that just needs a unique name
                 QString propertylessIdentifier = propertyNameNoUnderscores + "_" + ShaderUtils::generateName();
                 QRegularExpression namedRegex("\\$(\\(\\s*)?" + propertyName + "(\\s*,\\s*[_a-zA-Z0-9]+\\s*\\))?");
@@ -133,8 +140,7 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
                 alreadyReplaced.append(propertyName);
                 continue;
             }
-            QMetaProperty metaProperty = metaObject()->property(propertyIndex);
-            QVariant value = metaProperty.read(this);
+            QVariant value = mappings[propertyName];
 
             ShaderGroup *shaderGroup = qvariant_cast<ShaderGroup*>(value);
             if(shaderGroup) {
@@ -175,7 +181,17 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
                 targetIdentifier = node->identifier();
                 sourceType = node->type();
             } else {
+                //
                 // make a uniform
+                QByteArray propertyNameArray = propertyName.toUtf8();
+                int propertyIndex = metaObject()->indexOfProperty(propertyNameArray.constData());
+//                if(propertyIndex < 0) {
+//                    qWarning() << "WARNING: ShaderNode::setup(): Mapping with name" << propertyName << "on" << name()
+//                               << "is neither a shader node nor a property. This is not supported.";
+//                    continue;
+//                }
+                QMetaProperty metaProperty = metaObject()->property(propertyIndex);
+
                 QString uniformPrefix = "uniform";
                 switch(shaderBuilder->shaderType()) {
                 case ShaderBuilder::ShaderType::Fragment:
@@ -193,13 +209,10 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
 
                 targetIdentifier = uniformPrefix + "_" + propertyNameNoUnderscores + "_" + ShaderUtils::generateName();
                 sourceType = glslType(value);
-                if(!metaProperty.hasNotifySignal()) {
-                    qWarning() << "ShaderNode: property" << propertyName << "has no notification signal in" << this << "object with name" << name();
-                }
                 shaderBuilder->addUniform(this, propertyName, targetIdentifier, value, metaProperty);
             }
             // replaces '$property' or '$(property, type)'
-            QRegularExpression namedRegex("\\$(\\(\\s*)?" + propertyName + "(\\s*,\\s*[a-z0-9]+\\s*\\))?");
+            QRegularExpression namedRegex("\\$(\\(\\s*)?" + propertyName + "(\\s*,\\s*" + targetType + "\\s*\\))?");
             sourceContent.replace(namedRegex, ShaderUtils::convert(sourceType, targetType, targetIdentifier));
             alreadyReplaced.append(propertyName);
         }
@@ -359,4 +372,14 @@ QQmlListProperty<ShaderNode> ShaderNode::dependencies()
 QUrl ShaderNode::headerFile() const
 {
     return m_headerFile;
+}
+
+void ShaderNode::addMapping(QString propertyName, const QVariant &value)
+{
+    m_mappings.insert(propertyName, value);
+}
+
+void ShaderNode::removeMapping(QString propertyName)
+{
+    m_mappings.remove(propertyName);
 }

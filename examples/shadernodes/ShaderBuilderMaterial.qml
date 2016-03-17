@@ -47,7 +47,7 @@ Material {
             name: "vertexNormal"
             result: "vertexNormal"
         }
-        property ShaderNode texCoord: ShaderNode {
+        property ShaderNode textureCoordinate: ShaderNode {
             type: "vec2"
             name: "vertexTexCoord"
             result: "vertexTexCoord"
@@ -81,7 +81,7 @@ Material {
             name: "normal"
             result: "normal"
         }
-        property ShaderNode texCoord: ShaderNode {
+        property ShaderNode textureCoordinate: ShaderNode {
             type: "vec2"
             name: "texCoord"
             result: "texCoord"

@@ -99,3 +99,10 @@ HEADERS += \
     $$PWD/src/renderables/marchingcubes/marchingcubesgs.h \
     $$PWD/src/shadernodes/shaderutils.h \
     $$PWD/src/shadernodes/shaderbuilderbinding.h \
+
+
+HEADERS += \
+    $$PWD/src/shadernodes/bumpnode.h
+
+SOURCES += \
+    $$PWD/src/shadernodes/bumpnode.cpp

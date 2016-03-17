@@ -48,6 +48,11 @@ public:
     QQmlListProperty<ShaderNode> dependencies();
     QUrl headerFile() const;
 
+    QString m_resolvedSource;
+    QString m_resolvedResult;
+    void addMapping(QString propertyName, const QVariant &value);
+    void removeMapping(QString propertyName);
+
 signals:
     void nameChanged(QString name);
     void typeChanged(QString type);
@@ -72,7 +77,6 @@ protected:
     mutable bool m_hasGeneratedHeader = false;
     mutable bool m_hasGeneratedBody = false;
     mutable bool m_hasSetup = false;
-    QString m_resolvedSource;
     QList<ShaderNode*> m_dependencies;
     QList<ShaderNode*> m_declaredDependencies;
 
@@ -80,7 +84,6 @@ private:
     QString m_name;
     QString m_type;
     QString m_result;
-    QString m_resolvedResult;
     QString m_header;
     QString m_identifier;
     ShaderBuilder *m_shaderBuilder = nullptr;
@@ -88,6 +91,7 @@ private:
     QString m_source;
     bool m_requirement = true;
     QUrl m_headerFile;
+    QVariantMap m_mappings;
 
     QT3D_CLONEABLE(ShaderNode)
 };

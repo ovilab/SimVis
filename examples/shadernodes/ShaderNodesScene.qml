@@ -52,29 +52,32 @@ Scene3D {
             }
             ShaderBuilderMaterial {
                 id: material
-                vertexPosition: Displacement {
-                    vector: Noise {
-                        scale: scaleMix
-                        detail: detailMix
-                        vector: material.vertex.position
-                    }
-                    strength: displacementMix
-                }
+//                vertexPosition: Displacement {
+//                    vector: Noise {
+//                        scale: scaleMix
+//                        detail: detailMix
+//                        vector: material.vertex.position
+//                    }
+//                    strength: displacementMix
+//                }
 
                 fragmentColor: StandardMaterial {
-                    diffuseColor: "steelblue"
-
+                    diffuseColor: BumpNode {
+                        height: ImageTexture {
+                            id: image
+                            source: "diffuse.webp"
+                        }
+                    }
                     ambientIntensity: 0.1
                     ambientColor: diffuseColor
 
-                    normal: NormalMap {
-                        color: Simplex {
-                            scale: scaleMix
-                            detail: detailMix
-                            vector: material.fragment.position
-                        }
-                        strength: bumpMix
-                    }
+//                    normal: BumpNode {
+//                        delegate: Add {
+//                            value1: Simplex {}
+//                            value2: Simplex {}
+//                        }
+//                        strength: bumpMix
+//                    }
 
                     lights: ShaderGroup {
                         Nodes.Light {

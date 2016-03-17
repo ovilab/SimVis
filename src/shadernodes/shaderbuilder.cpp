@@ -130,12 +130,17 @@ void ShaderBuilder::addUniform(ShaderNode *node, const QString &propertyName, co
     uniform.parameter = param;
     m_uniforms.append(uniform);
 
-    QSignalMapper *mapper = new QSignalMapper;
-    mapper->setMapping(node, m_uniforms.length() - 1);
-    const QByteArray signal = '2' + metaProperty.notifySignal().methodSignature();
-    connect(node, signal, mapper, SLOT(map()));
-    connect(mapper, SIGNAL(mapped(int)), this, SLOT(updateUniform(int)));
-    m_mappers.append(mapper);
+    if(!metaProperty.hasNotifySignal()) {
+        qWarning() << "WARNING: ShaderBuilder::addUniform(): Property" << propertyName << "on" << node->name()
+                   << "has no notification signal.";
+    } else {
+        QSignalMapper *mapper = new QSignalMapper;
+        mapper->setMapping(node, m_uniforms.length() - 1);
+        const QByteArray signal = '2' + metaProperty.notifySignal().methodSignature();
+        connect(node, signal, mapper, SLOT(map()));
+        connect(mapper, SIGNAL(mapped(int)), this, SLOT(updateUniform(int)));
+        m_mappers.append(mapper);
+    }
 }
 
 QUrl ShaderBuilder::sourceFile() const

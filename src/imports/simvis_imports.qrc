@@ -23,10 +23,10 @@
         <file>SimVis/ShaderNodes/Multiply.qml</file>
         <file>SimVis/ShaderNodes/ImageTexture.qml</file>
         <file>SimVis/ShaderNodes/Subtract.qml</file>
-        <file>SimVis/ShaderNodes/Bump.qml</file>
         <file>SimVis/ShaderNodes/NormalMap.qml</file>
         <file>SimVis/ShaderNodes/Displacement.qml</file>
         <file>SimVis/ShaderNodes/Noise.qml</file>
         <file>SimVis/ShaderNodes/Simplex.qml</file>
+        <file>SimVis/ShaderNodes/Bump.qml</file>
     </qresource>
 </RCC>
