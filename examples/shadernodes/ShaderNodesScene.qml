@@ -68,7 +68,7 @@ Scene3D {
                     ambientColor: diffuseColor
 
                     normal: NormalMap {
-                        value: Noise {
+                        value: Simplex {
                             scale: scaleMix
                             detail: detailMix
                             value: material.fragment.position

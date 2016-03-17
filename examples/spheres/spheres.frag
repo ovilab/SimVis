@@ -12,7 +12,7 @@ in vec3 position;
 in vec3 color;
 in vec2 texCoord;
 
-//out vec4 fragColor;
+out vec4 fragColor;
 
 uniform mat4 modelView;
 uniform vec3 eyePosition;
@@ -50,6 +50,6 @@ void main(void) {
         vec3 normal = x*rightVector + y*upVector - z*viewVector;
 
 //        fragColor = vec4( adsModel( position, normalize( normal ) ), 1.0 );
-        $setupShaderNodes();
+#pragma shadernodes body
     }
 }

@@ -13,6 +13,7 @@ import MySimulator 1.0
 Scene3D {
     aspects: "input"
     property alias variable: spheresEntity.variable
+    property alias chest: chest
     Entity {
         Configuration  {
             controlledCamera: frameGraph.camera
@@ -29,33 +30,32 @@ Scene3D {
             id: spheresEntity
             camera: frameGraph.camera
             sphereData: simulator.sphereData
-            fragmentColor: StandardMaterial {
-                diffuseColor: "steelblue"
-                specularColor: "white"
-                position: spheresEntity.fragmentBuilder.position
-                normal: Simplex {
-                    normal: spheresEntity.fragmentBuilder.normal
-                    position: spheresEntity.fragmentBuilder.normal
-                    scale: 2.5
-                }
-                lights: ShaderGroup {
-                    Nodes.Light {
-                        position: Qt.vector3d(-20.0, 0.0, 0.0)
-                        color: "red"
-                        attenuation: 0.01
-                    }
-                    Nodes.Light {
-                        position: Qt.vector3d(20.0, 0.0, 0.0)
-                        color: "yellow"
-                        attenuation: 0.01
-                    }
-                    Nodes.Light {
-                        position: Qt.vector3d(0.0, 0.0, -20.0)
-                        color: "white"
-                        attenuation: 0.004
-                    }
-                }
-            }
+
+//            fragmentColor: StandardMaterial {
+//                diffuseColor: "steelblue"
+//                specularColor: "white"
+//                position: spheresEntity.fragmentBuilder.position
+//                normal: Simplex {
+//                    value: spheresEntity.fragmentBuilder.position
+//                }
+//                lights: ShaderGroup {
+//                    Nodes.Light {
+//                        position: Qt.vector3d(-20.0, 0.0, 0.0)
+//                        color: "red"
+//                        attenuation: 0.01
+//                    }
+//                    Nodes.Light {
+//                        position: Qt.vector3d(20.0, 0.0, 0.0)
+//                        color: "yellow"
+//                        attenuation: 0.01
+//                    }
+//                    Nodes.Light {
+//                        position: Qt.vector3d(0.0, 0.0, -20.0)
+//                        color: "white"
+//                        attenuation: 0.004
+//                    }
+//                }
+//            }
         }
 
         MySimulator {
@@ -63,6 +63,6 @@ Scene3D {
             dt: 0.01
         }
 
-//        Chest {}
+        Chest {id: chest}
     }
 }

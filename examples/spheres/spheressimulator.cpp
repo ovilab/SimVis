@@ -58,6 +58,7 @@ void MyWorker::synchronizeSimulator(Simulator *simulator)
 
 void MyWorker::synchronizeRenderer(Renderable *renderableObject)
 {
+
 }
 
 void MyWorker::work()

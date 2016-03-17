@@ -117,8 +117,8 @@ void PointGeometry::init()
 
     const quint32 elementSize = (3+2+1);
     const quint32 stride = elementSize * sizeof(float);
-    const int vertexCount = 5;
-    const int indexCount = 5;
+    const int vertexCount = 4;
+    const int indexCount = 4;
 
     m_positionAttribute->setName(QAttribute::defaultPositionAttributeName());
     m_positionAttribute->setDataType(QAttribute::Float);

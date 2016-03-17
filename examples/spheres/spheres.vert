@@ -7,7 +7,7 @@ in vec3 pos;
 
 uniform vec3 viewVector = vec3(0.0, 0.0, 1.0);
 uniform vec3 upVector = vec3(0.0, 1.0, 0.0);
-uniform vec3 rightVector = vec3(1.0, 0.0, 0.0);;
+uniform vec3 rightVector = vec3(1.0, 0.0, 0.0);
 
 uniform mat4 mvp;
 
