@@ -52,8 +52,6 @@ public:
     void addDependency(ShaderNode *dependency);
     void removeDependency(ShaderNode *dependency);
     void clearDependencies();
-    QList<ShaderNode*> resolvedDependencies() const;
-    QString resolvedSource() const;
 
 signals:
     void nameChanged(QString name);
@@ -72,7 +70,6 @@ public slots:
     void setResult(QString result);
     void setHeader(QString header);
     void setSource(QString source);
-    void setSourceWithoutNotification(QString source);
     void setRequirement(bool requirement);
     void setHeaderFile(QUrl headerFile);
 

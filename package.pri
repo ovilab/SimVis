@@ -100,21 +100,15 @@ HEADERS += \
     $$PWD/src/shadernodes/shaderutils.h \
     $$PWD/src/shadernodes/shaderbuilderbinding.h \
 
-HEADERS += \
-    $$PWD/src/shadernodes/bumpnode.h
+HEADERS +=
 
-SOURCES += \
-    $$PWD/src/shadernodes/bumpnode.cpp
+SOURCES +=
 
-HEADERS += \
-    $$PWD/src/shadernodes/variationgroup.h
+HEADERS +=
 
-SOURCES += \
-    $$PWD/src/shadernodes/variationgroup.cpp
+SOURCES +=
 
 
-HEADERS += \
-    $$PWD/src/shadernodes/variationnode.h
+HEADERS +=
 
-SOURCES += \
-    $$PWD/src/shadernodes/variationnode.cpp
+SOURCES +=

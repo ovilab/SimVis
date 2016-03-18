@@ -176,54 +176,11 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
                 continue;
             }
 
-            VariationGroup *variationGroup = qvariant_cast<VariationGroup*>(value);
-            if(variationGroup) {
-                ShaderNode *targetNode = qvariant_cast<ShaderNode*>(variationGroup->target());
-                if(!targetNode) {
-                    // if the variation group does not have a shader node target,
-                    // variations are not possible and we simply move on with the value set to
-                    // the target of the variation group
-                    QRegularExpression indexedRegex("\\$(\\(\\s*)?" + propertyName + "\\[[0-9]+\\](\\s*,\\s*[_a-zA-Z0-9]+\\s*\\))?");
-                    sourceContent.replace(indexedRegex, "$" + propertyName);
-                    value = variationGroup->target();
-                } else {
-                    int i = 0;
-                    for(VariationNode *variationNode : variationGroup->m_nodes) {
-                        m_resolvedDependencies.append(variationNode);
-                        targetNode->addMapping(variationGroup->propertyName(), variationNode->value());
-                        targetNode->setup(shaderBuilder, variationNode->identifier());
-                        variationNode->setType(targetNode->type());
-                        for(ShaderNode *dependency : targetNode->resolvedDependencies()) {
-                            variationNode->addDependency(dependency);
-                        }
-                        variationNode->setSourceWithoutNotification(targetNode->resolvedSource());
-                        variationNode->setup(shaderBuilder);
-
-                        QString targetIdentifier = variationNode->identifier();
-                        QString sourceType = variationNode->type();
-                        QRegularExpression indexedRegex("\\$(\\(\\s*)?" + propertyName + "\\[" + QString::number(i) +"\\](\\s*,\\s*[_a-zA-Z0-9]+\\s*\\))?");
-                        sourceContent.replace(indexedRegex, ShaderUtils::convert(sourceType, targetType, targetIdentifier));
-                        i += 1;
-                    }
-                    continue;
-                }
-            }
-
             ShaderNode *node = qvariant_cast<ShaderNode*>(value);
 
             QString targetIdentifier;
             QString sourceType;
             if(node) {
-                // Take over any declared dependencies
-                // TODO is this longer necessary? what is the use case for this
-//                for(ShaderNode* declaredDependency : node->m_declaredDependencies) {
-//                    if(declaredDependency && declaredDependency != this) {
-//                        success = success && declaredDependency->setup(shaderBuilder);
-//                        if(!m_resolvedDependencies.contains(declaredDependency)) {
-//                            m_resolvedDependencies.append(declaredDependency);
-//                        }
-//                    }
-//                }
                 success = success && node->setup(shaderBuilder);
                 if(!m_resolvedDependencies.contains(node)) {
                     m_resolvedDependencies.append(node);
@@ -356,11 +313,6 @@ void ShaderNode::setSource(QString source)
     emit sourceChanged(source);
 }
 
-void ShaderNode::setSourceWithoutNotification(QString source)
-{
-    m_source = source;
-}
-
 void ShaderNode::setRequirement(bool requirement)
 {
     if (m_requirement == requirement)
@@ -453,14 +405,4 @@ void ShaderNode::removeDependency(ShaderNode *dependency)
 void ShaderNode::clearDependencies()
 {
     m_declaredDependencies.clear();
-}
-
-QList<ShaderNode *> ShaderNode::resolvedDependencies() const
-{
-    return m_resolvedDependencies;
-}
-
-QString ShaderNode::resolvedSource() const
-{
-    return m_resolvedSource;
 }
