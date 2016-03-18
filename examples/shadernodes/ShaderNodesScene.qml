@@ -85,11 +85,12 @@ Scene3D {
                     //                        }
                     //                    }
                     normal: Bump {
-                        height: Decolorize {
-                            color: ImageTexture {
-                                source: "earth-elevation-small.png"
-                            }
-                        }
+//                        height: Decolorize {
+//                            color: ImageTexture {
+//                                source: "earth-elevation-small.png"
+//                            }
+//                        }
+                        source: "earth-elevation-small.png"
                         distance: scene.bumpDistance
                         strength: scene.bumpStrength
                     }

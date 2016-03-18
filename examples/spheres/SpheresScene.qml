@@ -31,10 +31,32 @@ Scene3D {
             camera: frameGraph.camera
             sphereData: simulator.sphereData
             fragmentColor: StandardMaterial {
-                normal: NormalMap {
-                    strength: 0.3
-                    color: Noise {
-                        vector: spheresEntity.normal
+                diffuseColor: "steelblue"
+                specularColor: "white"
+                position: spheresEntity.fragmentBuilder.position
+                normal: Add {
+                    value1: spheresEntity.normal
+                    value2: Simplex {
+                        vector: spheresEntity.fragmentBuilder.normal
+                        scale: 2.5
+                        strength: 0.3
+                    }
+                }
+                lights: ShaderGroup {
+                    Nodes.Light {
+                        position: Qt.vector3d(-20.0, 0.0, 0.0)
+                        color: "red"
+                        attenuation: 0.01
+                    }
+                    Nodes.Light {
+                        position: Qt.vector3d(20.0, 0.0, 0.0)
+                        color: "yellow"
+                        attenuation: 0.01
+                    }
+                    Nodes.Light {
+                        position: Qt.vector3d(0.0, 0.0, -20.0)
+                        color: "white"
+                        attenuation: 0.004
                     }
                 }
             }

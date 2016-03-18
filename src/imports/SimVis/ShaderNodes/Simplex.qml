@@ -7,7 +7,7 @@ ShaderNode {
     }
     property var scale: 1.0
     property var strength: 1.0
-    property var detail: 1.0
+    property var detail: 4.0
     property var offset: Qt.vector3d(0.0, 0.0, 0.0)
 
     type: "vec3"

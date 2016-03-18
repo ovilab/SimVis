@@ -35,24 +35,37 @@ ShaderNode {
     type: "vec3"
     result: {
         if(glslType(texture) === "sampler2D") {
-            return "bumpImage($(height, float), $(vector, vec2), $(position, vec3), $(normal, vec3), " +
+            return "bumpImage($texture, $(vector, vec2), $(position, vec3), $(normal, vec3), " +
                     "$(distance, float), $(strength, float))"
         }
         return "$(texture, " + type + ")"
     }
     header: "
-vec3 bumpImage(float height, vec2 coordinate, vec3 position, vec3 normal, float delta, float strength) {
-    vec3 dPositiondx = dFdx(position);
-    vec3 dPositiondy = dFdy(position);
+vec3 bumpImage(sampler2D tex, vec2 coordinate, vec3 position, vec3 normal, float delta, float strength) {
+    vec3 positiondx = dFdx(position);
+    vec3 positiondy = dFdy(position);
 
-    vec3 Rx = cross(dPositiondy, normal);
-    vec3 Ry = cross(normal, dPositiondx);
+    vec3 Rx = cross(positiondy, normal);
+    vec3 Ry = cross(normal, positiondx);
 
-    float determinant = dot(dPositiondx, Rx);
+    float determinant = dot(positiondx, Rx);
     float absdeterminant = abs(determinant);
 
-    float dBs = dFdx(height);
-    float dBt = dFdy(height);
+//    float height = texture(tex, coordinate).r;
+//    float dBs = dFdx(height);
+//    float dBt = dFdy(height);
+
+    vec2 coordinateDx = dFdx(coordinate);
+    vec2 coordinateDy = dFdy(coordinate);
+    vec2 STll = coordinate;
+    vec2 STlr = coordinate + coordinateDx;
+    vec2 STul = coordinate + coordinateDy;
+    float Hll = texture(tex, STll).r;
+    float Hlr = texture(tex, STlr).r;
+    float Hul = texture(tex, STul).r;
+
+    float dBs = Hlr - Hll;
+    float dBt = Hul - Hll;
 
     vec3 surfaceGradient = sign(determinant) * (dBs * Rx + dBt * Ry);
 
