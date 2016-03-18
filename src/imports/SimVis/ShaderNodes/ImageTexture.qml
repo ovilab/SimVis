@@ -6,6 +6,7 @@ ShaderNode {
     property var vector: ShaderBuilderBinding {
         property: "textureCoordinate"
     }
+//    property var vector: Qt.vector2d(0, 0)
     property var offset: Qt.vector2d(0, 0)
 
     property var texture: Texture2D {

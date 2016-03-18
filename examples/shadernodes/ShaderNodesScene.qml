@@ -66,6 +66,7 @@ Scene3D {
                         height: ImageTexture {
                             id: image
                             source: "diffuse.webp"
+//                            vector: material.fragment.textureCoordinate
                         }
                     }
                     ambientIntensity: 0.1

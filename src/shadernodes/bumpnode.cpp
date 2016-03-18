@@ -1,17 +1,77 @@
 #include "bumpnode.h"
+#include "shaderutils.h"
 
 #include <QVector3D>
 
 BumpNode::BumpNode(Qt3DCore::QNode *parent)
     : ShaderNode(parent)
+    , m_centerNode(this)
+    , m_plusNode(this)
+    , m_minusNode(this)
 {
-    addMapping("center", QVector3D(0, 0, 0));
-    addMapping("plus", QVector3D(0, 0, 0));
-    addMapping("minus", QVector3D(0, 0, 0));
+    addMapping("center", QVariant::fromValue(&m_centerNode));
+    addMapping("plus", QVariant::fromValue(&m_plusNode));
+    addMapping("minus", QVariant::fromValue(&m_minusNode));
+
+    m_centerNode.setName("center");
+    m_plusNode.setName("plus");
+    m_minusNode.setName("minus");
+
+    setStrength(0.0);
 
     setName("bump");
-    setType("vec3");
-    setResult("1.0 / 3.0 * ($(center, vec3) + $(plus, vec3) + $(minus, vec3))");
+}
+
+bool BumpNode::setup(ShaderBuilder *shaderBuilder, QString tempIdentifier)
+{
+    if(m_hasSetup) {
+        return true;
+    }
+
+    QString currentIdentifier;
+    if(!tempIdentifier.isEmpty()) {
+        currentIdentifier = tempIdentifier;
+    } else {
+        currentIdentifier = identifier();
+    }
+
+    setType(ShaderUtils::glslType(m_height));
+
+    ShaderNode *node = qvariant_cast<ShaderNode*>(m_height);
+    if(!node) {
+        setResult("$height");
+    } else {
+        setResult("1.0 / 3.0 * ($center + $plus + $minus)");
+
+        node->addMapping("offset", QVector3D(0, 0, 0));
+        node->setup(shaderBuilder, m_centerNode.identifier());
+
+        m_centerNode.setType(node->type());
+        m_centerNode.m_declaredDependencies = node->m_dependencies;
+        m_centerNode.m_source = node->m_resolvedSource;
+
+        double offset = 0.05;
+
+        node->addMapping("offset", QVector3D(offset, offset, offset));
+        node->setup(shaderBuilder, m_plusNode.identifier());
+
+        m_plusNode.setType(node->type());
+        m_plusNode.m_declaredDependencies = node->m_dependencies;
+        m_plusNode.m_source = node->m_resolvedSource;
+
+        node->addMapping("offset", QVector3D(-offset, -offset, -offset));
+        node->setup(shaderBuilder, m_minusNode.identifier());
+
+        m_minusNode.setType(node->type());
+        m_minusNode.m_declaredDependencies = node->m_dependencies;
+        m_minusNode.m_source = node->m_resolvedSource;
+    }
+
+    bool success = ShaderNode::setup(shaderBuilder, tempIdentifier);
+    if(!success) {
+        return false;
+    }
+    return true;
 }
 
 QVariant BumpNode::strength() const
@@ -29,7 +89,7 @@ QVariant BumpNode::vectorMinus() const
     return m_vectorMinus;
 }
 
-QQmlComponent *BumpNode::height() const
+QVariant BumpNode::height() const
 {
     return m_height;
 }
@@ -61,48 +121,11 @@ void BumpNode::setVectorMinus(QVariant vectorMinus)
     emit vectorMinusChanged(vectorMinus);
 }
 
-void BumpNode::setHeight(QQmlComponent *delegate)
+void BumpNode::setHeight(QVariant height)
 {
-    if (m_height == delegate)
+    if(m_height == height) {
         return;
-
-    if(m_height) {
-        removeMapping("center");
-        removeMapping("plus");
-        removeMapping("minus");
-        delete m_centerNode;
-        delete m_plusNode;
-        delete m_minusNode;
     }
-
-    m_height = delegate;
-
-    QObject *object = m_height->create();
-    ShaderNode *node = qobject_cast<ShaderNode*>(object);
-    if(node) {
-        node->setParent(this);
-        m_centerNode = node;
-        addMapping("center", QVariant::fromValue(m_centerNode));
-    }
-    object = m_height->create();
-    node = qobject_cast<ShaderNode*>(object);
-
-    double offset = 0.001;
-
-    if(node) {
-        node->setParent(this);
-        m_plusNode = node;
-        m_plusNode->setProperty("offset", QVector3D(offset, offset, offset));
-        addMapping("plus", QVariant::fromValue(m_plusNode));
-    }
-    object = m_height->create();
-    node = qobject_cast<ShaderNode*>(object);
-    if(node) {
-        node->setParent(this);
-        m_minusNode = node;
-        m_plusNode->setProperty("offset", QVector3D(-offset, -offset, -offset));
-        addMapping("minus", QVariant::fromValue(m_minusNode));
-    }
-
-    emit heightChanged(delegate);
+    m_height = height;
+    emit heightChanged(height);
 }

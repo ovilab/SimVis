@@ -38,8 +38,14 @@ void ShaderBuilderBinding::setDefaultValue(QVariant defaultValue)
     emit defaultValueChanged(defaultValue);
 }
 
-bool ShaderBuilderBinding::setup(ShaderBuilder *shaderBuilder)
+bool ShaderBuilderBinding::setup(ShaderBuilder *shaderBuilder, QString tempIdentifier)
 {
+    QString currentIdentifier;
+    if(!tempIdentifier.isEmpty()) {
+        currentIdentifier = tempIdentifier;
+    } else {
+        currentIdentifier = identifier();
+    }
     m_dependencies.clear();
     QByteArray bindingName = m_property.toUtf8();
     ShaderNode *node = qvariant_cast<ShaderNode*>(shaderBuilder->property(bindingName.constData()));
@@ -54,7 +60,9 @@ bool ShaderBuilderBinding::setup(ShaderBuilder *shaderBuilder)
     m_dependencies.append(node);
     node->setup(shaderBuilder);
     setType(node->type());
-    m_resolvedSource = identifier() + " = " + ShaderUtils::convert(node->type(), type(), node->identifier()) + ";\n";
+    m_resolvedSource = "";
+//    m_resolvedSource += type() + " " + currentIdentifier + ";\n";
+    m_resolvedSource += currentIdentifier + " = " + ShaderUtils::convert(node->type(), type(), node->identifier()) + ";\n";
     return true;
 }
 

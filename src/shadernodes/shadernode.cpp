@@ -73,26 +73,31 @@ QString ShaderNode::convert(const QString &targetType, const QString &identifier
     return ShaderUtils::convert(type(), targetType, v);
 }
 
-bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
+bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
 {
-    if(m_hasSetup) {
+    if(m_hasSetup && tempIdentifier.isEmpty()) {
         return true;
     }
-
     if(!m_requirement) {
         qWarning() << "ERROR: ShaderNode::setup(): Requirement for" << this << name() << "is not satisfied.";
         return false;
     }
-
     if(m_type.isEmpty()) {
         qWarning() << "ERROR: ShaderNode::setup(): " << name() << "is missing type.";
         return false;
     }
+    QString currentIdentifier;
+    if(tempIdentifier.isEmpty()) {
+        currentIdentifier = identifier();
+    } else {
+        currentIdentifier = tempIdentifier;
+    }
 
     QString sourceContent;
-    sourceContent = m_source;
+
+    sourceContent += m_source;
     if(!m_result.isEmpty()) {
-        sourceContent += m_identifier + " = " + m_result + ";\n";
+        sourceContent += currentIdentifier + " = " + m_result + ";\n";
     }
 
     m_dependencies.clear();
@@ -219,7 +224,9 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder)
     }
 
     setShaderBuilder(shaderBuilder);
-    m_hasSetup = true;
+    if(!tempIdentifier.isEmpty()) {
+        m_hasSetup = true;
+    }
     m_resolvedSource = sourceContent;
     return success;
 }
@@ -237,7 +244,7 @@ QString ShaderNode::generateBody() const
     for(ShaderNode* dependency : m_dependencies) {
         body += dependency->generateBody();
     }
-    body += m_type + " " + m_identifier + ";\n";
+    body += m_type + " " + identifier() + ";\n";
     if(!m_resolvedSource.isEmpty()) {
         body += m_resolvedSource + "\n";
     }
