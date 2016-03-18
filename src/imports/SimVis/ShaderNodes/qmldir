@@ -1,6 +1,6 @@
 module SimVis.ShaderNodes
 Add 1.0 Add.qml
-BumpImage 1.0 BumpImage.qml
+Bump 1.0 Bump.qml
 Clamp 1.0 Clamp.qml
 Decolorize 1.0 Decolorize.qml
 Displacement 1.0 Displacement.qml

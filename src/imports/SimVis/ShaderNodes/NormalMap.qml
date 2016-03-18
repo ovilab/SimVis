@@ -10,5 +10,5 @@ ShaderNode {
 
     name: "normalmap"
     type: "vec3"
-    result: "$(normal, vec3) + (-1.0 + 2.0 * $(color, vec3))"
+    result: "$(normal, vec3) + $(strength, float) * (-1.0 + 2.0 * normalize($(color, vec3)))"
 }

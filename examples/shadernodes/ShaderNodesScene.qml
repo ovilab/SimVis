@@ -84,8 +84,7 @@ Scene3D {
                     //                            mix: 0.5
                     //                        }
                     //                    }
-                    normal: BumpImage {
-                        id: image
+                    normal: Bump {
                         height: Decolorize {
                             color: ImageTexture {
                                 source: "earth-elevation-small.png"

@@ -31,13 +31,10 @@ Scene3D {
             camera: frameGraph.camera
             sphereData: simulator.sphereData
             fragmentColor: StandardMaterial {
-                normal: BumpImage {
-                    strength: 0.5
-                    distance: 0.01
-                    height: Decolorize {
-                        color: ImageTexture {
-                            source: "earth-elevation-smaller.png"
-                        }
+                normal: NormalMap {
+                    strength: 0.3
+                    color: Noise {
+                        vector: spheresEntity.normal
                     }
                 }
             }
