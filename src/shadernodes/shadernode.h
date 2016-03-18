@@ -49,6 +49,11 @@ public:
     QUrl headerFile() const;
     void addMapping(QString propertyName, const QVariant &value);
     void removeMapping(QString propertyName);
+    void addDependency(ShaderNode *dependency);
+    void removeDependency(ShaderNode *dependency);
+    void clearDependencies();
+    QList<ShaderNode*> resolvedDependencies() const;
+    QString resolvedSource() const;
 
 signals:
     void nameChanged(QString name);
@@ -67,6 +72,7 @@ public slots:
     void setResult(QString result);
     void setHeader(QString header);
     void setSource(QString source);
+    void setSourceWithoutNotification(QString source);
     void setRequirement(bool requirement);
     void setHeaderFile(QUrl headerFile);
 
@@ -86,11 +92,9 @@ protected:
     QVariantMap m_mappings;
 
     QString m_resolvedSource;
-    QList<ShaderNode*> m_dependencies;
+    QList<ShaderNode*> m_resolvedDependencies;
     QList<ShaderNode*> m_declaredDependencies;
     QString m_source;
-
-    friend class BumpNode;
 
     QT3D_CLONEABLE(ShaderNode)
 };

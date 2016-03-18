@@ -22,7 +22,7 @@ public:
     QVariant vectorMinus() const;
     QVariant height() const;
 
-    virtual bool setup(ShaderBuilder *shaderBuilder, QString tempIdentifier) override;
+    virtual bool setup(ShaderBuilder *shaderBuilder, QString aliasIdentifier) override;
 
 public slots:
     void setStrength(QVariant strength);

@@ -22,21 +22,22 @@ BumpNode::BumpNode(Qt3DCore::QNode *parent)
     setName("bump");
 }
 
-bool BumpNode::setup(ShaderBuilder *shaderBuilder, QString tempIdentifier)
+bool BumpNode::setup(ShaderBuilder *shaderBuilder, QString aliasIdentifier)
 {
     if(m_hasSetup) {
         return true;
     }
 
     QString currentIdentifier;
-    if(!tempIdentifier.isEmpty()) {
-        currentIdentifier = tempIdentifier;
+    if(!aliasIdentifier.isEmpty()) {
+        currentIdentifier = aliasIdentifier;
     } else {
         currentIdentifier = identifier();
     }
 
     setType(ShaderUtils::glslType(m_height));
 
+    m_centerNode.clearDependencies();
     ShaderNode *node = qvariant_cast<ShaderNode*>(m_height);
     if(!node) {
         setResult("$height");
@@ -47,27 +48,33 @@ bool BumpNode::setup(ShaderBuilder *shaderBuilder, QString tempIdentifier)
         node->setup(shaderBuilder, m_centerNode.identifier());
 
         m_centerNode.setType(node->type());
-        m_centerNode.m_declaredDependencies = node->m_dependencies;
-        m_centerNode.m_source = node->m_resolvedSource;
+        for(ShaderNode *dependency : node->resolvedDependencies()) {
+            m_centerNode.addDependency(dependency);
+        }
+        m_centerNode.setSourceWithoutNotification(node->resolvedSource());
 
-        double offset = 0.05;
+        double offset = 0.005;
 
         node->addMapping("offset", QVector3D(offset, offset, offset));
         node->setup(shaderBuilder, m_plusNode.identifier());
 
         m_plusNode.setType(node->type());
-        m_plusNode.m_declaredDependencies = node->m_dependencies;
-        m_plusNode.m_source = node->m_resolvedSource;
+        for(ShaderNode *dependency : node->resolvedDependencies()) {
+            m_plusNode.addDependency(dependency);
+        }
+        m_plusNode.setSourceWithoutNotification(node->resolvedSource());
 
         node->addMapping("offset", QVector3D(-offset, -offset, -offset));
         node->setup(shaderBuilder, m_minusNode.identifier());
 
         m_minusNode.setType(node->type());
-        m_minusNode.m_declaredDependencies = node->m_dependencies;
-        m_minusNode.m_source = node->m_resolvedSource;
+        for(ShaderNode *dependency : node->resolvedDependencies()) {
+            m_minusNode.addDependency(dependency);
+        }
+        m_minusNode.setSourceWithoutNotification(node->resolvedSource());
     }
 
-    bool success = ShaderNode::setup(shaderBuilder, tempIdentifier);
+    bool success = ShaderNode::setup(shaderBuilder, aliasIdentifier);
     if(!success) {
         return false;
     }

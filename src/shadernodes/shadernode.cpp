@@ -50,7 +50,7 @@ QString ShaderNode::generateHeader() const
     }
 
     QString headerResult = "";
-    for(const ShaderNode *node : m_dependencies) {
+    for(const ShaderNode *node : m_resolvedDependencies) {
         headerResult += node->generateHeader();
     }
     if(!m_header.isEmpty()) {
@@ -100,7 +100,7 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
         sourceContent += currentIdentifier + " = " + m_result + ";\n";
     }
 
-    m_dependencies.clear();
+    m_resolvedDependencies.clear();
 
     QVariantMap mappings = m_mappings;
     for(int i = 0; i < metaObject()->propertyCount(); i++) {
@@ -152,8 +152,8 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
                 int i = 0;
                 for(ShaderNode *groupNode : shaderGroup->m_nodes) {
                     success = success && groupNode->setup(shaderBuilder);
-                    if(!m_dependencies.contains(groupNode)) {
-                        m_dependencies.append(groupNode);
+                    if(!m_resolvedDependencies.contains(groupNode)) {
+                        m_resolvedDependencies.append(groupNode);
                     }
                     QString targetIdentifier = groupNode->identifier();
                     QString sourceType = groupNode->type();
@@ -174,14 +174,14 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
                 for(ShaderNode* declaredDependency : node->m_declaredDependencies) {
                     if(declaredDependency && declaredDependency != this) {
                         success = success && declaredDependency->setup(shaderBuilder);
-                        if(!m_dependencies.contains(declaredDependency)) {
-                            m_dependencies.append(declaredDependency);
+                        if(!m_resolvedDependencies.contains(declaredDependency)) {
+                            m_resolvedDependencies.append(declaredDependency);
                         }
                     }
                 }
                 success = success && node->setup(shaderBuilder);
-                if(!m_dependencies.contains(node)) {
-                    m_dependencies.append(node);
+                if(!m_resolvedDependencies.contains(node)) {
+                    m_resolvedDependencies.append(node);
                 }
                 targetIdentifier = node->identifier();
                 sourceType = node->type();
@@ -241,7 +241,7 @@ QString ShaderNode::generateBody() const
         return QString();
     }
     QString body = "";
-    for(ShaderNode* dependency : m_dependencies) {
+    for(ShaderNode* dependency : m_resolvedDependencies) {
         body += dependency->generateBody();
     }
     body += m_type + " " + identifier() + ";\n";
@@ -255,7 +255,7 @@ QString ShaderNode::generateBody() const
 
 void ShaderNode::reset() const
 {
-    for(ShaderNode* dependency : m_dependencies) {
+    for(ShaderNode* dependency : m_resolvedDependencies) {
         dependency->reset();
     }
     m_hasGeneratedBody = false;
@@ -310,6 +310,11 @@ void ShaderNode::setSource(QString source)
 
     m_source = source;
     emit sourceChanged(source);
+}
+
+void ShaderNode::setSourceWithoutNotification(QString source)
+{
+    m_source = source;
 }
 
 void ShaderNode::setRequirement(bool requirement)
@@ -389,4 +394,29 @@ void ShaderNode::addMapping(QString propertyName, const QVariant &value)
 void ShaderNode::removeMapping(QString propertyName)
 {
     m_mappings.remove(propertyName);
+}
+
+void ShaderNode::addDependency(ShaderNode *dependency)
+{
+    m_declaredDependencies.append(dependency);
+}
+
+void ShaderNode::removeDependency(ShaderNode *dependency)
+{
+    m_declaredDependencies.removeAll(dependency);
+}
+
+void ShaderNode::clearDependencies()
+{
+    m_declaredDependencies.clear();
+}
+
+QList<ShaderNode *> ShaderNode::resolvedDependencies() const
+{
+    return m_resolvedDependencies;
+}
+
+QString ShaderNode::resolvedSource() const
+{
+    return m_resolvedSource;
 }
