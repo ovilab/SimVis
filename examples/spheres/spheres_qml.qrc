@@ -14,5 +14,6 @@
         <file>Chest.qml</file>
         <file>spheres.frag</file>
         <file>spheres.vert</file>
+        <file>earth-elevation-smaller.png</file>
     </qresource>
 </RCC>

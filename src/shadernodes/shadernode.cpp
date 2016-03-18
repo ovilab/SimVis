@@ -3,7 +3,6 @@
 #include "shaderutils.h"
 #include "shadergroup.h"
 #include "shaderbuilderbinding.h"
-#include "variationgroup.h"
 
 #include <QDebug>
 #include <QJSValueIterator>

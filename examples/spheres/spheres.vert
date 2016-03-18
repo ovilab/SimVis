@@ -12,14 +12,14 @@ uniform vec3 rightVector = vec3(1.0, 0.0, 0.0);
 uniform mat4 mvp;
 
 out vec3 position;
-out vec2 texCoord;
+out vec2 planePosition;
 
 void main() {
     float a_scale = 1.0;
 
     position = vertexPosition + pos;
 
-    texCoord = vertexTexCoord;
+    planePosition = vertexTexCoord;
 
     position += 0.5*(-upVector - rightVector)*(a_scale*float(vertexId==0.0));
     position += 0.5*(-upVector + rightVector)*(a_scale*float(vertexId==1.0));

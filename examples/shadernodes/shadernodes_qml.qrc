@@ -5,7 +5,5 @@
         <file>shader.vert</file>
         <file>ShaderBuilderMaterial.qml</file>
         <file>ShaderNodesScene.qml</file>
-        <file>diffuse.webp</file>
-        <file>test.png</file>
     </qresource>
 </RCC>

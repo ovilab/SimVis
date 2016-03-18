@@ -7,7 +7,8 @@ SOURCES += \
     main_shadernodes.cpp \
 
 RESOURCES += \
-    shadernodes_qml.qrc
+    shadernodes_qml.qrc \
+    shadernodes_images.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

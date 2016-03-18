@@ -30,32 +30,17 @@ Scene3D {
             id: spheresEntity
             camera: frameGraph.camera
             sphereData: simulator.sphereData
-
-//            fragmentColor: StandardMaterial {
-//                diffuseColor: "steelblue"
-//                specularColor: "white"
-//                position: spheresEntity.fragmentBuilder.position
-//                normal: Simplex {
-//                    value: spheresEntity.fragmentBuilder.position
-//                }
-//                lights: ShaderGroup {
-//                    Nodes.Light {
-//                        position: Qt.vector3d(-20.0, 0.0, 0.0)
-//                        color: "red"
-//                        attenuation: 0.01
-//                    }
-//                    Nodes.Light {
-//                        position: Qt.vector3d(20.0, 0.0, 0.0)
-//                        color: "yellow"
-//                        attenuation: 0.01
-//                    }
-//                    Nodes.Light {
-//                        position: Qt.vector3d(0.0, 0.0, -20.0)
-//                        color: "white"
-//                        attenuation: 0.004
-//                    }
-//                }
-//            }
+            fragmentColor: StandardMaterial {
+                normal: BumpImage {
+                    strength: 0.5
+                    distance: 0.01
+                    height: Decolorize {
+                        color: ImageTexture {
+                            source: "earth-elevation-smaller.png"
+                        }
+                    }
+                }
+            }
         }
 
         MySimulator {

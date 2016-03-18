@@ -28,6 +28,8 @@ Item {
         blurMix: blurSlider.value
         detailMix: detailSlider.value
         scaleMix: scaleSlider.value
+        bumpDistance: bumpDistanceSlider.value
+        bumpStrength: bumpStrengthSlider.value
     }
 
     Rectangle {
@@ -98,6 +100,28 @@ Item {
                 id: scaleSlider
                 minimumValue: 0.0
                 maximumValue: 10.0
+                value: 1.0
+            }
+        }
+        Row {
+            Text {
+                text: "Bump distance"
+            }
+            Slider {
+                id: bumpDistanceSlider
+                minimumValue: 0.0
+                maximumValue: 1.0
+                value: 0.1
+            }
+        }
+        Row {
+            Text {
+                text: "Bump strength"
+            }
+            Slider {
+                id: bumpStrengthSlider
+                minimumValue: 0.0
+                maximumValue: 2.0
                 value: 1.0
             }
         }

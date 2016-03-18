@@ -9,12 +9,15 @@ import QtQuick 2.0 as QQ2
 import QtQuick.Scene3D 2.0
 
 Scene3D {
+    id: scene
     property real bumpMix: 0.5
     property real colorMix: 0.0
     property real displacementMix: 0.0
     property real blurMix: 0.0
     property real scaleMix: 0.0
     property real detailMix: 0.0
+    property real bumpDistance: 0.0
+    property real bumpStrength: 0.0
     aspects: "input"
     Entity {
         Camera {
@@ -46,55 +49,60 @@ Scene3D {
         Entity {
             SphereMesh {
                 id: mesh
-                radius: 4.0
+                radius: 6.0
                 rings: 64
                 slices: 32
             }
             ShaderBuilderMaterial {
                 id: material
-//                vertexPosition: Displacement {
-//                    vector: Noise {
-//                        scale: scaleMix
-//                        detail: detailMix
-//                        vector: material.vertex.position
-//                    }
-//                    strength: displacementMix
-//                }
+                //                vertexPosition: Displacement {
+                //                    vector: Noise {
+                //                        scale: scaleMix
+                //                        detail: detailMix
+                //                        vector: material.vertex.position
+                //                    }
+                //                    strength: displacementMix
+                //                }
 
                 fragmentColor: StandardMaterial {
-//                    diffuseColor: BumpNode {
-//                        height: ImageTexture {
-//                            id: image
-//                            source: "diffuse.webp"
-////                            vector: material.fragment.textureCoordinate
-//                        }
-//                    }
-//                    diffuseColor: Bump {
-//                        height: Mix {
-//                            value1: ImageTexture {
-//                                id: image
-//                                source: "diffuse.webp"
-//                            }
-//                            value2: Simplex {
+                    //                    diffuseColor: BumpNode {
+                    //                        height: ImageTexture {
+                    //                            id: image
+                    //                            source: "diffuse.webp"
+                    ////                            vector: material.fragment.textureCoordinate
+                    //                        }
+                    //                    }
+                    //                    diffuseColor: Bump {
+                    //                        height: Mix {
+                    //                            value1: ImageTexture {
+                    //                                id: image
+                    //                                source: "diffuse.webp"
+                    //                            }
+                    //                            value2: Simplex {
 
-//                            }
-//                            mix: 0.5
-//                        }
-//                    }
-                    diffuseColor: ImageTexture {
+                    //                            }
+                    //                            mix: 0.5
+                    //                        }
+                    //                    }
+                    normal: BumpImage {
                         id: image
-                        source: "diffuse.webp"
+                        height: Decolorize {
+                            color: ImageTexture {
+                                source: "earth-elevation-small.png"
+                            }
+                        }
+                        distance: scene.bumpDistance
+                        strength: scene.bumpStrength
                     }
+
+                    //                    diffuseColor: NormalMap {
+                    //                        color: ImageTexture {
+                    //                            source: "normal.jpg"
+                    //                        }
+                    //                    }
+
                     ambientIntensity: 0.1
                     ambientColor: diffuseColor
-
-//                    normal: BumpNode {
-//                        delegate: Add {
-//                            value1: Simplex {}
-//                            value2: Simplex {}
-//                        }
-//                        strength: bumpMix
-//                    }
 
                     lights: ShaderGroup {
                         Nodes.Light {
