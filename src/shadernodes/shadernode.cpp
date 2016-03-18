@@ -180,7 +180,12 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
             if(variationGroup) {
                 ShaderNode *targetNode = qvariant_cast<ShaderNode*>(variationGroup->target());
                 if(!targetNode) {
-                    qDebug() << "WARNING: non-shadernode variations not implemented!";
+                    // if the variation group does not have a shader node target,
+                    // variations are not possible and we simply move on with the value set to
+                    // the target of the variation group
+                    QRegularExpression indexedRegex("\\$(\\(\\s*)?" + propertyName + "\\[[0-9]+\\](\\s*,\\s*[_a-zA-Z0-9]+\\s*\\))?");
+                    sourceContent.replace(indexedRegex, "$" + propertyName);
+                    value = variationGroup->target();
                 } else {
                     int i = 0;
                     for(VariationNode *variationNode : variationGroup->m_nodes) {
@@ -200,8 +205,8 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
                         sourceContent.replace(indexedRegex, ShaderUtils::convert(sourceType, targetType, targetIdentifier));
                         i += 1;
                     }
+                    continue;
                 }
-                continue;
             }
 
             ShaderNode *node = qvariant_cast<ShaderNode*>(value);

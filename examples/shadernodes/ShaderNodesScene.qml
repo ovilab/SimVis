@@ -70,10 +70,15 @@ Scene3D {
 //                        }
 //                    }
                     diffuseColor: Bump {
-                        height: ImageTexture {
-                            id: image
-                            source: "diffuse.webp"
-//                            vector: material.fragment.textureCoordinate
+                        height: Mix {
+                            value1: ImageTexture {
+                                id: image
+                                source: "diffuse.webp"
+                            }
+                            value2: Simplex {
+
+                            }
+                            mix: 0.5
                         }
                     }
                     ambientIntensity: 0.1
