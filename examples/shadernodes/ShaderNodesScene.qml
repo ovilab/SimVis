@@ -62,7 +62,14 @@ Scene3D {
 //                }
 
                 fragmentColor: StandardMaterial {
-                    diffuseColor: BumpNode {
+//                    diffuseColor: BumpNode {
+//                        height: ImageTexture {
+//                            id: image
+//                            source: "diffuse.webp"
+////                            vector: material.fragment.textureCoordinate
+//                        }
+//                    }
+                    diffuseColor: Bump {
                         height: ImageTexture {
                             id: image
                             source: "diffuse.webp"

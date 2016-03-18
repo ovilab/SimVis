@@ -3,6 +3,7 @@
 #include "shaderutils.h"
 #include "shadergroup.h"
 #include "shaderbuilderbinding.h"
+#include "variationgroup.h"
 
 #include <QDebug>
 #include <QJSValueIterator>
@@ -102,6 +103,16 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
 
     m_resolvedDependencies.clear();
 
+    for(ShaderNode *dependency : m_declaredDependencies) {
+        if(dependency == this) {
+            continue;
+        }
+        if(!dependency->setup(shaderBuilder)) {
+            return false;
+        }
+        m_resolvedDependencies.append(dependency);
+    }
+
     QVariantMap mappings = m_mappings;
     for(int i = 0; i < metaObject()->propertyCount(); i++) {
         QString propertyName = metaObject()->property(i).name();
@@ -160,7 +171,35 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
                     // replaces '$property' or '$(property, type)'
                     QRegularExpression indexedRegex("\\$(\\(\\s*)?" + propertyName + "\\[" + QString::number(i) +"\\](\\s*,\\s*[_a-zA-Z0-9]+\\s*\\))?");
                     sourceContent.replace(indexedRegex, ShaderUtils::convert(sourceType, targetType, targetIdentifier));
-                    i++;
+                    i += 1;
+                }
+                continue;
+            }
+
+            VariationGroup *variationGroup = qvariant_cast<VariationGroup*>(value);
+            if(variationGroup) {
+                ShaderNode *targetNode = qvariant_cast<ShaderNode*>(variationGroup->target());
+                if(!targetNode) {
+                    qDebug() << "WARNING: non-shadernode variations not implemented!";
+                } else {
+                    int i = 0;
+                    for(VariationNode *variationNode : variationGroup->m_nodes) {
+                        m_resolvedDependencies.append(variationNode);
+                        targetNode->addMapping(variationGroup->propertyName(), variationNode->value());
+                        targetNode->setup(shaderBuilder, variationNode->identifier());
+                        variationNode->setType(targetNode->type());
+                        for(ShaderNode *dependency : targetNode->resolvedDependencies()) {
+                            variationNode->addDependency(dependency);
+                        }
+                        variationNode->setSourceWithoutNotification(targetNode->resolvedSource());
+                        variationNode->setup(shaderBuilder);
+
+                        QString targetIdentifier = variationNode->identifier();
+                        QString sourceType = variationNode->type();
+                        QRegularExpression indexedRegex("\\$(\\(\\s*)?" + propertyName + "\\[" + QString::number(i) +"\\](\\s*,\\s*[_a-zA-Z0-9]+\\s*\\))?");
+                        sourceContent.replace(indexedRegex, ShaderUtils::convert(sourceType, targetType, targetIdentifier));
+                        i += 1;
+                    }
                 }
                 continue;
             }
@@ -171,14 +210,15 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
             QString sourceType;
             if(node) {
                 // Take over any declared dependencies
-                for(ShaderNode* declaredDependency : node->m_declaredDependencies) {
-                    if(declaredDependency && declaredDependency != this) {
-                        success = success && declaredDependency->setup(shaderBuilder);
-                        if(!m_resolvedDependencies.contains(declaredDependency)) {
-                            m_resolvedDependencies.append(declaredDependency);
-                        }
-                    }
-                }
+                // TODO is this longer necessary? what is the use case for this
+//                for(ShaderNode* declaredDependency : node->m_declaredDependencies) {
+//                    if(declaredDependency && declaredDependency != this) {
+//                        success = success && declaredDependency->setup(shaderBuilder);
+//                        if(!m_resolvedDependencies.contains(declaredDependency)) {
+//                            m_resolvedDependencies.append(declaredDependency);
+//                        }
+//                    }
+//                }
                 success = success && node->setup(shaderBuilder);
                 if(!m_resolvedDependencies.contains(node)) {
                     m_resolvedDependencies.append(node);
@@ -186,15 +226,14 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
                 targetIdentifier = node->identifier();
                 sourceType = node->type();
             } else {
-                //
                 // make a uniform
                 QByteArray propertyNameArray = propertyName.toUtf8();
-                int propertyIndex = metaObject()->indexOfProperty(propertyNameArray.constData());
-//                if(propertyIndex < 0) {
-//                    qWarning() << "WARNING: ShaderNode::setup(): Mapping with name" << propertyName << "on" << name()
-//                               << "is neither a shader node nor a property. This is not supported.";
-//                    continue;
-//                }
+                int propertyIndex = metaObject()->indexOfProperty(propertyNameArray.constData());                
+                if(propertyIndex < 0) {
+                    qWarning() << "WARNING: ShaderNode::setup(): Could not find shader node or property for "
+                               << propertyName << "on" << name();
+                    continue;
+                }
                 QMetaProperty metaProperty = metaObject()->property(propertyIndex);
 
                 QString uniformPrefix = "uniform";

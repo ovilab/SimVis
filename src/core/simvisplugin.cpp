@@ -12,6 +12,7 @@
 #include "navigator.h"
 #include "navigators/trackballnavigator.h"
 #include "navigators/flymodenavigator.h"
+#include "../renderables/marchingcubes/marchingcubesgs.h"
 #include "../shadereffects/simplexbump.h"
 #include "../shadereffects/light.h"
 #include "../shadereffects/simplextexture.h"
@@ -26,7 +27,8 @@
 #include "../shadernodes/shaderoutput.h"
 #include "../shadernodes/shadergroup.h"
 #include "../shadernodes/shaderbuilderbinding.h"
-#include "../renderables/marchingcubes/marchingcubesgs.h"
+#include "../shadernodes/variationgroup.h"
+#include "../shadernodes/variationnode.h"
 
 #include <qqml.h>
 #include <QQmlEngine>
@@ -60,6 +62,8 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<ShaderBuilder>("SimVis", 1, 0, "ShaderBuilder");
     qmlRegisterType<ShaderOutput>("SimVis", 1, 0, "ShaderOutput");
     qmlRegisterType<ShaderGroup>("SimVis", 1, 0, "ShaderGroup");
+    qmlRegisterType<VariationGroup>("SimVis", 1, 0, "VariationGroup");
+    qmlRegisterType<VariationNode>("SimVis", 1, 0, "VariationNode");
     qmlRegisterType<BumpNode>("SimVis.ShaderNodes", 1, 0, "BumpNode");
     qmlRegisterType<ShaderBuilderBinding>("SimVis", 1, 0, "ShaderBuilderBinding");
     qmlRegisterType<MarchingCubesGS>("SimVis", 1, 0, "AbstractMarchingCubes");

@@ -10,7 +10,7 @@
 class ShaderBuilderBinding : public ShaderNode
 {
     Q_OBJECT
-    Q_PROPERTY(QString property READ property WRITE setProperty NOTIFY propertyChanged)
+    Q_PROPERTY(QString property READ propertyName WRITE setPropertyName NOTIFY propertyChanged)
     Q_PROPERTY(QVariant defaultValue READ defaultValue WRITE setDefaultValue NOTIFY defaultValueChanged)
 
 public:
@@ -18,15 +18,15 @@ public:
 
     virtual bool setup(ShaderBuilder *shaderBuilder, QString tempIdentifier = QString()) override;
     QVariant defaultValue() const;
-    QString property() const;
+    QString propertyName() const;
 
 signals:
-    void propertyChanged(QString property);
+    void propertyChanged(QString propertyName);
 
     void defaultValueChanged(QVariant defaultValue);
 
 public slots:
-    void setProperty(QString property);
+    void setPropertyName(QString propertyName);
 
     void setDefaultValue(QVariant defaultValue);
 

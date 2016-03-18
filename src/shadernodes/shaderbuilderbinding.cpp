@@ -15,12 +15,12 @@ ShaderBuilderBinding::ShaderBuilderBinding(Qt3DCore::QNode *parent)
     setName("builderbinding");
 }
 
-QString ShaderBuilderBinding::property() const
+QString ShaderBuilderBinding::propertyName() const
 {
     return m_property;
 }
 
-void ShaderBuilderBinding::setProperty(QString name)
+void ShaderBuilderBinding::setPropertyName(QString name)
 {
     if (m_property == name)
         return;
