@@ -10,6 +10,7 @@ in mat3 tangentMatrix;
 out vec4 fragColor;
 
 uniform vec3 eyePosition;
+uniform mat3 modelNormalMatrix;
 
 void main(void) {
     vec3 normal = tangentMatrix[2];

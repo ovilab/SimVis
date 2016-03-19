@@ -47,86 +47,94 @@ Scene3D {
         ]
 
         Entity {
-            SphereMesh {
+            components: [
+                SphereMesh {
+                    radius: 2
+                },
+                Transform {
+                    translation: Qt.vector3d(10.0, 10.0, 10.0)
+                },
+                PointLight {
+                    color: Qt.rgba(1, 1, 1, 1)
+                }
+            ]
+        }
+
+        Entity {
+            components: [
+                PlaneMesh {
+                    width: 10
+                    height: 10
+                },
+                NormalDiffuseMapMaterial {
+                    diffuse: "diffuse.webp"
+                    normal: "normal.webp"
+                    ambient: Qt.rgba(0, 0, 0, 1)
+                },
+                Transform {
+                    translation: Qt.vector3d(10, -4, 0)
+                }
+            ]
+        }
+
+        Entity {
+//            CylinderMesh {
+//                id: mesh
+//                radius: 6.0
+//                rings: 64
+//                slices: 32
+//            }
+            PlaneMesh {
                 id: mesh
-                radius: 6.0
-                rings: 64
-                slices: 32
+                width: 10
+                height: 10
+//                meshResolution: Qt.size(20, 20)
             }
+//            NormalDiffuseMapMaterial {
+//                id: material
+//                diffuse: "diffuse.webp"
+//                normal: "normal.webp"
+//            }
+
             ShaderBuilderMaterial {
                 id: material
-                //                vertexPosition: Displacement {
-                //                    vector: Noise {
-                //                        scale: scaleMix
-                //                        detail: detailMix
-                //                        vector: material.vertex.position
-                //                    }
-                //                    strength: displacementMix
-                //                }
 
                 fragmentColor: StandardMaterial {
-                    //                    diffuseColor: BumpNode {
-                    //                        height: ImageTexture {
-                    //                            id: image
-                    //                            source: "diffuse.webp"
-                    ////                            vector: material.fragment.textureCoordinate
-                    //                        }
-                    //                    }
-                    //                    diffuseColor: Bump {
-                    //                        height: Mix {
-                    //                            value1: ImageTexture {
-                    //                                id: image
-                    //                                source: "diffuse.webp"
-                    //                            }
-                    //                            value2: Simplex {
-
-                    //                            }
-                    //                            mix: 0.5
-                    //                        }
-                    //                    }
-                    normal: Bump {
-//                        height: Decolorize {
-//                            color: ImageTexture {
-//                                source: "earth-elevation-small.png"
-//                            }
-//                        }
-                        source: "earth-elevation-small.png"
-                        distance: scene.bumpDistance
-                        strength: scene.bumpStrength
+                    normal: NormalMap {
+                        color: ImageTexture {
+                            source: "normal.webp"
+                        }
                     }
 
-                    //                    diffuseColor: NormalMap {
-                    //                        color: ImageTexture {
-                    //                            source: "normal.jpg"
-                    //                        }
-                    //                    }
+                    diffuseColor: ImageTexture {
+                        source: "diffuse.webp"
+                    }
 
-                    ambientIntensity: 0.1
+                    ambientIntensity: 0.01
                     ambientColor: diffuseColor
+
+                    diffuseIntensity: 3.0
+
+                    specularIntensity: 1.0
+                    hardness: 160.0
 
                     lights: ShaderGroup {
                         Nodes.Light {
-                            position: Qt.vector3d(-5.0, 0.0, -5.0)
-                            attenuation: 0.001
-                        }
-                        Nodes.Light {
-                            position: Qt.vector3d(5.0, 0.0, -5.0)
-                            attenuation: 0.001
-                        }
-                        Nodes.Light {
-                            position: Qt.vector3d(-10.0, 2.0, 10.0)
-                            color: Mix {
-                                value1: "steelblue"
-                                value2: "purple"
-                                mix: colorMix
-                            }
+                            position: Qt.vector3d(10, 10, 10)
+                            attenuation: 0.0
                         }
                     }
                 }
             }
+            Transform {
+                id: transofmr
+                translation: Qt.vector3d(0, -1, 0)
+            }
+
             components: [
                 mesh,
-                material
+                material,
+                transofmr
             ]
         }
     }
