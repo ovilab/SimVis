@@ -72,7 +72,7 @@ Scene3D {
                     ambient: Qt.rgba(0, 0, 0, 1)
                 },
                 Transform {
-                    translation: Qt.vector3d(10, -4, 0)
+                    translation: Qt.vector3d(10, -1, 0)
                 }
             ]
         }
