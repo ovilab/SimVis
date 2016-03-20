@@ -5,7 +5,8 @@ QT += qml quick widgets opengl openglextensions
 
 SOURCES += \
     main_functionsurface.cpp \
-    functionsurfacesimulator.cpp
+    functionsurfacesimulator.cpp \
+    functionsurfacedata.cpp
 
 RESOURCES += \
     functionsurface_qml.qrc
@@ -17,4 +18,10 @@ QML_IMPORT_PATH =
 include(../examples_vendor.pri)
 
 HEADERS += \
-    functionsurfacesimulator.h
+    functionsurfacesimulator.h \
+    functionsurfacedata.h
+
+DISTFILES += \
+    fs.frag \
+    fs.vert \
+    fs.geom

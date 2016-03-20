@@ -2,20 +2,19 @@
 
 void MarchingCubesGSRenderer::uploadVBO()
 {
-    qDebug() << "Upload VBO";
+    qDebug() << "Uploading VBO with resolution: " << m_voxelsPerDimension;
     m_numberOfVoxels = m_voxelsPerDimension*m_voxelsPerDimension*m_voxelsPerDimension;
 
     QVector<QVector3D> vertices;
     vertices.reserve(m_numberOfVoxels);
-    float dr = m_scale / m_voxelsPerDimension;
-    float min = -m_scale*0.5;
+    int min = -m_voxelsPerDimension / 2;
 
     for(int i=0; i<m_voxelsPerDimension; i++) {
-        float x = min + i*dr;
+        float x = min + i;
         for(int j=0; j<m_voxelsPerDimension; j++) {
-            float y = min + j*dr;
+            float y = min + j;
             for(int k=0; k<m_voxelsPerDimension; k++) {
-                float z = min + k*dr;
+                float z = min + k;
                 vertices.push_back(QVector3D(x,y,z));
             }
         }
@@ -48,7 +47,6 @@ void MarchingCubesGSRenderer::uploadVBO()
 
 void MarchingCubesGSRenderer::createTriangleTable()
 {
-    qDebug() << "Create triangle table";
     const int triangleTable[256][16] = {
         {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
         {0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
@@ -328,6 +326,16 @@ float MarchingCubesGS::threshold() const
     return m_threshold;
 }
 
+int MarchingCubesGS::resolution() const
+{
+    return m_resolution;
+}
+
+float MarchingCubesGS::scale() const
+{
+    return m_scale;
+}
+
 void MarchingCubesGS::setThreshold(float threshold)
 {
     if (m_threshold == threshold)
@@ -337,17 +345,47 @@ void MarchingCubesGS::setThreshold(float threshold)
     emit thresholdChanged(threshold);
 }
 
+void MarchingCubesGS::setResolution(int resolution)
+{
+    if (m_resolution == resolution)
+        return;
+
+    m_resolution = resolution;
+    emit resolutionChanged(resolution);
+}
+
+void MarchingCubesGS::setScale(float scale)
+{
+    if (m_scale == scale)
+        return;
+
+    m_scale = scale;
+    emit scaleChanged(scale);
+}
+
 void MarchingCubesGSRenderer::synchronize(Renderable *renderable)
 {
     MarchingCubesGS *mc = qobject_cast<MarchingCubesGS*>(renderable);
     if(mc) {
+        m_threshold = mc->threshold();
+        m_scale = mc->scale();
+        if(m_voxelsPerDimension != mc->resolution()) {
+            qDebug() << "Updating resolution. Will need to upload vbo again...";
+            m_dirty = true;
+            m_voxelsPerDimension = mc->resolution();
+            m_scale = mc->scale();
+        }
+
         if(!m_isInitialized) {
             m_vboCount = 1;
             generateVBOs();
-            uploadVBO();
             m_isInitialized = true;
         }
-        m_threshold = mc->threshold();
+        if(m_dirty) {
+            qDebug() << "I am dirty now. Uploading?";
+            uploadVBO();
+            m_dirty = false;
+        }
     }
 }
 
@@ -358,8 +396,7 @@ void MarchingCubesGSRenderer::render()
     int positionLocation = 0;
 
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]); // Tell OpenGL which VBOs to use
-    float dr = m_scale / m_voxelsPerDimension;
-    program().setUniformValue("dr", dr);
+    program().setUniformValue("scale", m_scale);
     program().setUniformValue("threshold", m_threshold);
     program().enableAttributeArray(positionLocation);
     glFunctions()->glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D), 0);

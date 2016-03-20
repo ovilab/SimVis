@@ -6,7 +6,7 @@ out vec3 position;
 out vec3 normal;
 
 uniform float threshold;
-uniform float dr;
+uniform float scale;
 uniform sampler2D triangleTable;
 
 float eval(vec3 position) {
@@ -68,15 +68,19 @@ vec3 linterp(float threshold, vec3 p1, vec3 p2, float valp1, float valp2)
 
 void main(void) {
     // if( dot( (vs_position[0] - cp_cameraPosition), cp_viewVector) > 0) {
-        vec3 v_000 = vs_position[0] + cp_cameraPosition;                        // Corresponds to vertex 0
-        // vec3 v_000 = vs_position[0];                        // Corresponds to vertex 0
-        vec3 v_001 = v_000 + vec3(0.0, 0.0, dr);       // Corresponds to vertex 4
-        vec3 v_011 = v_000 + vec3(0.0, dr, dr);           // Corresponds to vertex 5
-        vec3 v_010 = v_000 + vec3(0.0, dr, 0.0);       // Corresponds to vertex 1
-        vec3 v_110 = v_000 + vec3(dr, dr, 0.0);           // Corresponds to vertex 2
-        vec3 v_111 = v_000 + dr;                         // Corresponds to vertex 6
-        vec3 v_101 = v_000 + vec3(dr, 0.0, dr);   // Corresponds to vertex 7
-        vec3 v_100 = v_000 + vec3(dr, 0.0, 0.0);       // Corresponds to vertex 3
+//        float oneOverPiHalf = 0.63661977236;
+//        vec3 vertexToCameraPosition = abs(scale*vs_position[0] - cp_cameraPosition);
+//        vec3 scaleVec = scale*atan(0.25*vertexToCameraPosition, vec3(1.0, 1.0, 1.0))*oneOverPiHalf;
+        vec3 scaleVec = vec3(scale);
+        //vec3 v_000 = scaleVec*(scale*vs_position[0]) + cp_cameraPosition;                        // Corresponds to vertex 0
+        vec3 v_000 = scaleVec*vs_position[0];                        // Corresponds to vertex 0
+        vec3 v_001 = v_000 + vec3(0.0, 0.0, scaleVec.z);            // Corresponds to vertex 4
+        vec3 v_011 = v_000 + vec3(0.0, scaleVec.y, scaleVec.z);             // Corresponds to vertex 5
+        vec3 v_010 = v_000 + vec3(0.0, scaleVec.y, 0.0);       // Corresponds to vertex 1
+        vec3 v_110 = v_000 + vec3(scaleVec.x, scaleVec.y, 0.0);           // Corresponds to vertex 2
+        vec3 v_111 = v_000 + scaleVec;                         // Corresponds to vertex 6
+        vec3 v_101 = v_000 + vec3(scaleVec.x, 0.0, scaleVec.z);   // Corresponds to vertex 7
+        vec3 v_100 = v_000 + vec3(scaleVec.x, 0.0, 0.0);       // Corresponds to vertex 3
 
 
         GridCell grid;
