@@ -12,7 +12,6 @@ import QtMultimedia 5.5
 
 Item {
     id: applicationRoot
-//    title: qsTr("Spheres in an harmonic oscillator - SimVis example")
     width: 1650
     height: 900
     visible: true
@@ -28,22 +27,6 @@ Item {
         id: slider
         minimumValue: 0.0
         maximumValue: 1.0
-    }
-    Text {
-//        text: scene.rotation
-    }
-    MouseArea {
-        anchors.fill: parent
-        propagateComposedEvents: true
-        hoverEnabled: true
-        onMouseXChanged: {
-            scene.chest.translation.x = mouse.x / 1000
-            mouse.accepted = false
-        }
-        onMouseYChanged: {
-            scene.chest.translation.y = mouse.y / 1000
-            mouse.accepted = false
-        }
     }
 }
 

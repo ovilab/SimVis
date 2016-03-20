@@ -33,6 +33,7 @@ Scene3D {
             fragmentColor: StandardMaterial {
                 diffuseColor: "steelblue"
                 specularColor: "white"
+                hardness: 0.5
                 position: spheresEntity.fragmentBuilder.position
                 normal: Add {
                     value1: spheresEntity.normal

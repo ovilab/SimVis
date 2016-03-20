@@ -32,7 +32,7 @@ ShaderNode {
             output += "$this += standardMaterialLight($lights[" + i + "], $(normal, vec3), $(position, vec3), eyePosition,\n"
             output += "             $(ambientColor, vec3), $(diffuseColor, vec3), $(specularColor, vec3),\n"
             output += "             0.04 * $(ambientIntensity, float), $(diffuseIntensity, float), 0.01 * $(specularIntensity, float),\n"
-            output += "             150.0 * $(hardness, float));\n"
+            output += "             10.0 * $(hardness, float));\n"
         }
         return output
     }
