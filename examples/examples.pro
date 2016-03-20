@@ -2,7 +2,6 @@ TEMPLATE = subdirs
 SUBDIRS += \
     spheres \
     shadernodes \
-#    simple \
 #    marchingcubes \
 #    functionsurface \
 #    triangles \
