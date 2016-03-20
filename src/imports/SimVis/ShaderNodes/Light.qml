@@ -14,7 +14,7 @@ ShaderNode {
     source: "
 $this.color = $(color, vec3);
 $this.strength = $(strength, float);
-$this.position = $(position, vec3);
+$this.position = (vec4($(position, vec3), 1.0)).xyz;
 $this.attenuation = $(attenuation, float);
 $this.gamma = $(gamma, float);
 "

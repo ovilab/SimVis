@@ -7,25 +7,27 @@ in vec4 vertexTangent;
 in vec2 vertexTexCoord;
 
 out vec3 position;
-//out vec3 normal;
+out vec3 normal;
+out vec3 tangent;
+out vec3 binormal;
 out vec2 texCoord;
-out mat3 tangentMatrix;
 
-uniform mat4 mvp;
-uniform mat3 modelMatrix;
+uniform mat4 modelMatrix;
 uniform mat3 modelNormalMatrix;
+uniform mat4 viewMatrix;
+uniform mat4 projectionMatrix;
+uniform mat4 mvp;
 
 void main() {
     texCoord = vertexTexCoord;
-    position = vertexPosition;
+    position = vec3(modelMatrix*vec4(vertexPosition, 1.0));
 
-    vec3 tangent = normalize(modelNormalMatrix * vertexTangent.xyz);
-    vec3 normal = normalize(modelNormalMatrix * vertexNormal.xyz);
-    vec3 binormal = normalize(cross(normal, tangent));
-
-    tangentMatrix = mat3(tangent, binormal, normal);
+    tangent = normalize(modelNormalMatrix * vertexTangent.xyz);
+    normal = normalize(modelNormalMatrix * vertexNormal.xyz);
+    binormal = normalize(cross(normal, tangent));
 
 #pragma shadernodes body
 
-    gl_Position = mvp*vec4(position, 1.0);
+    // not mvp because position may have been displaced by shader nodes
+    gl_Position = projectionMatrix*viewMatrix*vec4(position, 1.0);
 }

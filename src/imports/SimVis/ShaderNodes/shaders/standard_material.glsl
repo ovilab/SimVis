@@ -2,7 +2,6 @@ highp vec3 standardMaterialLight(Light light, highp vec3 normal, highp vec3 vert
                         highp vec3 ambientColor, highp vec3 diffuseColor, highp vec3 specularColor,
                         highp float ambientIntensity, highp float diffuseIntensity, highp float specularIntensity,
                         highp float hardness) {
-
     highp vec3 lightVector = vec3(0.0, 0.0, 0.0);
 
     highp vec3 surfaceToLight = normalize(light.position - vertexPosition);

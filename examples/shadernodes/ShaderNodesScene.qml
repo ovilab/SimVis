@@ -48,9 +48,6 @@ Scene3D {
 
         Entity {
             components: [
-                SphereMesh {
-                    radius: 2
-                },
                 Transform {
                     translation: Qt.vector3d(0.0, 10.0, 0.0)
                 },
@@ -73,47 +70,38 @@ Scene3D {
                     ambient: Qt.rgba(0, 0, 0, 1)
                 },
                 Transform {
-                    translation: Qt.vector3d(0, -1, 0)
-                    rotation: fromAxisAndAngle(Qt.vector3d(0, 1, 0), 180)
+                    translation: Qt.vector3d(-5, -1, 0)
                 }
             ]
         }
 
         Entity {
-            PlaneMesh {
-                id: mesh
-                width: 10
-                height: 10
-            }
-            ShaderBuilderMaterial {
-                id: material
-
-                fragmentColor: StandardMaterial {
-                    normal: NormalMap {
-                        color: ImageTexture {
-                            source: "normal.webp"
-                        }
-                    }
-                    diffuseColor: ImageTexture {
-                        source: "diffuse.webp"
-                    }
-                    lights: ShaderGroup {
-                        Nodes.Light {
-                            position: Qt.vector3d(0, 10, 0)
-                            attenuation: 0.0
-                        }
-                    }
-                }
-            }
-            Transform {
-                id: transofmr
-                translation: Qt.vector3d(10, -1, 0)
-            }
-
             components: [
-                mesh,
-                material,
-                transofmr
+                PlaneMesh {
+                    width: 10
+                    height: 10
+                },
+                ShaderBuilderMaterial {
+                    fragmentColor: StandardMaterial {
+                        normal: NormalMap {
+                            color: ImageTexture {
+                                source: "normal.webp"
+                            }
+                        }
+                        diffuseColor: ImageTexture {
+                            source: "diffuse.webp"
+                        }
+                        lights: ShaderGroup {
+                            Nodes.Light {
+                                position: Qt.vector3d(0, 10, 0)
+                                attenuation: 0.0
+                            }
+                        }
+                    }
+                },
+                Transform {
+                    translation: Qt.vector3d(5, -1, 0)
+                }
             ]
         }
     }

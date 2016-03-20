@@ -7,10 +7,18 @@ ShaderNode {
         property: "normal"
         defaultValue: Qt.vector3d(0.0, 0.0, 1.0)
     }
+    property var tangent: ShaderBuilderBinding {
+        property: "tangent"
+        defaultValue: Qt.vector3d(0.0, 1.0, 0.0)
+    }
+    property var binormal: ShaderBuilderBinding {
+        property: "binormal"
+        defaultValue: Qt.vector3d(1.0, 0.0, 0.0)
+    }
 
     name: "normalmap"
     type: "vec3"
-    result: "normalMap($(normal, vec3), tangentMatrix[0], tangentMatrix[1], $(color, vec3), modelNormalMatrix)"
+    result: "normalMap($(normal, vec3), $(tangent, vec3), $(binormal, vec3), $(color, vec3), modelNormalMatrix)"
     header: "
 vec3 normalMap(vec3 normal, vec3 tangent, vec3 binormal, vec3 color, mat3 modelNormalMatrix) {
     vec3 mcolor = 2.0 * color - vec3(1.0, 1.0, 1.0);
