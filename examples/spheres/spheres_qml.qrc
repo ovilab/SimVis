@@ -1,18 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>SpheresEntity.qml</file>
-        <file>instanced.frag</file>
-        <file>instanced.geom</file>
-        <file>instanced.vert</file>
         <file>SpheresScene.qml</file>
-        <file>Chest.obj</file>
-        <file>diffuse.webp</file>
-        <file>regular.frag</file>
-        <file>regular.vert</file>
-        <file>StandardFrameGraph.qml</file>
-        <file>Chest.qml</file>
-        <file>spheres.frag</file>
-        <file>spheres.vert</file>
+        <file>main_spheres.qml</file>
     </qresource>
 </RCC>

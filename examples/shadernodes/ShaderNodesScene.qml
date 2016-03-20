@@ -10,14 +10,6 @@ import QtQuick.Scene3D 2.0
 
 Scene3D {
     id: scene
-    property real bumpMix: 0.5
-    property real colorMix: 0.0
-    property real displacementMix: 0.0
-    property real blurMix: 0.0
-    property real scaleMix: 0.0
-    property real detailMix: 0.0
-    property real bumpDistance: 0.0
-    property real bumpStrength: 0.0
     aspects: "input"
     Entity {
         Camera {

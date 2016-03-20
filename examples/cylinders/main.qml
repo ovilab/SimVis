@@ -35,12 +35,6 @@ ApplicationWindow {
                 position: cylinders.shader.position
                 color: Qt.vector3d(0.6, 0.8, 1.0)
                 specularIntensity: 1.0
-                normal: Simplex {
-                    normal: cylinders.shader.normal
-                    position: cylinders.shader.position
-                    scale: 8.0
-                    strength: 0.2
-                }
 
                 lights: ShaderGroup {
                     Light {

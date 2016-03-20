@@ -1,6 +1,6 @@
 #include "cylindersimulator.h"
 #include <QDebug>
-#include <SimVis/Spheres>
+#include <SimVis/SphereData>
 
 CylinderSimulator::CylinderSimulator()
 {

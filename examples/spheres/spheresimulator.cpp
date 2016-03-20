@@ -1,18 +1,18 @@
-#include "spheressimulator.h"
+#include "spheresimulator.h"
 #include <QDebug>
-#include <SimVis/Spheres>
-MySimulator::MySimulator(QNode *parent)
+#include <SimVis/SphereData>
+SphereSimulator::SphereSimulator(QNode *parent)
     : Simulator(parent)
     , m_sphereData(new SphereData(this))
 {
 }
 
-double MySimulator::dt() const
+double SphereSimulator::dt() const
 {
     return m_dt;
 }
 
-void MySimulator::setDt(double dt)
+void SphereSimulator::setDt(double dt)
 {
     if (m_dt == dt)
         return;
@@ -21,7 +21,7 @@ void MySimulator::setDt(double dt)
     emit dtChanged(dt);
 }
 
-SimulatorWorker *MySimulator::createWorker()
+SimulatorWorker *SphereSimulator::createWorker()
 {
     return new MyWorker();
 }
@@ -46,7 +46,7 @@ MyWorker::MyWorker()
 
 void MyWorker::synchronizeSimulator(Simulator *simulator)
 {
-    MySimulator *mySimulator = qobject_cast<MySimulator*>(simulator);
+    SphereSimulator *mySimulator = qobject_cast<SphereSimulator*>(simulator);
     if(mySimulator) {
         // Synchronize data between QML thread and computing thread (MySimulator is on QML, MyWorker is computing thread).
         // This is for instance data from user through GUI (sliders, buttons, text fields etc)

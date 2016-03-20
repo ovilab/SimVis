@@ -6,6 +6,6 @@ SUBDIRS += \
 #    functionsurface \
 #    triangles \
 #    neuron \
-#    cylinders
+    cylinders
 
 CONFIG += ordered

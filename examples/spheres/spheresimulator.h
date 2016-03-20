@@ -8,7 +8,7 @@
 
 #include <Qt3DRender/QBuffer>
 
-#include "spheredata.h"
+#include <SimVis/SphereData>
 
 class MyWorker : public SimulatorWorker
 {
@@ -27,14 +27,14 @@ private:
     QElapsedTimer m_timer;
 };
 
-class MySimulator : public Simulator
+class SphereSimulator : public Simulator
 {
     Q_OBJECT
     Q_PROPERTY(double dt READ dt WRITE setDt NOTIFY dtChanged)
     Q_PROPERTY(SphereData* sphereData READ sphereData CONSTANT)
 
 public:
-    MySimulator(QNode *parent = 0);
+    SphereSimulator(QNode *parent = 0);
 
     double dt() const;
     SphereData* sphereData()
@@ -55,8 +55,7 @@ private:
     double m_dt = 0.05;
     QScopedPointer<SphereData> m_sphereData;
 
-    QT3D_CLONEABLE(MySimulator)
-
+    QT3D_CLONEABLE(SphereSimulator)
 };
 
 #endif // MYSIMULATOR_H

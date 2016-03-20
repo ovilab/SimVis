@@ -28,6 +28,8 @@ public:
 
 protected:
     virtual SimulatorWorker *createWorker();
+
+    QT3D_CLONEABLE(CylinderSimulator)
 };
 
 #endif // CylinderSimulator_H
