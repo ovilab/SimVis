@@ -80,8 +80,13 @@ Scene3D {
                 PlaneMesh {
                     width: 10
                     height: 10
+                    meshResolution: Qt.size(20, 20)
                 },
                 ShaderBuilderMaterial {
+                    vertexPosition: Displacement {
+                        vector: Simplex {}
+                        strength: 0.2
+                    }
                     fragmentColor: StandardMaterial {
                         normal: NormalMap {
                             color: ImageTexture {
