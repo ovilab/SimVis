@@ -6,10 +6,10 @@ ShaderNode {
     property var ambientColor: "black"
     property var diffuseColor: color
     property var specularColor: color
-    property var ambientIntensity: 0.04
+    property var ambientIntensity: 1.0
     property var diffuseIntensity: 1.0
-    property var specularIntensity: 0.4
-    property var hardness: 10.0
+    property var specularIntensity: 1.0
+    property var hardness: 1.0
 
     property var normal: ShaderBuilderBinding {
         property: "normal"
@@ -31,8 +31,8 @@ ShaderNode {
         for(var i in lights.nodes) {
             output += "$this += standardMaterialLight($lights[" + i + "], $(normal, vec3), $(position, vec3), eyePosition,\n"
             output += "             $(ambientColor, vec3), $(diffuseColor, vec3), $(specularColor, vec3),\n"
-            output += "             $(ambientIntensity, float), $(diffuseIntensity, float), $(specularIntensity, float),\n"
-            output += "             $(hardness, float));\n"
+            output += "             0.04 * $(ambientIntensity, float), $(diffuseIntensity, float), 0.01 * $(specularIntensity, float),\n"
+            output += "             150.0 * $(hardness, float));\n"
         }
         return output
     }
