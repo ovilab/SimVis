@@ -38,5 +38,13 @@
         <file>renderables/marchingcubes/marchingcubes.fsh</file>
         <file>render/shaders/spheres.frag</file>
         <file>render/shaders/spheres.vert</file>
+        <file>render/shaders/cylinders.frag</file>
+        <file>render/shaders/cylinders.geom</file>
+        <file>render/shaders/cylinders.vert</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>render/shaders/cylinders.frag</file>
+        <file>render/shaders/cylinders.geom</file>
+        <file>render/shaders/cylinders.vert</file>
     </qresource>
 </RCC>

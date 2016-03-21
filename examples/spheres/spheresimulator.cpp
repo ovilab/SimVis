@@ -23,10 +23,10 @@ void SphereSimulator::setDt(double dt)
 
 SimulatorWorker *SphereSimulator::createWorker()
 {
-    return new MyWorker();
+    return new SphereWorker();
 }
 
-MyWorker::MyWorker()
+SphereWorker::SphereWorker()
 {
     m_positions.resize(100000);
     m_velocities.resize(m_positions.size());
@@ -44,7 +44,7 @@ MyWorker::MyWorker()
     }
 }
 
-void MyWorker::synchronizeSimulator(Simulator *simulator)
+void SphereWorker::synchronizeSimulator(Simulator *simulator)
 {
     SphereSimulator *mySimulator = qobject_cast<SphereSimulator*>(simulator);
     if(mySimulator) {
@@ -56,12 +56,12 @@ void MyWorker::synchronizeSimulator(Simulator *simulator)
     }
 }
 
-void MyWorker::synchronizeRenderer(Renderable *renderableObject)
+void SphereWorker::synchronizeRenderer(Renderable *renderableObject)
 {
 
 }
 
-void MyWorker::work()
+void SphereWorker::work()
 {
     for(int i=0; i<m_positions.size(); i++) {
         float ax = ((2.0*rand() / double(RAND_MAX))-1.0);

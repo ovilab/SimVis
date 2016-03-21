@@ -2,7 +2,6 @@
 #include "simulator.h"
 #include "../renderables/billboards/billboards.h"
 #include "../renderables/points/points.h"
-#include "../renderables/cylinders/cylinders.h"
 #include "../renderables/lines/lines.h"
 #include "../generators/marchingcubes/marchingcubes.h"
 #include "../renderables/skybox/skybox.h"
@@ -26,6 +25,7 @@
 #include "../shadernodes/shaderbuilderbinding.h"
 #include "../render/geometry/pointgeometry.h"
 #include "../render/geometry/spheredata.h"
+#include "../render/geometry/cylinderdata.h"
 
 #include <qqml.h>
 #include <QQmlEngine>
@@ -52,7 +52,6 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<NoiseViewer>("SimVis", 1, 0, "NoiseViewer");
     qmlRegisterType<PeriodicCopies>("SimVis", 1, 0, "PeriodicCopies");
     qmlRegisterType<Slice>("SimVis", 1, 0, "Slice");
-    qmlRegisterType<Cylinders>("SimVis", 1, 0, "AbstractCylinders");
     qmlRegisterType<Lines>("SimVis", 1, 0, "Lines");
     qmlRegisterType<ShaderNode>("SimVis", 1, 0, "ShaderNode");
     qmlRegisterType<ShaderBuilder>("SimVis", 1, 0, "ShaderBuilder");
@@ -62,6 +61,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<MarchingCubesGS>("SimVis", 1, 0, "AbstractMarchingCubes");
     qmlRegisterType<PointGeometry>("SimVis", 1, 0, "PointGeometry");
     qmlRegisterType<SphereData>("SimVis", 1, 0, "SphereData");
+    qmlRegisterType<CylinderData>("SimVis", 1, 0, "CylinderData");
     qmlRegisterType<TriangleCollection>("SimVis", 1, 0, "AbstractTriangleCollection");
 }
 

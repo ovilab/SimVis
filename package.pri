@@ -48,7 +48,8 @@ SOURCES += \
     $$PWD/src/render/geometry/spheredata.cpp \
     $$PWD/src/core/camera.cpp \
     $$PWD/src/core/cameralens.cpp \
-    $$PWD/src/core/visualizer.cpp
+    $$PWD/src/core/visualizer.cpp \
+    $$PWD/src/render/geometry/cylinderdata.cpp
 
 HEADERS += \
     $$PWD/src/core/navigator.h \
@@ -98,17 +99,6 @@ HEADERS += \
     $$PWD/src/render/geometry/spheredata.h \
     $$PWD/src/SimVis/SphereData \
     $$PWD/src/core/camera.h \
-    $$PWD/src/core/cameralens.h
-
-HEADERS +=
-
-SOURCES +=
-
-HEADERS +=
-
-SOURCES +=
-
-
-HEADERS +=
-
-SOURCES +=
+    $$PWD/src/core/cameralens.h \
+    $$PWD/src/render/geometry/cylinderdata.h \
+    $$PWD/src/SimVis/CylinderData

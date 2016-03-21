@@ -75,10 +75,10 @@ Scene3D {
                     meshResolution: Qt.size(20, 20)
                 },
                 ShaderBuilderMaterial {
-                    vertexPosition: Displacement {
-                        vector: Simplex {}
-                        strength: 0.2
-                    }
+//                    vertexPosition: Displacement {
+//                        vector: Simplex {}
+//                        strength: 0.2
+//                    }
                     fragmentColor: StandardMaterial {
                         normal: NormalMap {
                             color: ImageTexture {

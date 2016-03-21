@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
+        <file>main_cylinders.qml</file>
+        <file>CylinderScene.qml</file>
     </qresource>
 </RCC>

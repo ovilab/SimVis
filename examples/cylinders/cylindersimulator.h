@@ -1,8 +1,9 @@
-#ifndef CylinderSimulator_H
-#define CylinderSimulator_H
+#ifndef CYLINDERSIMULATOR_H
+#define CYLINDERSIMULATOR_H
 
 #include <SimVis/Simulator>
-#include <SimVis/Cylinders>
+#include <SimVis/CylinderData>
+#include <SimVis/SphereData>
 
 #include <QVector>
 #include <QVector3D>
@@ -23,13 +24,27 @@ public:
 class CylinderSimulator : public Simulator
 {
     Q_OBJECT
+    Q_PROPERTY(CylinderData* cylinderData READ cylinderData CONSTANT)
+    Q_PROPERTY(SphereData* sphereData READ sphereData CONSTANT)
 public:
-    CylinderSimulator();
+    CylinderSimulator(QNode *parent = nullptr);
+
+    CylinderData *cylinderData() {
+        return m_cylinderData.data();
+    }
+
+    SphereData *sphereData() {
+        return m_sphereData.data();
+    }
 
 protected:
     virtual SimulatorWorker *createWorker();
 
+private:
+    QScopedPointer<CylinderData> m_cylinderData;
+    QScopedPointer<SphereData> m_sphereData;
+
     QT3D_CLONEABLE(CylinderSimulator)
 };
 
-#endif // CylinderSimulator_H
+#endif // CYLINDERSIMULATOR_H

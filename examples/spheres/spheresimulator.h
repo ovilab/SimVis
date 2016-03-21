@@ -10,11 +10,11 @@
 
 #include <SimVis/SphereData>
 
-class MyWorker : public SimulatorWorker
+class SphereWorker : public SimulatorWorker
 {
     Q_OBJECT
 public:
-    MyWorker();
+    SphereWorker();
 
 private:
     // SimulatorWorker interface
