@@ -26,8 +26,8 @@ out mat3 cylinderBasis;
 out vec3 cylinderDirection;
 out mat3 cylinderWorldBasis;
 
-out vec3 worldPerpendicular;
-out vec3 cylinderPerpendicular;
+out vec3 perpendicular;
+out vec3 biperpendicular;
 
 uniform mat4 mvp;
 uniform mat4 modelMatrix;
@@ -59,7 +59,10 @@ void main(void)
     vec3 delta = v2 - v1;
     vec3 deltaNormalized = normalize(delta);
 
-    worldPerpendicular = normalize(makePerpendicular(deltaNormalized));
+    // define a unique perpendicular to the axis that can be used by
+    // the texture coordinate in the fragment shader
+    perpendicular = normalize(makePerpendicular(deltaNormalized));
+    biperpendicular = normalize(cross(delta, perpendicular));
 
     radiusA = vs_radius1;
     radiusB = vs_radius2;
@@ -87,8 +90,6 @@ void main(void)
     cylinderWorldBasis = mat3(normalize(outward), // U
                               normalize(right), // V
                               normalize(deltaNormalized)); // axis
-
-    cylinderPerpendicular = inverse(cylinderWorldBasis) * worldPerpendicular;
 
     vec4 mvv1 = modelView * vec4(v1, 1.0);
     vec4 mvv2 = modelView * vec4(v2, 1.0);

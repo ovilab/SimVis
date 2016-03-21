@@ -1,5 +1,6 @@
 import SimVis 1.0
 import SimVis.ShaderNodes 1.0
+import SimVis.ShaderNodes 1.0 as Nodes
 
 import Qt3D.Core 2.0
 import Qt3D.Render 2.0

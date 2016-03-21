@@ -20,8 +20,8 @@ in mat3 cylinderWorldBasis;
 in vec3 v1;
 in vec3 v2;
 
-in vec3 worldPerpendicular;
-in vec3 cylinderPerpendicular;
+in vec3 perpendicular;
+in vec3 biperpendicular;
 
 out vec4 fragColor;
 
@@ -161,19 +161,14 @@ void main(void) {
     // use the found solution to produce the final version
     // of the point in cylinder space
     vec3 cylPoint = E + D * dist;
-    // TODO verify that this gives the correct position
     vec3 cylPointWorld = vs_vertex1Position + cylinderWorldBasis * cylPoint;
 
-    float pi = 3.1415926535897932384626433832795;
-
-    float z = cylPoint.z / l;
+    // use the perpendicular vector to define the texture coordinate
     vec3 xyPoint = vec3(cylPoint.x, cylPoint.y, 0.0);
-    float x = dot(xyPoint, cylinderPerpendicular);
-    vec3 opposite = cross(vec3(0, 0, 1), cylinderPerpendicular);
-    float y = dot(xyPoint, opposite);
-
+    vec3 xyPointWorld = cylinderWorldBasis * xyPoint;
+    float x = dot(xyPointWorld, perpendicular);
+    float y = dot(xyPointWorld, biperpendicular);
     float radius = r1 + rd * cylPoint.z / l; // interpolates from r1 to t2 by z
-
     vec2 texCoord = vec2(0.5 + x / (2.0*radius), 0.5 + y / (2.0*radius));
 
     if(isSideSolution) {
@@ -189,11 +184,12 @@ void main(void) {
         normal = cylinderWorldBasis * cylNormal;
         normal = normalize(normal);
 
-        texCoord = vec2(z, atan(y, x) / (2.0 * pi));
+        float pi = 3.1415926535897932384626433832795;
+        float z = cylPoint.z / l;
+        texCoord = vec2(z, 0.5 + atan(y, x) / (2.0 * pi));
     }
 
     // calculate texture coordinate
-
     vec3 position = cylPointWorld;
 
 #pragma shadernodes body
