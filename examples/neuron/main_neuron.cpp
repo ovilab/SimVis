@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QtQml>
+#include <QQuickView>
 
 #include "neuronreader.h"
 
@@ -9,12 +10,17 @@
 int main(int argc, char *argv[])
 {
     qmlRegisterType<NeuronReader>("NeuroML", 1, 0, "NeuronReader");
-//    qmlRegisterType<NeuronRenderable>("NeuroML", 1, 0, "Neuron");
-
     QApplication app(argc, argv);
-    QQmlApplicationEngine engine;
-    qpm::init(app, engine);
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+
+    QQuickView view;
+    qpm::init(app, *view.engine());
+    QSurfaceFormat format;
+    format.setMajorVersion(4);
+    format.setMinorVersion(3);
+    format.setProfile(QSurfaceFormat::CoreProfile);
+    view.setFormat(format);
+    view.setSource(QUrl("qrc:/main_neuron.qml"));
+    view.show();
 
     return app.exec();
 }

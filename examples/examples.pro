@@ -5,7 +5,7 @@ SUBDIRS += \
 #    marchingcubes \
 #    functionsurface \
 #    triangles \
-#    neuron \
+    neuron \
     cylinders
 
 CONFIG += ordered

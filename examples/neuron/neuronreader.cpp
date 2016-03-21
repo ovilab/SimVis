@@ -14,28 +14,11 @@ NeuronWorker::NeuronWorker()
 
 void NeuronWorker::synchronizeSimulator(Simulator *simulator)
 {
-    NeuronReader *sim = static_cast<NeuronReader *>(simulator);
-    if(sim->m_segmentsAreDirty) {
-        m_segments = sim->m_segments;
-        m_cylinders = sim->m_cylinders;
-        m_spheres = sim->m_spheres;
-        sim->m_segmentsAreDirty = false;
-    }
+
 }
 
 void NeuronWorker::synchronizeRenderer(Renderable *renderable)
 {
-    Cylinders *cylinders = qobject_cast<Cylinders*>(renderable);
-    if(cylinders) {
-        cylinders->setCylinders(m_cylinders);
-        cylinders->setDirty(true);
-    }
-
-    Spheres *spheres = qobject_cast<Spheres*>(renderable);
-    if(spheres) {
-        spheres->setPositions(m_spheres);
-        spheres->triggerDirtyData();
-    }
 }
 
 void NeuronWorker::work()
@@ -48,8 +31,9 @@ void NeuronWorker::reset()
 }
 
 
-NeuronReader::NeuronReader(QQuickItem *parent)
+NeuronReader::NeuronReader(QNode *parent)
     : Simulator(parent)
+    , m_cylinderData(new CylinderData(this))
 {
 
 }
@@ -155,6 +139,8 @@ void NeuronReader::readFile()
 //    cylinder.radius2 = 1.2;
 
 //    m_cylinders.push_back(cylinder);
+
+    m_cylinderData->setData(m_cylinders);
 
 
     qDebug() << "Done reading";

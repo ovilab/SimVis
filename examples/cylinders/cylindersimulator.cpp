@@ -4,7 +4,6 @@
 CylinderSimulator::CylinderSimulator(QNode *parent)
     : Simulator(parent)
     , m_cylinderData(new CylinderData(this))
-    , m_sphereData(new SphereData(this))
 {
 
 }
