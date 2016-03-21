@@ -16,7 +16,6 @@ Entity {
     property alias position: _fragmentBuilder.position
 
     property CylinderData cylinderData
-    property SphereData sphereData
     property Camera camera
     Material {
         id: material
@@ -38,32 +37,26 @@ Entity {
             techniques: Technique {
                 renderPasses: RenderPass {
                     bindings: [
-                                                ParameterMapping {
-                                                    parameterName: "vertex1Position"
-                                                    shaderVariableName: "pos"
-                                                    bindingType: ParameterMapping.Attribute
-                                                }
-                        //                        ParameterMapping {
-                        //                            parameterName: "vertex2Position"
-                        //                            shaderVariableName: "vertex2Position"
-                        //                            bindingType: ParameterMapping.Attribute
-                        //                        },
-                        //                        ParameterMapping {
-                        //                            parameterName: "radius1"
-                        //                            shaderVariableName: "vertex1Position"
-                        //                            bindingType: ParameterMapping.Attribute
-                        //                        },
-                        //                        ParameterMapping {
-                        //                            parameterName: "radius2"
-                        //                            shaderVariableName: "vertex1Position"
-                        //                            bindingType: ParameterMapping.Attribute
-                        //                        }
-//                        ParameterMapping {
-//                            parameterName: "pos"
-//                            shaderVariableName: "pos"
-//                            bindingType: ParameterMapping.Attribute
-//                        },
-                        ,
+                        ParameterMapping {
+                            parameterName: "vertex1Position"
+                            shaderVariableName: "vertex1Position"
+                            bindingType: ParameterMapping.Attribute
+                        },
+                        ParameterMapping {
+                            parameterName: "vertex2Position"
+                            shaderVariableName: "vertex2Position"
+                            bindingType: ParameterMapping.Attribute
+                        },
+                        ParameterMapping {
+                            parameterName: "radius1"
+                            shaderVariableName: "radius1"
+                            bindingType: ParameterMapping.Attribute
+                        },
+                        ParameterMapping {
+                            parameterName: "radius2"
+                            shaderVariableName: "radius2"
+                            bindingType: ParameterMapping.Attribute
+                        },
                         ParameterMapping {
                             parameterName: "vertexId"
                             shaderVariableName: "vertexId"
@@ -71,15 +64,8 @@ Entity {
                         }
                     ]
                     shaderProgram: ShaderProgram {
-
-                        //TODO use spheres and modify to accept multiple attributes
-                        vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/spheres.vert")
-//                                                geometryShaderCode: loadSource("qrc:/SimVis/render/shaders/cylinders.geom")
+                        vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/cylinders.vert")
                         fragmentShaderCode: _fragmentBuilder.finalShader
-
-                        onFragmentShaderCodeChanged: {
-                            // console.log(fragmentShaderCode)
-                        }
                     }
                     ShaderBuilder {
                         id: _fragmentBuilder
@@ -105,31 +91,15 @@ Entity {
                             name: "texCoord"
                             result: "texCoord"
                         }
-                        property ShaderNode color: ShaderNode {
-                            type: "vec3"
-                            name: "color"
-                            result: "color"
-                        }
-                        property ShaderNode sphereId: ShaderNode {
-                            type: "float"
-                            name: "sphereId"
-                            result: "sphereId"
-                        }
 
-                        sourceFile: "qrc:/SimVis/render/shaders/spheres.frag"
+                        sourceFile: "qrc:/SimVis/render/shaders/cylinders.frag"
 
                         outputs: [
                             ShaderOutput {
                                 id: _fragmentColor
                                 type: "vec4"
                                 name: "fragColor"
-                                value: StandardMaterial {
-                                    position: _fragmentBuilder.position
-                                    normal: _fragmentBuilder.normal
-                                    lights: ShaderGroup {
-                                        Nodes.Light {}
-                                    }
-                                }
+                                value: StandardMaterial {}
                             }
                         ]
                     }
@@ -145,53 +115,13 @@ Entity {
 
         geometry: PointGeometry {
             attributes: [
-                //                Attribute {
-                //                    name: "vertex1Position"
-                //                    attributeType: Attribute.VertexAttribute
-                //                    dataType: Attribute.Float
-                //                    dataSize: 3
-                //                    byteOffset: 0
-                //                    byteStride: 3 + 3 + 1 + 1
-                //                    divisor: 1
-                //                    buffer: cylinderData.buffer
-                //                },
-                //                Attribute {
-                //                    name: "vertex2Position"
-                //                    attributeType: Attribute.VertexAttribute
-                //                    dataType: Attribute.Float
-                //                    dataSize: 3
-                //                    byteOffset: 3
-                //                    byteStride: 3 + 3 + 1 + 1
-                //                    divisor: 1
-                //                    buffer: cylinderData.buffer
-                //                },
-                //                Attribute {
-                //                    name: "radius1"
-                //                    attributeType: Attribute.VertexAttribute
-                //                    dataType: Attribute.Float
-                //                    dataSize: 1
-                //                    byteOffset: 6
-                //                    byteStride: 3 + 3 + 1 + 1
-                //                    divisor: 1
-                //                    buffer: cylinderData.buffer
-                //                },
-                //                Attribute {
-                //                    name: "radius2"
-                //                    attributeType: Attribute.VertexAttribute
-                //                    dataType: Attribute.Float
-                //                    dataSize: 1
-                //                    byteOffset: 7
-                //                    byteStride: 3 + 3 + 1 + 1
-                //                    divisor: 1
-                //                    buffer: cylinderData.buffer
-                //                }
                 Attribute {
                     name: "vertex1Position"
                     attributeType: Attribute.VertexAttribute
                     dataType: Attribute.Float
                     dataSize: 3
-//                    byteOffset: 7
-                    byteStride: 3 + 3 + 1 + 1
+                    byteOffset: 0
+                    byteStride: (3 + 3 + 1 + 1) * 4
                     divisor: 1
                     buffer: cylinderData.buffer
                 },
@@ -200,8 +130,28 @@ Entity {
                     attributeType: Attribute.VertexAttribute
                     dataType: Attribute.Float
                     dataSize: 3
-//                    byteOffset: 7
-                    byteStride: 3 + 3 + 1 + 1
+                    byteOffset: 3 * 4
+                    byteStride: (3 + 3 + 1 + 1) * 4
+                    divisor: 1
+                    buffer: cylinderData.buffer
+                },
+                Attribute {
+                    name: "radius1"
+                    attributeType: Attribute.VertexAttribute
+                    dataType: Attribute.Float
+                    dataSize: 1
+                    byteOffset: 6 * 4
+                    byteStride: (3 + 3 + 1 + 1) * 4
+                    divisor: 1
+                    buffer: cylinderData.buffer
+                },
+                Attribute {
+                    name: "radius2"
+                    attributeType: Attribute.VertexAttribute
+                    dataType: Attribute.Float
+                    dataSize: 1
+                    byteOffset: 7 * 4
+                    byteStride: (3 + 3 + 1 + 1) * 4
                     divisor: 1
                     buffer: cylinderData.buffer
                 }

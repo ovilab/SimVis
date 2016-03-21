@@ -43,10 +43,6 @@ void CylinderWorker::synchronizeSimulator(Simulator *simulator)
         // Synchronize data between QML thread and computing thread (CylinderSimulator is on QML, CylinderWorker is computing thread).
         // This is for instance data from user through GUI (sliders, buttons, text fields etc)
         cylinderSimulator->cylinderData()->setData(m_cylinders);
-
-        QVector<QVector3D> test = {{1,2,3}, {2,2,3}};
-
-        cylinderSimulator->sphereData()->setPositions(test);
     }
 }
 

@@ -7,5 +7,6 @@ Item {
 
     CylinderScene {
         anchors.fill: parent
+        focus: true
     }
 }

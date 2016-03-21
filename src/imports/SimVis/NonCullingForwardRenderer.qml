@@ -11,10 +11,11 @@ TechniqueFilter {
             value: "forward"
         }
     ]
+
     Viewport {
         id: viewport
         rect: Qt.rect(0.0, 0.0, 1.0, 1.0)
-        clearColor: "white"
+        clearColor: "blue"
         CameraSelector {
             id : cameraSelector
             FrustumCulling {

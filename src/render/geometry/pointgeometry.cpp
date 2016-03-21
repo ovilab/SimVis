@@ -16,7 +16,7 @@ public:
 
     QByteArray operator ()() Q_DECL_OVERRIDE
     {
-        const int verticesCount = 4;
+        const int verticesCount = 6;
         // vec3 pos
         const quint32 vertexSize = (3+2+1) * sizeof(float);
 
@@ -60,6 +60,24 @@ public:
 
         *verticesPtr++ = 3.0;
 
+        *verticesPtr++ = 0.0;
+        *verticesPtr++ = 0.0;
+        *verticesPtr++ = 0.0;
+
+        *verticesPtr++ = 1.0;
+        *verticesPtr++ = 1.0;
+
+        *verticesPtr++ = 4.0;
+
+        *verticesPtr++ = 0.0;
+        *verticesPtr++ = 0.0;
+        *verticesPtr++ = 0.0;
+
+        *verticesPtr++ = 1.0;
+        *verticesPtr++ = 1.0;
+
+        *verticesPtr++ = 5.0;
+
         return verticesData;
     }
 
@@ -83,7 +101,7 @@ public:
 
     QByteArray operator ()() Q_DECL_OVERRIDE
     {
-        const int indexCount = 4;
+        const int indexCount = 6;
         const int indexSize = sizeof(quint16);
         QByteArray indicesBytes;
         indicesBytes.resize(indexCount * indexSize);
@@ -92,6 +110,8 @@ public:
         *indicesPtr++ = 1;
         *indicesPtr++ = 2;
         *indicesPtr++ = 3;
+        *indicesPtr++ = 4;
+        *indicesPtr++ = 5;
         return indicesBytes;
     }
 
@@ -117,8 +137,8 @@ void PointGeometry::init()
 
     const quint32 elementSize = (3+2+1);
     const quint32 stride = elementSize * sizeof(float);
-    const int vertexCount = 4;
-    const int indexCount = 4;
+    const int vertexCount = 6;
+    const int indexCount = 6;
 
     m_positionAttribute->setName(QAttribute::defaultPositionAttributeName());
     m_positionAttribute->setDataType(QAttribute::Float);

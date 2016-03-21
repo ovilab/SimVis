@@ -19,16 +19,18 @@ Scene3D {
         Cylinders {
             id: cylinders
             cylinderData: simulator.cylinderData
-            sphereData: simulator.sphereData
+            fragmentColor: StandardMaterial {
+                color: ImageTexture {
+                    source: "diffuse.webp"
+                }
+                normal: NormalMap {
+                    color: ImageTexture {
+                        source: "normal.webp"
+                    }
+                }
+                ambientIntensity: 10.0
+                hardness: 2.0
+            }
         }
     }
-
-//    Camera {
-//        id: camera
-//        nearPlane: 0.1
-//        farPlane: 5000.0
-//        position: Qt.vector3d(0.0, 0.0, -20.0)
-//        upVector: Qt.vector3d(0.0, -1.0, 0.0)
-//        viewCenter: Qt.vector3d(0.0, 0.0, 0.0)
-//    }
 }

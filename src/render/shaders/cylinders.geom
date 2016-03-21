@@ -31,6 +31,19 @@ uniform mat4 projectionMatrix;
 uniform vec3 eyePosition;
 
 void main(void) {
+    gl_Position = mvp*vec4(0.0, 0.0, 0.0, 1.0);
+    EmitVertex();
+
+    gl_Position = mvp*vec4(0.0, 1.0, 0.0, 1.0);
+    EmitVertex();
+
+    gl_Position = mvp*vec4(1.0, 0.0, 0.0, 1.0);
+    EmitVertex();
+
+    gl_Position = mvp*vec4(1.0, 1.0, 0.0, 1.0);
+    EmitVertex();
+    EndPrimitive();
+
     mat4 MV = modelViewMatrix;
     mat4 MVP = mvp;
     mat4 P = projectionMatrix;

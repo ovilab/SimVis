@@ -2,13 +2,15 @@
 
 #pragma shadernodes header
 
-in vec2 texCoord;
+in vec3 vs_vertex1Position;
+in vec3 vs_vertex2Position;
+
+in vec3 modelPosition;
 in vec3 modelViewPosition;
 in vec3 worldPosition;
 in vec3 base;
 in vec3 end;
 in vec3 color;
-//in float radius;
 in float radiusA;
 in float radiusB;
 in float da;
@@ -18,9 +20,14 @@ in mat3 cylinderWorldBasis;
 in vec3 v1;
 in vec3 v2;
 
+in vec3 worldPerpendicular;
+in vec3 cylinderPerpendicular;
+
 out vec4 fragColor;
 
 uniform vec3 eyePosition;
+uniform mat3 modelNormalMatrix;
+uniform mat3 modelViewNormal;
 
 float square(vec3 a) {
     return dot(a, a);
@@ -79,6 +86,7 @@ void main(void) {
     float d = b*b - 4.0*a*c;
     // if this is below zero, there is no solution
     // and we are outside cylinder
+
     if (d < 0.0) {
         //        fragcolor = vec4(0.2, 1.0, 0.2, 1.0);
         //        return;
@@ -108,6 +116,7 @@ void main(void) {
     vec3 normal;
     float dist = distSide;
 
+
     // first, test if the end cap planes are closer to the
     // screen than the solution to the cone equation
     // this is unlikely, but is necessary to ensure that we
@@ -122,6 +131,7 @@ void main(void) {
         isSideSolution = false;
         normal = worldAxis;
     }
+
     if(isSideSolution) {
         // we didn't find a cap plane that was closer,
         // so we check if the point on the side is outside the
@@ -151,7 +161,20 @@ void main(void) {
     // use the found solution to produce the final version
     // of the point in cylinder space
     vec3 cylPoint = E + D * dist;
-    vec3 cylPointWorld = cylinderWorldBasis * cylPoint;
+    // TODO verify that this gives the correct position
+    vec3 cylPointWorld = vs_vertex1Position + cylinderWorldBasis * cylPoint;
+
+    float pi = 3.1415926535897932384626433832795;
+
+    float z = cylPoint.z / l;
+    vec3 xyPoint = vec3(cylPoint.x, cylPoint.y, 0.0);
+    float x = dot(xyPoint, cylinderPerpendicular);
+    vec3 opposite = cross(vec3(0, 0, 1), cylinderPerpendicular);
+    float y = dot(xyPoint, opposite);
+
+    float radius = r1 + rd * cylPoint.z / l; // interpolates from r1 to t2 by z
+
+    vec2 texCoord = vec2(0.5 + x / (2.0*radius), 0.5 + y / (2.0*radius));
 
     if(isSideSolution) {
         // we didn't find a solution that returned one of the caps
@@ -165,9 +188,14 @@ void main(void) {
         // we transform this to real space by using our basis matrix
         normal = cylinderWorldBasis * cylNormal;
         normal = normalize(normal);
+
+        texCoord = vec2(z, atan(y, x) / (2.0 * pi));
     }
+
+    // calculate texture coordinate
 
     vec3 position = cylPointWorld;
 
 #pragma shadernodes body
+
 }
