@@ -2,6 +2,7 @@
 in highp vec3 normal;
 in highp vec3 color;
 in highp vec3 vertexPosition;
+uniform float alpha;
 out vec4 outColor;
 void main() {
     lowp float n = 1.0;
@@ -24,6 +25,6 @@ void main() {
     n = surface(vertexPosition); // From simplextexture.fsh
 #endif
 
-    outColor = vec4(light*n, 1.0);
+    outColor = vec4(light*n, alpha);
 }
 // END trianglecollection.fsh

@@ -12,6 +12,20 @@ RenderableRenderer *TriangleCollection::createRenderer()
     return new TriangleCollectionRenderer();
 }
 
+float TriangleCollection::alpha() const
+{
+    return m_alpha;
+}
+
+void TriangleCollection::setAlpha(float alpha)
+{
+    if (m_alpha == alpha)
+        return;
+
+    m_alpha = alpha;
+    emit alphaChanged(alpha);
+}
+
 void TriangleCollectionRenderer::beforeLinkProgram()
 {
     setShaderFromSourceFile(QOpenGLShader::Fragment, ":/org.compphys.SimVis/renderables/trianglecollection/trianglecollection.fsh");
@@ -30,6 +44,7 @@ void TriangleCollectionRenderer::synchronize(Renderable *renderable)
         uploadVBO(triangleCollection);
         triangleCollection->dirty = false;
     }
+    alpha = triangleCollection->alpha();
 }
 
 void TriangleCollectionRenderer::render()
@@ -50,6 +65,7 @@ void TriangleCollectionRenderer::render()
     // Offset for position
     quintptr offset = 0;
 
+    program().setUniformValue("alpha", alpha);
     // Tell OpenGL programmable pipeline how to locate vertex position data
     program().enableAttributeArray(positionLocation);
     glFunctions()->glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(TriangleCollectionVBOData), (const void *)offset);
@@ -69,9 +85,15 @@ void TriangleCollectionRenderer::render()
     glFunctions()->glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(TriangleCollectionVBOData), (const void *)offset);
 
     glFunctions()->glEnable(GL_DEPTH_TEST);
-    glFunctions()->glDepthMask(GL_TRUE);
+
+    glFunctions()->glDisable(GL_DEPTH_TEST);
+    glFunctions()->glDepthMask(GL_FALSE);
+
     glFunctions()->glEnable(GL_CULL_FACE);
+    // glFunctions()->glDisable(GL_CULL_FACE);
     glFunctions()->glCullFace(GL_FRONT);
+    glFunctions()->glEnable(GL_BLEND);
+    glFunctions()->glBlendFunc (GL_SRC_ALPHA, GL_ONE);
 
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
     program().setUniformValue("normalVectorSign", -1.0f);

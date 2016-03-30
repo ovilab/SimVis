@@ -26,11 +26,19 @@ namespace SimVis {
 class TriangleCollection : public Renderable
 {
     Q_OBJECT
+    Q_PROPERTY(float alpha READ alpha WRITE setAlpha NOTIFY alphaChanged)
+    float m_alpha = 1.0;
+
 public:
     TriangleCollection();
     bool dirty = true;
     QVector<SimVis::TriangleCollectionVBOData> data;
     virtual RenderableRenderer *createRenderer();
+    float alpha() const;
+public slots:
+    void setAlpha(float alpha);
+signals:
+    void alphaChanged(float alpha);
 };
 
 
@@ -42,6 +50,7 @@ public:
 private:
     bool m_isInitialized = false;
     int numberOfTriangles = 0;
+    float alpha = 1.0;
     virtual void beforeLinkProgram();
     virtual void synchronize(Renderable *renderable);
     virtual void render();
