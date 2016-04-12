@@ -15,7 +15,7 @@ Scene3D {
     Visualizer {
         NeuronReader {
             id: simulator
-            source: "test.xml"
+            source: "L5PC.cell.nml"
         }
 
         Cylinders {
@@ -25,7 +25,7 @@ Scene3D {
                 color: ImageTexture {
                     source: "diffuse.webp"
                     vector: Multiply {
-                        value1: 0.1
+                        value1: 2.0
                         value2: cylinders.fragmentBuilder.position
                     }
                 }
@@ -33,7 +33,7 @@ Scene3D {
                     color: ImageTexture {
                         source: "normal.webp"
                         vector: Multiply {
-                            value1: 0.1
+                            value1: 2.0
                             value2: cylinders.fragmentBuilder.position
                         }
                     }
