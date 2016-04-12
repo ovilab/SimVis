@@ -75,19 +75,16 @@ Scene3D {
                     meshResolution: Qt.size(20, 20)
                 },
                 ShaderBuilderMaterial {
-//                    vertexPosition: Displacement {
-//                        vector: Simplex {}
-//                        strength: 0.2
-//                    }
                     fragmentColor: StandardMaterial {
                         normal: NormalMap {
                             color: ImageTexture {
                                 source: "normal.webp"
                             }
                         }
-                        diffuseColor: ImageTexture {
+                        color: ImageTexture {
                             source: "diffuse.webp"
                         }
+                        specularColor: "white"
                         lights: ShaderGroup {
                             Nodes.Light {
                                 position: Qt.vector3d(0, 10, 0)

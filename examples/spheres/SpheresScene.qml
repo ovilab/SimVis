@@ -23,8 +23,8 @@ Scene3D {
             camera: visualizer.camera
             sphereData: simulator.sphereData
             fragmentColor: StandardMaterial {
-                diffuseColor: "steelblue"
-                hardness: 0.5
+                color: "steelblue"
+                hardness: 0.05
                 position: spheresEntity.fragmentBuilder.position
                 normal: Add {
                     value1: spheresEntity.normal
