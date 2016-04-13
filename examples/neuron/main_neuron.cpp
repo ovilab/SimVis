@@ -31,5 +31,6 @@ int main(int argc, char *argv[])
     view.show();
     qDebug() << "Exec app";
 
+
     return app.exec();
 }

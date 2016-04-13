@@ -14,25 +14,16 @@ Entity {
     property alias fragmentBuilder: _fragmentBuilder
     property alias normal: _fragmentBuilder.normal
     property alias position: _fragmentBuilder.position
+    property alias transform: transform
 
     property CylinderData cylinderData
-    property Camera camera
+
+    Transform {
+        id: transform
+    }
+
     Material {
         id: material
-        parameters: [
-            Parameter {
-                name: "viewVector"
-                value: camera ? camera.viewVector.normalized() : Qt.vector3d(1.0, 0.0, 0.0)
-            },
-            Parameter {
-                name: "upVector"
-                value: camera ? camera.upVector.normalized() : Qt.vector3d(0.0, 1.0, 0.0)
-            },
-            Parameter {
-                name: "rightVector"
-                value: camera ? camera.viewVector.normalized().crossProduct(camera.upVector.normalized()) : Qt.vector3d(0.0, 0.0, 1.0)
-            }
-        ]
         effect: Effect {
             techniques: Technique {
                 renderPasses: RenderPass {
@@ -162,6 +153,7 @@ Entity {
 
     components: [
         cylindersMeshInstanced,
-        material
+        material,
+        transform
     ]
 }

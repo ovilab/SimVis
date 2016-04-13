@@ -11,8 +11,11 @@ import QtQuick.Scene3D 2.0
 import NeuroML 1.0
 
 Scene3D {
+    property alias transforma: cylinders.transform
     aspects: "input"
     Visualizer {
+        id: visualizer
+
         NeuronReader {
             id: simulator
             source: "L5PC.cell.nml"

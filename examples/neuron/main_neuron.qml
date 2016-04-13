@@ -6,6 +6,7 @@ Item {
     visible: true
 
     NeuronScene {
+        id: neuronScene
         anchors.fill: parent
         focus: true
     }
