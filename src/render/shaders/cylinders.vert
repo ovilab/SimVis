@@ -56,6 +56,9 @@ void main(void)
     vec3 v1 = vs_vertex1Position;
     vec3 v2 = vs_vertex2Position;
 
+    vec3 mv1 = (modelMatrix * vec4(v1, 1.0)).xyz;
+    vec3 mv2 = (modelMatrix * vec4(v2, 1.0)).xyz;
+
     vec3 delta = v2 - v1;
     vec3 deltaNormalized = normalize(delta);
 
@@ -69,7 +72,7 @@ void main(void)
 
     float rmax = max(radiusA, radiusB);
 
-    vec3 center = (v1 + v2) * 0.5;
+    vec3 center = (mv1 + mv2) * 0.5;
     vec3 cam_dir = (eyePosition - center);
 
     vec3 right = cross(cam_dir, deltaNormalized);
@@ -98,8 +101,8 @@ void main(void)
     base = mvv1.xyz / mvv1.w;
     end = mvv2.xyz / mvv2.w;
 
-    vec3 cameraToV1 = eyePosition - v1;
-    vec3 cameraToV2 = eyePosition - v2;
+    vec3 cameraToV1 = eyePosition - mv1;
+    vec3 cameraToV2 = eyePosition - mv2;
     float distanceToV1 = dot(cameraToV1, cameraToV1);
     float distanceToV2 = dot(cameraToV2, cameraToV2);
 
