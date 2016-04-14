@@ -48,7 +48,6 @@
 class UniformGridGeometry : public Qt3DRender::QGeometry
 {
     Q_OBJECT
-    Q_PROPERTY(int resolution READ resolution WRITE setResolution NOTIFY resolutionChanged)
 
 public:
     explicit UniformGridGeometry(QNode *parent = 0);
@@ -56,23 +55,14 @@ public:
     void updateVertices();
     void updateIndices();
     void init();
-    int resolution() const;
-
-public Q_SLOTS:
-    void setResolution(int resolution);
-
-Q_SIGNALS:
-    void resolutionChanged(int resolution);
-
-protected:
 
 private:
     Qt3DRender::QAttribute *m_positionAttribute = nullptr;
     Qt3DRender::QAttribute *m_deltaAttribute = nullptr;
     Qt3DRender::QBuffer *m_vertexBuffer = nullptr;
     class UniformGridVertexDataFunctor *m_dataFunctor = nullptr;
-    int m_resolution = 32;
-    int vertexCount() { return m_resolution*m_resolution*m_resolution; }
+    int m_nR, m_nPhi, m_nTheta;
+    int vertexCount() { return m_nR*m_nPhi*m_nTheta; }
 };
 
 #endif // UNIFORMGRIDGEOMETRY_H

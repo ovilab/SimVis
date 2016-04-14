@@ -31,25 +31,25 @@ float translate(float x) {
 
 class UniformGridVertexDataFunctor : public Qt3DRender::QBufferFunctor
 {
-    int m_vertexCount = 0;
+    int m_nR, m_nPhi, m_nTheta;
 public:
-    UniformGridVertexDataFunctor(int vertexCount) { m_vertexCount = vertexCount; }
-    void setVertexCount(int vertexCount) { m_vertexCount = vertexCount; }
+    UniformGridVertexDataFunctor(int inx, int ny, int nz) { m_nR = nz; m_nPhi = ny; m_nTheta = nz; }
 
     QByteArray operator ()() Q_DECL_OVERRIDE
     {
         const quint32 vertexSize = (3+3)*sizeof(float);
         QByteArray verticesData;
-        verticesData.resize(vertexSize*m_vertexCount);
+        int vertexCount = m_nR*m_nPhi*m_nTheta;
+        verticesData.resize(vertexSize*vertexCount);
         float *verticesPtr = reinterpret_cast<float*>(verticesData.data());
 
-        for(int i=0; i<m_vertexCount; i++) {
+        for(int i=0; i<vertexCount; i++) {
             *verticesPtr++ = i;
             *verticesPtr++ = i;
             *verticesPtr++ = i;
-            *verticesPtr++ = i;
-            *verticesPtr++ = i;
-            *verticesPtr++ = i;
+            *verticesPtr++ = m_nR;
+            *verticesPtr++ = m_nPhi;
+            *verticesPtr++ = m_nTheta;
         }
 
         return verticesData;
@@ -88,7 +88,7 @@ void UniformGridGeometry::init()
     m_deltaAttribute->setBuffer(m_vertexBuffer);
     m_deltaAttribute->setByteStride(stride);
 
-    m_dataFunctor = new UniformGridVertexDataFunctor(vertexCount());
+    m_dataFunctor = new UniformGridVertexDataFunctor(m_nR, m_nPhi, m_nTheta);
 
     m_positionAttribute->setCount(vertexCount());
     m_deltaAttribute->setCount(vertexCount());
@@ -101,6 +101,9 @@ void UniformGridGeometry::init()
 UniformGridGeometry::UniformGridGeometry(Qt3DCore::QNode *parent)
     : QGeometry(parent)
 {
+    m_nR = 32;
+    m_nPhi = 64;
+    m_nTheta = 16;
     init();
 }
 
@@ -115,18 +118,4 @@ void UniformGridGeometry::updateVertices()
 void UniformGridGeometry::updateIndices()
 {
     qWarning() << "UniformGridGeometry::updateIndices()";
-}
-
-int UniformGridGeometry::resolution() const
-{
-    return m_resolution;
-}
-
-void UniformGridGeometry::setResolution(int resolution)
-{
-    if (m_resolution == resolution)
-        return;
-
-    m_resolution = resolution;
-    emit resolutionChanged(resolution);
 }

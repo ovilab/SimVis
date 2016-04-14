@@ -82,10 +82,13 @@ vec3 translate(float r, float theta, float phi) {
 #define M_PI 3.1415926535897932384626433832795
 
 void main(void) {
+    int nR = int(vs_delta[0].x); // I'm using this to send nx ny nz for now
+    int nPhi = int(vs_delta[0].y);
+    int nTheta = int(vs_delta[0].z);
     int index = int(vs_position[0].x);
-    int i = index / (32*32);
-    int j = int(mod((index/32), 32));
-    int k = int(mod(index, 32));
+    int i = index / (nPhi*nTheta);
+    int j = int(mod((index/nTheta), nPhi));
+    int k = int(mod(index, nTheta));
 
     vec3 viewVector = vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2]);
     // vec3 viewVector = vec3(0.0, 0.0, 1.0);
@@ -94,11 +97,11 @@ void main(void) {
     float r0 = (i+1)*delta_r0;
     float r1 = (i+2)*delta_r1;
     float dr = r1-r0;
-    float phi0 = float(j) / 32 * 2 * M_PI;
-    float phi1 = float(j+1) / 32 * 2 * M_PI;
+    float phi0 = float(j) / nPhi * 2 * M_PI;
+    float phi1 = float(j+1) / nPhi * 2 * M_PI;
     float dphi = phi1-phi0;
-    float theta0 = -0.5*M_PI + float(k) / 32 * M_PI;
-    float theta1 = -0.5*M_PI + float(k+1) / 32 * M_PI;
+    float theta0 = -0.5*M_PI + float(k) / nTheta * M_PI;
+    float theta1 = -0.5*M_PI + float(k+1) / nTheta * M_PI;
     float dtheta = theta1-theta0;
 
     vec3 v_000 = viewVector + translate(r0,phi0,theta0);
