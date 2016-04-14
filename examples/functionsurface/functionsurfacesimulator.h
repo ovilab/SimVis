@@ -11,23 +11,18 @@ class MyWorker;
 class MySimulator : public Simulator
 {
     Q_OBJECT
-    Q_PROPERTY(MarchingCubes* marchingCubes READ marchingCubes WRITE setMarchingCubes NOTIFY marchingCubesChanged)
 
-public:
-    MarchingCubes* marchingCubes() const;
 
 public slots:
-    void setMarchingCubes(MarchingCubes* marchingCubes);
 
 signals:
-    void marchingCubesChanged(MarchingCubes* marchingCubes);
 
 protected:
     SimulatorWorker *createWorker();
 
 private:
     friend class MyWorker;
-    MarchingCubes* m_marchingCubes = nullptr;
+    QT3D_CLONEABLE(MySimulator)
 };
 
 class MyWorker : public QuickWorker
@@ -44,7 +39,6 @@ private:
     virtual void synchronizeSimulator(Simulator *simulator) override;
     virtual void work() override;
     virtual void synchronizeRenderer(Renderable *renderableObject) override;
-    MarchingCubesGenerator m_marchingCubesGenerator;
 };
 
 #endif // MARCHINGCUBESSIMULATOR_H

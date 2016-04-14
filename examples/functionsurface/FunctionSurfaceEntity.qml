@@ -15,47 +15,69 @@ Entity {
     property alias normal: _fragmentBuilder.normal
     property alias position: _fragmentBuilder.position
 
-    property SphereData sphereData
     property Camera camera
     Material {
         id: material
+
         parameters: [
             Parameter {
-                name: "viewVector"
-                value: camera ? camera.viewVector.normalized() : Qt.vector3d(1.0, 0.0, 0.0)
+                name: "triangleTable"
+                value: triangleTableTexture
             },
             Parameter {
-                name: "upVector"
-                value: camera ? camera.upVector.normalized() : Qt.vector3d(0.0, 1.0, 0.0)
+                name: "threshold"
+                value: 0.0
             },
             Parameter {
-                name: "rightVector"
-                value: camera ? camera.viewVector.normalized().crossProduct(camera.upVector.normalized()) : Qt.vector3d(0.0, 0.0, 1.0)
+                name: "scale"
+                value: 1.0
             }
+
         ]
+
         effect: Effect {
             techniques: Technique {
                 renderPasses: RenderPass {
-                    bindings: [
-                        ParameterMapping {
-                            parameterName: "pos"
-                            shaderVariableName: "pos"
-                            bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "vertexId"
-                            shaderVariableName: "vertexId"
-                            bindingType: ParameterMapping.Attribute
-                        }
-                    ]
                     shaderProgram: ShaderProgram {
-                        vertexShaderCode: loadSource("qrc:/spheres.vert")
+                        vertexShaderCode: loadSource("qrc:/SimVis/renderables/marchingcubes/marchingcubes.vsh")
+                        geometryShaderCode: _geometryBuilder.finalShader
+                        // geometryShaderCode: loadSource("qrc:/SimVis/renderables/marchingcubes/marchingcubes.gsh")
                         fragmentShaderCode: _fragmentBuilder.finalShader
 
                         onFragmentShaderCodeChanged: {
                             // console.log(fragmentShaderCode)
                         }
                     }
+
+                    ShaderBuilder {
+                        id: _geometryBuilder
+                        property ShaderNode position: ShaderNode {
+                            type: "vec3"
+                            name: "position"
+                            result: "position"
+                        }
+
+                        sourceFile: "qrc:/SimVis/renderables/marchingcubes/marchingcubes.gsh"
+                        shaderType: ShaderBuilder.Geometry
+
+                        outputs: [
+                            ShaderOutput {
+                                id: geometryEval
+                                type: "float"
+                                name: "shaderNodeResult"
+                                value: ShaderNode {
+                                    property var position: _geometryBuilder.position
+                                    name: "position"
+                                    type: "float"
+                                    // result: "sin(2.0 *0.1* $position.x - 0.1*0.1*$position.y*$position.z) + cos(2.0 * 0.1*$position.y) + sin(2.0 * 0.1*$position.z)*cos(2.0*0.1*$position.y);"
+                                    // result: "$position.y + sin($position.z) + sin($position.x);"
+                                    result: "$position.x;"
+                                    // result: "$position.x*$position.x + $position.y*$position.y + $position.z*$position.z;"
+                                }
+                            }
+                        ]
+                    }
+
                     ShaderBuilder {
                         id: _fragmentBuilder
 
@@ -80,18 +102,8 @@ Entity {
                             name: "texCoord"
                             result: "texCoord"
                         }
-                        property ShaderNode color: ShaderNode {
-                            type: "vec3"
-                            name: "color"
-                            result: "color"
-                        }
-                        property ShaderNode sphereId: ShaderNode {
-                            type: "float"
-                            name: "sphereId"
-                            result: "sphereId"
-                        }
 
-                        sourceFile: "qrc:/spheres.frag"
+                        sourceFile: "qrc:/SimVis/renderables/marchingcubes/marchingcubes.fsh"
 
                         outputs: [
                             ShaderOutput {
@@ -102,7 +114,9 @@ Entity {
                                     position: _fragmentBuilder.position
                                     normal: _fragmentBuilder.normal
                                     lights: ShaderGroup {
-                                        Nodes.Light {}
+                                        Nodes.Light {
+                                            position: camera.position
+                                        }
                                     }
                                 }
                             }
@@ -112,29 +126,33 @@ Entity {
             }
         }
     }
+
     GeometryRenderer {
-        id: spheresMeshInstanced
-        primitiveType: GeometryRenderer.TriangleStrip
-        enabled: instanceCount != 0
-        instanceCount: sphereData.count
+        id: functionSurfaceMesh
+        primitiveType: GeometryRenderer.Points
 
-        geometry: PointGeometry {
-            attributes: [
-                Attribute {
-                    name: "pos"
-                    attributeType: Attribute.VertexAttribute
-                    dataType: Attribute.Float
-                    dataSize: 3
-                    divisor: 1
-                    buffer: sphereData.buffer
-                }
-            ]
+        geometry: UniformGridGeometry {
+            resolution: 64
         }
+    }
 
+    Texture2D {
+        id: triangleTableTexture
+        minificationFilter: Texture.Nearest
+        magnificationFilter: Texture.Nearest
+        wrapMode {
+            x: WrapMode.ClampToEdge
+            y: WrapMode.ClampToEdge
+        }
+        generateMipMaps: false
+
+        textureImages: MarchingCubesTableTexture {
+
+        }
     }
 
     components: [
-        spheresMeshInstanced,
+        functionSurfaceMesh,
         material
     ]
 }

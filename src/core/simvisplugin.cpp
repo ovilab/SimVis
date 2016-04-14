@@ -26,6 +26,8 @@
 #include "../render/geometry/pointgeometry.h"
 #include "../render/geometry/spheredata.h"
 #include "../render/geometry/cylinderdata.h"
+#include "../render/geometry/uniformgridgeometry.h"
+#include "../utils/marchingcubestabletexture.h"
 
 #include <qqml.h>
 #include <QQmlEngine>
@@ -60,9 +62,11 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<ShaderBuilderBinding>("SimVis", 1, 0, "ShaderBuilderBinding");
     qmlRegisterType<MarchingCubesGS>("SimVis", 1, 0, "AbstractMarchingCubes");
     qmlRegisterType<PointGeometry>("SimVis", 1, 0, "PointGeometry");
+    qmlRegisterType<UniformGridGeometry>("SimVis", 1, 0, "UniformGridGeometry");
     qmlRegisterType<SphereData>("SimVis", 1, 0, "SphereData");
     qmlRegisterType<CylinderData>("SimVis", 1, 0, "CylinderData");
     qmlRegisterType<TriangleCollection>("SimVis", 1, 0, "AbstractTriangleCollection");
+    qmlRegisterType<MarchingCubesTableTexture>("SimVis", 1, 0, "MarchingCubesTableTexture");
 }
 
 void SimVisPlugin::initializeEngine(QQmlEngine *engine, const char *uri)

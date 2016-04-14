@@ -28,7 +28,7 @@ FrameGraph {
         Viewport {
             id: viewport
             rect: Qt.rect(0.0, 0.0, 1.0, 1.0)
-            clearColor: "#111"
+            clearColor: "#afc"
             CameraSelector {
                 id : cameraSelector
                 camera: frameGraph.camera

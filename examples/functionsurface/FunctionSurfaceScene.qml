@@ -12,6 +12,7 @@ import MySimulator 1.0
 
 Scene3D {
     aspects: "input"
+
     Entity {
         Configuration  {
             controlledCamera: frameGraph.camera
@@ -27,25 +28,6 @@ Scene3D {
         FunctionSurfaceEntity {
             id: fsEntity
             camera: frameGraph.camera
-            sphereData: simulator.sphereData
-            fragmentColor: StandardMaterial {
-                diffuseColor: "steelblue"
-                specularColor: "white"
-                position: fsEntity.fragmentBuilder.position
-                normal: fsEntity.fragmentBuilder.normal
-                lights: ShaderGroup {
-                    Nodes.Light {
-                        position: frameGraph.camera.position
-                        color: "red"
-                        attenuation: 0.01
-                    }
-                }
-            }
-        }
-
-        MySimulator {
-            id: simulator
-            dt: 0.01
         }
     }
 }

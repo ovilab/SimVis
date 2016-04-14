@@ -1,8 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
         <file>FunctionSurfaceScene.qml</file>
         <file>StandardFrameGraph.qml</file>
         <file>FunctionSurfaceEntity.qml</file>
+        <file>main_functionsurface.qml</file>
     </qresource>
 </RCC>

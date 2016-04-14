@@ -49,7 +49,9 @@ SOURCES += \
     $$PWD/src/core/camera.cpp \
     $$PWD/src/core/cameralens.cpp \
     $$PWD/src/core/visualizer.cpp \
-    $$PWD/src/render/geometry/cylinderdata.cpp
+    $$PWD/src/render/geometry/cylinderdata.cpp \
+    $$PWD/src/render/geometry/uniformgridgeometry.cpp \
+    $$PWD/src/utils/marchingcubestabletexture.cpp
 
 HEADERS += \
     $$PWD/src/core/navigator.h \
@@ -101,4 +103,6 @@ HEADERS += \
     $$PWD/src/core/camera.h \
     $$PWD/src/core/cameralens.h \
     $$PWD/src/render/geometry/cylinderdata.h \
-    $$PWD/src/SimVis/CylinderData
+    $$PWD/src/render/geometry/uniformgridgeometry.h \
+    $$PWD/src/SimVis/CylinderData \
+    $$PWD/src/utils/marchingcubestabletexture.h
