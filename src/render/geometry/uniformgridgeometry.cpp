@@ -42,55 +42,16 @@ public:
         QByteArray verticesData;
         verticesData.resize(vertexSize*m_vertexCount);
         float *verticesPtr = reinterpret_cast<float*>(verticesData.data());
-        int verticesPerDimension = cbrt(m_vertexCount); // Since m_vertexCount comes from resolution^3, this will always work
-        int N = verticesPerDimension;
-        int nHalf = 0.5*N;
-        int nHalfSquared = nHalf*nHalf;
 
-        int count = 0;
-        for(int i=0; i<N; i++) {
-            float r0 = i;
-            float r1 = i+1;
-            r0 = translate(r0);
-            r1 = translate(r1);
-//            x0 = translate(r0);
-//            x1 = translate(r1);
-            float dr = r1-r0;
-
-            for(int j=0; j<N; j++) {
-                float phi0 = float(j) / N * 2*3.1415;
-                float phi1 = float(j+1) / N * 2*3.1415;
-//                y0 = translate(y0);
-//                y1 = translate(y1);
-                float dphi = phi1-phi0;
-
-                for(int k=0; k<N; k++) {
-                    float theta0 = -3.1415*0.5 + float(k) / N * 3.1415;
-                    float theta1 = -3.1415*0.5 + float(k+1) / N * 3.1415;
-
-                    float dtheta = theta1-theta0;
-
-                    // if(true || x0*x0 + y0*y0 + z0*z0 < nHalfSquared) {
-                    *verticesPtr++ = r0;
-                    *verticesPtr++ = phi0;
-                    *verticesPtr++ = theta0;
-//                        *verticesPtr++ = r0*sin(theta0)*cos(phi0);
-//                        *verticesPtr++ = r0*sin(theta0)*sin(phi0);
-//                        *verticesPtr++ = r0*cos(theta0);
-                        *verticesPtr++ = dr;
-                        *verticesPtr++ = dphi;
-                        *verticesPtr++ = dtheta;
-//                    *verticesPtr++ = 1;
-//                    *verticesPtr++ = 1;
-//                    *verticesPtr++ = 1;
-                    qDebug() << r0*sin(theta0)*cos(phi0) << " " << r0*sin(theta0)*sin(phi0) << " " << r0*cos(theta0);
-                        count+=6;
-                    // }
-                }
-            }
+        for(int i=0; i<m_vertexCount; i++) {
+            *verticesPtr++ = i;
+            *verticesPtr++ = i;
+            *verticesPtr++ = i;
+            *verticesPtr++ = i;
+            *verticesPtr++ = i;
+            *verticesPtr++ = i;
         }
 
-        verticesData.resize(count*sizeof(float));
         return verticesData;
     }
 
@@ -110,7 +71,7 @@ void UniformGridGeometry::init()
 
     m_vertexBuffer = new QBuffer(QBuffer::VertexBuffer, this);
 
-    const quint32 stride = (3+3) * sizeof(float); // 6 floats, x y z, dx dy dz
+    const quint32 stride = (3+3)*sizeof(float);
 
     m_positionAttribute->setName(QAttribute::defaultPositionAttributeName());
     m_positionAttribute->setDataType(QAttribute::Float);
@@ -128,11 +89,9 @@ void UniformGridGeometry::init()
     m_deltaAttribute->setByteStride(stride);
 
     m_dataFunctor = new UniformGridVertexDataFunctor(vertexCount());
-    QByteArray gridPoints = (*m_dataFunctor)();
-    int realVertexCount = gridPoints.size() / (6*sizeof(float));
 
-    m_positionAttribute->setCount(realVertexCount);
-    m_deltaAttribute->setCount(realVertexCount);
+    m_positionAttribute->setCount(vertexCount());
+    m_deltaAttribute->setCount(vertexCount());
 
     m_vertexBuffer->setBufferFunctor(QBufferFunctorPtr(m_dataFunctor));
     addAttribute(m_positionAttribute);

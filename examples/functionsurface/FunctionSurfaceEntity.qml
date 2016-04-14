@@ -78,8 +78,10 @@ Entity {
                                     type: "float"
                                     // result: "sin(2.0 *0.1* $position.x - 0.1*0.1*$position.y*$position.z) + cos(2.0 * 0.1*$position.y) + sin(2.0 * 0.1*$position.z)*cos(2.0*0.1*$position.y);"
                                     // result: "$position.z + 3*sin(0.05*$position.y) + 3*sin(0.05*$position.x);"
+                                    // result: "$position.x + $position.y + $position.z;"
+                                    // result: "$position.x*$position.x + $position.z*$position.z;"
                                     // result: "$position.z;"
-                                    result: "sin(0.1*$position.z) + sin(0.1*$position.x) + sin(0.1*$position.y);"
+                                    result: "sin(0.2*$position.z) + sin(0.2*$position.x) + sin(0.2*$position.y);"
                                     // result: "$position.x*$position.x + $position.y*$position.y + $position.z*$position.z;"
                                 }
                             }
@@ -126,25 +128,25 @@ Entity {
                                 name: "fragColor"
                                 value: StandardMaterial {
                                     position: _fragmentBuilder.position
-                                    // normal: _fragmentBuilder.normal
-                                    normal: NormalMap {
-                                        color: ImageTexture {
-                                            source: "file:///projects/SimVis/SimVis/examples/cylinders/normal.webp"
-                                            vector: Multiply {
-                                                value1: _fragmentBuilder.position
-                                                value2: 0.1
-                                            }
-                                        }
-                                    }
+                                    normal: _fragmentBuilder.normal
+//                                    normal: NormalMap {
+//                                        color: ImageTexture {
+//                                            source: "file:///projects/SimVis/SimVis/examples/cylinders/normal.webp"
+//                                            vector: Multiply {
+//                                                value1: _fragmentBuilder.position
+//                                                value2: 0.1
+//                                            }
+//                                        }
+//                                    }
 
                                     // color: _fragmentBuilder.lolCoord
-                                    color: ImageTexture {
-                                        source: "file:///projects/SimVis/SimVis/examples/cylinders/diffuse.webp"
-                                        vector: Multiply {
-                                            value1: _fragmentBuilder.position
-                                            value2: 0.1
-                                        }
-                                    }
+//                                    color: ImageTexture {
+//                                        source: "file:///projects/SimVis/SimVis/examples/cylinders/diffuse.webp"
+//                                        vector: Multiply {
+//                                            value1: _fragmentBuilder.position
+//                                            value2: 0.1
+//                                        }
+//                                    }
 
                                     lights: ShaderGroup {
                                         Nodes.Light {
@@ -181,9 +183,7 @@ Entity {
         id: functionSurfaceMesh
         primitiveType: GeometryRenderer.Points
 
-        geometry: UniformGridGeometry {
-            resolution: 64
-        }
+        geometry: UniformGridGeometry { }
     }
 
     Texture2D {
