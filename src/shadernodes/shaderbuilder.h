@@ -41,6 +41,7 @@ class ShaderBuilder : public Qt3DCore::QNode
 
 public:
     explicit ShaderBuilder(QNode *parent = 0);
+    virtual ~ShaderBuilder();
 
     QString source() const;
     QString finalShader();
@@ -111,6 +112,7 @@ public slots:
 
 private:
     QString glslType(QVariant value) const;
+    void clear();
 
     QString m_source;
     QList<ShaderOutput*> m_inputs;

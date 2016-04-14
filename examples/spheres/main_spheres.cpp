@@ -3,17 +3,13 @@
 #include <QQuickView>
 #include <QtQml>
 
-#include "spheressimulator.h"
-#include "pointgeometry.h"
-#include "spheredata.h"
+#include "spheresimulator.h"
 
 #include <vendor.h>
 
 int main(int argc, char *argv[])
 {
-    qmlRegisterType<MySimulator>("MySimulator", 1, 0, "MySimulator");
-    qmlRegisterType<PointGeometry>("MySimulator", 1, 0, "PointGeometry");
-    qmlRegisterType<SphereData>("MySimulator", 1, 0, "SphereData");
+    qmlRegisterType<SphereSimulator>("SphereSimulator", 1, 0, "SphereSimulator");
     QApplication app(argc, argv);
 
     QQuickView view;
@@ -23,7 +19,7 @@ int main(int argc, char *argv[])
     format.setMinorVersion(3);
     format.setProfile(QSurfaceFormat::CoreProfile);
     view.setFormat(format);
-    view.setSource(QUrl("qrc:/main.qml"));
+    view.setSource(QUrl("qrc:/main_spheres.qml"));
     view.show();
 
     return app.exec();

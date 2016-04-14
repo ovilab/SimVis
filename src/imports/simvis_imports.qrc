@@ -18,7 +18,6 @@
         <file>SimVis/Mesh.qml</file>
         <file>SimVis/FunctionSurface.qml</file>
         <file>SimVis/ShaderNodes/StandardMaterial.qml</file>
-        <file>SimVis/ShaderNodes/shaders/standard_material.glsl</file>
         <file>SimVis/ShaderNodes/Function.qml</file>
         <file>SimVis/ShaderNodes/Multiply.qml</file>
         <file>SimVis/ShaderNodes/ImageTexture.qml</file>
@@ -29,5 +28,8 @@
         <file>SimVis/ShaderNodes/Simplex.qml</file>
         <file>SimVis/ShaderNodes/Decolorize.qml</file>
         <file>SimVis/ShaderNodes/Bump.qml</file>
+        <file>SimVis/NonCullingForwardRenderer.qml</file>
+        <file>SimVis/Visualizer.qml</file>
+        <file>SimVis/ShaderNodes/shaders/standard_material.glsl</file>
     </qresource>
 </RCC>

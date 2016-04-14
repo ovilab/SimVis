@@ -2,11 +2,12 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-QT += qml quick widgets
+QT += qml quick widgets 3drender_private
 
 SOURCES += \
     cylindersimulator.cpp \
-    main_cylinders.cpp
+    main_cylinders.cpp \
+    cullfacenone.cpp
 
 RESOURCES += \
     cylinders_qml.qrc
@@ -18,7 +19,8 @@ QML_IMPORT_PATH =
 include(../examples_vendor.pri)
 
 HEADERS += \
-    cylindersimulator.h
+    cylindersimulator.h \
+    cullfacenone.h
 
 DISTFILES += \
     SimpleMorphology.nml

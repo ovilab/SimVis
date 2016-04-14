@@ -22,6 +22,10 @@ Material {
             renderPasses: RenderPass {
                 shaderProgram: ShaderProgram {
                     vertexShaderCode: vertexShaderBuilder.finalShader
+                    onVertexShaderCodeChanged: {
+//                        console.log(vertexShaderCode)
+                    }
+
                     fragmentShaderCode: shaderBuilder.finalShader
                     onFragmentShaderCodeChanged: {
 //                        console.log(fragmentShaderCode)
@@ -39,8 +43,8 @@ Material {
         // inputs
         property ShaderNode position: ShaderNode {
             type: "vec3"
-            name: "vertexPosition"
-            result: "vertexPosition"
+            name: "position"
+            result: "position"
         }
         property ShaderNode normal: ShaderNode {
             type: "vec3"
@@ -80,6 +84,16 @@ Material {
             type: "vec3"
             name: "normal"
             result: "normal"
+        }
+        property ShaderNode tangent: ShaderNode {
+            type: "vec3"
+            name: "tangent"
+            result: "tangent"
+        }
+        property ShaderNode binormal: ShaderNode {
+            type: "vec3"
+            name: "binormal"
+            result: "binormal"
         }
         property ShaderNode textureCoordinate: ShaderNode {
             type: "vec2"

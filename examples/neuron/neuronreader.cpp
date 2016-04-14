@@ -14,28 +14,11 @@ NeuronWorker::NeuronWorker()
 
 void NeuronWorker::synchronizeSimulator(Simulator *simulator)
 {
-    NeuronReader *sim = static_cast<NeuronReader *>(simulator);
-    if(sim->m_segmentsAreDirty) {
-        m_segments = sim->m_segments;
-        m_cylinders = sim->m_cylinders;
-        m_spheres = sim->m_spheres;
-        sim->m_segmentsAreDirty = false;
-    }
+
 }
 
 void NeuronWorker::synchronizeRenderer(Renderable *renderable)
 {
-    Cylinders *cylinders = qobject_cast<Cylinders*>(renderable);
-    if(cylinders) {
-        cylinders->setCylinders(m_cylinders);
-        cylinders->setDirty(true);
-    }
-
-    Spheres *spheres = qobject_cast<Spheres*>(renderable);
-    if(spheres) {
-        spheres->setPositions(m_spheres);
-        spheres->triggerDirtyData();
-    }
 }
 
 void NeuronWorker::work()
@@ -48,8 +31,9 @@ void NeuronWorker::reset()
 }
 
 
-NeuronReader::NeuronReader(QQuickItem *parent)
+NeuronReader::NeuronReader(QNode *parent)
     : Simulator(parent)
+    , m_cylinderData(new CylinderData(this))
 {
 
 }
@@ -81,7 +65,7 @@ void NeuronReader::readFile()
     while (!reader.isEndDocument())
     {
         if(reader.isStartElement()) {
-//            qDebug() << reader.name() << reader.isStartElement() << reader.isEndElement();
+            //            qDebug() << reader.name() << reader.isStartElement() << reader.isEndElement();
             if(reader.name() == "segment") {
                 m_segments.append(segment);
                 segment = Segment();
@@ -96,7 +80,7 @@ void NeuronReader::readFile()
                 segment.hasParentID = true;
             }
             if(reader.name() == "proximal") {
-//                qDebug() << reader.attributes().value("x") << reader.attributes().value("y") << reader.attributes().value("z");
+                //                qDebug() << reader.attributes().value("x") << reader.attributes().value("y") << reader.attributes().value("z");
                 segment.proximal.setX(reader.attributes().value("x").toDouble());
                 segment.proximal.setY(reader.attributes().value("y").toDouble());
                 segment.proximal.setZ(reader.attributes().value("z").toDouble());
@@ -104,7 +88,7 @@ void NeuronReader::readFile()
                 segment.hasProximal = true;
             }
             if(reader.name() == "distal") {
-//                qDebug() << reader.attributes().value("x") << reader.attributes().value("y") << reader.attributes().value("z") << reader.attributes().value("diameter");
+                //                qDebug() << reader.attributes().value("x") << reader.attributes().value("y") << reader.attributes().value("z") << reader.attributes().value("diameter");
                 segment.distal.setX(reader.attributes().value("x").toDouble());
                 segment.distal.setY(reader.attributes().value("y").toDouble());
                 segment.distal.setZ(reader.attributes().value("z").toDouble());
@@ -130,31 +114,37 @@ void NeuronReader::readFile()
         if(segment.proximalWidth == 0.0) {
             segment.proximalWidth = segment.distalWidth;
         }
-//        qDebug() << s.id << s.parentID << s.proximal << s.distal << s.proximalWidth << s.distalWidth;
+        //        qDebug() << s.id << s.parentID << s.proximal << s.distal << s.proximalWidth << s.distalWidth;
     }
 
     m_cylinders.clear();
-    for(const Segment &segment : m_segments) {
-        CylinderVBOData cylinder;
+    for(int i = 0; i < 1; i++) {
+        for(int j = 0; j < 1; j++) {
+            for(const Segment &segment : m_segments) {
+                CylinderVBOData cylinder;
 
-        double scaler = 1.0;
+                float scaler = 0.1;
 
-        cylinder.vertex1 = segment.proximal * scaler;
-        cylinder.vertex2 = segment.distal * scaler;
-        cylinder.radius1 = segment.proximalWidth * scaler * 0.5;
-        cylinder.radius2 = segment.distalWidth * scaler * 0.5;
+                cylinder.vertex1 = segment.proximal * scaler + QVector3D(i*4, 0, j*4);
+                cylinder.vertex2 = segment.distal * scaler + QVector3D(i*4, 0, j*4);;
+                cylinder.radius1 = segment.proximalWidth * scaler * 0.5;
+                cylinder.radius2 = segment.distalWidth * scaler * 0.5;
 
-        m_cylinders.push_back(cylinder);
+                m_cylinders.push_back(cylinder);
+            }
+        }
     }
 
-//    m_cylinders.clear();
-//    CylinderVBOData cylinder;
-//    cylinder.vertex1 = QVector3D(1.0, -2.0,  1.0);
-//    cylinder.vertex2 = QVector3D(-1.0,  2.0,  -1.0);
-//    cylinder.radius1 = 2.4;
-//    cylinder.radius2 = 1.2;
+    //    m_cylinders.clear();
+    //    CylinderVBOData cylinder;
+    //    cylinder.vertex1 = QVector3D(1.0, -2.0,  1.0);
+    //    cylinder.vertex2 = QVector3D(-1.0,  2.0,  -1.0);
+    //    cylinder.radius1 = 2.4;
+    //    cylinder.radius2 = 1.2;
 
-//    m_cylinders.push_back(cylinder);
+    //    m_cylinders.push_back(cylinder);
+
+    m_cylinderData->setData(m_cylinders);
 
 
     qDebug() << "Done reading";

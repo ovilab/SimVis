@@ -13,22 +13,17 @@ RESOURCES += \
     $$PWD/src/imports/simvis_imports.qrc
 
 SOURCES += \
-    $$PWD/src/core/camera.cpp \
     $$PWD/src/core/navigator.cpp \
     $$PWD/src/core/quickworker.cpp \
     $$PWD/src/core/renderable.cpp \
     $$PWD/src/core/simulator.cpp \
     $$PWD/src/core/simvisplugin.cpp \
     $$PWD/src/navigators/trackballnavigator.cpp \
-    $$PWD/src/core/visualizer.cpp \
-    $$PWD/src/core/cameralens.cpp \
-    $$PWD/src/core/lookattransform.cpp \
     $$PWD/src/renderables/billboards/billboards.cpp \
     $$PWD/src/renderables/points/points.cpp \
     $$PWD/src/core/shadereffect.cpp \
     $$PWD/src/shadereffects/simplexbump.cpp \
     $$PWD/src/shadereffects/simplextexture.cpp \
-    $$PWD/src/renderables/spheres/spheres.cpp \
     $$PWD/src/shadereffects/light.cpp \
     $$PWD/src/renderables/skybox/skybox.cpp \
     $$PWD/src/shadereffects/skyboxreflection.cpp \
@@ -48,19 +43,22 @@ SOURCES += \
     $$PWD/src/renderables/marchingcubes/marchingcubesgs.cpp \
     $$PWD/src/shadernodes/shaderbuilderbinding.cpp \
     $$PWD/src/shadernodes/shaderutils.cpp \
+    $$PWD/src/core/lookattransform.cpp \
+    $$PWD/src/render/geometry/pointgeometry.cpp \
+    $$PWD/src/render/geometry/spheredata.cpp \
+    $$PWD/src/core/camera.cpp \
+    $$PWD/src/core/cameralens.cpp \
+    $$PWD/src/core/visualizer.cpp \
+    $$PWD/src/render/geometry/cylinderdata.cpp
 
 HEADERS += \
     $$PWD/src/core/navigator.h \
     $$PWD/src/core/quickworker.h \
     $$PWD/src/core/renderable.h \
     $$PWD/src/core/simulator.h \
-    $$PWD/src/core/camera.h \
     $$PWD/src/core/simvisplugin.h \
     $$PWD/src/navigators/trackballnavigator.h \
     $$PWD/src/core/visualizer.h \
-    $$PWD/src/core/camera_p.h \
-    $$PWD/src/core/cameralens.h \
-    $$PWD/src/core/cameralens_p.h \
     $$PWD/src/core/lookattransform.h \
     $$PWD/src/core/lookattransform_p.h \
     $$PWD/src/renderables/billboards/billboards.h \
@@ -71,8 +69,6 @@ HEADERS += \
     $$PWD/src/core/shadereffect.h \
     $$PWD/src/shadereffects/simplexbump.h \
     $$PWD/src/shadereffects/simplextexture.h \
-    $$PWD/src/renderables/spheres/spheres.h \
-    $$PWD/src/SimVis/Spheres \
     $$PWD/src/shadereffects/light.h \
     $$PWD/src/renderables/skybox/skybox.h \
     $$PWD/src/shadereffects/skyboxreflection.h \
@@ -99,16 +95,10 @@ HEADERS += \
     $$PWD/src/renderables/marchingcubes/marchingcubesgs.h \
     $$PWD/src/shadernodes/shaderutils.h \
     $$PWD/src/shadernodes/shaderbuilderbinding.h \
-
-HEADERS +=
-
-SOURCES +=
-
-HEADERS +=
-
-SOURCES +=
-
-
-HEADERS +=
-
-SOURCES +=
+    $$PWD/src/render/geometry/pointgeometry.h \
+    $$PWD/src/render/geometry/spheredata.h \
+    $$PWD/src/SimVis/SphereData \
+    $$PWD/src/core/camera.h \
+    $$PWD/src/core/cameralens.h \
+    $$PWD/src/render/geometry/cylinderdata.h \
+    $$PWD/src/SimVis/CylinderData

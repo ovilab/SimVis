@@ -6,7 +6,7 @@ ShaderNode {
     property var color: "white"
     property var strength: 1.0
     property var position: Qt.vector3d(0.0, 0.0, 0.0)
-    property var attenuation: 0.0001
+    property var attenuation: 1.0
     property var gamma: 1.0
 
     name: "light"
@@ -14,7 +14,7 @@ ShaderNode {
     source: "
 $this.color = $(color, vec3);
 $this.strength = $(strength, float);
-$this.position = $(position, vec3);
+$this.position = (vec4($(position, vec3), 1.0)).xyz;
 $this.attenuation = $(attenuation, float);
 $this.gamma = $(gamma, float);
 "
@@ -30,7 +30,7 @@ struct Light {
 
 highp float attenuation(Light light, highp vec3 vertexPosition) {
     highp float distanceToLight = distance(vertexPosition, light.position);
-    highp float attenuationFactor = 1.0 / (1.0 + light.attenuation * distanceToLight * distanceToLight);
+    highp float attenuationFactor = 1.0 / (1.0 + light.attenuation * 0.0001 * distanceToLight * distanceToLight);
     return attenuationFactor;
 }
 

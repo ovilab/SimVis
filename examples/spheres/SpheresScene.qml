@@ -8,31 +8,23 @@ import Qt3D.Render 2.0
 import QtQuick 2.0 as QQ2
 import QtQuick.Scene3D 2.0
 
-import MySimulator 1.0
+import SphereSimulator 1.0
 
 Scene3D {
     aspects: "input"
-    property alias variable: spheresEntity.variable
-    property alias chest: chest
-    Entity {
-        Configuration  {
-            controlledCamera: frameGraph.camera
+    Visualizer {
+        id: visualizer
+        SphereSimulator {
+            id: simulator
+            dt: 0.01
         }
-
-        components: [
-            StandardFrameGraph {
-                id: frameGraph
-                camera.position: Qt.vector3d(0.0, 0.0, 4.0)
-            }
-        ]
-
-        SpheresEntity {
+        Spheres {
             id: spheresEntity
-            camera: frameGraph.camera
+            camera: visualizer.camera
             sphereData: simulator.sphereData
             fragmentColor: StandardMaterial {
-                diffuseColor: "steelblue"
-                specularColor: "white"
+                color: "steelblue"
+                hardness: 0.05
                 position: spheresEntity.fragmentBuilder.position
                 normal: Add {
                     value1: spheresEntity.normal
@@ -76,12 +68,5 @@ Scene3D {
                 }
             }
         }
-
-        MySimulator {
-            id: simulator
-            dt: 0.01
-        }
-
-        Chest {id: chest}
     }
 }

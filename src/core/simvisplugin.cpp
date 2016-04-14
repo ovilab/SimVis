@@ -2,13 +2,10 @@
 #include "simulator.h"
 #include "../renderables/billboards/billboards.h"
 #include "../renderables/points/points.h"
-#include "../renderables/spheres/spheres.h"
-#include "../renderables/cylinders/cylinders.h"
 #include "../renderables/lines/lines.h"
 #include "../generators/marchingcubes/marchingcubes.h"
 #include "../renderables/skybox/skybox.h"
 #include "visualizer.h"
-#include "camera.h"
 #include "navigator.h"
 #include "navigators/trackballnavigator.h"
 #include "navigators/flymodenavigator.h"
@@ -26,9 +23,13 @@
 #include "../shadernodes/shaderoutput.h"
 #include "../shadernodes/shadergroup.h"
 #include "../shadernodes/shaderbuilderbinding.h"
+#include "../render/geometry/pointgeometry.h"
+#include "../render/geometry/spheredata.h"
+#include "../render/geometry/cylinderdata.h"
 
 #include <qqml.h>
 #include <QQmlEngine>
+
 
 void SimVisPlugin::registerTypes(const char *uri)
 {
@@ -40,8 +41,6 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<Billboards>("SimVis", 1, 0, "Billboards");
     qmlRegisterType<MarchingCubes>("SimVis", 1, 0, "MarchingCubes");
     qmlRegisterType<Points>("SimVis", 1, 0, "Points");
-    qmlRegisterType<Visualizer>("SimVis", 1, 0, "Visualizer");
-    qmlRegisterType<Camera>("SimVis", 1, 0, "Camera");
     qmlRegisterType<Navigator>("SimVis", 1, 0, "Navigator");
     qmlRegisterType<TrackballNavigator>("SimVis", 1, 0, "TrackballNavigator");
     qmlRegisterType<FlyModeNavigator>("SimVis", 1, 0, "FlyModeNavigator");
@@ -53,7 +52,6 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<NoiseViewer>("SimVis", 1, 0, "NoiseViewer");
     qmlRegisterType<PeriodicCopies>("SimVis", 1, 0, "PeriodicCopies");
     qmlRegisterType<Slice>("SimVis", 1, 0, "Slice");
-    qmlRegisterType<Cylinders>("SimVis", 1, 0, "AbstractCylinders");
     qmlRegisterType<Lines>("SimVis", 1, 0, "Lines");
     qmlRegisterType<ShaderNode>("SimVis", 1, 0, "ShaderNode");
     qmlRegisterType<ShaderBuilder>("SimVis", 1, 0, "ShaderBuilder");
@@ -61,7 +59,9 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<ShaderGroup>("SimVis", 1, 0, "ShaderGroup");
     qmlRegisterType<ShaderBuilderBinding>("SimVis", 1, 0, "ShaderBuilderBinding");
     qmlRegisterType<MarchingCubesGS>("SimVis", 1, 0, "AbstractMarchingCubes");
-    qmlRegisterType<Spheres>("SimVis", 1, 0, "AbstractSpheres");
+    qmlRegisterType<PointGeometry>("SimVis", 1, 0, "PointGeometry");
+    qmlRegisterType<SphereData>("SimVis", 1, 0, "SphereData");
+    qmlRegisterType<CylinderData>("SimVis", 1, 0, "CylinderData");
     qmlRegisterType<TriangleCollection>("SimVis", 1, 0, "AbstractTriangleCollection");
 }
 

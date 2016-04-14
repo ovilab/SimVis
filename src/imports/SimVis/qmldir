@@ -2,4 +2,6 @@ module SimVis
 Cylinders 1.0 Cylinders.qml
 FunctionSurface 1.0 FunctionSurface.qml
 Mesh 1.0 Mesh.qml
+NonCullingForwardRenderer 1.0 NonCullingForwardRenderer.qml
 Spheres 1.0 Spheres.qml
+Visualizer 1.0 Visualizer.qml

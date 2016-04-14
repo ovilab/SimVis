@@ -3,11 +3,15 @@
 #include <QQuickView>
 #include <QtQml>
 
+#include "spheregeometrynew.h"
+
 #include <vendor.h>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
+    qmlRegisterType<Qt3DRender::SphereGeometryNew>("SimVis", 1, 0, "SphereGeometryNew");
 
     QQuickView view;
     qpm::init(app, *view.engine());

@@ -5,8 +5,7 @@
 
 #include <SimVis/QuickWorker>
 #include <SimVis/Simulator>
-#include <SimVis/Cylinders>
-#include <SimVis/Spheres>
+#include <SimVis/CylinderData>
 #include <QObject>
 #include <QUrl>
 #include <QVector3D>
@@ -48,11 +47,16 @@ class NeuronReader : public Simulator
 {
     Q_OBJECT
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(CylinderData* cylinderData READ cylinderData CONSTANT)
 public:
-    explicit NeuronReader(QQuickItem *parent = 0);
+    explicit NeuronReader(QNode *parent = 0);
     ~NeuronReader();
 
     QUrl source() const;
+
+    CylinderData *cylinderData() {
+        return m_cylinderData.data();
+    }
 
     void readFile();
 
@@ -73,9 +77,12 @@ private:
     QVector<Segment> m_segments;
     QVector<CylinderVBOData> m_cylinders;
     QVector<QVector3D> m_spheres;
+    QScopedPointer<CylinderData> m_cylinderData;
     bool m_segmentsAreDirty = true;
 
     friend class NeuronWorker;
+
+    QT3D_CLONEABLE(NeuronReader)
 };
 
 #endif // NEURONREADER_H

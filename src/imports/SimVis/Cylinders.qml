@@ -1,65 +1,159 @@
-import QtQuick 2.0
 import SimVis 1.0
 import SimVis.ShaderNodes 1.0
+import SimVis.ShaderNodes 1.0 as Nodes
 
-AbstractCylinders {
+import Qt3D.Core 2.0
+import Qt3D.Render 2.0
+
+import QtQuick 2.0 as QQ2
+
+Entity {
     id: cylindersRoot
-    property alias fragmentColor: shaderOutput.value
-    property alias shader: _shader
+    property var variable: 0.0
+    property alias fragmentColor: _fragmentColor.value
+    property alias fragmentBuilder: _fragmentBuilder
+    property alias normal: _fragmentBuilder.normal
+    property alias position: _fragmentBuilder.position
+    property alias transform: transform
 
-    vertexShader: ShaderBuilder {
-        sourceFile: "qrc:/org.compphys.SimVis/renderables/cylinders/cylinders.vsh"
-        shaderType: ShaderBuilder.Vertex
+    property CylinderData cylinderData
+
+    Transform {
+        id: transform
     }
 
-    geometryShader: ShaderBuilder {
-        sourceFile: "qrc:/org.compphys.SimVis/renderables/cylinders/cylinders.gsh"
-        shaderType: ShaderBuilder.Geometry
-    }
+    Material {
+        id: material
+        effect: Effect {
+            techniques: Technique {
+                renderPasses: RenderPass {
+                    bindings: [
+                        ParameterMapping {
+                            parameterName: "vertex1Position"
+                            shaderVariableName: "vertex1Position"
+                            bindingType: ParameterMapping.Attribute
+                        },
+                        ParameterMapping {
+                            parameterName: "vertex2Position"
+                            shaderVariableName: "vertex2Position"
+                            bindingType: ParameterMapping.Attribute
+                        },
+                        ParameterMapping {
+                            parameterName: "radius1"
+                            shaderVariableName: "radius1"
+                            bindingType: ParameterMapping.Attribute
+                        },
+                        ParameterMapping {
+                            parameterName: "radius2"
+                            shaderVariableName: "radius2"
+                            bindingType: ParameterMapping.Attribute
+                        },
+                        ParameterMapping {
+                            parameterName: "vertexId"
+                            shaderVariableName: "vertexId"
+                            bindingType: ParameterMapping.Attribute
+                        }
+                    ]
+                    shaderProgram: ShaderProgram {
+                        vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/cylinders.vert")
+                        fragmentShaderCode: _fragmentBuilder.finalShader
+                    }
+                    ShaderBuilder {
+                        id: _fragmentBuilder
 
-    fragmentShader: ShaderBuilder {
-        id: _shader
+                        material: material
 
-        // TODO add readonly or some other way to show that these are only for others to read
-        shaderType: ShaderBuilder.Fragment
-        property ShaderNode position: ShaderNode {
-            type: "vec3"
-            name: "position"
-            result: "position";
-        }
-        property ShaderNode normal: ShaderNode {
-            type: "vec3"
-            name: "normal"
-            result: "normal";
-        }
-        property ShaderNode textureCoordinate: ShaderNode {
-            type: "vec2"
-            name: "texCoord"
-            result: "texCoord";
-        }
-        property ShaderNode color: ShaderNode {
-            type: "vec3"
-            name: "color"
-            result: "color";
-        }
+                        // TODO add readonly or some other way to show that these are only for others to read
+                        shaderType: ShaderBuilder.Fragment
 
-        sourceFile: "qrc:/org.compphys.SimVis/renderables/cylinders/cylinders.fsh"
+                        // inputs
+                        property ShaderNode position: ShaderNode {
+                            type: "vec3"
+                            name: "position"
+                            result: "position"
+                        }
+                        property ShaderNode normal: ShaderNode {
+                            type: "vec3"
+                            name: "normal"
+                            result: "normal"
+                        }
+                        property ShaderNode textureCoordinate: ShaderNode {
+                            type: "vec2"
+                            name: "texCoord"
+                            result: "texCoord"
+                        }
 
-        outputs: [
-            ShaderOutput {
-                id: shaderOutput
-                type: "vec4"
-                name: "cp_FragColor"
-                value: StandardMaterial {
-                    position: shader.position
-                    color: shader.normal
-                    normal: shader.normal
+                        sourceFile: "qrc:/SimVis/render/shaders/cylinders.frag"
+
+                        outputs: [
+                            ShaderOutput {
+                                id: _fragmentColor
+                                type: "vec4"
+                                name: "fragColor"
+                                value: StandardMaterial {}
+                            }
+                        ]
+                    }
                 }
             }
-        ]
-
-        // TODO consider adding support for chaining shaders
-        // TODO add functionality to choose input names or shader file based on GLSL version
+        }
     }
-}
+    GeometryRenderer {
+        id: cylindersMeshInstanced
+        primitiveType: GeometryRenderer.TriangleStrip
+        enabled: instanceCount != 0
+        instanceCount: cylinderData.count
 
+        geometry: PointGeometry {
+            attributes: [
+                Attribute {
+                    name: "vertex1Position"
+                    attributeType: Attribute.VertexAttribute
+                    dataType: Attribute.Float
+                    dataSize: 3
+                    byteOffset: 0
+                    byteStride: (3 + 3 + 1 + 1) * 4
+                    divisor: 1
+                    buffer: cylinderData.buffer
+                },
+                Attribute {
+                    name: "vertex2Position"
+                    attributeType: Attribute.VertexAttribute
+                    dataType: Attribute.Float
+                    dataSize: 3
+                    byteOffset: 3 * 4
+                    byteStride: (3 + 3 + 1 + 1) * 4
+                    divisor: 1
+                    buffer: cylinderData.buffer
+                },
+                Attribute {
+                    name: "radius1"
+                    attributeType: Attribute.VertexAttribute
+                    dataType: Attribute.Float
+                    dataSize: 1
+                    byteOffset: 6 * 4
+                    byteStride: (3 + 3 + 1 + 1) * 4
+                    divisor: 1
+                    buffer: cylinderData.buffer
+                },
+                Attribute {
+                    name: "radius2"
+                    attributeType: Attribute.VertexAttribute
+                    dataType: Attribute.Float
+                    dataSize: 1
+                    byteOffset: 7 * 4
+                    byteStride: (3 + 3 + 1 + 1) * 4
+                    divisor: 1
+                    buffer: cylinderData.buffer
+                }
+            ]
+        }
+
+    }
+
+    components: [
+        cylindersMeshInstanced,
+        material,
+        transform
+    ]
+}

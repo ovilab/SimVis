@@ -20,18 +20,19 @@ ShaderBuilder::ShaderBuilder(QNode *parent)
 {
 }
 
-QString ShaderBuilder::source() const
+ShaderBuilder::~ShaderBuilder()
 {
-    return m_source;
+    clear();
 }
 
-QString ShaderBuilder::finalShader()
+void ShaderBuilder::clear()
 {
     for(QSignalMapper *mapper : m_mappers) {
         disconnect(this, 0, mapper, SLOT(map()));
         disconnect(mapper, SIGNAL(mapped(int)), this, SLOT(updateUniform(int)));
+        delete mapper;
     }
-    qDeleteAll(m_mappers);
+    m_mappers.clear();
     if(m_material) {
         for(UniformValue &uniformValue : m_uniforms) {
             m_material->removeParameter(uniformValue.parameter);
@@ -39,6 +40,15 @@ QString ShaderBuilder::finalShader()
         }
     }
     m_uniforms.clear();
+}
+
+QString ShaderBuilder::source() const
+{
+    return m_source;
+}
+
+QString ShaderBuilder::finalShader()
+{
     // Verify all that all outputs have values
     for(ShaderOutput *output : m_outputs) {
         bool success = output->node()->setup(this);

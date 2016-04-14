@@ -3,10 +3,7 @@ SUBDIRS += \
     spheres \
     shadernodes \
     functionsurface \
-#    simple \
-#    marchingcubes \
-#    triangles \
-#    neuron \
-#    cylinders
+    neuron \
+    cylinders
 
 CONFIG += ordered
