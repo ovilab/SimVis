@@ -74,6 +74,10 @@ vec3 linterp(float threshold, vec3 p1, vec3 p2, float valp1, float valp2)
     return(p);
 }
 
+vec3 translate(float r, float theta, float phi) {
+    return vec3(r*sin(theta)*cos(phi), r*sin(theta)*sin(phi), r*cos(theta));
+}
+
 void main(void) {
         vec3 scaleVec = vec3(scale);
         // vec3 v_000 = scaleVec*(vs_position[0]) + eyePosition;                        // Corresponds to vertex 0
@@ -86,15 +90,21 @@ void main(void) {
 //        vec3 v_101 = v_000 + vec3(scaleVec.x, 0.0, scaleVec.z);   // Corresponds to vertex 7
 //        vec3 v_100 = v_000 + vec3(scaleVec.x, 0.0, 0.0);       // Corresponds to vertex 3
 
-        vec3 delta = vs_delta[0];
-        vec3 v_000 = vs_position[0];              // Corresponds to vertex 0
-        vec3 v_001 = v_000 + vec3(0.0, 0.0, delta.z); // Corresponds to vertex 4
-        vec3 v_011 = v_000 + vec3(0.0, delta.yz); // Corresponds to vertex 5
-        vec3 v_010 = v_000 + vec3(0.0, delta.y, 0.0); // Corresponds to vertex 1
-        vec3 v_110 = v_000 + vec3(delta.xy, 0.0); // Corresponds to vertex 2
-        vec3 v_111 = v_000 + delta; // Corresponds to vertex 6
-        vec3 v_101 = v_000 + vec3(delta.x, 0.0, delta.z); // Corresponds to vertex 7
-        vec3 v_100 = v_000 + vec3(delta.x, 0.0, 0.0); // Corresponds to vertex 3
+        float r = vs_position[0].x;
+        float phi = vs_position[0].y;
+        float theta = vs_position[0].z;
+        float dr =     vs_delta[0].x;
+        float dphi =   vs_delta[0].y;
+        float dtheta = vs_delta[0].z;
+
+        vec3 v_000 = translate(r,phi,theta);
+        vec3 v_001 = translate(r,phi, theta+dtheta);
+        vec3 v_011 = translate(r,phi+dphi, theta+dtheta);
+        vec3 v_010 = translate(r,phi+dphi, theta);
+        vec3 v_110 = translate(r+dr,phi+dphi, theta);
+        vec3 v_111 = translate(r+dr,phi+dphi, theta+dtheta);
+        vec3 v_101 = translate(r+dr,phi, theta+dtheta);
+        vec3 v_100 = translate(r+dr,phi, theta);
 
         GridCell grid;
         grid.p[0] = v_000;
@@ -134,8 +144,8 @@ void main(void) {
 
         for(int i=0; i<8; i++) {
             // grid.p[i] += eyePosition;
-            grid.p[i] *= scale;
-            grid.p[i] += eyePosition;
+//            grid.p[i] *= scale;
+//            grid.p[i] += eyePosition;
             grid.val[i] = eval(grid.p[i]);
         }
 

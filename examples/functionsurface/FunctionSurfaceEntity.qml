@@ -77,9 +77,9 @@ Entity {
                                     name: "position"
                                     type: "float"
                                     // result: "sin(2.0 *0.1* $position.x - 0.1*0.1*$position.y*$position.z) + cos(2.0 * 0.1*$position.y) + sin(2.0 * 0.1*$position.z)*cos(2.0*0.1*$position.y);"
-                                    result: "$position.z + 3*sin(0.05*$position.y) + 3*sin(0.05*$position.x);"
+                                    // result: "$position.z + 3*sin(0.05*$position.y) + 3*sin(0.05*$position.x);"
                                     // result: "$position.z;"
-                                    // result: "sin(0.1*$position.z) + sin(0.1*$position.x) + sin(0.1*$position.y);"
+                                    result: "sin(0.1*$position.z) + sin(0.1*$position.x) + sin(0.1*$position.y);"
                                     // result: "$position.x*$position.x + $position.y*$position.y + $position.z*$position.z;"
                                 }
                             }
