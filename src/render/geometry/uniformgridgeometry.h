@@ -65,6 +65,7 @@ private:
     int m_nPhi = 0;
     int m_nTheta = 0;
     int vertexCount() {
+        qDebug() << "Vertex count:" << m_nR*m_nPhi*m_nTheta;
         return m_nR*m_nPhi*m_nTheta;
     }
 };

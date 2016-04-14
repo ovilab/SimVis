@@ -10,12 +10,13 @@ in vec3 vs_delta[1];
 out vec3 position;
 out vec3 normal;
 out vec2 lolCoord;
+out vec3 color;
 uniform float threshold;
 uniform vec3 eyePosition;
 uniform float scale;
 uniform sampler2D triangleTable;
 uniform mat4 mvp;
-uniform mat4 modelViewMatrix;
+uniform mat4 modelView;
 
 float eval(vec3 position) {
     float shaderNodeResult;
@@ -90,7 +91,7 @@ void main(void) {
     int j = int(mod((index/nTheta), nPhi));
     int k = int(mod(index, nTheta));
 
-    vec3 viewVector = vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2]);
+    vec3 viewVector = vec3(modelView[2][0], modelView[2][1], modelView[2][2]);
     // vec3 viewVector = vec3(0.0, 0.0, 1.0);
     float delta_r0 = sqrt(i+1);
     float delta_r1 = sqrt(i+2);
@@ -104,14 +105,14 @@ void main(void) {
     float theta1 = -0.5*M_PI + float(k+1) / nTheta * M_PI;
     float dtheta = theta1-theta0;
 
-    vec3 v_000 = viewVector + translate(r0,phi0,theta0);
-    vec3 v_001 = viewVector + translate(r0,phi0, theta0+dtheta);
-    vec3 v_011 = viewVector + translate(r0,phi0+dphi, theta0+dtheta);
-    vec3 v_010 = viewVector + translate(r0,phi0+dphi, theta0);
-    vec3 v_110 = viewVector + translate(r0+dr,phi0+dphi, theta0);
-    vec3 v_111 = viewVector + translate(r0+dr,phi0+dphi, theta0+dtheta);
-    vec3 v_101 = viewVector + translate(r0+dr,phi0, theta0+dtheta);
-    vec3 v_100 = viewVector + translate(r0+dr,phi0, theta0);
+    vec3 v_000 = translate(r0,phi0,theta0);
+    vec3 v_001 = translate(r0,phi0, theta0+dtheta);
+    vec3 v_011 = translate(r0,phi0+dphi, theta0+dtheta);
+    vec3 v_010 = translate(r0,phi0+dphi, theta0);
+    vec3 v_110 = translate(r0+dr,phi0+dphi, theta0);
+    vec3 v_111 = translate(r0+dr,phi0+dphi, theta0+dtheta);
+    vec3 v_101 = translate(r0+dr,phi0, theta0+dtheta);
+    vec3 v_100 = translate(r0+dr,phi0, theta0);
 
     GridCell grid;
     grid.p[0] = v_000;
@@ -122,32 +123,6 @@ void main(void) {
     grid.p[5] = v_011;
     grid.p[6] = v_111;
     grid.p[7] = v_101;
-
-    //        for(int i=0; i<8; i++) {
-    //            if(abs(grid.p[i][0]) > 16) {
-    //                grid.p[i][0] += sign(grid.p[i][0])*( (8 - 4)*2 + (16 - 8)*4 + (abs(grid.p[i][0]) - 16)*8);
-    //            } else if(abs(grid.p[i][0]) > 8) {
-    //                grid.p[i][0] += sign(grid.p[i][0])*( (8 - 4)*2 + (abs(grid.p[i][0]) - 8)*4);
-    //            } else if(abs(grid.p[i][0]) > 4) {
-    //                grid.p[i][0] += sign(grid.p[i][0])*((abs(grid.p[i][0]) - 4)*2);
-    //            }
-
-    //            if(abs(grid.p[i][1]) > 16) {
-    //                grid.p[i][1] += sign(grid.p[i][1])*( (8 - 4)*2 + (16 - 8)*4 + (abs(grid.p[i][1]) - 16)*8);
-    //            } else if(abs(grid.p[i][1]) > 8) {
-    //                grid.p[i][1] += sign(grid.p[i][1])*( (8 - 4)*2 + (abs(grid.p[i][1]) - 8)*4);
-    //            } else if(abs(grid.p[i][1]) > 4) {
-    //                grid.p[i][1] += sign(grid.p[i][1])*((abs(grid.p[i][1]) - 4)*2);
-    //            }
-
-    //            if(abs(grid.p[i][2]) > 16) {
-    //                grid.p[i][2] += sign(grid.p[i][2])*( (8 - 4)*2 + (16 - 8)*4 + (abs(grid.p[i][2]) - 16)*8);
-    //            } else if(abs(grid.p[i][2]) > 8) {
-    //                grid.p[i][2] += sign(grid.p[i][2])*( (8 - 4)*2 + (abs(grid.p[i][2]) - 8)*4);
-    //            } else if(abs(grid.p[i][2]) > 4) {
-    //                grid.p[i][2] += sign(grid.p[i][2])*((abs(grid.p[i][2]) - 4)*2);
-    //            }
-    //        }
 
     for(int i=0; i<8; i++) {
         // grid.p[i] += eyePosition;
@@ -197,45 +172,55 @@ void main(void) {
         vec4 mvp_p3 = mvp*vec4(p3, 1.0);
         vec3 n3 = calculateNormal(p3);
 
-        // front face
-        position = p1;
-        normal = n1;
-        gl_Position = mvp_p1;
-        lolCoord = vec2(0.0, 0.0);
-        EmitVertex();
+        vec3 center = (p1 + p2 + p3) / 3.0;
+        vec3 eyeDirection = center - eyePosition;
 
-        position = p2;
-        normal = n2;
-        gl_Position = mvp_p2;
-        lolCoord = vec2(1.0, 0.0);
-        EmitVertex();
+        vec3 U = p2 - p1;
+        vec3 V = p3 - p1;
 
-        position = p3;
-        normal = n3;
-        gl_Position = mvp_p3;
-        lolCoord = vec2(1.0, 1.0);
-        EmitVertex();
-        EndPrimitive();
+        vec3 N = normalize(cross(U, V));
 
-        // back face
-        position = p3;
-        normal = -n3;
-        gl_Position = mvp_p3;
-        lolCoord = vec2(1.0, 1.0);
-        EmitVertex();
+        float sign = dot(N, eyeDirection);
 
-        position = p2;
-        normal = -n2;
-        gl_Position = mvp_p2;
-        lolCoord = vec2(1.0, 0.0);
-        EmitVertex();
+        if(sign < 0) {
+            position = p1;
+            normal = n1;
+            gl_Position = mvp_p1;
+            lolCoord = vec2(0.0, 0.0);
+            EmitVertex();
 
-        position = p1;
-        normal = -n1;
-        gl_Position = mvp_p1;
-        lolCoord = vec2(0.0, 0.0);
-        EmitVertex();
-        EndPrimitive();
+            position = p2;
+            normal = n2;
+            gl_Position = mvp_p2;
+            lolCoord = vec2(1.0, 0.0);
+            EmitVertex();
+
+            position = p3;
+            normal = n3;
+            gl_Position = mvp_p3;
+            lolCoord = vec2(1.0, 1.0);
+            EmitVertex();
+            EndPrimitive();
+
+        } else {
+            position = p3;
+            normal = n3;
+            gl_Position = mvp_p3;
+            lolCoord = vec2(1.0, 1.0);
+            EmitVertex();
+
+            position = p2;
+            normal = n2;
+            gl_Position = mvp_p2;
+            lolCoord = vec2(1.0, 0.0);
+            EmitVertex();
+
+            position = p1;
+            normal = n1;
+            gl_Position = mvp_p1;
+            lolCoord = vec2(0.0, 0.0);
+            EmitVertex();
+            EndPrimitive();
+        }
     }
-    // }
 }

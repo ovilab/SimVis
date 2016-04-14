@@ -80,7 +80,7 @@ Entity {
                                     // result: "$position.z + 3*sin(0.05*$position.y) + 3*sin(0.05*$position.x);"
                                     // result: "$position.x + $position.y + $position.z;"
                                     // result: "$position.x*$position.x + $position.z*$position.z;"
-                                    // result: "$position.z;"
+//                                     result: "$position.z;"
                                     result: "sin(0.2*$position.z) + sin(0.2*$position.x) + sin(0.2*$position.y);"
                                     // result: "$position.x*$position.x + $position.y*$position.y + $position.z*$position.z;"
                                 }
@@ -139,7 +139,7 @@ Entity {
 //                                        }
 //                                    }
 
-                                    // color: _fragmentBuilder.lolCoord
+//                                     color: _fragmentBuilder.lolCoord
 //                                    color: ImageTexture {
 //                                        source: "file:///projects/SimVis/SimVis/examples/cylinders/diffuse.webp"
 //                                        vector: Multiply {
@@ -151,22 +151,6 @@ Entity {
                                     lights: ShaderGroup {
                                         Nodes.Light {
                                             position: camera.position
-                                            attenuation: 0.0
-                                        }
-                                        Nodes.Light {
-                                            position: Qt.vector3d(0,10,0)
-                                            attenuation: 0.0
-                                        }
-                                        Nodes.Light {
-                                            position: Qt.vector3d(20,10,0)
-                                            attenuation: 0.0
-                                        }
-                                        Nodes.Light {
-                                            position: Qt.vector3d(0,10,20)
-                                            attenuation: 0.0
-                                        }
-                                        Nodes.Light {
-                                            position: Qt.vector3d(20,20,31)
                                             attenuation: 0.0
                                         }
                                     }
@@ -184,6 +168,7 @@ Entity {
         primitiveType: GeometryRenderer.Points
 
         geometry: UniformGridGeometry { }
+//        geometry: SphereGeometry {}
     }
 
     Texture2D {
