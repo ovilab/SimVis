@@ -7,6 +7,28 @@
 
 using namespace Qt3DRender;
 
+float translate(float x) {
+    float y = 0;
+
+    for(int i = 0; i<fabs(x); i++) {
+        if(i<6) {
+            y += i;
+        } else if(i<8) {
+            y += 2*i;
+        } else if(i<10) {
+            y += 4*i;
+        } else if(i<12) {
+            y += 8*i;
+        } else if(i<16) {
+            y += 16*i;
+        } else  {
+            y += 32*i;
+        }
+    }
+    if(x>0) return y;
+    else return -y;
+}
+
 class UniformGridVertexDataFunctor : public Qt3DRender::QBufferFunctor
 {
     int m_vertexCount = 0;
@@ -29,16 +51,22 @@ public:
         for(int i=0; i<N; i++) {
             float x0 = -nHalf + i;
             float x1 = -nHalf + i+1;
+            x0 = translate(x0);
+            x1 = translate(x1);
             float dx = x1-x0;
 
             for(int j=0; j<N; j++) {
                 float y0 = -nHalf + j;
                 float y1 = -nHalf + j+1;
+                y0 = translate(y0);
+                y1 = translate(y1);
                 float dy = y1-y0;
 
                 for(int k=0; k<N; k++) {
                     float z0 = -nHalf + k;
                     float z1 = -nHalf + k+1;
+                    z0 = translate(z0);
+                    z1 = translate(z1);
                     float dz = z1-z0;
 
                     if(true || x0*x0 + y0*y0 + z0*z0 < nHalfSquared) {

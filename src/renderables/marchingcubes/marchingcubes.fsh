@@ -1,6 +1,7 @@
 #version 410
 
 uniform sampler2D triangleTable;
+uniform mat3 modelNormalMatrix;
 
 #pragma shadernodes header
 

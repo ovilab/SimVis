@@ -77,8 +77,8 @@ Entity {
                                     name: "position"
                                     type: "float"
                                     // result: "sin(2.0 *0.1* $position.x - 0.1*0.1*$position.y*$position.z) + cos(2.0 * 0.1*$position.y) + sin(2.0 * 0.1*$position.z)*cos(2.0*0.1*$position.y);"
-                                    // result: "$position.y + sin($position.z) + sin($position.x);"
-                                    result: "$position.z;"
+                                    result: "$position.z + 3*sin(0.05*$position.y) + 3*sin(0.05*$position.x);"
+                                    // result: "$position.z;"
                                     // result: "sin(0.1*$position.z) + sin(0.1*$position.x) + sin(0.1*$position.y);"
                                     // result: "$position.x*$position.x + $position.y*$position.y + $position.z*$position.z;"
                                 }
@@ -126,11 +126,46 @@ Entity {
                                 name: "fragColor"
                                 value: StandardMaterial {
                                     position: _fragmentBuilder.position
-                                    normal: _fragmentBuilder.normal
+                                    // normal: _fragmentBuilder.normal
+                                    normal: NormalMap {
+                                        color: ImageTexture {
+                                            source: "file:///projects/SimVis/SimVis/examples/cylinders/normal.webp"
+                                            vector: Multiply {
+                                                value1: _fragmentBuilder.position
+                                                value2: 0.1
+                                            }
+                                        }
+                                    }
+
                                     // color: _fragmentBuilder.lolCoord
+                                    color: ImageTexture {
+                                        source: "file:///projects/SimVis/SimVis/examples/cylinders/diffuse.webp"
+                                        vector: Multiply {
+                                            value1: _fragmentBuilder.position
+                                            value2: 0.1
+                                        }
+                                    }
+
                                     lights: ShaderGroup {
                                         Nodes.Light {
                                             position: camera.position
+                                            attenuation: 0.0
+                                        }
+                                        Nodes.Light {
+                                            position: Qt.vector3d(0,10,0)
+                                            attenuation: 0.0
+                                        }
+                                        Nodes.Light {
+                                            position: Qt.vector3d(20,10,0)
+                                            attenuation: 0.0
+                                        }
+                                        Nodes.Light {
+                                            position: Qt.vector3d(0,10,20)
+                                            attenuation: 0.0
+                                        }
+                                        Nodes.Light {
+                                            position: Qt.vector3d(20,20,31)
+                                            attenuation: 0.0
                                         }
                                     }
                                 }

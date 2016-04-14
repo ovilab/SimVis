@@ -134,8 +134,8 @@ void main(void) {
 
         for(int i=0; i<8; i++) {
             // grid.p[i] += eyePosition;
-//            grid.p[i] *= scale;
-//            grid.p[i] += eyePosition;
+            grid.p[i] *= scale;
+            grid.p[i] += eyePosition;
             grid.val[i] = eval(grid.p[i]);
         }
 
