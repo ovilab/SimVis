@@ -8,7 +8,7 @@ layout( triangle_strip, max_vertices = 64 ) out;
 in vec3 vs_position[1];
 out vec3 position;
 out vec3 normal;
-
+out vec2 lolCoord;
 uniform float threshold;
 uniform vec3 eyePosition;
 uniform float scale;
@@ -76,15 +76,23 @@ vec3 linterp(float threshold, vec3 p1, vec3 p2, float valp1, float valp2)
 void main(void) {
         vec3 scaleVec = vec3(scale);
         // vec3 v_000 = scaleVec*(vs_position[0]) + eyePosition;                        // Corresponds to vertex 0
-        vec3 v_000 = scaleVec*vs_position[0];                        // Corresponds to vertex 0
-        vec3 v_001 = v_000 + vec3(0.0, 0.0, scaleVec.z);            // Corresponds to vertex 4
-        vec3 v_011 = v_000 + vec3(0.0, scaleVec.y, scaleVec.z);             // Corresponds to vertex 5
-        vec3 v_010 = v_000 + vec3(0.0, scaleVec.y, 0.0);       // Corresponds to vertex 1
-        vec3 v_110 = v_000 + vec3(scaleVec.x, scaleVec.y, 0.0);           // Corresponds to vertex 2
-        vec3 v_111 = v_000 + scaleVec;                         // Corresponds to vertex 6
-        vec3 v_101 = v_000 + vec3(scaleVec.x, 0.0, scaleVec.z);   // Corresponds to vertex 7
-        vec3 v_100 = v_000 + vec3(scaleVec.x, 0.0, 0.0);       // Corresponds to vertex 3
+//        vec3 v_000 = scaleVec*vs_position[0];                        // Corresponds to vertex 0
+//        vec3 v_001 = v_000 + vec3(0.0, 0.0, scaleVec.z);            // Corresponds to vertex 4
+//        vec3 v_011 = v_000 + vec3(0.0, scaleVec.y, scaleVec.z);             // Corresponds to vertex 5
+//        vec3 v_010 = v_000 + vec3(0.0, scaleVec.y, 0.0);       // Corresponds to vertex 1
+//        vec3 v_110 = v_000 + vec3(scaleVec.x, scaleVec.y, 0.0);           // Corresponds to vertex 2
+//        vec3 v_111 = v_000 + scaleVec;                         // Corresponds to vertex 6
+//        vec3 v_101 = v_000 + vec3(scaleVec.x, 0.0, scaleVec.z);   // Corresponds to vertex 7
+//        vec3 v_100 = v_000 + vec3(scaleVec.x, 0.0, 0.0);       // Corresponds to vertex 3
 
+        vec3 v_000 = vs_position[0];              // Corresponds to vertex 0
+        vec3 v_001 = v_000 + vec3(0.0, 0.0, 1.0); // Corresponds to vertex 4
+        vec3 v_011 = v_000 + vec3(0.0, 1.0, 1.0); // Corresponds to vertex 5
+        vec3 v_010 = v_000 + vec3(0.0, 1.0, 0.0); // Corresponds to vertex 1
+        vec3 v_110 = v_000 + vec3(1.0, 1.0, 0.0); // Corresponds to vertex 2
+        vec3 v_111 = v_000 + vec3(1.0, 1.0, 1.0); // Corresponds to vertex 6
+        vec3 v_101 = v_000 + vec3(1.0, 0.0, 1.0); // Corresponds to vertex 7
+        vec3 v_100 = v_000 + vec3(1.0, 0.0, 0.0); // Corresponds to vertex 3
 
         GridCell grid;
         grid.p[0] = v_000;
@@ -97,6 +105,35 @@ void main(void) {
         grid.p[7] = v_101;
 
         for(int i=0; i<8; i++) {
+            if(abs(grid.p[i][0]) > 16) {
+                grid.p[i][0] += sign(grid.p[i][0])*( (8 - 4)*2 + (16 - 8)*4 + (abs(grid.p[i][0]) - 16)*8);
+            } else if(abs(grid.p[i][0]) > 8) {
+                grid.p[i][0] += sign(grid.p[i][0])*( (8 - 4)*2 + (abs(grid.p[i][0]) - 8)*4);
+            } else if(abs(grid.p[i][0]) > 4) {
+                grid.p[i][0] += sign(grid.p[i][0])*((abs(grid.p[i][0]) - 4)*2);
+            }
+
+            if(abs(grid.p[i][1]) > 16) {
+                grid.p[i][1] += sign(grid.p[i][1])*( (8 - 4)*2 + (16 - 8)*4 + (abs(grid.p[i][1]) - 16)*8);
+            } else if(abs(grid.p[i][1]) > 8) {
+                grid.p[i][1] += sign(grid.p[i][1])*( (8 - 4)*2 + (abs(grid.p[i][1]) - 8)*4);
+            } else if(abs(grid.p[i][1]) > 4) {
+                grid.p[i][1] += sign(grid.p[i][1])*((abs(grid.p[i][1]) - 4)*2);
+            }
+
+            if(abs(grid.p[i][2]) > 16) {
+                grid.p[i][2] += sign(grid.p[i][2])*( (8 - 4)*2 + (16 - 8)*4 + (abs(grid.p[i][2]) - 16)*8);
+            } else if(abs(grid.p[i][2]) > 8) {
+                grid.p[i][2] += sign(grid.p[i][2])*( (8 - 4)*2 + (abs(grid.p[i][2]) - 8)*4);
+            } else if(abs(grid.p[i][2]) > 4) {
+                grid.p[i][2] += sign(grid.p[i][2])*((abs(grid.p[i][2]) - 4)*2);
+            }
+        }
+
+        for(int i=0; i<8; i++) {
+            // grid.p[i] += eyePosition;
+            grid.p[i] *= scale;
+            grid.p[i] += eyePosition;
             grid.val[i] = eval(grid.p[i]);
         }
 
@@ -145,16 +182,19 @@ void main(void) {
             position = p1;
             normal = n1;
             gl_Position = mvp_p1;
+            lolCoord = vec2(0.0, 0.0);
             EmitVertex();
 
             position = p2;
             normal = n2;
             gl_Position = mvp_p2;
+            lolCoord = vec2(1.0, 0.0);
             EmitVertex();
 
             position = p3;
             normal = n3;
             gl_Position = mvp_p3;
+            lolCoord = vec2(1.0, 1.0);
             EmitVertex();
             EndPrimitive();
 
@@ -162,16 +202,19 @@ void main(void) {
             position = p3;
             normal = -n3;
             gl_Position = mvp_p3;
+            lolCoord = vec2(1.0, 1.0);
             EmitVertex();
 
             position = p2;
             normal = -n2;
             gl_Position = mvp_p2;
+            lolCoord = vec2(1.0, 0.0);
             EmitVertex();
 
             position = p1;
             normal = -n1;
             gl_Position = mvp_p1;
+            lolCoord = vec2(0.0, 0.0);
             EmitVertex();
             EndPrimitive();
         }

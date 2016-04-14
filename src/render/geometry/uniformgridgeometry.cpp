@@ -32,7 +32,7 @@ public:
                 float y = -nHalf + j;
                 for(int k=0; k<N; k++) {
                     float z = -nHalf + k;
-                    if(x*x + y*y + z*z < nHalfSquared) {
+                    if(true || x*x + y*y + z*z < nHalfSquared) {
                         *verticesPtr++ = x;
                         *verticesPtr++ = y;
                         *verticesPtr++ = z;

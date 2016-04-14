@@ -6,6 +6,7 @@ uniform sampler2D triangleTable;
 
 uniform vec3 eyePosition;
 in vec3 position;
+in vec2 lolCoord;
 in vec3 normal;
 out vec4 fragColor;
 

@@ -26,11 +26,11 @@ Entity {
             },
             Parameter {
                 name: "threshold"
-                value: 0.0
+                value: 0.001
             },
             Parameter {
                 name: "scale"
-                value: 1.0
+                value: 5.0
             }
 
         ]
@@ -71,7 +71,8 @@ Entity {
                                     type: "float"
                                     // result: "sin(2.0 *0.1* $position.x - 0.1*0.1*$position.y*$position.z) + cos(2.0 * 0.1*$position.y) + sin(2.0 * 0.1*$position.z)*cos(2.0*0.1*$position.y);"
                                     // result: "$position.y + sin($position.z) + sin($position.x);"
-                                    result: "$position.x;"
+                                    // result: "$position.z;"
+                                    result: "sin(0.1*$position.z) + sin(0.1*$position.x) + sin(0.1*$position.y);"
                                     // result: "$position.x*$position.x + $position.y*$position.y + $position.z*$position.z;"
                                 }
                             }
@@ -103,6 +104,12 @@ Entity {
                             result: "texCoord"
                         }
 
+                        property ShaderNode lolCoord: ShaderNode {
+                            type: "vec2"
+                            name: "lolCoord"
+                            result: "lolCoord"
+                        }
+
                         sourceFile: "qrc:/SimVis/renderables/marchingcubes/marchingcubes.fsh"
 
                         outputs: [
@@ -113,6 +120,7 @@ Entity {
                                 value: StandardMaterial {
                                     position: _fragmentBuilder.position
                                     normal: _fragmentBuilder.normal
+                                    // color: _fragmentBuilder.lolCoord
                                     lights: ShaderGroup {
                                         Nodes.Light {
                                             position: camera.position
