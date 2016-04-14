@@ -68,9 +68,8 @@ protected:
 
 private:
     Qt3DRender::QAttribute *m_positionAttribute = nullptr;
-    Qt3DRender::QAttribute *m_indexAttribute = nullptr;
+    Qt3DRender::QAttribute *m_deltaAttribute = nullptr;
     Qt3DRender::QBuffer *m_vertexBuffer = nullptr;
-    Qt3DRender::QBuffer *m_indexBuffer = nullptr;
     class UniformGridVertexDataFunctor *m_dataFunctor = nullptr;
     int m_resolution = 32;
     int vertexCount() { return m_resolution*m_resolution*m_resolution; }
