@@ -30,7 +30,7 @@ Camera::Camera(QObject *parent) :
     QObject::connect(d_func()->m_lookAt, SIGNAL(viewCenterChanged()), this, SIGNAL(viewCenterChanged()));
 
     // Default values
-    setPosition(QVector3D(0, 0, -5));
+    setPosition(QVector3D(0, 0, -0.2));
     setViewCenter(QVector3D(0, 0, 0));
     setUpVector(QVector3D(0, -1, 0));
 

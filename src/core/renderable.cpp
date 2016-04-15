@@ -140,6 +140,14 @@ void RenderableRenderer::prepareAndRender()
     m_program.setUniformValue("cp_upVector", m_upVector.normalized());
     m_program.setUniformValue("cp_cameraPosition", m_cameraPosition);
     m_program.setUniformValue("cp_time", float(m_elapsedTime.elapsed()*1e-3));
+
+    static QMatrix4x4 mvpInv = modelViewProjectionMatrix.inverted();
+    QMatrix4x4 mvpInv2 = modelViewProjectionMatrix.inverted();
+    m_program.setUniformValue("cp_mvpInv", mvpInv);
+
+    qDebug() << "static mvpInv: " << mvpInv;
+    qDebug() << "mvpInv: " << mvpInv2;
+
     GLint numberOfLights = 0;
     for(ShaderEffect *shaderEffect : m_shaderEffects) {
         if(shaderEffect->enabled()) {

@@ -5,6 +5,7 @@ message(simvis_builddir: $$simvis_builddir)
 LIB_NAME = SimVis
 
 LIB_TARGET = $$qtLibraryTarget($$LIB_NAME)
+LIBS += -L/projects/SimVis/build-SimVis-Desktop_Qt_5_6_0_clang_64bit-Release/dist/SimVis/
 LIBS += -L$$simvis_builddir/dist/$${LIB_NAME} -l$${LIB_TARGET}
 
 QML_IMPORT_PATH += $$simvis_builddir/dist/
@@ -19,7 +20,7 @@ ios {
     # undocumented Qmake property used to autogenerate Q_IMPORT_PLUGIN
     QMLPATHS += $$simvis_srcdir/src/imports
 } macx {
-    copy_lib.commands = $(COPY_DIR) $$simvis_builddir/dist/$${LIB_NAME} $$OUT_PWD/$${TARGET}.app/Contents/MacOS
+    copy_lib.commands = $(COPY_DIR) /projects/SimVis/build-SimVis-Desktop_Qt_5_6_0_clang_64bit-Release/dist/SimVis $$OUT_PWD/$${TARGET}.app/Contents/MacOS
     copy_lib.commands += && install_name_tool -change lib$${LIB_TARGET}.dylib @executable_path/$${LIB_NAME}/lib$${LIB_TARGET}.dylib $$OUT_PWD/$${TARGET}.app/Contents/MacOS/$${TARGET}
 } unix:!macx {
     copy_lib.commands = $(COPY_DIR) $$simvis_builddir/dist/$${LIB_NAME} $$OUT_PWD
