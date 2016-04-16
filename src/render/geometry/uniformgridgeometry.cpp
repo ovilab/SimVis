@@ -43,6 +43,19 @@ public:
         verticesData.resize(vertexSize*vertexCount);
         float *verticesPtr = reinterpret_cast<float*>(verticesData.data());
 
+//        for(int i=0; i<m_nPhi; i++) {
+//            for(int j=0; j<m_nTheta; j++) {
+//                for(int k=0; k<m_nR; k++) {
+//                    *verticesPtr++ = i;
+//                    *verticesPtr++ = j;
+//                    *verticesPtr++ = k;
+//                    *verticesPtr++ = m_nR;
+//                    *verticesPtr++ = m_nPhi;
+//                    *verticesPtr++ = m_nTheta;
+//                }
+//            }
+//        }
+
         for(int i=0; i<vertexCount; i++) {
             *verticesPtr++ = i;
             *verticesPtr++ = i;

@@ -17,6 +17,8 @@ uniform float scale;
 uniform sampler2D triangleTable;
 uniform mat4 mvp;
 uniform mat4 modelView;
+uniform mat4 inverseModelViewProjection;
+uniform mat4 inverseProjectionMatrix;
 
 float eval(vec3 position) {
     float shaderNodeResult;
@@ -87,32 +89,82 @@ void main(void) {
     int nPhi = int(vs_delta[0].y);
     int nTheta = int(vs_delta[0].z);
     int index = int(vs_position[0].x);
-    int i = index / (nPhi*nTheta);
-    int j = int(mod((index/nTheta), nPhi));
-    int k = int(mod(index, nTheta));
 
-    vec3 viewVector = vec3(modelView[2][0], modelView[2][1], modelView[2][2]);
-    // vec3 viewVector = vec3(0.0, 0.0, 1.0);
-    float delta_r0 = sqrt(i+1);
-    float delta_r1 = sqrt(i+2);
-    float r0 = (i+1)*delta_r0;
-    float r1 = (i+2)*delta_r1;
-    float dr = r1-r0;
-    float phi0 = float(j) / nPhi * 2 * M_PI;
-    float phi1 = float(j+1) / nPhi * 2 * M_PI;
-    float dphi = phi1-phi0;
-    float theta0 = -0.5*M_PI + float(k) / nTheta * M_PI;
-    float theta1 = -0.5*M_PI + float(k+1) / nTheta * M_PI;
-    float dtheta = theta1-theta0;
+    int k = index / (nPhi*nTheta);
+    int i = int(mod((index/nTheta), nPhi));
+    int j = int(mod(index, nTheta));
 
-    vec3 v_000 = translate(r0,phi0,theta0);
-    vec3 v_001 = translate(r0,phi0, theta0+dtheta);
-    vec3 v_011 = translate(r0,phi0+dphi, theta0+dtheta);
-    vec3 v_010 = translate(r0,phi0+dphi, theta0);
-    vec3 v_110 = translate(r0+dr,phi0+dphi, theta0);
-    vec3 v_111 = translate(r0+dr,phi0+dphi, theta0+dtheta);
-    vec3 v_101 = translate(r0+dr,phi0, theta0+dtheta);
-    vec3 v_100 = translate(r0+dr,phi0, theta0);
+//    int i = int(vs_position[0].x);
+//    int j = int(vs_position[0].y);
+//    int k = int(vs_position[0].z);
+
+
+    //         d1
+    //    c1 ------- c2
+    //    |           |
+    // d3 |           | d4
+    //    |           |
+    //    c3 ------- c4
+    //         d2
+
+    float f_i = float(i) / nPhi;
+    float f_j = float(j) / nTheta;
+
+    vec2 c1 = vec2(-1, -1);
+    vec2 c4 = vec2( 1,  1);
+    vec2 deltaCorner = c4 - c1;
+
+    float x =  c1.x + deltaCorner.x*f_i;
+    float y =  c1.y + deltaCorner.y*f_j;
+
+    vec4  p1_ss = vec4(x, y, -1.0, 1.0);
+    vec4  p2_ss = vec4(x, y, 1.0, 0.0);
+    vec4  p1 = inverseModelViewProjection*p1_ss;
+    vec4  p2 = inverseModelViewProjection*p2_ss;
+//    vec4  p1 = inverseProjectionMatrix*p1_ss;
+//    vec4  p2 = inverseProjectionMatrix*p2_ss;
+
+//    p1 = vec4(0.0, 0.0, 0.0, 1.0);
+//    p2 = vec4(0.0, 0.0, 1.0, 1.0);
+    // vec4  d1 = normalize(p2 - p1);
+    // vec4  d1 = p2 - p1;
+    vec4  d1 = p2;
+    // d1.w = 0.0;
+    // d1 /= d1.w;
+    d1 = normalize(d1);
+
+    // Now also do this for the next point (v_111 basically)
+    f_i = float(i+1) / nPhi;
+    f_j = float(j+1) / nTheta;
+    x =  c1.x + deltaCorner.x*f_i;
+    y =  c1.y + deltaCorner.y*f_j;
+    p2_ss = vec4(x, y, -1.0, 1.0);
+    vec4 p3_ss = vec4(x, y, 1.0, 0.0);
+
+//    p2 = inverseProjectionMatrix*p2_ss;
+//    vec4 p3 = inverseProjectionMatrix*p3_ss;
+    p2 = inverseModelViewProjection*p2_ss;
+    vec4 p3 = inverseModelViewProjection*p3_ss;
+
+//    p2 = vec4(1.0, 1.0, 0.0, 1.0);
+//    p3 = vec4(1.0, 1.0, 1.0, 1.0);
+
+    // vec4 d2 = p3 - p2;
+    vec4 d2 = p3;
+    // d2 /= d2.w;
+    // d2.w = 0.0;
+    d2 = normalize(d2);
+
+    vec3 v_000 = p1.xyz + d1.xyz*(5*k);
+    vec3 v_111 = p2.xyz + d2.xyz*(5*(k+1));
+    vec3 delta = v_111 - v_000;
+
+    vec3 v_001 = v_000 + vec3(0.0, 0.0, delta.z);
+    vec3 v_011 = v_000 + vec3(0.0, delta.y, delta.z);
+    vec3 v_010 = v_000 + vec3(0.0, delta.y, 0.0);
+    vec3 v_110 = v_000 + vec3(delta.x, delta.y, 0.0);
+    vec3 v_101 = v_000 + vec3(delta.x, 0.0, delta.z);
+    vec3 v_100 = v_000 + vec3(delta.x, 0.0, 0.0);
 
     GridCell grid;
     grid.p[0] = v_000;
@@ -127,7 +179,7 @@ void main(void) {
     for(int i=0; i<8; i++) {
         // grid.p[i] += eyePosition;
         //            grid.p[i] *= scale;
-        grid.p[i] += eyePosition;
+        // grid.p[i] += eyePosition;
         grid.val[i] = eval(grid.p[i]);
     }
 
@@ -224,3 +276,4 @@ void main(void) {
         }
     }
 }
+
