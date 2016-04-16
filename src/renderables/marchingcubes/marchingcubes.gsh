@@ -141,6 +141,22 @@ void main(void) {
     EmitVertex();
     EndPrimitive();
 
+    gl_Position = mvp*p1;
+    position = p1.xyz;
+    lolCoord = vec2(0.0, 0.0);
+    EmitVertex();
+
+    gl_Position = mvp*p3;
+    position = p3.xyz;
+    lolCoord = vec2(0.0, 0.0);
+    EmitVertex();
+
+    gl_Position = mvp*p2;
+    position = p2.xyz;
+    lolCoord = vec2(0.0, 0.0);
+    EmitVertex();
+    EndPrimitive();
+
 //    int i = int(vs_position[0].x);
 //    int j = int(vs_position[0].y);
 //    int k = int(vs_position[0].z);
