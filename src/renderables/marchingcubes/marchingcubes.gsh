@@ -99,29 +99,24 @@ void main(void) {
     int j = int(vs_position[0].y);
     int k = int(vs_position[0].z);
 
-//    int k = index / (nx*ny);
-//    int i = int(mod((index/nz), ny));
-//    int j = int(mod(index, nx));
-
     float min = -1.0;
-    float max = 1.0;
-    float delta = max-min;
 
-    float dx = delta / nx;
-    float dy = delta / ny;
-    float dz = delta / nz;
+    float dx = 2.0 / nx;
+    float dy = 2.0 / ny;
+    float dz = 2.0 / nz;
 
     float x = min + i*dx;
     float y = min + j*dy;
     float z = min + k*dz;
-
+// #define TRIANGLES
+#ifdef TRIANGLES
     vec4 p1 = inverseModelViewProjection*vec4(vec3(x,y,z), 1.0);
     vec4 p2 = inverseModelViewProjection*vec4(vec3(x+dx,y,z), 1.0);
     vec4 p3 = inverseModelViewProjection*vec4(vec3(x,y+dx,z), 1.0);
 
-    p1 = mvpInv*vec4(vec3(x,y,z), 1.0);
-    p2 = mvpInv*vec4(vec3(x+dx,y,z), 1.0);
-    p3 = mvpInv*vec4(vec3(x,y+dx,z), 1.0);
+//    p1 = mvpInv*vec4(vec3(x,y,z), 1.0);
+//    p2 = mvpInv*vec4(vec3(x+dx,y,z), 1.0);
+//    p3 = mvpInv*vec4(vec3(x,y+dx,z), 1.0);
 
     normal = vec3(0,0,1);
 
@@ -156,182 +151,130 @@ void main(void) {
     lolCoord = vec2(0.0, 0.0);
     EmitVertex();
     EndPrimitive();
+#else
+    vec3 v_000 = (inverseModelViewProjection*vec4(x, y, z, 1.0)).xyz;
+    vec3 v_111 = (inverseModelViewProjection*vec4(x+dx, y+dy, z+dz, 1.0)).xyz;
+//    v_000 = (mvpInv*vec4(x, y, z, 1.0)).xyz;
+//    v_111 = (mvpInv*vec4(x+dx, y+dy, z+dz, 1.0)).xyz;
 
-//    int i = int(vs_position[0].x);
-//    int j = int(vs_position[0].y);
-//    int k = int(vs_position[0].z);
+    vec3 delta = v_111 - v_000;
 
+    vec3 v_001 = v_000 + vec3(0.0, 0.0, delta.z);
+    vec3 v_011 = v_000 + vec3(0.0, delta.y, delta.z);
+    vec3 v_010 = v_000 + vec3(0.0, delta.y, 0.0);
+    vec3 v_110 = v_000 + vec3(delta.x, delta.y, 0.0);
+    vec3 v_101 = v_000 + vec3(delta.x, 0.0, delta.z);
+    vec3 v_100 = v_000 + vec3(delta.x, 0.0, 0.0);
 
-    //         d2
-    //    c1 ------- c2
-    //    |           |
-    // d3 |           |
-    //    |           |
-    //    c3 ------- c4
-    //
+    GridCell grid;
+    grid.p[0] = v_000;
+    grid.p[1] = v_010;
+    grid.p[2] = v_110;
+    grid.p[3] = v_100;
+    grid.p[4] = v_001;
+    grid.p[5] = v_011;
+    grid.p[6] = v_111;
+    grid.p[7] = v_101;
 
+    for(int i=0; i<8; i++) {
+        // grid.p[i] += eyePosition;
+        //            grid.p[i] *= scale;
+        // grid.p[i] += eyePosition;
+        grid.val[i] = eval(grid.p[i]);
+    }
 
-//    vec2 c1 = vec2(-1, -1);
-//    vec2 c2 = vec2(1, -1);
-//    vec2 c3 = vec2(-1, 1);
+    int cubeindex = 0;
 
-//    vec4  p_c1_ss = vec4(c1, -1.0, 1.0);
-//    vec4  dp_c1_ss = vec4(c1, 1.0, 1.0);
-//    vec4  p1 = inverseModelViewProjection*p_c1_ss;
-//    vec4  p1_2 = inverseModelViewProjection*dp_c1_ss;
-//    vec4  dp1 = p1_2 - p1;
+    if (grid.val[0] < threshold) cubeindex |= 1;
+    if (grid.val[1] < threshold) cubeindex |= 2;
+    if (grid.val[2] < threshold) cubeindex |= 4;
+    if (grid.val[3] < threshold) cubeindex |= 8;
+    if (grid.val[4] < threshold) cubeindex |= 16;
+    if (grid.val[5] < threshold) cubeindex |= 32;
+    if (grid.val[6] < threshold) cubeindex |= 64;
+    if (grid.val[7] < threshold) cubeindex |= 128;
 
-//    vec4  p_c2_ss = vec4(c2, -1.0, 1.0);
-//    vec4  dp_c2_ss = vec4(c2, 1.0, 1.0);
-//    vec4  p2 = inverseModelViewProjection*p_c2_ss;
-//    vec4  p2_2 = inverseModelViewProjection*dp_c2_ss;
-//    vec4  dp2 = p2_2 - p2;
+    vec3 vertlist[12];
+    /* Find the vertices where the surface intersects the cube */
+    vertlist[0] = linterp(threshold,grid.p[0],grid.p[1],grid.val[0],grid.val[1]);
+    vertlist[1] = linterp(threshold,grid.p[1],grid.p[2],grid.val[1],grid.val[2]);
+    vertlist[2] = linterp(threshold,grid.p[2],grid.p[3],grid.val[2],grid.val[3]);
+    vertlist[3] = linterp(threshold,grid.p[3],grid.p[0],grid.val[3],grid.val[0]);
+    vertlist[4] = linterp(threshold,grid.p[4],grid.p[5],grid.val[4],grid.val[5]);
+    vertlist[5] = linterp(threshold,grid.p[5],grid.p[6],grid.val[5],grid.val[6]);
+    vertlist[6] = linterp(threshold,grid.p[6],grid.p[7],grid.val[6],grid.val[7]);
+    vertlist[7] = linterp(threshold,grid.p[7],grid.p[4],grid.val[7],grid.val[4]);
+    vertlist[8] = linterp(threshold,grid.p[0],grid.p[4],grid.val[0],grid.val[4]);
+    vertlist[9] = linterp(threshold,grid.p[1],grid.p[5],grid.val[1],grid.val[5]);
+    vertlist[10] = linterp(threshold,grid.p[2],grid.p[6],grid.val[2],grid.val[6]);
+    vertlist[11] = linterp(threshold,grid.p[3],grid.p[7],grid.val[3],grid.val[7]);
 
-//    vec4  p_c3_ss = vec4(c3, -1.0, 1.0);
-//    vec4  dp_c3_ss = vec4(c3, 1.0, 1.0);
-//    vec4  p3 = inverseModelViewProjection*p_c3_ss;
-//    vec4  p3_2 = inverseModelViewProjection*dp_c3_ss;
-//    vec4  dp3 = p3_2 - p3;
+    /* Emit triangles*/
+    int max = 15;
+    int triangleStartIndex = cubeindex;
+    for (int i=0; triTableValue(cubeindex, i) != -1; i+=3) {
+        if(i>=max) break;
+        vec3 p1 = vertlist[triTableValue(cubeindex, i)];
+        vec4 mvp_p1 = mvp*vec4(p1, 1.0);
+        vec3 n1 = calculateNormal(p1);
+        vec3 p2 = vertlist[triTableValue(cubeindex, i+1)];
+        vec4 mvp_p2 = mvp*vec4(p2, 1.0);
+        vec3 n2 = calculateNormal(p2);
+        vec3 p3 = vertlist[triTableValue(cubeindex, i+2)];
+        vec4 mvp_p3 = mvp*vec4(p3, 1.0);
+        vec3 n3 = calculateNormal(p3);
 
-////    dp1.w = 0;
-////    dp1 = normalize(dp1);
-////    dp2.w = 0;
-////    dp2 = normalize(dp2);
-////    dp3.w = 0;
-////    dp3 = normalize(dp3);
+        vec3 center = (p1 + p2 + p3) / 3.0;
+        vec3 eyeDirection = center - eyePosition;
 
-//    float f_i = float(i) / nPhi;
-//    float f_j = float(j) / nTheta;
+        vec3 U = p2 - p1;
+        vec3 V = p3 - p1;
 
-//    vec4 d2 = p2-p1;
-//    vec4 d3 = p3-p1;
-//    vec4 dd1 = dp2-dp1;
-//    vec4 dd2 = dp3-dp1;
-//    // vec4 d5 = dp1 + dd1*f_i + dd2*f_j;
-//    vec4 d5 = vec4(0.0, 0.0, -1.0, 0.0);
+        vec3 N = normalize(cross(U, V));
 
-//    vec3 v_000 = (p1 + d2*f_i + d3*f_j + d5*k).xyz;
+        float sign = dot(N, eyeDirection);
 
-//    f_i = float(i+1) / nPhi;
-//    f_j = float(j+1) / nTheta;
-//    vec3 v_111 = (p1 + d2*f_i + d3*f_j + d5*(k+1)).xyz;
-//    vec3 delta = v_111 - v_000;
+        if(sign < 0) {
+            position = p1;
+            normal = n1;
+            gl_Position = mvp_p1;
+            lolCoord = vec2(0.0, 0.0);
+            EmitVertex();
 
-//    vec3 v_001 = v_000 + vec3(0.0, 0.0, delta.z);
-//    vec3 v_011 = v_000 + vec3(0.0, delta.y, delta.z);
-//    vec3 v_010 = v_000 + vec3(0.0, delta.y, 0.0);
-//    vec3 v_110 = v_000 + vec3(delta.x, delta.y, 0.0);
-//    vec3 v_101 = v_000 + vec3(delta.x, 0.0, delta.z);
-//    vec3 v_100 = v_000 + vec3(delta.x, 0.0, 0.0);
+            position = p2;
+            normal = n2;
+            gl_Position = mvp_p2;
+            lolCoord = vec2(1.0, 0.0);
+            EmitVertex();
 
-//    GridCell grid;
-//    grid.p[0] = v_000;
-//    grid.p[1] = v_010;
-//    grid.p[2] = v_110;
-//    grid.p[3] = v_100;
-//    grid.p[4] = v_001;
-//    grid.p[5] = v_011;
-//    grid.p[6] = v_111;
-//    grid.p[7] = v_101;
+            position = p3;
+            normal = n3;
+            gl_Position = mvp_p3;
+            lolCoord = vec2(1.0, 1.0);
+            EmitVertex();
+            EndPrimitive();
 
-//    for(int i=0; i<8; i++) {
-//        // grid.p[i] += eyePosition;
-//        //            grid.p[i] *= scale;
-//        // grid.p[i] += eyePosition;
-//        grid.val[i] = eval(grid.p[i]);
-//    }
+        } else {
+            position = p3;
+            normal = n3;
+            gl_Position = mvp_p3;
+            lolCoord = vec2(1.0, 1.0);
+            EmitVertex();
 
-//    int cubeindex = 0;
+            position = p2;
+            normal = n2;
+            gl_Position = mvp_p2;
+            lolCoord = vec2(1.0, 0.0);
+            EmitVertex();
 
-//    if (grid.val[0] < threshold) cubeindex |= 1;
-//    if (grid.val[1] < threshold) cubeindex |= 2;
-//    if (grid.val[2] < threshold) cubeindex |= 4;
-//    if (grid.val[3] < threshold) cubeindex |= 8;
-//    if (grid.val[4] < threshold) cubeindex |= 16;
-//    if (grid.val[5] < threshold) cubeindex |= 32;
-//    if (grid.val[6] < threshold) cubeindex |= 64;
-//    if (grid.val[7] < threshold) cubeindex |= 128;
-
-//    vec3 vertlist[12];
-//    /* Find the vertices where the surface intersects the cube */
-//    vertlist[0] = linterp(threshold,grid.p[0],grid.p[1],grid.val[0],grid.val[1]);
-//    vertlist[1] = linterp(threshold,grid.p[1],grid.p[2],grid.val[1],grid.val[2]);
-//    vertlist[2] = linterp(threshold,grid.p[2],grid.p[3],grid.val[2],grid.val[3]);
-//    vertlist[3] = linterp(threshold,grid.p[3],grid.p[0],grid.val[3],grid.val[0]);
-//    vertlist[4] = linterp(threshold,grid.p[4],grid.p[5],grid.val[4],grid.val[5]);
-//    vertlist[5] = linterp(threshold,grid.p[5],grid.p[6],grid.val[5],grid.val[6]);
-//    vertlist[6] = linterp(threshold,grid.p[6],grid.p[7],grid.val[6],grid.val[7]);
-//    vertlist[7] = linterp(threshold,grid.p[7],grid.p[4],grid.val[7],grid.val[4]);
-//    vertlist[8] = linterp(threshold,grid.p[0],grid.p[4],grid.val[0],grid.val[4]);
-//    vertlist[9] = linterp(threshold,grid.p[1],grid.p[5],grid.val[1],grid.val[5]);
-//    vertlist[10] = linterp(threshold,grid.p[2],grid.p[6],grid.val[2],grid.val[6]);
-//    vertlist[11] = linterp(threshold,grid.p[3],grid.p[7],grid.val[3],grid.val[7]);
-
-//    /* Emit triangles*/
-//    int max = 15;
-//    int triangleStartIndex = cubeindex;
-//    for (int i=0; triTableValue(cubeindex, i) != -1; i+=3) {
-//        if(i>=max) break;
-//        vec3 p1 = vertlist[triTableValue(cubeindex, i)];
-//        vec4 mvp_p1 = mvp*vec4(p1, 1.0);
-//        vec3 n1 = calculateNormal(p1);
-//        vec3 p2 = vertlist[triTableValue(cubeindex, i+1)];
-//        vec4 mvp_p2 = mvp*vec4(p2, 1.0);
-//        vec3 n2 = calculateNormal(p2);
-//        vec3 p3 = vertlist[triTableValue(cubeindex, i+2)];
-//        vec4 mvp_p3 = mvp*vec4(p3, 1.0);
-//        vec3 n3 = calculateNormal(p3);
-
-//        vec3 center = (p1 + p2 + p3) / 3.0;
-//        vec3 eyeDirection = center - eyePosition;
-
-//        vec3 U = p2 - p1;
-//        vec3 V = p3 - p1;
-
-//        vec3 N = normalize(cross(U, V));
-
-//        float sign = dot(N, eyeDirection);
-
-//        if(sign < 0) {
-//            position = p1;
-//            normal = n1;
-//            gl_Position = mvp_p1;
-//            lolCoord = vec2(0.0, 0.0);
-//            EmitVertex();
-
-//            position = p2;
-//            normal = n2;
-//            gl_Position = mvp_p2;
-//            lolCoord = vec2(1.0, 0.0);
-//            EmitVertex();
-
-//            position = p3;
-//            normal = n3;
-//            gl_Position = mvp_p3;
-//            lolCoord = vec2(1.0, 1.0);
-//            EmitVertex();
-//            EndPrimitive();
-
-//        } else {
-//            position = p3;
-//            normal = n3;
-//            gl_Position = mvp_p3;
-//            lolCoord = vec2(1.0, 1.0);
-//            EmitVertex();
-
-//            position = p2;
-//            normal = n2;
-//            gl_Position = mvp_p2;
-//            lolCoord = vec2(1.0, 0.0);
-//            EmitVertex();
-
-//            position = p1;
-//            normal = n1;
-//            gl_Position = mvp_p1;
-//            lolCoord = vec2(0.0, 0.0);
-//            EmitVertex();
-//            EndPrimitive();
-//        }
-//    }
+            position = p1;
+            normal = n1;
+            gl_Position = mvp_p1;
+            lolCoord = vec2(0.0, 0.0);
+            EmitVertex();
+            EndPrimitive();
+        }
+    }
+#endif
 }
 
