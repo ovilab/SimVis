@@ -49,9 +49,9 @@ public:
                     *verticesPtr++ = i;
                     *verticesPtr++ = j;
                     *verticesPtr++ = k;
-                    *verticesPtr++ = m_nR;
                     *verticesPtr++ = m_nPhi;
                     *verticesPtr++ = m_nTheta;
+                    *verticesPtr++ = m_nR;
                 }
             }
         }

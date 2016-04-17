@@ -91,9 +91,9 @@ mat4 mvpInv = mat4(
     vec4(0,         0,  -4.99995,   5.00005));
 
 void main(void) {
-    int nz = int(vs_delta[0].x); // I'm using this to send nx ny nz for now
-    int nx = int(vs_delta[0].y);
-    int ny = int(vs_delta[0].z);
+    int nx = int(vs_delta[0].x);
+    int ny = int(vs_delta[0].y);
+    int nz = int(vs_delta[0].z);
     int index = int(vs_position[0].x);
     int i = int(vs_position[0].x);
     int j = int(vs_position[0].y);
