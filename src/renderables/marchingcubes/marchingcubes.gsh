@@ -19,6 +19,7 @@ uniform mat4 mvp;
 uniform mat4 modelView;
 uniform mat4 inverseModelViewProjection;
 uniform mat4 inverseProjectionMatrix;
+uniform mat4 projectionMatrix;
 
 float eval(vec3 position) {
     float shaderNodeResult;
@@ -103,24 +104,20 @@ void main(void) {
     float dx = 2.0 / nx;
     float dy = 2.0 / ny;
     float dz = 2.0 / nz;
-    // float dz_normalized = 1.0 / nz;
-
-    float f = 100;
-    float n = 0.1;
 
     float x_ndc = min + i*dx; // -1 to 1
     float y_ndc = min + j*dy; // -1 to 1
     float z_ndc = min + k*dz; // -1 to 1
-    // z_ndc = 1.0 - z_ndc;
 
-    // float z_eye = -20*dz_normalized*k;
-    // float z_eye = (-2*f*n/(f-n))/( (f+n)/(f-n) - z_ndc);
-    float A = -(f+n)/(f-n);
-    float B = -2*f*n/(f-n);
-    float z_eye = -B / (z_ndc - A);
+    // see https://www.opengl.org/wiki/Compute_eye_space_from_window_space
+    float T1 = projectionMatrix[2][2];
+    float T2 = projectionMatrix[2][3];
+    float E1 = projectionMatrix[3][2];
+    float Nz = z_ndc;
+    float Pz = T2 / (T1 * Nz - T1);
 
-    // z_ndc = (-(f+n)/(f-n)*z_eye - 2*f*n/(f-n)) / (-z_eye);
-    float w_clip = -z_eye;
+    float Cw = E1 * Pz;
+    float w_clip = Cw;
 
 #define TRIANGLES
 #ifdef TRIANGLES
