@@ -16,6 +16,10 @@ Entity {
     property alias position: _fragmentBuilder.position
 
     property Camera camera
+    onCameraChanged: {
+        console.log("Cam pos: "+camera.position)
+    }
+
     Material {
         id: material
 
@@ -26,7 +30,7 @@ Entity {
             },
             Parameter {
                 name: "threshold"
-                value: 2.0
+                value: 1.0
             },
             Parameter {
                 name: "scale"

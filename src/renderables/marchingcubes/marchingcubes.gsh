@@ -85,16 +85,15 @@ vec3 translate(float r, float theta, float phi) {
 #define M_PI 3.1415926535897932384626433832795
 
 mat4 mvpInv = mat4(
-    vec4(0.995851,         0,         0,         0),
-    vec4(0, -0.700208,         0,         0),
-    vec4(0,         0,   4.99995,  -4.00005),
-    vec4(0,         0,  -4.99995,   5.00005));
+    vec4(0.663193,         0,         0,         0),
+    vec4(       0,  0.466308,         0,         0),
+    vec4(       0,         0,    -4.995,     4.005),
+    vec4(       0,         0,    -4.995,     5.005));
 
 void main(void) {
     int nx = int(vs_delta[0].x);
     int ny = int(vs_delta[0].y);
     int nz = int(vs_delta[0].z);
-    int index = int(vs_position[0].x);
     int i = int(vs_position[0].x);
     int j = int(vs_position[0].y);
     int k = int(vs_position[0].z);
@@ -104,58 +103,87 @@ void main(void) {
     float dx = 2.0 / nx;
     float dy = 2.0 / ny;
     float dz = 2.0 / nz;
+    // float dz_normalized = 1.0 / nz;
 
-    float x = min + i*dx;
-    float y = min + j*dy;
-    float z = min + k*dz;
-// #define TRIANGLES
+    float f = 100;
+    float n = 0.1;
+
+    float x_ndc = min + i*dx; // -1 to 1
+    float y_ndc = min + j*dy; // -1 to 1
+    float z_ndc = min + k*dz; // -1 to 1
+    // z_ndc = 1.0 - z_ndc;
+
+    // float z_eye = -20*dz_normalized*k;
+    // float z_eye = (-2*f*n/(f-n))/( (f+n)/(f-n) - z_ndc);
+    float A = -(f+n)/(f-n);
+    float B = -2*f*n/(f-n);
+    float z_eye = -B / (z_ndc - A);
+
+    // z_ndc = (-(f+n)/(f-n)*z_eye - 2*f*n/(f-n)) / (-z_eye);
+    float w_clip = -z_eye;
+
+#define TRIANGLES
 #ifdef TRIANGLES
-    vec4 p1 = inverseModelViewProjection*vec4(vec3(x,y,z), 1.0);
-    vec4 p2 = inverseModelViewProjection*vec4(vec3(x+dx,y,z), 1.0);
-    vec4 p3 = inverseModelViewProjection*vec4(vec3(x,y+dx,z), 1.0);
+    vec3 p1_ndc = vec3(x_ndc   ,y_ndc   , z_ndc);
+    vec3 p2_ndc = vec3(x_ndc+dx,y_ndc   , z_ndc);
+    vec3 p3_ndc = vec3(x_ndc   ,y_ndc+dy, z_ndc);
 
-//    p1 = mvpInv*vec4(vec3(x,y,z), 1.0);
-//    p2 = mvpInv*vec4(vec3(x+dx,y,z), 1.0);
-//    p3 = mvpInv*vec4(vec3(x,y+dx,z), 1.0);
+    vec4 p1_clip = vec4(p1_ndc * w_clip, w_clip);
+    vec4 p2_clip = vec4(p2_ndc * w_clip, w_clip);
+    vec4 p3_clip = vec4(p3_ndc * w_clip, w_clip);
+
+    vec4 p1 = inverseModelViewProjection*p1_clip;
+    vec4 p2 = inverseModelViewProjection*p2_clip;
+    vec4 p3 = inverseModelViewProjection*p3_clip;
+
+    p1 = mvpInv*p1_clip;
+    p2 = mvpInv*p2_clip;
+    p3 = mvpInv*p3_clip;
 
     normal = vec3(0,0,1);
 
     gl_Position = mvp*p1;
     position = p1.xyz;
-    lolCoord = vec2(0.0, 0.0);
+    lolCoord = vec2(z_ndc, -z_ndc);
     EmitVertex();
 
     gl_Position = mvp*p2;
     position = p2.xyz;
-    lolCoord = vec2(0.0, 0.0);
+    lolCoord = vec2(z_ndc, -z_ndc);
     EmitVertex();
 
     gl_Position = mvp*p3;
     position = p3.xyz;
-    lolCoord = vec2(0.0, 0.0);
+    lolCoord = vec2(z_ndc, -z_ndc);
     EmitVertex();
     EndPrimitive();
 
     gl_Position = mvp*p1;
     position = p1.xyz;
-    lolCoord = vec2(0.0, 0.0);
+    lolCoord = vec2(z_ndc, -z_ndc);
     EmitVertex();
 
     gl_Position = mvp*p3;
     position = p3.xyz;
-    lolCoord = vec2(0.0, 0.0);
+    lolCoord = vec2(z_ndc, -z_ndc);
     EmitVertex();
 
     gl_Position = mvp*p2;
     position = p2.xyz;
-    lolCoord = vec2(0.0, 0.0);
+    lolCoord = vec2(z_ndc, -z_ndc);
     EmitVertex();
     EndPrimitive();
 #else
-    vec3 v_000 = (inverseModelViewProjection*vec4(x, y, z, 1.0)).xyz;
-    vec3 v_111 = (inverseModelViewProjection*vec4(x+dx, y+dy, z+dz, 1.0)).xyz;
-//    v_000 = (mvpInv*vec4(x, y, z, 1.0)).xyz;
-//    v_111 = (mvpInv*vec4(x+dx, y+dy, z+dz, 1.0)).xyz;
+    vec3 v_000_ndc = vec3(x_ndc,    y_ndc,    z_ndc);
+    vec3 v_111_ndc = vec3(x_ndc+dx, y_ndc+dy, z_ndc+dz);
+
+    vec4 v_000_clip = vec4(v_000_ndc * w_ndc, w_ndc);
+    vec4 v_111_clip = vec4(v_111_ndc * w_ndc, w_ndc);
+
+    vec3 v_000 = (inverseModelViewProjection*v_000_clip).xyz;
+    vec3 v_111 = (inverseModelViewProjection*v_111_clip).xyz;
+//    v_000 = (mvpInv*v_000_clip).xyz;
+//    v_111 = (mvpInv*v_111_clip).xyz;
 
     vec3 delta = v_111 - v_000;
 

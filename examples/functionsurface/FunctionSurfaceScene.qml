@@ -21,7 +21,6 @@ Scene3D {
         components: [
             StandardFrameGraph {
                 id: frameGraph
-                camera.position: Qt.vector3d(0.0, 0.0, 4.0)
             }
         ]
 

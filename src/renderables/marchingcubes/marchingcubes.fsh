@@ -20,5 +20,6 @@ void main(void) {
     // fragColor = vec4(value.xyz*255, 1.0);
     // fragColor = vec4(gl_FragCoord.xy / 2000, 0.0, 1.0);
     // fragColor = vec4(texture(triangleTable, vec2(0.0,0.0)).r, texture(triangleTable, vec2(0.0,0.0)).g, texture(triangleTable, vec2(0.0,0.0)).b, 1.0);
-    fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    // fragColor = vec4(lolCoord.x, lolCoord.y, 0.0, 0.5);
+    fragColor = vec4(lolCoord.x, lolCoord.y, 0.0, 0.5);
 }

@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
     format.setMinorVersion(3);
     format.setProfile(QSurfaceFormat::CoreProfile);
     view.setFormat(format);
+    view.setResizeMode(QQuickView::SizeRootObjectToView);
     view.setSource(QUrl("qrc:/main_functionsurface.qml"));
     view.show();
 
