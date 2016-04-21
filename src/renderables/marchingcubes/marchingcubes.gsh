@@ -86,10 +86,10 @@ vec3 translate(float r, float theta, float phi) {
 #define M_PI 3.1415926535897932384626433832795
 
 mat4 mvpInv = mat4(
-    vec4(0.663193,         0,         0,         0),
-    vec4(       0,  0.466308,         0,         0),
-    vec4(       0,         0,    -4.995,     4.005),
-    vec4(       0,         0,    -4.995,     5.005));
+            vec4(0.663193,         0,         0,         0),
+            vec4(       0,  0.466308,         0,         0),
+            vec4(       0,         0,    -4.995,     -4.995),
+            vec4(       0,         0,    4.005,     5.005));
 
 void main(void) {
     int nx = int(vs_delta[0].x);
@@ -108,18 +108,23 @@ void main(void) {
     float x_ndc = min + i*dx; // -1 to 1
     float y_ndc = min + j*dy; // -1 to 1
     float z_ndc = min + k*dz; // -1 to 1
+    float z_ndc_next = z_ndc + dz;
 
     // see https://www.opengl.org/wiki/Compute_eye_space_from_window_space
     float T1 = projectionMatrix[2][2];
-    float T2 = projectionMatrix[2][3];
-    float E1 = projectionMatrix[3][2];
+    float T2 = projectionMatrix[3][2];
+    float E1 = projectionMatrix[2][3];
     float Nz = z_ndc;
+    float Nz_next = z_ndc_next;
     float Pz = T2 / (T1 * Nz - T1);
+    float Pz_next = T2 / (T1 * Nz_next - T1);
 
     float Cw = E1 * Pz;
+    float Cw_next = E1 * Pz_next;
     float w_clip = Cw;
+    float w_clip_next = Cw_next;
 
-#define TRIANGLES
+    // #define TRIANGLES
 #ifdef TRIANGLES
     vec3 p1_ndc = vec3(x_ndc   ,y_ndc   , z_ndc);
     vec3 p2_ndc = vec3(x_ndc+dx,y_ndc   , z_ndc);
@@ -172,34 +177,115 @@ void main(void) {
     EndPrimitive();
 #else
     vec3 v_000_ndc = vec3(x_ndc,    y_ndc,    z_ndc);
+    vec3 v_001_ndc = vec3(x_ndc,    y_ndc,    z_ndc+dz);
+    vec3 v_010_ndc = vec3(x_ndc,    y_ndc+dy,    z_ndc);
+    vec3 v_011_ndc = vec3(x_ndc,    y_ndc+dy,    z_ndc+dz);
+    vec3 v_100_ndc = vec3(x_ndc+dx, y_ndc,    z_ndc);
+    vec3 v_101_ndc = vec3(x_ndc+dx, y_ndc, z_ndc+dz);
+    vec3 v_110_ndc = vec3(x_ndc+dx, y_ndc+dy, z_ndc);
     vec3 v_111_ndc = vec3(x_ndc+dx, y_ndc+dy, z_ndc+dz);
 
-    vec4 v_000_clip = vec4(v_000_ndc * w_ndc, w_ndc);
-    vec4 v_111_clip = vec4(v_111_ndc * w_ndc, w_ndc);
+    vec4 v_000_clip = vec4(v_000_ndc * w_clip, w_clip);
+    vec4 v_110_clip = vec4(v_110_ndc * w_clip, w_clip);
+    vec4 v_100_clip = vec4(v_100_ndc * w_clip, w_clip);
+    vec4 v_010_clip = vec4(v_010_ndc * w_clip, w_clip);
 
-    vec3 v_000 = (inverseModelViewProjection*v_000_clip).xyz;
-    vec3 v_111 = (inverseModelViewProjection*v_111_clip).xyz;
+    vec4 v_001_clip = vec4(v_001_ndc * w_clip_next, w_clip_next);
+    vec4 v_011_clip = vec4(v_011_ndc * w_clip_next, w_clip_next);
+    vec4 v_101_clip = vec4(v_101_ndc * w_clip_next, w_clip_next);
+    vec4 v_111_clip = vec4(v_111_ndc * w_clip_next, w_clip_next);
+
+    vec4 v_000 = inverseModelViewProjection*v_000_clip;
+    vec4 v_001 = inverseModelViewProjection*v_001_clip;
+    vec4 v_010 = inverseModelViewProjection*v_010_clip;
+    vec4 v_011 = inverseModelViewProjection*v_011_clip;
+    vec4 v_100 = inverseModelViewProjection*v_100_clip;
+    vec4 v_101 = inverseModelViewProjection*v_101_clip;
+    vec4 v_110 = inverseModelViewProjection*v_110_clip;
+    vec4 v_111 = inverseModelViewProjection*v_111_clip;
+
+//    v_000 = mvpInv*v_000_clip;
+//    v_001 = mvpInv*v_001_clip;
+//    v_010 = mvpInv*v_010_clip;
+//    v_011 = mvpInv*v_011_clip;
+//    v_100 = mvpInv*v_100_clip;
+//    v_101 = mvpInv*v_101_clip;
+//    v_110 = mvpInv*v_110_clip;
+//    v_111 = mvpInv*v_111_clip;
+
+//    v_000 /= v_000.w;
+//    v_001 /= v_001.w;
+//    v_010 /= v_010.w;
+//    v_011 /= v_011.w;
+//    v_100 /= v_100.w;
+//    v_101 /= v_101.w;
+//    v_110 /= v_110.w;
+//    v_111 /= v_111.w;
+
 //    v_000 = (mvpInv*v_000_clip).xyz;
+//    v_110 = (mvpInv*v_110_clip).xyz;
+//    v_001 = (mvpInv*v_001_clip).xyz;
 //    v_111 = (mvpInv*v_111_clip).xyz;
 
-    vec3 delta = v_111 - v_000;
+//    vec3 delta_0 = v_110 - v_000;
+//    vec3 delta_1 = v_111 - v_001;
 
-    vec3 v_001 = v_000 + vec3(0.0, 0.0, delta.z);
-    vec3 v_011 = v_000 + vec3(0.0, delta.y, delta.z);
-    vec3 v_010 = v_000 + vec3(0.0, delta.y, 0.0);
-    vec3 v_110 = v_000 + vec3(delta.x, delta.y, 0.0);
-    vec3 v_101 = v_000 + vec3(delta.x, 0.0, delta.z);
-    vec3 v_100 = v_000 + vec3(delta.x, 0.0, 0.0);
+//    vec3 v_010 = v_000 + vec3(0.0, delta_0.y, 0.0);
+//    vec3 v_100 = v_000 + vec3(delta_0.x, 0.0, 0.0);
+//    vec3 v_011 = v_001 + vec3(0.0, delta_1.y, 0);
+//    vec3 v_101 = v_001 + vec3(delta_1.x, 0.0, 0.0);
+    normal = vec3(1,0,0);
+// #define tri
+#ifdef tri
+        vec4 p1 = vec4(v_001.xyz, 1.0);
+        gl_Position = mvp*p1;
+        position = p1.xyz;
+        lolCoord = vec2(100*(1.0-p1.w), -p1.w);
+        EmitVertex();
 
+        vec4 p2 = vec4(v_101.xyz, 1.0);
+        gl_Position = mvp*p2;
+        position = p2.xyz;
+        lolCoord = vec2(100*(1.0-p2.w), -p2.w);
+        EmitVertex();
+
+        vec4 p3 = vec4(v_111.xyz, 1.0);
+        gl_Position = mvp*p3;
+        position = p3.xyz;
+        lolCoord = vec2(100*(1.0-p3.w), -p3.w);
+        EmitVertex();
+        EndPrimitive();
+
+        vec4 p1_1 = vec4(v_000.xyz, 1.0);
+        gl_Position = mvp*p1_1;
+        position = p1_1.xyz;
+        lolCoord = vec2(100*(1.0-p1.w), -p1.w);
+        EmitVertex();
+
+        vec4 p2_1 = vec4(v_100.xyz, 1.0);
+        gl_Position = mvp*p2_1;
+        position = p2_1.xyz;
+        lolCoord = vec2(100*(1.0-p2.w), -p2.w);
+        EmitVertex();
+
+        vec4 p3_1 = vec4(v_110.xyz, 1.0);
+        gl_Position = mvp*p3_1;
+        position = p3_1.xyz;
+        lolCoord = vec2(100*(1.0-p3.w), -p3.w);
+        EmitVertex();
+        EndPrimitive();
+#endif
+#define MC
+#ifdef MC
     GridCell grid;
-    grid.p[0] = v_000;
-    grid.p[1] = v_010;
-    grid.p[2] = v_110;
-    grid.p[3] = v_100;
-    grid.p[4] = v_001;
-    grid.p[5] = v_011;
-    grid.p[6] = v_111;
-    grid.p[7] = v_101;
+    grid.p[0] = v_000.xyz;
+    grid.p[1] = v_010.xyz;
+    grid.p[2] = v_110.xyz;
+    grid.p[3] = v_100.xyz;
+    grid.p[4] = v_001.xyz;
+    grid.p[5] = v_011.xyz;
+    grid.p[6] = v_111.xyz;
+    grid.p[7] = v_101.xyz;
 
     for(int i=0; i<8; i++) {
         // grid.p[i] += eyePosition;
@@ -259,26 +345,25 @@ void main(void) {
 
         float sign = dot(N, eyeDirection);
 
-        if(sign < 0) {
+        if(sign<0){
             position = p1;
-            normal = n1;
+            normal = -n1;
             gl_Position = mvp_p1;
             lolCoord = vec2(0.0, 0.0);
             EmitVertex();
 
             position = p2;
-            normal = n2;
+            normal = -n2;
             gl_Position = mvp_p2;
             lolCoord = vec2(1.0, 0.0);
             EmitVertex();
 
             position = p3;
-            normal = n3;
+            normal = -n3;
             gl_Position = mvp_p3;
             lolCoord = vec2(1.0, 1.0);
             EmitVertex();
             EndPrimitive();
-
         } else {
             position = p3;
             normal = n3;
@@ -300,6 +385,7 @@ void main(void) {
             EndPrimitive();
         }
     }
+#endif
 #endif
 }
 

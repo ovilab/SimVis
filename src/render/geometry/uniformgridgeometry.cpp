@@ -114,10 +114,9 @@ void UniformGridGeometry::init()
 UniformGridGeometry::UniformGridGeometry(Qt3DCore::QNode *parent)
     : QGeometry(parent)
 {
-    // TODO if m_nR * m_nPhi * m_nTheta >= 32768 the program sometimes crashes on Ubuntu
-    m_nR = 4;
-    m_nPhi = 4;
-    m_nTheta = 4;
+    m_nR = 48;
+    m_nPhi = 32;
+    m_nTheta = 32;
     init();
 }
 
