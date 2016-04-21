@@ -31,27 +31,27 @@ float translate(float x) {
 
 class UniformGridVertexDataFunctor : public Qt3DRender::QBufferFunctor
 {
-    int m_nR, m_nPhi, m_nTheta;
+    int m_nz, m_nx, m_ny;
 public:
-    UniformGridVertexDataFunctor(int inx, int ny, int nz) { m_nR = nz; m_nPhi = ny; m_nTheta = nz; }
+    UniformGridVertexDataFunctor(int nx, int ny, int nz) { m_nx = nx; m_ny = ny; m_nz = nz; }
 
     QByteArray operator ()() Q_DECL_OVERRIDE
     {
         const quint32 vertexSize = (3+3)*sizeof(float);
         QByteArray verticesData;
-        int vertexCount = m_nR*m_nPhi*m_nTheta;
+        int vertexCount = m_nz*m_nx*m_ny;
         verticesData.resize(vertexSize*vertexCount);
         float *verticesPtr = reinterpret_cast<float*>(verticesData.data());
 
-        for(int i=0; i<m_nPhi; i++) {
-            for(int j=0; j<m_nTheta; j++) {
-                for(int k=0; k<m_nR; k++) {
+        for(int i=0; i<m_nx; i++) {
+            for(int j=0; j<m_ny; j++) {
+                for(int k=0; k<m_nz; k++) {
                     *verticesPtr++ = i;
                     *verticesPtr++ = j;
                     *verticesPtr++ = k;
-                    *verticesPtr++ = m_nPhi;
-                    *verticesPtr++ = m_nTheta;
-                    *verticesPtr++ = m_nR;
+                    *verticesPtr++ = m_nx;
+                    *verticesPtr++ = m_ny;
+                    *verticesPtr++ = m_nz;
                 }
             }
         }
@@ -101,7 +101,7 @@ void UniformGridGeometry::init()
     m_deltaAttribute->setBuffer(m_vertexBuffer);
     m_deltaAttribute->setByteStride(stride);
 
-    m_dataFunctor = new UniformGridVertexDataFunctor(m_nR, m_nPhi, m_nTheta);
+    m_dataFunctor = new UniformGridVertexDataFunctor(m_nx, m_ny, m_nz);
 
     m_positionAttribute->setCount(vertexCount());
     m_deltaAttribute->setCount(vertexCount());
@@ -114,9 +114,9 @@ void UniformGridGeometry::init()
 UniformGridGeometry::UniformGridGeometry(Qt3DCore::QNode *parent)
     : QGeometry(parent)
 {
-    m_nR = 48;
-    m_nPhi = 32;
-    m_nTheta = 32;
+    m_nz = 32;
+    m_nx = 16;
+    m_ny = 16;
     init();
 }
 

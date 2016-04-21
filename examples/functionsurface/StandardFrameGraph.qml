@@ -18,7 +18,7 @@ FrameGraph {
         upVector: Qt.vector3d(0.0, 1.0, 0.0)
         viewCenter: Qt.vector3d(0.0, 0.0, -1.0)
         onPositionChanged: {
-            // console.log("Pos: ", position)
+            console.log("Pos: ", position)
         }
         onProjectionMatrixChanged: {
             console.log("Proj: ", projectionMatrix)

@@ -61,12 +61,12 @@ private:
     Qt3DRender::QAttribute *m_deltaAttribute = nullptr;
     Qt3DRender::QBuffer *m_vertexBuffer = nullptr;
     class UniformGridVertexDataFunctor *m_dataFunctor = nullptr;
-    int m_nR = 0;
-    int m_nPhi = 0;
-    int m_nTheta = 0;
+    int m_nz = 0;
+    int m_nx = 0;
+    int m_ny = 0;
     int vertexCount() {
-        qDebug() << "Vertex count:" << m_nR*m_nPhi*m_nTheta;
-        return m_nR*m_nPhi*m_nTheta;
+        qDebug() << "Vertex count:" << m_nz*m_nx*m_ny;
+        return m_nz*m_nx*m_ny;
     }
 };
 

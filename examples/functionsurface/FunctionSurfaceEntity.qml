@@ -30,7 +30,7 @@ Entity {
             },
             Parameter {
                 name: "threshold"
-                value: 0.3
+                value: 0.0
             },
             Parameter {
                 name: "scale"
@@ -87,9 +87,8 @@ Entity {
                                     // result: "exp(-($position.y*$position.y + $position.x*$position.x))"
                                     // result: "$position.x + $position.y + $position.z;"
                                     // result: "$position.z"
-                                    result: "sqrt($position.y*$position.y + $position.x*$position.x + ($position.z+2.0)*($position.z+2.0))"
-
-                                    // result: "sin(0.2*$position.z) + sin(0.2*$position.x) + sin(0.2*$position.y);"
+                                    // result: "sqrt($position.y*$position.y + $position.x*$position.x + ($position.z+2.0)*($position.z+2.0))"
+                                    result: "sin(0.2*$position.z) + sin(0.2*$position.x) + sin(0.2*$position.y);"
                                     // result: "sin($position.z)"
                                     // result: "$position.x*$position.x + $position.y*$position.y + $position.z*$position.z;"
                                 }

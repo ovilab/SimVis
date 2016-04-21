@@ -90,13 +90,13 @@ void main(void) {
 #ifdef CP
     mat4 cp_proj = mat4(1.20628514,  0.,          0.,          0.,
                        0.,          2.14450692,  0.,          0.,
-                       0.,          0.,         -1.02020202, -1.,
-                       0.,          0.,         -2.02020202,  0.);
+                       0.,          0.,         -1.002020202, -1.,
+                       0.,          0.,         -2.002020202,  0.);
 
     mat4 cp_projInv = mat4(0.82899139,  0.,          0.,          0.,
                            0.,          0.46630766,  0.,          0.,
-                          -0.,         -0.,         -0.,         -0.495,
-                          -0.,         -0.,        -1.,          0.505);
+                          -0.,         -0.,         -0.,         -0.4995,
+                          -0.,         -0.,        -1.,          0.5005);
 
     mat4 cp_mvp = cp_proj;
     mat4 cp_mvpInv = cp_projInv;
@@ -106,18 +106,19 @@ void main(void) {
     mat4 cp_mvpInv = inverseModelViewProjection;
 #endif
 
-    int nx = int(vs_delta[0].x);
-    int ny = int(vs_delta[0].y);
-    int nz = int(vs_delta[0].z);
     int i = int(vs_position[0].x);
     int j = int(vs_position[0].y);
     int k = int(vs_position[0].z);
+    int nx = int(vs_delta[0].x);
+    int ny = int(vs_delta[0].y);
+    int nz = int(vs_delta[0].z);
 
     float min = -1.0;
 
-    float dx = 2.0 / nx;
-    float dy = 2.0 / ny;
-    float dz = 1.5 / nz;
+    float dx = 2.0 / (nx-1);
+    float dy = 2.0 / (ny-1);
+    float dz = 2.0 / (nz-1);
+    dz -= 1e-4;
 
     float x_ndc = min + i*dx; // -1 to 1
     float y_ndc = min + j*dy; // -1 to 1
@@ -176,21 +177,21 @@ void main(void) {
 //    v_111 /= v_111.w;
 
     normal = vec3(1,0,0);
-// #define tri
+#define tri
 #ifdef tri
-        vec4 p1 = vec4(v_001.xyz, 1.0);
+        vec4 p1 = vec4(v_000.xyz, 1.0);
         gl_Position = mvp*p1;
         position = p1.xyz;
         lolCoord = vec2(100*(1.0-p1.w), -p1.w);
         EmitVertex();
 
-        vec4 p2 = vec4(v_101.xyz, 1.0);
+        vec4 p2 = vec4(v_100.xyz, 1.0);
         gl_Position = mvp*p2;
         position = p2.xyz;
         lolCoord = vec2(100*(1.0-p2.w), -p2.w);
         EmitVertex();
 
-        vec4 p3 = vec4(v_111.xyz, 1.0);
+        vec4 p3 = vec4(v_110.xyz, 1.0);
         gl_Position = mvp*p3;
         position = p3.xyz;
         lolCoord = vec2(100*(1.0-p3.w), -p3.w);
@@ -213,7 +214,7 @@ void main(void) {
         EmitVertex();
         EndPrimitive();
 #endif
-#define MC
+// #define MC
 #ifdef MC
     GridCell grid;
     grid.p[0] = v_000.xyz;
@@ -226,9 +227,6 @@ void main(void) {
     grid.p[7] = v_101.xyz;
 
     for(int i=0; i<8; i++) {
-        // grid.p[i] += eyePosition;
-        //            grid.p[i] *= scale;
-        // grid.p[i] += eyePosition;
         grid.val[i] = eval(grid.p[i]);
     }
 
@@ -283,7 +281,7 @@ void main(void) {
 
         float sign = dot(N, eyeDirection);
 
-        if(sign<0){
+        // if(sign<0){
             position = p1;
             normal = -n1;
             gl_Position = mvp_p1;
@@ -302,7 +300,7 @@ void main(void) {
             lolCoord = vec2(1.0, 1.0);
             EmitVertex();
             EndPrimitive();
-        } else {
+        // } else {
             position = p3;
             normal = n3;
             gl_Position = mvp_p3;
@@ -321,7 +319,7 @@ void main(void) {
             lolCoord = vec2(0.0, 0.0);
             EmitVertex();
             EndPrimitive();
-        }
+        // }
     }
 #endif
 }
