@@ -14,7 +14,7 @@ Entity {
     property alias fragmentBuilder: _fragmentBuilder
     property alias normal: _fragmentBuilder.normal
     property alias position: _fragmentBuilder.position
-
+    property real  r: 2.0
     property Camera camera
     onCameraChanged: {
         console.log("Cam pos: "+camera.position)
@@ -35,8 +35,11 @@ Entity {
             Parameter {
                 name: "scale"
                 value: 1.0
+            },
+            Parameter {
+                name: "r"
+                value: r
             }
-
         ]
 
         effect: Effect {
@@ -88,7 +91,7 @@ Entity {
                                     // result: "$position.x + $position.y + $position.z;"
                                     // result: "$position.z"
                                      result: "sqrt($position.y*$position.y + $position.x*$position.x + ($position.z+15.0)*($position.z+15.0))"
-//                                    result: "sin(0.2*$position.z) + sin(0.2*$position.x) + sin(0.2*$position.y);"
+                                    // result: "sin(0.05*$position.z) + sin(0.1*$position.x) + sin(0.075234555*$position.y);"
                                     // result: "sin($position.z)"
                                     // result: "$position.x*$position.x + $position.y*$position.y + $position.z*$position.z;"
                                 }

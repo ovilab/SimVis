@@ -20,6 +20,7 @@ uniform mat4 modelView;
 uniform mat4 inverseModelViewProjection;
 uniform mat4 inverseProjectionMatrix;
 uniform mat4 projectionMatrix;
+uniform float r;
 
 float eval(vec3 position) {
     float shaderNodeResult;
@@ -85,8 +86,15 @@ vec3 translate(float r, float theta, float phi) {
 
 #define M_PI 3.1415926535897932384626433832795
 
+float calc_z_ndc(int k, int nz, float r) {
+    float min = -1;
+    float max = 1;
+    float delta = max-min;
+    return min + 2*pow(float(k)/nz, 1./r);
+}
+
 void main(void) {
-//#define CP
+// #define CP
 #ifdef CP
     mat4 cp_proj = mat4(1.20628514,  0.,          0.,          0.,
                        0.,          2.14450692,  0.,          0.,
@@ -115,15 +123,18 @@ void main(void) {
 
     float min = -1.0;
 
-    float dx = 2.0 / (nx-1);
-    float dy = 2.0 / (ny-1);
-    float dz = 2.0 / (nz-1);
+    float dx = 2.0 / nx;
+    float dy = 2.0 / ny;
+    float dz = 2.0 / nz;
     dz -= 1e-4;
 
     float x_ndc = min + i*dx; // -1 to 1
     float y_ndc = min + j*dy; // -1 to 1
-    float z_ndc = min + k*dz; // -1 to 1
-    float z_ndc_next = z_ndc + dz;
+    float z_ndc = calc_z_ndc(k, nz, r);
+    float z_ndc_next = calc_z_ndc(k+1, nz, r);
+    dz = z_ndc_next - z_ndc;
+//    float z_ndc = min + k*dz; // -1 to 1
+//    float z_ndc_next = z_ndc + dz;
 
     // see https://www.opengl.org/wiki/Compute_eye_space_from_window_space
     float T1 = cp_proj[2][2];
@@ -167,17 +178,17 @@ void main(void) {
     vec4 v_110 = cp_mvpInv*v_110_clip;
     vec4 v_111 = cp_mvpInv*v_111_clip;
 
-//    v_000 /= v_000.w;
-//    v_001 /= v_001.w;
-//    v_010 /= v_010.w;
-//    v_011 /= v_011.w;
-//    v_100 /= v_100.w;
-//    v_101 /= v_101.w;
-//    v_110 /= v_110.w;
-//    v_111 /= v_111.w;
+    v_000 /= v_000.w;
+    v_001 /= v_001.w;
+    v_010 /= v_010.w;
+    v_011 /= v_011.w;
+    v_100 /= v_100.w;
+    v_101 /= v_101.w;
+    v_110 /= v_110.w;
+    v_111 /= v_111.w;
 
     normal = vec3(1,0,0);
-#define tri
+// #define tri
 #ifdef tri
         vec4 p1 = vec4(v_000.xyz, 1.0);
         gl_Position = mvp*p1;

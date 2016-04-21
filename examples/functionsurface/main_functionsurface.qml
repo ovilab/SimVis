@@ -21,5 +21,14 @@ Item {
         id: scene
         anchors.fill: parent
         focus: true
+        r: slider.value
+    }
+
+    Slider {
+        id: slider
+        minimumValue: 0
+        maximumValue: 10
+        stepSize: 0.1
+        value: scene.r
     }
 }
