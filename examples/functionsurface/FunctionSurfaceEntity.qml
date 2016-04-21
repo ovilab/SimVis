@@ -30,7 +30,7 @@ Entity {
             },
             Parameter {
                 name: "threshold"
-                value: 5.0
+                value: 0.0
             },
             Parameter {
                 name: "scale"
@@ -89,9 +89,9 @@ Entity {
                                     // result: "$position.x*$position.x + $position.z*$position.z;"
                                     // result: "exp(-($position.y*$position.y + $position.x*$position.x))"
                                     // result: "$position.x + $position.y + $position.z;"
-                                    // result: "$position.z"
-                                     result: "sqrt($position.y*$position.y + $position.x*$position.x + ($position.z+15.0)*($position.z+15.0))"
-                                    // result: "sin(0.05*$position.z) + sin(0.1*$position.x) + sin(0.075234555*$position.y);"
+                                    // result: "10*sin(0.1*($position.z+$position.x)) - $position.y"
+                                    // result: "sqrt($position.y*$position.y + $position.x*$position.x + ($position.z+15.0)*($position.z+15.0))"
+                                    result: "sin(0.05353522*$position.z) + sin(0.1343535*$position.x) + sin(0.075234555*$position.y);"
                                     // result: "sin($position.z)"
                                     // result: "$position.x*$position.x + $position.y*$position.y + $position.z*$position.z;"
                                 }
@@ -139,25 +139,26 @@ Entity {
                                 name: "fragColor"
                                 value: StandardMaterial {
                                     position: _fragmentBuilder.position
-                                    normal: _fragmentBuilder.normal
-//                                    normal: NormalMap {
-//                                        color: ImageTexture {
-//                                            source: "file:///projects/SimVis/SimVis/examples/cylinders/normal.webp"
-//                                            vector: Multiply {
-//                                                value1: _fragmentBuilder.position
-//                                                value2: 0.1
-//                                            }
-//                                        }
-//                                    }
+                                    ambientIntensity: 100
+//                                    normal: _fragmentBuilder.normal
+                                    normal: NormalMap {
+                                        color: ImageTexture {
+                                            source: "file:///projects/SimVis/SimVis/examples/cylinders/normal.webp"
+                                            vector: Multiply {
+                                                value1: _fragmentBuilder.position
+                                                value2: 0.1
+                                            }
+                                        }
+                                    }
 
 //                                     color: _fragmentBuilder.lolCoord
-//                                    color: ImageTexture {
-//                                        source: "file:///projects/SimVis/SimVis/examples/cylinders/diffuse.webp"
-//                                        vector: Multiply {
-//                                            value1: _fragmentBuilder.position
-//                                            value2: 0.1
-//                                        }
-//                                    }
+                                    color: ImageTexture {
+                                        source: "file:///projects/SimVis/SimVis/examples/cylinders/diffuse.webp"
+                                        vector: Multiply {
+                                            value1: _fragmentBuilder.position
+                                            value2: 0.1
+                                        }
+                                    }
 
                                     lights: ShaderGroup {
                                         Nodes.Light {
