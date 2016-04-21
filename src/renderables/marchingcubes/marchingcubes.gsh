@@ -86,17 +86,17 @@ vec3 translate(float r, float theta, float phi) {
 #define M_PI 3.1415926535897932384626433832795
 
 void main(void) {
-#define CP
+//#define CP
 #ifdef CP
     mat4 cp_proj = mat4(1.20628514,  0.,          0.,          0.,
                        0.,          2.14450692,  0.,          0.,
-                       0.,          0.,         -1.002020202, -1.,
-                       0.,          0.,         -2.002020202,  0.);
+                       0.,          0.,         -1.02020202, -1.,
+                       0.,          0.,         -20.2020202,  0.);
 
     mat4 cp_projInv = mat4(0.82899139,  0.,          0.,          0.,
                            0.,          0.46630766,  0.,          0.,
-                          -0.,         -0.,         -0.,         -0.4995,
-                          -0.,         -0.,        -1.,          0.5005);
+                          -0.,         -0.,         -0.,         -0.0495,
+                          -0.,         -0.,        -1.,          0.0505);
 
     mat4 cp_mvp = cp_proj;
     mat4 cp_mvpInv = cp_projInv;
@@ -214,7 +214,7 @@ void main(void) {
         EmitVertex();
         EndPrimitive();
 #endif
-// #define MC
+#define MC
 #ifdef MC
     GridCell grid;
     grid.p[0] = v_000.xyz;
