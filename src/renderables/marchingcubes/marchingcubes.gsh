@@ -85,13 +85,27 @@ vec3 translate(float r, float theta, float phi) {
 
 #define M_PI 3.1415926535897932384626433832795
 
-mat4 mvpInv = mat4(
-            vec4(0.663193,         0,         0,         0),
-            vec4(       0,  0.466308,         0,         0),
-            vec4(       0,         0,    -4.995,     -4.995),
-            vec4(       0,         0,    4.005,     5.005));
-
 void main(void) {
+#define CP
+#ifdef CP
+    mat4 cp_proj = mat4(1.20628514,  0.,          0.,          0.,
+                       0.,          2.14450692,  0.,          0.,
+                       0.,          0.,         -1.02020202, -1.,
+                       0.,          0.,         -2.02020202,  0.);
+
+    mat4 cp_projInv = mat4(0.82899139,  0.,          0.,          0.,
+                           0.,          0.46630766,  0.,          0.,
+                          -0.,         -0.,         -0.,         -0.495,
+                          -0.,         -0.,        -1.,          0.505);
+
+    mat4 cp_mvp = cp_proj;
+    mat4 cp_mvpInv = cp_projInv;
+#else
+    mat4 cp_proj = projectionMatrix;
+    mat4 cp_mvp = mvp;
+    mat4 cp_mvpInv = inverseModelViewProjection;
+#endif
+
     int nx = int(vs_delta[0].x);
     int ny = int(vs_delta[0].y);
     int nz = int(vs_delta[0].z);
@@ -103,7 +117,7 @@ void main(void) {
 
     float dx = 2.0 / nx;
     float dy = 2.0 / ny;
-    float dz = 2.0 / nz;
+    float dz = 1.5 / nz;
 
     float x_ndc = min + i*dx; // -1 to 1
     float y_ndc = min + j*dy; // -1 to 1
@@ -111,9 +125,9 @@ void main(void) {
     float z_ndc_next = z_ndc + dz;
 
     // see https://www.opengl.org/wiki/Compute_eye_space_from_window_space
-    float T1 = projectionMatrix[2][2];
-    float T2 = projectionMatrix[3][2];
-    float E1 = projectionMatrix[2][3];
+    float T1 = cp_proj[2][2];
+    float T2 = cp_proj[3][2];
+    float E1 = cp_proj[2][3];
     float Nz = z_ndc;
     float Nz_next = z_ndc_next;
     float Pz = T2 / (T1 * Nz - T1);
@@ -124,58 +138,6 @@ void main(void) {
     float w_clip = Cw;
     float w_clip_next = Cw_next;
 
-    // #define TRIANGLES
-#ifdef TRIANGLES
-    vec3 p1_ndc = vec3(x_ndc   ,y_ndc   , z_ndc);
-    vec3 p2_ndc = vec3(x_ndc+dx,y_ndc   , z_ndc);
-    vec3 p3_ndc = vec3(x_ndc   ,y_ndc+dy, z_ndc);
-
-    vec4 p1_clip = vec4(p1_ndc * w_clip, w_clip);
-    vec4 p2_clip = vec4(p2_ndc * w_clip, w_clip);
-    vec4 p3_clip = vec4(p3_ndc * w_clip, w_clip);
-
-    vec4 p1 = inverseModelViewProjection*p1_clip;
-    vec4 p2 = inverseModelViewProjection*p2_clip;
-    vec4 p3 = inverseModelViewProjection*p3_clip;
-
-    p1 = mvpInv*p1_clip;
-    p2 = mvpInv*p2_clip;
-    p3 = mvpInv*p3_clip;
-
-    normal = vec3(0,0,1);
-
-    gl_Position = mvp*p1;
-    position = p1.xyz;
-    lolCoord = vec2(z_ndc, -z_ndc);
-    EmitVertex();
-
-    gl_Position = mvp*p2;
-    position = p2.xyz;
-    lolCoord = vec2(z_ndc, -z_ndc);
-    EmitVertex();
-
-    gl_Position = mvp*p3;
-    position = p3.xyz;
-    lolCoord = vec2(z_ndc, -z_ndc);
-    EmitVertex();
-    EndPrimitive();
-
-    gl_Position = mvp*p1;
-    position = p1.xyz;
-    lolCoord = vec2(z_ndc, -z_ndc);
-    EmitVertex();
-
-    gl_Position = mvp*p3;
-    position = p3.xyz;
-    lolCoord = vec2(z_ndc, -z_ndc);
-    EmitVertex();
-
-    gl_Position = mvp*p2;
-    position = p2.xyz;
-    lolCoord = vec2(z_ndc, -z_ndc);
-    EmitVertex();
-    EndPrimitive();
-#else
     vec3 v_000_ndc = vec3(x_ndc,    y_ndc,    z_ndc);
     vec3 v_001_ndc = vec3(x_ndc,    y_ndc,    z_ndc+dz);
     vec3 v_010_ndc = vec3(x_ndc,    y_ndc+dy,    z_ndc);
@@ -195,23 +157,14 @@ void main(void) {
     vec4 v_101_clip = vec4(v_101_ndc * w_clip_next, w_clip_next);
     vec4 v_111_clip = vec4(v_111_ndc * w_clip_next, w_clip_next);
 
-    vec4 v_000 = inverseModelViewProjection*v_000_clip;
-    vec4 v_001 = inverseModelViewProjection*v_001_clip;
-    vec4 v_010 = inverseModelViewProjection*v_010_clip;
-    vec4 v_011 = inverseModelViewProjection*v_011_clip;
-    vec4 v_100 = inverseModelViewProjection*v_100_clip;
-    vec4 v_101 = inverseModelViewProjection*v_101_clip;
-    vec4 v_110 = inverseModelViewProjection*v_110_clip;
-    vec4 v_111 = inverseModelViewProjection*v_111_clip;
-
-//    v_000 = mvpInv*v_000_clip;
-//    v_001 = mvpInv*v_001_clip;
-//    v_010 = mvpInv*v_010_clip;
-//    v_011 = mvpInv*v_011_clip;
-//    v_100 = mvpInv*v_100_clip;
-//    v_101 = mvpInv*v_101_clip;
-//    v_110 = mvpInv*v_110_clip;
-//    v_111 = mvpInv*v_111_clip;
+    vec4 v_000 = cp_mvpInv*v_000_clip;
+    vec4 v_001 = cp_mvpInv*v_001_clip;
+    vec4 v_010 = cp_mvpInv*v_010_clip;
+    vec4 v_011 = cp_mvpInv*v_011_clip;
+    vec4 v_100 = cp_mvpInv*v_100_clip;
+    vec4 v_101 = cp_mvpInv*v_101_clip;
+    vec4 v_110 = cp_mvpInv*v_110_clip;
+    vec4 v_111 = cp_mvpInv*v_111_clip;
 
 //    v_000 /= v_000.w;
 //    v_001 /= v_001.w;
@@ -222,18 +175,6 @@ void main(void) {
 //    v_110 /= v_110.w;
 //    v_111 /= v_111.w;
 
-//    v_000 = (mvpInv*v_000_clip).xyz;
-//    v_110 = (mvpInv*v_110_clip).xyz;
-//    v_001 = (mvpInv*v_001_clip).xyz;
-//    v_111 = (mvpInv*v_111_clip).xyz;
-
-//    vec3 delta_0 = v_110 - v_000;
-//    vec3 delta_1 = v_111 - v_001;
-
-//    vec3 v_010 = v_000 + vec3(0.0, delta_0.y, 0.0);
-//    vec3 v_100 = v_000 + vec3(delta_0.x, 0.0, 0.0);
-//    vec3 v_011 = v_001 + vec3(0.0, delta_1.y, 0);
-//    vec3 v_101 = v_001 + vec3(delta_1.x, 0.0, 0.0);
     normal = vec3(1,0,0);
 // #define tri
 #ifdef tri
@@ -256,21 +197,18 @@ void main(void) {
         EmitVertex();
         EndPrimitive();
 
-        vec4 p1_1 = vec4(v_000.xyz, 1.0);
-        gl_Position = mvp*p1_1;
-        position = p1_1.xyz;
+        gl_Position = mvp*p1;
+        position = p1.xyz;
         lolCoord = vec2(100*(1.0-p1.w), -p1.w);
         EmitVertex();
 
-        vec4 p2_1 = vec4(v_100.xyz, 1.0);
-        gl_Position = mvp*p2_1;
-        position = p2_1.xyz;
+        gl_Position = mvp*p3;
+        position = p3.xyz;
         lolCoord = vec2(100*(1.0-p2.w), -p2.w);
         EmitVertex();
 
-        vec4 p3_1 = vec4(v_110.xyz, 1.0);
-        gl_Position = mvp*p3_1;
-        position = p3_1.xyz;
+        gl_Position = mvp*p2;
+        position = p2.xyz;
         lolCoord = vec2(100*(1.0-p3.w), -p3.w);
         EmitVertex();
         EndPrimitive();
@@ -385,7 +323,6 @@ void main(void) {
             EndPrimitive();
         }
     }
-#endif
 #endif
 }
 

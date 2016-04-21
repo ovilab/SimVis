@@ -3,6 +3,7 @@
 #include <QtQml>
 #include <cmath>
 #include "functionsurfacesimulator.h"
+#include <QMatrix4x4>
 
 #include <QQuickView>
 #include <vendor.h>

@@ -10,13 +10,19 @@ FrameGraph {
     id: frameGraph
     property Camera camera: Camera {
         projectionType: CameraLens.PerspectiveProjection
-        fieldOfView: 50
+        fieldOfView: 45
         aspectRatio: 16/9
-        nearPlane : 1
-        farPlane : 10000.0
-        position: Qt.vector3d(0.0, 0.0, 1.0)
+        nearPlane : 0.1
+        farPlane : 1000.0
+        position: Qt.vector3d(0.0, 0.0, 0.0)
         upVector: Qt.vector3d(0.0, 1.0, 0.0)
-        viewCenter: Qt.vector3d(0.0, 0.0, 0.0)
+        viewCenter: Qt.vector3d(0.0, 0.0, -1.0)
+        onPositionChanged: {
+            // console.log("Pos: ", position)
+        }
+        onProjectionMatrixChanged: {
+            console.log("Proj: ", projectionMatrix)
+        }
     }
     activeFrameGraph: TechniqueFilter {
         requires: [

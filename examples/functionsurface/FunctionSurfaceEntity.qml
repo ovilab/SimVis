@@ -30,7 +30,7 @@ Entity {
             },
             Parameter {
                 name: "threshold"
-                value: 0.0
+                value: 0.3
             },
             Parameter {
                 name: "scale"
@@ -78,6 +78,7 @@ Entity {
                                 name: "shaderNodeResult"
                                 value: ShaderNode {
                                     property var position: _geometryBuilder.position
+
                                     name: "position"
                                     type: "float"
                                     // result: "sin(2.0 *0.1* $position.x - 0.1*0.1*$position.y*$position.z) + cos(2.0 * 0.1*$position.y) + sin(2.0 * 0.1*$position.z)*cos(2.0*0.1*$position.y);"
@@ -85,8 +86,9 @@ Entity {
                                     // result: "$position.x*$position.x + $position.z*$position.z;"
                                     // result: "exp(-($position.y*$position.y + $position.x*$position.x))"
                                     // result: "$position.x + $position.y + $position.z;"
-                                    result: "$position.z"
-                                    // result: "sqrt($position.y*$position.y + $position.x*$position.x + $position.z*$position.z)"
+                                    // result: "$position.z"
+                                    result: "sqrt($position.y*$position.y + $position.x*$position.x + ($position.z+2.0)*($position.z+2.0))"
+
                                     // result: "sin(0.2*$position.z) + sin(0.2*$position.x) + sin(0.2*$position.y);"
                                     // result: "sin($position.z)"
                                     // result: "$position.x*$position.x + $position.y*$position.y + $position.z*$position.z;"
