@@ -2,6 +2,7 @@ import SimVis 1.0
 
 import Qt3D.Core 2.0
 import Qt3D.Render 2.0
+import Qt3D.Input 2.0
 
 Entity {
     id: visualizerRoot
@@ -17,18 +18,23 @@ Entity {
         viewCenter: Qt.vector3d(0.0, 0.0, 0.0)
     }
 
-    Configuration  {
-        controlledCamera: visualizerRoot.camera
+    OrbitController {
+        camera: visualizerRoot.camera
     }
 
     components: [
-        FrameGraph {
-            id: frameGraph
-            activeFrameGraph: NonCullingForwardRenderer {
+        RenderSettings {
+//            activeFrameGraph: NonCullingForwardRenderer {
+//                id: forwardRenderer
+//                camera: visualizerRoot.camera
+//                clearColor: "#012"
+//            }
+            activeFrameGraph: ForwardRenderer {
                 id: forwardRenderer
                 camera: visualizerRoot.camera
-                clearColor: "#012"
             }
-        }
+        },
+        // Event Source will be set by the Qt3DQuickWindow
+        InputSettings { }
     ]
 }

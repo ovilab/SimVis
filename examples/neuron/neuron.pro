@@ -6,7 +6,9 @@ QT += qml quick widgets
 
 SOURCES += \
     neuronreader.cpp \
-    main_neuron.cpp
+    main_neuron.cpp \
+    window.cpp \
+    instancebuffer.cpp
 
 RESOURCES += \
     neuron_qml.qrc
@@ -18,7 +20,11 @@ QML_IMPORT_PATH =
 include(../examples_vendor.pri)
 
 HEADERS += \
-    neuronreader.h
+    neuronreader.h \
+    window.h \
+    instancebuffer.h
 
 DISTFILES += \
-    SimpleMorphology.nml
+    SimpleMorphology.nml \
+    instanced.frag \
+    instanced.vert

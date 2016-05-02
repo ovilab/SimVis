@@ -6,5 +6,8 @@
         <file>diffuse.webp</file>
         <file>normal.webp</file>
         <file>L5PC.cell.nml</file>
+        <file>instanced.frag</file>
+        <file>instanced.vert</file>
+        <file>InstancedCylinders.qml</file>
     </qresource>
 </RCC>

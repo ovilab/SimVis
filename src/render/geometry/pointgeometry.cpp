@@ -171,8 +171,8 @@ void PointGeometry::init()
     m_indexAttribute->setBuffer(m_indexBuffer);
     m_indexAttribute->setCount(indexCount);
 
-    m_vertexBuffer->setBufferFunctor(QBufferFunctorPtr(new PointVertexDataFunctor()));
-    m_indexBuffer->setBufferFunctor(QBufferFunctorPtr(new PointIndexDataFunctor()));
+    m_vertexBuffer->setDataGenerator(QBufferDataGeneratorPtr(new PointVertexDataFunctor()));
+    m_indexBuffer->setDataGenerator(QBufferDataGeneratorPtr(new PointIndexDataFunctor()));
 
     addAttribute(m_positionAttribute);
     addAttribute(m_texCoordAttribute);
