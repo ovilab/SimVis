@@ -32,34 +32,31 @@ Entity {
         effect: Effect {
             techniques: Technique {
                 renderPasses: RenderPass {
-                    bindings: [
-                        ParameterMapping {
-                            parameterName: "vertexId"
-                            shaderVariableName: "vertexId"
-                            bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "pos"
-                            shaderVariableName: "pos"
-                            bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "scale"
-                            shaderVariableName: "scale"
-                            bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "col"
-                            shaderVariableName: "col"
-                            bindingType: ParameterMapping.Attribute
-                        }
-                    ]
+//                    bindings: [
+//                        ParameterMapping {
+//                            parameterName: "vertexId"
+//                            shaderVariableName: "vertexId"
+//                            bindingType: ParameterMapping.Attribute
+//                        },
+//                        ParameterMapping {
+//                            parameterName: "pos"
+//                            shaderVariableName: "pos"
+//                            bindingType: ParameterMapping.Attribute
+//                        },
+//                        ParameterMapping {
+//                            parameterName: "scale"
+//                            shaderVariableName: "scale"
+//                            bindingType: ParameterMapping.Attribute
+//                        },
+//                        ParameterMapping {
+//                            parameterName: "col"
+//                            shaderVariableName: "col"
+//                            bindingType: ParameterMapping.Attribute
+//                        }
+//                    ]
                     shaderProgram: ShaderProgram {
                         vertexShaderCode: loadSource(vertexShaderSourceFile)
                         fragmentShaderCode: _fragmentBuilder.finalShader
-                        onFragmentShaderCodeChanged: {
-                            console.log("Fragment shader code: ", fragmentShaderCode)
-                        }
                     }
                     ShaderBuilder {
                         id: _fragmentBuilder
@@ -120,32 +117,32 @@ Entity {
                 Attribute {
                     name: "pos"
                     attributeType: Attribute.VertexAttribute
-                    dataType: Attribute.Float
-                    dataSize: 3
+                    vertexBaseType: Attribute.Float
+                    vertexSize: 3
                     byteOffset: 0
                     byteStride: (3 + 3 + 1) * 4
                     divisor: 1
-                    buffer: sphereData.buffer
+                    buffer: sphereData ? sphereData.buffer : null
                 },
                 Attribute {
                     name: "col"
                     attributeType: Attribute.VertexAttribute
-                    dataType: Attribute.Float
-                    dataSize: 3
+                    vertexBaseType: Attribute.Float
+                    vertexSize: 3
                     byteOffset: 3*4
                     byteStride: (3 + 3 + 1) * 4
                     divisor: 1
-                    buffer: sphereData.buffer
+                    buffer: sphereData ? sphereData.buffer : null
                 },
                 Attribute {
                     name: "scale"
                     attributeType: Attribute.VertexAttribute
-                    dataType: Attribute.Float
-                    dataSize: 1
+                    vertexBaseType: Attribute.Float
+                    vertexSize: 1
                     byteOffset: (3+3)*4
                     byteStride: (3 + 3 + 1) * 4
                     divisor: 1
-                    buffer: sphereData.buffer
+                    buffer: sphereData ? sphereData.buffer : null
                 }
             ]
         }

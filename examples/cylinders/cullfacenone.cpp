@@ -12,7 +12,7 @@ class CullFaceNonePrivate : public QRenderStatePrivate
 {
 public:
     CullFaceNonePrivate()
-        : QRenderStatePrivate(QRenderState::CullFace)
+        : QRenderStatePrivate(QRenderStatePrivate::CullFace)
         , m_mode(CullFaceNone::Back)
     {
     }

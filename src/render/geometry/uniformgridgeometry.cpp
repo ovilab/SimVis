@@ -1,13 +1,13 @@
 #include "uniformgridgeometry.h"
-#include <Qt3DRender/qbuffer.h>
-#include <Qt3DRender/qbufferfunctor.h>
-#include <Qt3DRender/qattribute.h>
+#include <Qt3DRender/QBuffer>
+#include <Qt3DRender/QBufferDataGenerator>
+#include <Qt3DRender/QAttribute>
 #include <qmath.h>
 #include <QVector3D>
 
 using namespace Qt3DRender;
 
-class UniformGridVertexDataFunctor : public Qt3DRender::QBufferFunctor
+class UniformGridVertexDataFunctor : public Qt3DRender::QBufferDataGenerator
 {
     int m_vertexCount = 0;
 public:
@@ -46,7 +46,7 @@ public:
         return verticesData;
     }
 
-    bool operator ==(const QBufferFunctor &other) const Q_DECL_OVERRIDE
+    bool operator ==(const QBufferDataGenerator &other) const Q_DECL_OVERRIDE
     {
         Q_UNUSED(other);
         return true;
@@ -74,7 +74,7 @@ void UniformGridGeometry::init()
     int realVertexCount = gridPoints.size() / (3*sizeof(float));
     m_positionAttribute->setCount(realVertexCount);
 
-    m_vertexBuffer->setBufferFunctor(QBufferFunctorPtr(m_dataFunctor));
+    m_vertexBuffer->setDataGenerator(QBufferDataGeneratorPtr(m_dataFunctor));
 
     addAttribute(m_positionAttribute);
 }

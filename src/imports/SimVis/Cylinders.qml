@@ -27,33 +27,33 @@ Entity {
         effect: Effect {
             techniques: Technique {
                 renderPasses: RenderPass {
-                    bindings: [
-                        ParameterMapping {
-                            parameterName: "vertex1Position"
-                            shaderVariableName: "vertex1Position"
-                            bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "vertex2Position"
-                            shaderVariableName: "vertex2Position"
-                            bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "radius1"
-                            shaderVariableName: "radius1"
-                            bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "radius2"
-                            shaderVariableName: "radius2"
-                            bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "vertexId"
-                            shaderVariableName: "vertexId"
-                            bindingType: ParameterMapping.Attribute
-                        }
-                    ]
+//                    bindings: [
+//                        ParameterMapping {
+//                            parameterName: "vertex1Position"
+//                            shaderVariableName: "vertex1Position"
+//                            bindingType: ParameterMapping.Attribute
+//                        },
+//                        ParameterMapping {
+//                            parameterName: "vertex2Position"
+//                            shaderVariableName: "vertex2Position"
+//                            bindingType: ParameterMapping.Attribute
+//                        },
+//                        ParameterMapping {
+//                            parameterName: "radius1"
+//                            shaderVariableName: "radius1"
+//                            bindingType: ParameterMapping.Attribute
+//                        },
+//                        ParameterMapping {
+//                            parameterName: "radius2"
+//                            shaderVariableName: "radius2"
+//                            bindingType: ParameterMapping.Attribute
+//                        },
+//                        ParameterMapping {
+//                            parameterName: "vertexId"
+//                            shaderVariableName: "vertexId"
+//                            bindingType: ParameterMapping.Attribute
+//                        }
+//                    ]
                     shaderProgram: ShaderProgram {
                         vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/gl3/cylinders.vert")
                         fragmentShaderCode: _fragmentBuilder.finalShader
@@ -98,19 +98,34 @@ Entity {
             }
         }
     }
+
     GeometryRenderer {
         id: cylindersMeshInstanced
         primitiveType: GeometryRenderer.TriangleStrip
         enabled: instanceCount != 0
         instanceCount: cylinderData ? cylinderData.count : 0
 
+//        geometry: CylinderGeometry {
+//            attributes: [
+//                Attribute {
+//                    id: instanceDataAttribute
+//                    name: "pos"
+//                    attributeType: Attribute.VertexAttribute
+//                    vertexBaseType: Attribute.Float
+//                    vertexSize: 3
+//                    divisor: 1
+//                    buffer: _instanceBuffer
+//                }
+//            ]
+//        }
+
         geometry: PointGeometry {
             attributes: [
                 Attribute {
                     name: "vertex1Position"
                     attributeType: Attribute.VertexAttribute
-                    dataType: Attribute.Float
-                    dataSize: 3
+                    vertexBaseType: Attribute.Float
+                    vertexSize: 3
                     byteOffset: 0
                     byteStride: (3 + 3 + 1 + 1) * 4
                     divisor: 1
@@ -119,8 +134,8 @@ Entity {
                 Attribute {
                     name: "vertex2Position"
                     attributeType: Attribute.VertexAttribute
-                    dataType: Attribute.Float
-                    dataSize: 3
+                    vertexBaseType: Attribute.Float
+                    vertexSize: 3
                     byteOffset: 3 * 4
                     byteStride: (3 + 3 + 1 + 1) * 4
                     divisor: 1
@@ -129,8 +144,8 @@ Entity {
                 Attribute {
                     name: "radius1"
                     attributeType: Attribute.VertexAttribute
-                    dataType: Attribute.Float
-                    dataSize: 1
+                    vertexBaseType: Attribute.Float
+                    vertexSize: 1
                     byteOffset: 6 * 4
                     byteStride: (3 + 3 + 1 + 1) * 4
                     divisor: 1
@@ -139,8 +154,8 @@ Entity {
                 Attribute {
                     name: "radius2"
                     attributeType: Attribute.VertexAttribute
-                    dataType: Attribute.Float
-                    dataSize: 1
+                    vertexBaseType: Attribute.Float
+                    vertexSize: 1
                     byteOffset: 7 * 4
                     byteStride: (3 + 3 + 1 + 1) * 4
                     divisor: 1

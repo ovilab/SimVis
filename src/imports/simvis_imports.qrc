@@ -32,5 +32,7 @@
         <file>SimVis/Visualizer.qml</file>
         <file>SimVis/ShaderNodes/shaders/standard_material.glsl</file>
         <file>SimVis/SpheresTechnique.qml</file>
+        <file>SimVis/FirstPersonCameraController.qml</file>
+        <file>SimVis/OrbitController.qml</file>
     </qresource>
 </RCC>

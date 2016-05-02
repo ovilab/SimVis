@@ -1,13 +1,13 @@
 #include "spherespointgeometry.h"
 #include <Qt3DRender/qbuffer.h>
-#include <Qt3DRender/qbufferfunctor.h>
+#include <Qt3DRender/QBufferDataGenerator>
 #include <Qt3DRender/qattribute.h>
 #include <qmath.h>
 #include <QVector3D>
 
 using namespace Qt3DRender;
 
-class SpheresPointVertexDataFunctor : public Qt3DRender::QBufferFunctor
+class SpheresPointVertexDataFunctor : public Qt3DRender::QBufferDataGenerator
 {
 public:
     SpheresPointVertexDataFunctor()
@@ -67,18 +67,16 @@ public:
         return verticesData;
     }
 
-    bool operator ==(const QBufferFunctor &other) const Q_DECL_OVERRIDE
+    bool operator ==(const QBufferDataGenerator &other) const Q_DECL_OVERRIDE
     {
         Q_UNUSED(other);
         return true;
     }
 
     QT3D_FUNCTOR(SpheresPointVertexDataFunctor)
-
-private:
 };
 
-class SpheresPointIndexDataFunctor : public QBufferFunctor
+class SpheresPointIndexDataFunctor : public QBufferDataGenerator
 {
 public:
     SpheresPointIndexDataFunctor()
@@ -99,7 +97,7 @@ public:
         return indicesBytes;
     }
 
-    bool operator ==(const QBufferFunctor &other) const Q_DECL_OVERRIDE
+    bool operator ==(const QBufferDataGenerator &other) const Q_DECL_OVERRIDE
     {
         Q_UNUSED(other);
         return true;
@@ -154,8 +152,8 @@ void SpheresPointGeometry::init()
     m_indexAttribute->setBuffer(m_indexBuffer);
     m_indexAttribute->setCount(indexCount);
 
-    m_vertexBuffer->setBufferFunctor(QBufferFunctorPtr(new SpheresPointVertexDataFunctor()));
-    m_indexBuffer->setBufferFunctor(QBufferFunctorPtr(new SpheresPointIndexDataFunctor()));
+    m_vertexBuffer->setDataGenerator(QBufferDataGeneratorPtr(new SpheresPointVertexDataFunctor()));
+    m_indexBuffer->setDataGenerator(QBufferDataGeneratorPtr(new SpheresPointIndexDataFunctor()));
 
     addAttribute(m_positionAttribute);
     addAttribute(m_texCoordAttribute);

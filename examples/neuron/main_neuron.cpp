@@ -5,6 +5,7 @@
 #include <QDebug>
 
 #include "neuronreader.h"
+#include "instancebuffer.h"
 
 #include <vendor.h>
 
@@ -19,6 +20,9 @@ int main(int argc, char *argv[])
 
     QQuickView view;
     qpm::init(app, *view.engine());
+
+    InstanceBuffer buffer;
+    view.engine()->rootContext()->setContextProperty("_instanceBuffer", &buffer);
     QSurfaceFormat format;
     format.setMajorVersion(4);
     format.setMinorVersion(3);
