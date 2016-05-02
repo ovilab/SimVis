@@ -157,7 +157,7 @@ void PointGeometry::init()
     m_texCoordAttribute->setByteOffset(3 * sizeof(float));
     m_texCoordAttribute->setCount(vertexCount);
 
-    m_idAttribute->setName(QAttribute::defaultNormalAttributeName());
+    m_idAttribute->setName("vertexId");
     m_idAttribute->setDataType(QAttribute::Float);
     m_idAttribute->setDataSize(1);
     m_idAttribute->setAttributeType(QAttribute::VertexAttribute);

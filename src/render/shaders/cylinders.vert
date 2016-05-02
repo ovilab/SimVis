@@ -7,8 +7,7 @@ in vec3 vertex2Position;
 in float radius1;
 in float radius2;
 
-in float vertexNormal;
-//in float vertexId;
+in float vertexId;
 
 out vec3 vs_vertex1Position;
 out vec3 vs_vertex2Position;
@@ -64,8 +63,6 @@ void main(void)
 
     vec3 delta = v2 - v1;
     vec3 deltaNormalized = normalize(delta);
-
-    float vertexId = vertexNormal;
 
     // define a unique perpendicular to the axis that can be used by
     // the texture coordinate in the fragment shader
