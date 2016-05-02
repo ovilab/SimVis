@@ -4,7 +4,7 @@
 
 #include <QDebug>
 #include <QJSEngine>
-#include <Qt3DRender/QTexture2D>
+#include <Qt3DRender/QTexture>
 
 using Qt3DRender::QTexture2D;
 

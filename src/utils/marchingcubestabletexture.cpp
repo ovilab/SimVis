@@ -275,13 +275,13 @@ QTexImageDataPtr MCDataFunctor::operator ()()
     return data;
 }
 
-bool MCDataFunctor::operator ==(const Qt3DRender::QTextureDataFunctor &other) const
+bool MCDataFunctor::operator ==(const Qt3DRender::QTextureImageDataGenerator &other) const
 {
     const MCDataFunctor *f = functor_cast<MCDataFunctor>(&other);
-    return(f!=nullptr);
+    return (f != nullptr);
 }
 
-Qt3DRender::QTextureDataFunctorPtr MarchingCubesTableTexture::dataFunctor() const
+QTextureImageDataGeneratorPtr MarchingCubesTableTexture::dataGenerator() const
 {
-    return QTextureDataFunctorPtr(new MCDataFunctor());
+    return QTextureImageDataGeneratorPtr(new MCDataFunctor());
 }

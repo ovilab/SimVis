@@ -1,13 +1,13 @@
 #include "pointgeometry.h"
 #include <Qt3DRender/qbuffer.h>
-#include <Qt3DRender/qbufferfunctor.h>
+#include <Qt3DRender/QBufferDataGenerator>
 #include <Qt3DRender/qattribute.h>
 #include <qmath.h>
 #include <QVector3D>
 
 using namespace Qt3DRender;
 
-class PointVertexDataFunctor : public Qt3DRender::QBufferFunctor
+class PointVertexDataFunctor : public Qt3DRender::QBufferDataGenerator
 {
 public:
     PointVertexDataFunctor()
@@ -81,7 +81,7 @@ public:
         return verticesData;
     }
 
-    bool operator ==(const QBufferFunctor &other) const Q_DECL_OVERRIDE
+    bool operator ==(const QBufferDataGenerator &other) const Q_DECL_OVERRIDE
     {
         Q_UNUSED(other);
         return true;
@@ -92,7 +92,7 @@ public:
 private:
 };
 
-class PointIndexDataFunctor : public QBufferFunctor
+class PointIndexDataFunctor : public QBufferDataGenerator
 {
 public:
     PointIndexDataFunctor()
@@ -115,7 +115,7 @@ public:
         return indicesBytes;
     }
 
-    bool operator ==(const QBufferFunctor &other) const Q_DECL_OVERRIDE
+    bool operator ==(const QBufferDataGenerator &other) const Q_DECL_OVERRIDE
     {
         Q_UNUSED(other);
         return true;

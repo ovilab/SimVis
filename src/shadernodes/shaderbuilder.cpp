@@ -11,7 +11,7 @@
 #include <QColor>
 
 #include <Qt3DRender/QParameter>
-#include <Qt3DRender/QTexture2D>
+#include <Qt3DRender/QTexture>
 
 using Qt3DRender::QTexture2D;
 
