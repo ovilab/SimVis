@@ -24,48 +24,46 @@ Scene3D {
         Cylinders {
             id: cylinders
             cylinderData: simulator.cylinderData
-//            fragmentColor: StandardMaterial {
-//                color: ImageTexture {
-//                    source: "diffuse.webp"
-//                    vector: Multiply {
-//                        value1: 2.0
-//                        value2: cylinders.fragmentBuilder.position
-//                    }
-//                }
-//                normal: NormalMap {
-//                    color: ImageTexture {
-//                        source: "normal.webp"
-//                        vector: Multiply {
-//                            value1: 2.0
-//                            value2: cylinders.fragmentBuilder.position
-//                        }
-//                    }
-//                }
+            fragmentColor: StandardMaterial {
+                color: ImageTexture {
+                    source: "diffuse.webp"
+                    vector: Multiply {
+                        value1: 2.0
+                        value2: cylinders.fragmentBuilder.position
+                    }
+                }
+                normal: NormalMap {
+                    color: ImageTexture {
+                        source: "normal.webp"
+                        vector: Multiply {
+                            value1: 2.0
+                            value2: cylinders.fragmentBuilder.position
+                        }
+                    }
+                }
 
-//                specularIntensity: 10.0
-//                hardness: 0.2
-//                lights: ShaderGroup {
-//                    Nodes.Light {
-//                        position: Qt.vector3d(20.0, 0.0, -10.0)
-//                        attenuation: 0.1
-//                    }
-//                    Nodes.Light {
-//                        position: Qt.vector3d(-20.0, 0.0, 10.0)
-//                        attenuation: 0.1
-//                    }
-//                    Nodes.Light {
-//                        position: Qt.vector3d(-50.0, 10.0, 50.0)
-//                        attenuation: 0.1
-//                    }
-//                    Nodes.Light {
-//                        position: Qt.vector3d(50.0, -20.0, -50.0)
-//                        attenuation: 0.1
-//                    }
-//                }
-//            }
+                specularIntensity: 10.0
+                hardness: 0.2
+                lights: ShaderGroup {
+                    Nodes.Light {
+                        position: Qt.vector3d(20.0, 0.0, -10.0)
+                        attenuation: 0.1
+                    }
+                    Nodes.Light {
+                        position: Qt.vector3d(-20.0, 0.0, 10.0)
+                        attenuation: 0.1
+                    }
+                    Nodes.Light {
+                        position: Qt.vector3d(-50.0, 10.0, 50.0)
+                        attenuation: 0.1
+                    }
+                    Nodes.Light {
+                        position: Qt.vector3d(50.0, -20.0, -50.0)
+                        attenuation: 0.1
+                    }
+                }
+            }
         }
-
-        InstancedCylinders {}
 
         CylinderMesh {
             id: mesh
