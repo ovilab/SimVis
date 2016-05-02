@@ -192,6 +192,8 @@ void main(void) {
     // calculate texture coordinate
     vec3 position = cylPointWorld;
 
+    fragColor = vec4(1.0, 0.0, 1.0, 1.0); // dummy output if shadernodes fail
+
 #pragma shadernodes body
 
 }

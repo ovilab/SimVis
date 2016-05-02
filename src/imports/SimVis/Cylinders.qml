@@ -26,34 +26,17 @@ Entity {
         id: material
         effect: Effect {
             techniques: Technique {
+                graphicsApiFilter {
+                    api: GraphicsApiFilter.OpenGL
+                    profile: GraphicsApiFilter.CoreProfile
+                    minorVersion: 2
+                    majorVersion: 3
+                }
+                filterKeys: FilterKey {
+                    name: "renderingStyle"
+                    value: "forward"
+                }
                 renderPasses: RenderPass {
-//                    bindings: [
-//                        ParameterMapping {
-//                            parameterName: "vertex1Position"
-//                            shaderVariableName: "vertex1Position"
-//                            bindingType: ParameterMapping.Attribute
-//                        },
-//                        ParameterMapping {
-//                            parameterName: "vertex2Position"
-//                            shaderVariableName: "vertex2Position"
-//                            bindingType: ParameterMapping.Attribute
-//                        },
-//                        ParameterMapping {
-//                            parameterName: "radius1"
-//                            shaderVariableName: "radius1"
-//                            bindingType: ParameterMapping.Attribute
-//                        },
-//                        ParameterMapping {
-//                            parameterName: "radius2"
-//                            shaderVariableName: "radius2"
-//                            bindingType: ParameterMapping.Attribute
-//                        },
-//                        ParameterMapping {
-//                            parameterName: "vertexId"
-//                            shaderVariableName: "vertexId"
-//                            bindingType: ParameterMapping.Attribute
-//                        }
-//                    ]
                     shaderProgram: ShaderProgram {
                         vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/gl3/cylinders.vert")
                         fragmentShaderCode: _fragmentBuilder.finalShader
@@ -105,20 +88,6 @@ Entity {
         enabled: instanceCount != 0
         instanceCount: cylinderData ? cylinderData.count : 0
 
-//        geometry: CylinderGeometry {
-//            attributes: [
-//                Attribute {
-//                    id: instanceDataAttribute
-//                    name: "pos"
-//                    attributeType: Attribute.VertexAttribute
-//                    vertexBaseType: Attribute.Float
-//                    vertexSize: 3
-//                    divisor: 1
-//                    buffer: _instanceBuffer
-//                }
-//            ]
-//        }
-
         geometry: PointGeometry {
             attributes: [
                 Attribute {
@@ -163,7 +132,6 @@ Entity {
                 }
             ]
         }
-
     }
 
     components: [
