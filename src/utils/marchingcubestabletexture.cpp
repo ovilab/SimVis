@@ -1,51 +1,8 @@
-#include "marchingcubesgs.h"
+#include "marchingcubestabletexture.h"
+#include <QDebug>
+using namespace Qt3DRender;
 
-void MarchingCubesGSRenderer::uploadVBO()
-{
-    qDebug() << "Uploading VBO with resolution: " << m_voxelsPerDimension;
-    m_numberOfVoxels = m_voxelsPerDimension*m_voxelsPerDimension*m_voxelsPerDimension;
-
-    QVector<QVector3D> vertices;
-    vertices.reserve(m_numberOfVoxels);
-    int min = -m_voxelsPerDimension / 2;
-
-    for(int i=0; i<m_voxelsPerDimension; i++) {
-        float x = min + i;
-        for(int j=0; j<m_voxelsPerDimension; j++) {
-            float y = min + j;
-            for(int k=0; k<m_voxelsPerDimension; k++) {
-                float z = min + k;
-                vertices.push_back(QVector3D(x,y,z));
-            }
-        }
-    }
-
-    // Transfer vertex data to VBO 0
-    m_vao->bind();
-    glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
-    glFunctions()->glBufferData(GL_ARRAY_BUFFER, m_numberOfVoxels * sizeof(QVector3D), &vertices.front(), GL_STATIC_DRAW);
-    createTriangleTable();
-
-    QImage img(QSize(256, 16), QImage::Format_ARGB32);
-    for(int i = 0; i < 256; i++) {
-        for(int j = 0; j < 16; j++) {
-            img.setPixel(i, j, QColor(m_triangleTable[i*16 + j] + 1, 0, 0).rgba());
-        }
-    }
-
-    m_triangleTableTexture = new QOpenGLTexture(img, QOpenGLTexture::DontGenerateMipMaps);
-
-    // alternative method:
-//    m_triangleTableTexture = new QOpenGLTexture(QOpenGLTexture::Target2D);
-//    m_triangleTableTexture->setSize(256,16);
-//    m_triangleTableTexture->setMagnificationFilter(QOpenGLTexture::Nearest);
-//    m_triangleTableTexture->setMinificationFilter(QOpenGLTexture::Nearest);
-//    m_triangleTableTexture->setWrapMode(QOpenGLTexture::ClampToEdge);
-//    m_triangleTableTexture->allocateStorage(QOpenGLTexture::Red_Integer, QOpenGLTexture::Int8);
-//    m_triangleTableTexture->setData(QOpenGLTexture::Red_Integer, QOpenGLTexture::Int8, m_triangleTable);
-}
-
-void MarchingCubesGSRenderer::createTriangleTable()
+QTexImageDataPtr MCDataFunctor::operator ()()
 {
     const int triangleTable[256][16] = {
         {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
@@ -306,108 +263,25 @@ void MarchingCubesGSRenderer::createTriangleTable()
         {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
     };
 
-    int count = 0;
-    m_triangleTable = new GLint[4096];
-    for(int i=0; i<256; i++) {
-        for(int j=0; j<16; j++) {
-            m_triangleTable[count++] = triangleTable[i][j];
+    QImage img(QSize(256, 16), QImage::Format_ARGB32);
+    for(int i = 0; i < 256; i++) {
+        for(int j = 0; j < 16; j++) {
+            img.setPixel(i, j, QColor(triangleTable[i][j] + 1, 0, 0).rgba());
         }
     }
+
+    QTexImageDataPtr data(new QTexImageData());
+    data->setImage(img);
+    return data;
 }
 
-
-RenderableRenderer *MarchingCubesGS::createRenderer()
+bool MCDataFunctor::operator ==(const Qt3DRender::QTextureDataFunctor &other) const
 {
-    return new MarchingCubesGSRenderer();
+    const MCDataFunctor *f = functor_cast<MCDataFunctor>(&other);
+    return(f!=nullptr);
 }
 
-float MarchingCubesGS::threshold() const
+Qt3DRender::QTextureDataFunctorPtr MarchingCubesTableTexture::dataFunctor() const
 {
-    return m_threshold;
-}
-
-int MarchingCubesGS::resolution() const
-{
-    return m_resolution;
-}
-
-float MarchingCubesGS::scale() const
-{
-    return m_scale;
-}
-
-void MarchingCubesGS::setThreshold(float threshold)
-{
-    if (m_threshold == threshold)
-        return;
-
-    m_threshold = threshold;
-    emit thresholdChanged(threshold);
-}
-
-void MarchingCubesGS::setResolution(int resolution)
-{
-    if (m_resolution == resolution)
-        return;
-
-    m_resolution = resolution;
-    emit resolutionChanged(resolution);
-}
-
-void MarchingCubesGS::setScale(float scale)
-{
-    if (m_scale == scale)
-        return;
-
-    m_scale = scale;
-    emit scaleChanged(scale);
-}
-
-void MarchingCubesGSRenderer::synchronize(Renderable *renderable)
-{
-    MarchingCubesGS *mc = qobject_cast<MarchingCubesGS*>(renderable);
-    if(mc) {
-        m_threshold = mc->threshold();
-        m_scale = mc->scale();
-        if(m_voxelsPerDimension != mc->resolution()) {
-            qDebug() << "Updating resolution. Will need to upload vbo again...";
-            m_dirty = true;
-            m_voxelsPerDimension = mc->resolution();
-            m_scale = mc->scale();
-        }
-
-        if(!m_isInitialized) {
-            m_vboCount = 1;
-            generateVBOs();
-            m_isInitialized = true;
-        }
-        if(m_dirty) {
-            qDebug() << "I am dirty now. Uploading?";
-            uploadVBO();
-            m_dirty = false;
-        }
-    }
-}
-
-void MarchingCubesGSRenderer::render()
-{
-    m_vao->bind();
-
-    int positionLocation = 0;
-
-    glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]); // Tell OpenGL which VBOs to use
-    program().setUniformValue("scale", m_scale);
-    program().setUniformValue("threshold", m_threshold);
-    program().enableAttributeArray(positionLocation);
-    glFunctions()->glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(QVector3D), 0);
-
-    glFunctions()->glEnable(GL_CULL_FACE);
-    glFunctions()->glCullFace(GL_BACK);
-    glFunctions()->glDepthMask(GL_TRUE);
-    glFunctions()->glEnable(GL_DEPTH_TEST);
-    m_triangleTableTexture->bind();
-    glFunctions()->glDrawArrays(GL_POINTS, 0, m_numberOfVoxels);
-
-    program().disableAttributeArray(positionLocation);
-    glFunctions()->glDisable(GL_CULL_FACE);
+    return QTextureDataFunctorPtr(new MCDataFunctor());
 }

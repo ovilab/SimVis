@@ -1,3 +1,7 @@
+#version 410
+
+#pragma shadernodes header
+
 layout( points ) in;
 layout( triangle_strip, max_vertices = 64 ) out;
 
@@ -6,11 +10,14 @@ out vec3 position;
 out vec3 normal;
 
 uniform float threshold;
-uniform float dr;
+uniform vec3 eyePosition;
+uniform float scale;
 uniform sampler2D triangleTable;
+uniform mat4 mvp;
 
 float eval(vec3 position) {
-    $setupShaderNodes();
+    float shaderNodeResult;
+ #pragma shadernodes body
     return shaderNodeResult;
 }
 
@@ -67,16 +74,16 @@ vec3 linterp(float threshold, vec3 p1, vec3 p2, float valp1, float valp2)
 }
 
 void main(void) {
-    // if( dot( (vs_position[0] - cp_cameraPosition), cp_viewVector) > 0) {
-        vec3 v_000 = vs_position[0] + cp_cameraPosition;                        // Corresponds to vertex 0
-        // vec3 v_000 = vs_position[0];                        // Corresponds to vertex 0
-        vec3 v_001 = v_000 + vec3(0.0, 0.0, dr);       // Corresponds to vertex 4
-        vec3 v_011 = v_000 + vec3(0.0, dr, dr);           // Corresponds to vertex 5
-        vec3 v_010 = v_000 + vec3(0.0, dr, 0.0);       // Corresponds to vertex 1
-        vec3 v_110 = v_000 + vec3(dr, dr, 0.0);           // Corresponds to vertex 2
-        vec3 v_111 = v_000 + dr;                         // Corresponds to vertex 6
-        vec3 v_101 = v_000 + vec3(dr, 0.0, dr);   // Corresponds to vertex 7
-        vec3 v_100 = v_000 + vec3(dr, 0.0, 0.0);       // Corresponds to vertex 3
+        vec3 scaleVec = vec3(scale);
+        // vec3 v_000 = scaleVec*(vs_position[0]) + eyePosition;                        // Corresponds to vertex 0
+        vec3 v_000 = scaleVec*vs_position[0];                        // Corresponds to vertex 0
+        vec3 v_001 = v_000 + vec3(0.0, 0.0, scaleVec.z);            // Corresponds to vertex 4
+        vec3 v_011 = v_000 + vec3(0.0, scaleVec.y, scaleVec.z);             // Corresponds to vertex 5
+        vec3 v_010 = v_000 + vec3(0.0, scaleVec.y, 0.0);       // Corresponds to vertex 1
+        vec3 v_110 = v_000 + vec3(scaleVec.x, scaleVec.y, 0.0);           // Corresponds to vertex 2
+        vec3 v_111 = v_000 + scaleVec;                         // Corresponds to vertex 6
+        vec3 v_101 = v_000 + vec3(scaleVec.x, 0.0, scaleVec.z);   // Corresponds to vertex 7
+        vec3 v_100 = v_000 + vec3(scaleVec.x, 0.0, 0.0);       // Corresponds to vertex 3
 
 
         GridCell grid;
@@ -120,16 +127,18 @@ void main(void) {
         vertlist[11] = linterp(threshold,grid.p[3],grid.p[7],grid.val[3],grid.val[7]);
 
         /* Emit triangles*/
+        int max = 15;
         int triangleStartIndex = cubeindex;
         for (int i=0; triTableValue(cubeindex, i) != -1; i+=3) {
+            if(i>=max) break;
             vec3 p1 = vertlist[triTableValue(cubeindex, i)];
-            vec4 mvp_p1 = cp_modelViewProjectionMatrix*vec4(p1, 1.0);
+            vec4 mvp_p1 = mvp*vec4(p1, 1.0);
             vec3 n1 = calculateNormal(p1);
             vec3 p2 = vertlist[triTableValue(cubeindex, i+1)];
-            vec4 mvp_p2 = cp_modelViewProjectionMatrix*vec4(p2, 1.0);
+            vec4 mvp_p2 = mvp*vec4(p2, 1.0);
             vec3 n2 = calculateNormal(p2);
             vec3 p3 = vertlist[triTableValue(cubeindex, i+2)];
-            vec4 mvp_p3 = cp_modelViewProjectionMatrix*vec4(p3, 1.0);
+            vec4 mvp_p3 = mvp*vec4(p3, 1.0);
             vec3 n3 = calculateNormal(p3);
 
             // front face

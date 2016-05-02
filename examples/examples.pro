@@ -2,9 +2,7 @@ TEMPLATE = subdirs
 SUBDIRS += \
     spheres \
     shadernodes \
-#    marchingcubes \
-#    functionsurface \
-#    triangles \
+    functionsurface \
     neuron \
     cylinders
 

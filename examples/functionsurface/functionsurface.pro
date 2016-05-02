@@ -18,3 +18,8 @@ include(../examples_vendor.pri)
 
 HEADERS += \
     functionsurfacesimulator.h
+
+DISTFILES += \
+    fs.frag \
+    fs.vert \
+    fs.geom

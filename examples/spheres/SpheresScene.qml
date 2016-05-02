@@ -50,6 +50,21 @@ Scene3D {
                         color: "white"
                         attenuation: 0.004
                     }
+                    Nodes.Light {
+                        position: Qt.vector3d(0.0, 55.0, -20.0)
+                        color: "brown"
+                        attenuation: 0.004
+                    }
+                    Nodes.Light {
+                        position: Qt.vector3d(29.0, 29.0, -53.0)
+                        color: "yellow"
+                        attenuation: 0.004
+                    }
+                    Nodes.Light {
+                        position: frameGraph.camera.position
+                        color: "red"
+                        attenuation: 0.01
+                    }
                 }
             }
         }
