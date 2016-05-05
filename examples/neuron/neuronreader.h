@@ -1,15 +1,11 @@
 #ifndef NEURONREADER_H
 #define NEURONREADER_H
 
-#include <SimVis/QuickWorker>
 #include <SimVis/Simulator>
 #include <SimVis/CylinderData>
 #include <QObject>
 #include <QUrl>
 #include <QVector3D>
-
-class NeuronReader;
-class NeuronRenderable;
 
 class Segment {
 public:

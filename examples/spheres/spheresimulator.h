@@ -5,7 +5,6 @@
 #include <QVector3D>
 #include <QElapsedTimer>
 #include <Qt3DRender/QBuffer>
-
 #include <SimVis/SphereData>
 
 class SphereWorker : public SimulatorWorker

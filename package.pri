@@ -13,7 +13,6 @@ RESOURCES += \
     $$PWD/src/imports/simvis_imports.qrc
 
 SOURCES += \
-    $$PWD/src/core/quickworker.cpp \
     $$PWD/src/core/simulator.cpp \
     $$PWD/src/core/simvisplugin.cpp \
     $$PWD/src/shadernodes/shadernode.cpp \
@@ -29,7 +28,6 @@ SOURCES += \
     $$PWD/src/utils/marchingcubestabletexture.cpp
 
 HEADERS += \
-    $$PWD/src/core/quickworker.h \
     $$PWD/src/core/simulator.h \
     $$PWD/src/core/simvisplugin.h \
     $$PWD/src/SimVis/QuickWorker \
