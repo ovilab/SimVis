@@ -12,6 +12,7 @@ public:
     static QString glslType(const QVariant &value);
     static QString convert(const QString &sourceType, const QString &targetType, const QString &identifier);
     static QString generateName();
+    static QString precisionQualifier(QString type);
 
 private:
     static QMutex m_nameMutex;

@@ -21,47 +21,53 @@ Scene3D {
         Spheres {
             id: spheresEntity
             camera: visualizer.camera
+            onCameraChanged: {
+                camera.position = Qt.vector3d(0.0, 0.0, -2.0)
+                camera.upVector = Qt.vector3d(0.0, 1.0, 0.0)
+                camera.viewCenter = Qt.vector3d(0.0, 0.0, 0.0)
+            }
+
             sphereData: simulator.sphereData
-            fragmentColor: StandardMaterial {
-                color: "steelblue"
-                hardness: 0.05
-                position: spheresEntity.fragmentBuilder.position
-//                normal: Add {
-//                    value1: spheresEntity.normal
-//                    value2: Simplex {
-//                        vector: spheresEntity.fragmentBuilder.normal
-//                        scale: 2.5
-//                        strength: 0.3
+//            fragmentColor: StandardMaterial {
+//                color: "steelblue"
+//                hardness: 0.05
+//                position: spheresEntity.fragmentBuilder.position
+////                normal: Add {
+////                    value1: spheresEntity.normal
+////                    value2: Simplex {
+////                        vector: spheresEntity.fragmentBuilder.normal
+////                        scale: 2.5
+////                        strength: 0.3
+////                    }
+////                }
+//                lights: ShaderGroup {
+//                    Nodes.Light {
+//                        position: Qt.vector3d(-20.0, 0.0, 0.0)
+//                        color: "red"
+//                        attenuation: 0.01
+//                    }
+//                    Nodes.Light {
+//                        position: Qt.vector3d(20.0, 0.0, 0.0)
+//                        color: "yellow"
+//                        attenuation: 0.01
+//                    }
+//                    Nodes.Light {
+//                        position: Qt.vector3d(0.0, 0.0, -20.0)
+//                        color: "white"
+//                        attenuation: 0.004
+//                    }
+//                    Nodes.Light {
+//                        position: Qt.vector3d(0.0, 55.0, -20.0)
+//                        color: "brown"
+//                        attenuation: 0.004
+//                    }
+//                    Nodes.Light {
+//                        position: Qt.vector3d(29.0, 29.0, -53.0)
+//                        color: "yellow"
+//                        attenuation: 0.004
 //                    }
 //                }
-                lights: ShaderGroup {
-                    Nodes.Light {
-                        position: Qt.vector3d(-20.0, 0.0, 0.0)
-                        color: "red"
-                        attenuation: 0.01
-                    }
-                    Nodes.Light {
-                        position: Qt.vector3d(20.0, 0.0, 0.0)
-                        color: "yellow"
-                        attenuation: 0.01
-                    }
-                    Nodes.Light {
-                        position: Qt.vector3d(0.0, 0.0, -20.0)
-                        color: "white"
-                        attenuation: 0.004
-                    }
-                    Nodes.Light {
-                        position: Qt.vector3d(0.0, 55.0, -20.0)
-                        color: "brown"
-                        attenuation: 0.004
-                    }
-                    Nodes.Light {
-                        position: Qt.vector3d(29.0, 29.0, -53.0)
-                        color: "yellow"
-                        attenuation: 0.004
-                    }
-                }
-            }
+//            }
         }
     }
 }

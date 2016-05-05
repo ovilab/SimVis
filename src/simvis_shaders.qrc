@@ -1,9 +1,14 @@
 <RCC>
     <qresource prefix="/SimVis">
-        <file>render/shaders/spheres.frag</file>
-        <file>render/shaders/spheres.vert</file>
-        <file>render/shaders/cylinders.frag</file>
-        <file>render/shaders/cylinders.geom</file>
-        <file>render/shaders/cylinders.vert</file>
+        <file>render/shaders/gl3/spheres.frag</file>
+        <file>render/shaders/gl3/spheres.vert</file>
+        <file>render/shaders/gl3/cylinders.frag</file>
+        <file>render/shaders/gl3/cylinders.geom</file>
+        <file>render/shaders/gl3/cylinders.vert</file>
+        <file>render/shaders/es2/spheres.frag</file>
+        <file>render/shaders/es2/spheres.vert</file>
+        <file>render/shaders/es2/cylinders.frag</file>
+        <file>render/shaders/es2/cylinders.geom</file>
+        <file>render/shaders/es2/cylinders.vert</file>
     </qresource>
 </RCC>
