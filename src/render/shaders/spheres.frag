@@ -21,6 +21,10 @@ uniform vec3 viewVector;
 uniform vec3 rightVector;
 uniform vec3 upVector;
 
+in vec3 up;
+in vec3 right;
+in vec3 view;
+
 vec3 adsModel( const in vec3 pos, const in vec3 n )
 {
     // Calculate the vector from the light to the fragment
@@ -47,7 +51,7 @@ void main(void) {
         discard;
     } else {
         float z = sqrt(1.0 - r2); // Equation for sphere, x^2 + y^2 + z^2 = R^2
-        vec3 normal = x*rightVector + y*upVector - z*viewVector;
+        vec3 normal = x*right + y*up - z*view;
         float pi = 3.1415926535897932384626433832795;
         vec2 texCoord = vec2(0.5 + atan(-normal.z, normal.x) / (2.0 * pi), 0.5 - asin(normal.y) / pi);
 
