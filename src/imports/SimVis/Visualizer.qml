@@ -27,7 +27,7 @@ Entity {
             activeFrameGraph: NonCullingForwardRenderer {
                 id: forwardRenderer
                 camera: visualizerRoot.camera
-                clearColor: "#012"
+                clearColor: "red"
             }
         }
     ]

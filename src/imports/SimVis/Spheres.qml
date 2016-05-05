@@ -17,6 +17,11 @@ Entity {
 
     property SphereData sphereData
     property Camera camera
+
+    onSphereDataChanged: {
+        sphereData.parent = spheresRoot
+    }
+
     Material {
         id: material
         parameters: [
