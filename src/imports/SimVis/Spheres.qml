@@ -35,19 +35,17 @@ Entity {
         ]
         effect: Effect {
             techniques: Technique {
+                graphicsApiFilter {
+                    api: GraphicsApiFilter.OpenGL
+                    profile: GraphicsApiFilter.CoreProfile
+                    minorVersion: 2
+                    majorVersion: 3
+                }
+                filterKeys: FilterKey {
+                    name: "renderingStyle"
+                    value: "forward"
+                }
                 renderPasses: RenderPass {
-                    bindings: [
-                        ParameterMapping {
-                            parameterName: "pos"
-                            shaderVariableName: "pos"
-                            bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "vertexId"
-                            shaderVariableName: "vertexId"
-                            bindingType: ParameterMapping.Attribute
-                        }
-                    ]
                     shaderProgram: ShaderProgram {
                         vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/spheres.vert")
                         fragmentShaderCode: _fragmentBuilder.finalShader
@@ -123,8 +121,8 @@ Entity {
                 Attribute {
                     name: "pos"
                     attributeType: Attribute.VertexAttribute
-                    dataType: Attribute.Float
-                    dataSize: 3
+                    vertexBaseType: Attribute.Float
+                    vertexSize: 3
                     divisor: 1
                     buffer: sphereData.buffer
                 }

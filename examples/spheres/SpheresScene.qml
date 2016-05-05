@@ -11,12 +11,12 @@ import QtQuick.Scene3D 2.0
 import SphereSimulator 1.0
 
 Scene3D {
-    aspects: "input"
+    aspects: ["render", "input", "logic"]
     Visualizer {
         id: visualizer
         SphereSimulator {
             id: simulator
-            dt: 0.01
+            dt: 0.1
         }
         Spheres {
             id: spheresEntity
@@ -59,11 +59,6 @@ Scene3D {
                         position: Qt.vector3d(29.0, 29.0, -53.0)
                         color: "yellow"
                         attenuation: 0.004
-                    }
-                    Nodes.Light {
-                        position: frameGraph.camera.position
-                        color: "red"
-                        attenuation: 0.01
                     }
                 }
             }

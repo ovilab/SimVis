@@ -22,6 +22,10 @@ Entity {
         camera: visualizerRoot.camera
     }
 
+//    FirstPersonCameraController {
+//        camera: visualizerRoot.camera
+//    }
+
     components: [
         RenderSettings {
             // TODO replace with ForwardRenderer with no culling when this is available in Qt 5.7 or Qt 5.8

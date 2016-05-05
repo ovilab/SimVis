@@ -58,7 +58,7 @@ Entity {
     id: root
     property Camera camera
     property real linearSpeed: 10.0
-    property real lookSpeed: 180.0
+    property real lookSpeed: 360.0
     property real zoomLimit: 2.0
 
     QtObject {

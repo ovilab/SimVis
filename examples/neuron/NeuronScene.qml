@@ -13,6 +13,8 @@ import NeuroML 1.0
 Scene3D {
     focus: true
     aspects: ["render", "logic", "input"]
+    cameraAspectRatioMode: Scene3D.AutomaticAspectRatio
+
     Visualizer {
         id: visualizer
 
@@ -63,31 +65,6 @@ Scene3D {
                     }
                 }
             }
-        }
-
-        CylinderMesh {
-            id: mesh
-            radius: 1
-            length: 3
-            rings: 100
-            slices: 20
-        }
-
-        Transform {
-            id: transform
-            scale: 1.5
-            rotation: fromAxisAndAngle(Qt.vector3d(1, 0, 0), 45)
-        }
-
-        PhongMaterial {
-            id: material
-            diffuse: "green"
-        }
-
-        Entity {
-            id: mainEntity
-            objectName: "mainEntity"
-            components: [ mesh, material, transform ]
         }
     }
 }

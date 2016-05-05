@@ -28,7 +28,7 @@ SimulatorWorker *SphereSimulator::createWorker()
 
 SphereWorker::SphereWorker()
 {
-    m_positions.resize(50000);
+    m_positions.resize(5000);
     m_velocities.resize(m_positions.size());
     double size = 50;
     for(int i=0; i<m_positions.size(); i++) {
