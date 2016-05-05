@@ -1,21 +1,19 @@
-#version 410
+attribute highp vec3 vertexPosition;
+attribute highp vec2 vertexTexCoord;
+attribute highp float vertexId;
+attribute highp vec3 pos;
 
-in vec3 vertexPosition;
-in vec2 vertexTexCoord;
-in float vertexId;
-in vec3 pos;
+uniform highp vec3 viewVector;
+uniform highp vec3 upVector;
+uniform highp vec3 rightVector;
 
-uniform vec3 viewVector = vec3(0.0, 0.0, 1.0);
-uniform vec3 upVector = vec3(0.0, 1.0, 0.0);
-uniform vec3 rightVector = vec3(1.0, 0.0, 0.0);
+uniform highp mat4 mvp;
 
-uniform mat4 mvp;
-
-out vec3 position;
-out vec2 planePosition;
+varying highp vec3 position;
+varying highp vec2 planePosition;
 
 void main() {
-    float a_scale = 1.0;
+    highp float a_scale = 1.0;
 
     position = vertexPosition + pos;
 

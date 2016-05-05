@@ -21,6 +21,12 @@ Scene3D {
         Spheres {
             id: spheresEntity
             camera: visualizer.camera
+            onCameraChanged: {
+                camera.position = Qt.vector3d(0.0, 0.0, -2.0)
+                camera.upVector = Qt.vector3d(0.0, 1.0, 0.0)
+                camera.viewCenter = Qt.vector3d(0.0, 0.0, 0.0)
+            }
+
             sphereData: simulator.sphereData
 //            fragmentColor: StandardMaterial {
 //                color: "steelblue"

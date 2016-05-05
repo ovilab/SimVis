@@ -244,7 +244,7 @@ QString ShaderNode::generateBody() const
     for(ShaderNode* dependency : m_resolvedDependencies) {
         body += dependency->generateBody();
     }
-    body += m_type + " " + identifier() + ";\n";
+    body += ShaderUtils::precisionQualifier(m_type) + " " + m_type + " " + identifier() + ";\n";
     if(!m_resolvedSource.isEmpty()) {
         body += m_resolvedSource + "\n";
     }
