@@ -4,8 +4,6 @@
 #include <QFile>
 #include <QXmlStreamReader>
 #include <QQmlFile>
-#include "core/camera.h"
-
 
 NeuronWorker::NeuronWorker()
 {

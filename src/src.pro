@@ -19,10 +19,6 @@ uri = com.mycompany.qmlcomponents
 include(../package.pri)
 
 DISTFILES = qmldir \
-    core/simvisplugin.json \
-    renderables/spheres/spheres_node.vsh \
-    renderables/spheres/spheres_node_geom.vsh \
-    shadereffects/shaders/defaultvertex.glsl \
-    shadereffects/shaders/defaultgeometry.glsl
+    core/simvisplugin.json
 
 

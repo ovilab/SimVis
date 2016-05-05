@@ -26,14 +26,14 @@ Scene3D {
                 color: "steelblue"
                 hardness: 0.05
                 position: spheresEntity.fragmentBuilder.position
-                normal: Add {
-                    value1: spheresEntity.normal
-                    value2: Simplex {
-                        vector: spheresEntity.fragmentBuilder.normal
-                        scale: 2.5
-                        strength: 0.3
-                    }
-                }
+//                normal: Add {
+//                    value1: spheresEntity.normal
+//                    value2: Simplex {
+//                        vector: spheresEntity.fragmentBuilder.normal
+//                        scale: 2.5
+//                        strength: 0.3
+//                    }
+//                }
                 lights: ShaderGroup {
                     Nodes.Light {
                         position: Qt.vector3d(-20.0, 0.0, 0.0)
@@ -59,11 +59,6 @@ Scene3D {
                         position: Qt.vector3d(29.0, 29.0, -53.0)
                         color: "yellow"
                         attenuation: 0.004
-                    }
-                    Nodes.Light {
-                        position: frameGraph.camera.position
-                        color: "red"
-                        attenuation: 0.01
                     }
                 }
             }

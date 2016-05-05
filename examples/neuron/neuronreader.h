@@ -1,8 +1,6 @@
 #ifndef NEURONREADER_H
 #define NEURONREADER_H
 
-#include "core/renderable.h"
-
 #include <SimVis/QuickWorker>
 #include <SimVis/Simulator>
 #include <SimVis/CylinderData>
@@ -35,7 +33,6 @@ public:
 
 private:
     QVector<Segment> m_segments;
-    QVector<CylinderVBOData> m_cylinders;
     QVector<QVector3D> m_spheres;
     virtual void synchronizeSimulator(Simulator *simulator) override;
     virtual void synchronizeRenderer(Renderable *renderable) override;

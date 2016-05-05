@@ -1,11 +1,9 @@
 #ifndef MYSIMULATOR_H
 #define MYSIMULATOR_H
 #include <SimVis/Simulator>
-#include <SimVis/TriangleCollection>
-
 #include <QVector>
 #include <QVector3D>
-
+#include <QElapsedTimer>
 #include <Qt3DRender/QBuffer>
 
 #include <SimVis/SphereData>

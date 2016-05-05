@@ -4,6 +4,7 @@
 #include "simulator.h"
 
 #include <QVector>
+#include <QVector3D>
 
 class QuickWorker : public SimulatorWorker
 {
