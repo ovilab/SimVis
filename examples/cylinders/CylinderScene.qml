@@ -11,7 +11,7 @@ import QtQuick.Scene3D 2.0
 import CylinderSimulator 1.0
 
 Scene3D {
-    aspects: "input"
+    aspects: ["render", "logic", "input"]
     Visualizer {
         CylinderSimulator {
             id: simulator

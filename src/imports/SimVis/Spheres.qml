@@ -31,29 +31,17 @@ Entity {
         parameters: [ ]
         effect: Effect {
             techniques: Technique {
+                graphicsApiFilter {
+                    api: GraphicsApiFilter.OpenGL
+                    profile: GraphicsApiFilter.CoreProfile
+                    minorVersion: 2
+                    majorVersion: 3
+                }
+                filterKeys: FilterKey {
+                    name: "renderingStyle"
+                    value: "forward"
+                }
                 renderPasses: RenderPass {
-//                    bindings: [
-//                        ParameterMapping {
-//                            parameterName: "vertexId"
-//                            shaderVariableName: "vertexId"
-//                            bindingType: ParameterMapping.Attribute
-//                        },
-//                        ParameterMapping {
-//                            parameterName: "pos"
-//                            shaderVariableName: "pos"
-//                            bindingType: ParameterMapping.Attribute
-//                        },
-//                        ParameterMapping {
-//                            parameterName: "scale"
-//                            shaderVariableName: "scale"
-//                            bindingType: ParameterMapping.Attribute
-//                        },
-//                        ParameterMapping {
-//                            parameterName: "col"
-//                            shaderVariableName: "col"
-//                            bindingType: ParameterMapping.Attribute
-//                        }
-//                    ]
                     shaderProgram: ShaderProgram {
                         vertexShaderCode: loadSource(vertexShaderSourceFile)
                         fragmentShaderCode: _fragmentBuilder.finalShader
