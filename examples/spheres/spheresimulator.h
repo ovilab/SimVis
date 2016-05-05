@@ -1,13 +1,10 @@
 #ifndef MYSIMULATOR_H
 #define MYSIMULATOR_H
 #include <SimVis/Simulator>
-#include <SimVis/TriangleCollection>
-
 #include <QVector>
 #include <QVector3D>
-
+#include <QElapsedTimer>
 #include <Qt3DRender/QBuffer>
-
 #include <SimVis/SphereData>
 
 class SphereWorker : public SimulatorWorker
@@ -19,7 +16,6 @@ public:
 private:
     // SimulatorWorker interface
     virtual void synchronizeSimulator(Simulator *simulator);
-    virtual void synchronizeRenderer(Renderable *renderableObject);
     virtual void work();
     QVector<QVector3D> m_positions;
     QVector<QVector3D> m_velocities;
@@ -49,7 +45,7 @@ signals:
     void dtChanged(double dt);
 
 protected:
-    virtual SimulatorWorker *createWorker();
+    virtual SimulatorWorker *createWorker() override;
 
 private:
     double m_dt = 0.05;

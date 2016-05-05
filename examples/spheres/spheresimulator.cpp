@@ -56,11 +56,6 @@ void SphereWorker::synchronizeSimulator(Simulator *simulator)
     }
 }
 
-void SphereWorker::synchronizeRenderer(Renderable *renderableObject)
-{
-
-}
-
 void SphereWorker::work()
 {
     for(int i=0; i<m_positions.size(); i++) {
