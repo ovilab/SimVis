@@ -10,6 +10,7 @@ ShaderNode {
     property var offset: Qt.vector2d(0, 0)
 
     property var texture: Texture2D {
+        // TODO This needs to be added as a parameter in the material
         id: diffuseTexture
         minificationFilter: Texture.LinearMipMapLinear
         magnificationFilter: Texture.Linear
