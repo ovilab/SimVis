@@ -16,10 +16,6 @@ protected:
 public:
     QuickWorker();
     ~QuickWorker();
-
-    // SimulatorWorker interface
-private:
-    void synchronizeRenderer(Renderable *renderableObject);
 };
 
 #endif // QUICKWORKER_H

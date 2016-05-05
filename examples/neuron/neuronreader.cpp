@@ -15,10 +15,6 @@ void NeuronWorker::synchronizeSimulator(Simulator *simulator)
 
 }
 
-void NeuronWorker::synchronizeRenderer(Renderable *renderable)
-{
-}
-
 void NeuronWorker::work()
 {
 }

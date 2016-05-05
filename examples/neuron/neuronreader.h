@@ -35,7 +35,6 @@ private:
     QVector<Segment> m_segments;
     QVector<QVector3D> m_spheres;
     virtual void synchronizeSimulator(Simulator *simulator) override;
-    virtual void synchronizeRenderer(Renderable *renderable) override;
     virtual void work() override;
     void reset();
 };
