@@ -30,7 +30,6 @@ SOURCES += \
 HEADERS += \
     $$PWD/src/core/simulator.h \
     $$PWD/src/core/simvisplugin.h \
-    $$PWD/src/SimVis/QuickWorker \
     $$PWD/src/SimVis/Simulator \
     $$PWD/src/shadernodes/shadernode.h \
     $$PWD/src/shadernodes/shaderbuilder.h \
