@@ -1,7 +1,7 @@
 import SimVis 1.0
 
 ShaderNode {
-    property var color: "purple"
+    property var color: "pink"
 
     property var ambientColor: color
     property var diffuseColor: color

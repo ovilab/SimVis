@@ -3,6 +3,7 @@ SUBDIRS += \
     spheres \
     shadernodes \
     neuron \
-    cylinders
+    cylinders \
+    bonds
 
 CONFIG += ordered
