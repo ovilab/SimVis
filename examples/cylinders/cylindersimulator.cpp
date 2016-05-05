@@ -45,10 +45,6 @@ void CylinderWorker::synchronizeSimulator(Simulator *simulator)
     }
 }
 
-void CylinderWorker::synchronizeRenderer(Renderable *renderableObject)
-{
-}
-
 void CylinderWorker::work()
 {
 }

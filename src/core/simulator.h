@@ -12,9 +12,6 @@
 #include <Qt3DRender/QBuffer>
 #include <Qt3DCore/QEntity>
 
-class Renderable;
-class Simulator;
-
 class SimulatorWorker : public QObject {
     Q_OBJECT
 
@@ -22,8 +19,8 @@ protected:
     virtual void work() = 0;
 
 private:
-    virtual void synchronizeSimulator(Simulator *simulator) = 0;
-    Q_INVOKABLE void workAndUnlock(Simulator *simulator);
+    virtual void synchronizeSimulator(class Simulator *simulator) = 0;
+    Q_INVOKABLE void workAndUnlock(class Simulator *simulator);
 signals:
     void workDone();
 

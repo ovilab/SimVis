@@ -13,7 +13,6 @@ class CylinderWorker : public SimulatorWorker
 private:
     // SimulatorWorker interface
     virtual void synchronizeSimulator(Simulator *simulator);
-    virtual void synchronizeRenderer(Renderable *renderableObject);
     virtual void work();
     QVector<CylinderVBOData> m_cylinders;
 public:
@@ -32,7 +31,7 @@ public:
     }
 
 protected:
-    virtual SimulatorWorker *createWorker();
+    virtual SimulatorWorker *createWorker() override;
 
 private:
     QScopedPointer<CylinderData> m_cylinderData;

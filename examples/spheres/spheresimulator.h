@@ -17,7 +17,6 @@ public:
 private:
     // SimulatorWorker interface
     virtual void synchronizeSimulator(Simulator *simulator);
-    virtual void synchronizeRenderer(Renderable *renderableObject);
     virtual void work();
     QVector<QVector3D> m_positions;
     QVector<QVector3D> m_velocities;
@@ -47,7 +46,7 @@ signals:
     void dtChanged(double dt);
 
 protected:
-    virtual SimulatorWorker *createWorker();
+    virtual SimulatorWorker *createWorker() override;
 
 private:
     double m_dt = 0.05;

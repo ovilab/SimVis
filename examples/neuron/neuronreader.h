@@ -66,7 +66,7 @@ public slots:
 
     // Simulator interface
 protected:
-    SimulatorWorker *createWorker();
+    SimulatorWorker *createWorker() override;
 
 private:
     QUrl m_source;
