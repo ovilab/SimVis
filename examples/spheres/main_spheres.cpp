@@ -16,9 +16,11 @@ int main(int argc, char *argv[])
     qpm::init(app, *view.engine());
     QSurfaceFormat format;
     format.setMajorVersion(4);
-    format.setMinorVersion(3);
+    format.setMinorVersion(1);
     format.setProfile(QSurfaceFormat::CoreProfile);
+#ifndef Q_OS_IOS
     view.setFormat(format);
+#endif
     view.setSource(QUrl("qrc:/main_spheres.qml"));
     view.show();
 

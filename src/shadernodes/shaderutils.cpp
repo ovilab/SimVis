@@ -116,3 +116,11 @@ QString ShaderUtils::generateName()
     m_nameMutex.unlock();
     return name;
 }
+
+QString ShaderUtils::precisionQualifier(QString type)
+{
+    QList<QString> typesWithPrecisionQualifier = {"float", "vec2", "vec3", "vec4"};
+    if(typesWithPrecisionQualifier.contains(type)) {
+        return "highp";
+    } else return "";
+}

@@ -10,6 +10,10 @@ import QtQuick 2.0 as QQ2
 Entity {
     id: spheresRoot
     property var variable: 0.0
+    property string vertexShaderSourceFile: "qrc:/SimVis/render/shaders/gl3/spheres.vert"
+    property string fragmentShaderSourceFile: "qrc:/SimVis/render/shaders/gl3/spheres.frag"
+//    property string vertexShaderSourceFile: "qrc:/SimVis/render/shaders/es2/spheres.vert"
+//    property string fragmentShaderSourceFile: "qrc:/SimVis/render/shaders/es2/spheres.frag"
     property alias fragmentColor: _fragmentColor.value
     property alias fragmentBuilder: _fragmentBuilder
     property alias normal: _fragmentBuilder.normal
@@ -17,6 +21,11 @@ Entity {
 
     property SphereData sphereData
     property Camera camera
+
+    onSphereDataChanged: {
+        sphereData.parent = spheresRoot
+    }
+
     Material {
         id: material
         parameters: [
@@ -49,7 +58,7 @@ Entity {
                         }
                     ]
                     shaderProgram: ShaderProgram {
-                        vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/spheres.vert")
+                        vertexShaderCode: loadSource(vertexShaderSourceFile)
                         fragmentShaderCode: _fragmentBuilder.finalShader
 
                         onFragmentShaderCodeChanged: {
@@ -91,7 +100,7 @@ Entity {
                             result: "sphereId"
                         }
 
-                        sourceFile: "qrc:/SimVis/render/shaders/spheres.frag"
+                        sourceFile: fragmentShaderSourceFile
 
                         outputs: [
                             ShaderOutput {
