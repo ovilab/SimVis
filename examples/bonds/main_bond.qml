@@ -1,4 +1,4 @@
-import QtQuick 2.2
+import QtQuick 2.6
 
 Item {
     id: applicationRoot
@@ -10,6 +10,14 @@ Item {
         id: scene
         anchors.fill: parent
         focus: true
+    }
+
+    Shortcut {
+        sequence: StandardKey.Copy
+        onActivated: {
+            console.log("Woop")
+            scene.doSomething()
+        }
     }
 }
 

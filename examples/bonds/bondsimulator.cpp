@@ -30,13 +30,13 @@ SimulatorWorker *BondSimulator::createWorker()
 
 BondWorker::BondWorker()
 {
-    m_positions.push_back(QVector3D(2, 2, 0));
-    m_positions.push_back(QVector3D(-2, -2, 0));
+    m_positions.push_back(QVector3D(4, 0, 0));
+    m_positions.push_back(QVector3D(-4, -2, 0));
 
     CylinderVBOData cylinder;
     QVector3D diff = m_positions[1] - m_positions[0];
-    cylinder.vertex1 = m_positions[0] + diff.normalized() * 0.5;
-    cylinder.vertex2 = m_positions[1] - diff.normalized() * 0.5;
+    cylinder.vertex1 = m_positions[0] + diff.normalized() * 0.4;
+    cylinder.vertex2 = m_positions[1] - diff.normalized() * 0.4;
     cylinder.radius1 = 0.2;
     cylinder.radius2 = 0.2;
 
