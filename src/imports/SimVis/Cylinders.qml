@@ -55,7 +55,7 @@ Entity {
                         }
                     ]
                     shaderProgram: ShaderProgram {
-                        vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/cylinders.vert")
+                        vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/gl3/cylinders.vert")
                         fragmentShaderCode: _fragmentBuilder.finalShader
                     }
                     ShaderBuilder {
@@ -83,7 +83,7 @@ Entity {
                             result: "texCoord"
                         }
 
-                        sourceFile: "qrc:/SimVis/render/shaders/cylinders.frag"
+                        sourceFile: "qrc:/SimVis/render/shaders/gl3/cylinders.frag"
 
                         outputs: [
                             ShaderOutput {
