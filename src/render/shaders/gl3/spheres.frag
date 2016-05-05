@@ -27,8 +27,6 @@ void main(void) {
         vec3 normal = x*right + y*up - z*view;
         float pi = 3.1415926535897932384626433832795;
         vec2 texCoord = vec2(0.5 + atan(-normal.z, normal.x) / (2.0 * pi), 0.5 - asin(normal.y) / pi);
-
-//        fragColor = vec4( adsModel( position, normalize( normal ) ), 1.0 );
 #pragma shadernodes body
     }
 }
