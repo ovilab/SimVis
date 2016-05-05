@@ -13,6 +13,8 @@ import MySimulator 1.0
 Scene3D {
     aspects: "input"
     property alias r: fsEntity.r
+    property alias nearPlane: fsEntity.nearPlane
+    property alias farPlane: fsEntity.farPlane
 
     Entity {
         Configuration  {

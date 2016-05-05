@@ -114,9 +114,9 @@ void UniformGridGeometry::init()
 UniformGridGeometry::UniformGridGeometry(Qt3DCore::QNode *parent)
     : QGeometry(parent)
 {
-    m_nz = 64;
-    m_nx = 16;
-    m_ny = 16;
+    m_nz = 50;
+    m_nx = 32;
+    m_ny = 32;
     init();
 }
 

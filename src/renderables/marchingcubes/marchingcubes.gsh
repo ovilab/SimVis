@@ -11,6 +11,7 @@ out vec3 position;
 out vec3 normal;
 out vec2 lolCoord;
 out vec3 color;
+uniform float time;
 uniform float threshold;
 uniform vec3 eyePosition;
 uniform float scale;
@@ -21,6 +22,8 @@ uniform mat4 inverseModelViewProjection;
 uniform mat4 inverseProjectionMatrix;
 uniform mat4 projectionMatrix;
 uniform float r;
+uniform float nearPlane;
+uniform float farPlane;
 
 float eval(vec3 position) {
     float shaderNodeResult;
@@ -110,6 +113,12 @@ void main(void) {
     mat4 cp_mvpInv = cp_projInv;
 #else
     mat4 cp_proj = projectionMatrix;
+//    cp_proj[0][0] *= nearPlane/10.;
+//    cp_proj[1][1] *= nearPlane/10.;
+//    cp_proj[2][2] = -(farPlane - nearPlane)/(farPlane + nearPlane);
+//    cp_proj[3][2] = -2.0*farPlane*nearPlane/(farPlane - nearPlane);
+//    mat4 cp_mvp = cp_proj*modelView;
+//    mat4 cp_mvpInv = inverse(cp_mvp);
     mat4 cp_mvp = mvp;
     mat4 cp_mvpInv = inverseModelViewProjection;
 #endif
@@ -140,6 +149,7 @@ void main(void) {
     float T1 = cp_proj[2][2];
     float T2 = cp_proj[3][2];
     float E1 = cp_proj[2][3];
+
     float Nz = z_ndc;
     float Nz_next = z_ndc_next;
     float Pz = T2 / (T1 * Nz - T1);
@@ -292,7 +302,7 @@ void main(void) {
 
         float sign = dot(N, eyeDirection);
 
-        // if(sign<0){
+        if(sign<0){
             position = p1;
             normal = -n1;
             gl_Position = mvp_p1;
@@ -311,7 +321,7 @@ void main(void) {
             lolCoord = vec2(1.0, 1.0);
             EmitVertex();
             EndPrimitive();
-        // } else {
+        } else {
             position = p3;
             normal = n3;
             gl_Position = mvp_p3;
@@ -330,7 +340,7 @@ void main(void) {
             lolCoord = vec2(0.0, 0.0);
             EmitVertex();
             EndPrimitive();
-        // }
+        }
     }
 #endif
 }

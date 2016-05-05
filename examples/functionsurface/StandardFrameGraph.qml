@@ -12,8 +12,8 @@ FrameGraph {
         projectionType: CameraLens.PerspectiveProjection
         fieldOfView: 45
         aspectRatio: 16/9
-        nearPlane : 40.0
-        farPlane : 100000.0
+        nearPlane : 5.0
+        farPlane : 300.0
         position: Qt.vector3d(0.0, 0.0, 0.0)
         upVector: Qt.vector3d(0.0, 1.0, 0.0)
         viewCenter: Qt.vector3d(0.0, 0.0, -1.0)
@@ -34,7 +34,7 @@ FrameGraph {
         Viewport {
             id: viewport
             rect: Qt.rect(0.0, 0.0, 1.0, 1.0)
-            clearColor: "#afc"
+            clearColor: "#111"
             CameraSelector {
                 id : cameraSelector
                 camera: frameGraph.camera

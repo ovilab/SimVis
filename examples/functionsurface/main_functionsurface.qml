@@ -12,7 +12,7 @@ import QtMultimedia 5.5
 
 Item {
     id: applicationRoot
-//    title: qsTr("Spheres in an harmonic oscillator - SimVis example")
+    //    title: qsTr("Spheres in an harmonic oscillator - SimVis example")
     width: 1650
     height: 900
     visible: true
@@ -21,14 +21,48 @@ Item {
         id: scene
         anchors.fill: parent
         focus: true
-        r: slider.value
+        r: sliderR.value
+        nearPlane: sliderNP.value
+        farPlane: sliderFP.value
     }
 
-    Slider {
-        id: slider
-        minimumValue: 0
-        maximumValue: 10
-        stepSize: 0.1
-        value: scene.r
+    Column {
+        Row {
+            Slider {
+                id: sliderR
+                minimumValue: 0
+                maximumValue: 10
+                stepSize: 0.1
+                value: scene.r
+            }
+            Label {
+                text: sliderR.value
+            }
+        }
+        Row {
+
+            Slider {
+                id: sliderNP
+                minimumValue: 1
+                maximumValue: 30
+                stepSize: 1
+                value: scene.nearPlane
+            }
+            Label {
+                text: sliderNP.value
+            }
+        }
+        Row {
+            Slider {
+                id: sliderFP
+                minimumValue: 100
+                maximumValue: 10000
+                stepSize: 100
+                value: scene.farPlane
+            }
+            Label {
+                text: sliderFP.value
+            }
+        }
     }
 }

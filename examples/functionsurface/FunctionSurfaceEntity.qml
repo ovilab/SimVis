@@ -15,6 +15,8 @@ Entity {
     property alias normal: _fragmentBuilder.normal
     property alias position: _fragmentBuilder.position
     property real  r: 2.0
+    property real nearPlane: 20
+    property real farPlane: 1000
     property Camera camera
     onCameraChanged: {
         console.log("Cam pos: "+camera.position)
@@ -30,7 +32,7 @@ Entity {
             },
             Parameter {
                 name: "threshold"
-                value: 0.0
+                value: 0.231
             },
             Parameter {
                 name: "scale"
@@ -39,6 +41,20 @@ Entity {
             Parameter {
                 name: "r"
                 value: r
+            },
+            Parameter {
+                name: "nearPlane"
+                value: nearPlane
+                onValueChanged: {
+                    console.log("Near: ", nearPlane)
+                }
+            },
+            Parameter {
+                name: "farPlane"
+                value: farPlane
+                onValueChanged: {
+                    console.log("Far: ", farPlane)
+                }
             }
         ]
 
@@ -90,8 +106,8 @@ Entity {
                                     // result: "exp(-($position.y*$position.y + $position.x*$position.x))"
                                     // result: "$position.x + $position.y + $position.z;"
                                     // result: "10*sin(0.1*($position.z+$position.x)) - $position.y"
-                                    // result: "sqrt($position.y*$position.y + $position.x*$position.x + ($position.z+15.0)*($position.z+15.0))"
-                                    result: "sin(0.05353522*$position.z) + sin(0.1343535*$position.x) + sin(0.075234555*$position.y);"
+                                    // result: "sqrt($position.y*$position.y + $position.x*$position.x + ($position.z+0.0)*($position.z+0.0))"
+                                    result: "sin(sin(0.05353522*$position.z + time) + sin(0.1343535*$position.x + time) + sin(0.075234555*$position.y));"
                                     // result: "sin($position.z)"
                                     // result: "$position.x*$position.x + $position.y*$position.y + $position.z*$position.z;"
                                 }
