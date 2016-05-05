@@ -5,9 +5,6 @@ in vec2 vertexTexCoord;
 in float vertexId;
 in vec3 pos;
 
-uniform vec3 viewVector = vec3(0.0, 0.0, 1.0);
-uniform vec3 upVector = vec3(0.0, 1.0, 0.0);
-uniform vec3 rightVector = vec3(1.0, 0.0, 0.0);
 uniform vec3 eyePosition = vec3(0.0, 0.0, 0.0);
 
 uniform mat4 mvp;
@@ -30,7 +27,7 @@ vec3 makePerpendicular(vec3 v) {
 }
 
 void main() {
-    float a_scale = 1.0;
+    float a_scale = 0.6;
 
     position = vertexPosition + pos;
 

@@ -34,6 +34,7 @@ Scene3D {
             camera: visualizer.camera
             sphereData: simulator.sphereData
         }
+
         Cylinders {
             cylinderData: simulator.cylinderData
             fragmentColor: StandardMaterial {
