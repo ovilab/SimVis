@@ -90,7 +90,7 @@ Entity {
                                 id: _fragmentColor
                                 type: "vec4"
                                 name: "fragColor"
-                                value: StandardMaterial {}
+                                value: StandardMaterial { }
                             }
                         ]
                     }

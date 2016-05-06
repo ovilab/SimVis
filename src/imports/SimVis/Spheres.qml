@@ -101,14 +101,7 @@ Entity {
                                 id: _fragmentColor
                                 type: "vec4"
                                 name: "fragColor"
-                                value: StandardMaterial {
-                                    position: _fragmentBuilder.position
-                                    color: _fragmentBuilder.color
-                                    normal: _fragmentBuilder.normal
-                                    lights: [
-                                        Nodes.Light {}
-                                    ]
-                                }
+                                value: StandardMaterial {}
                             }
                         ]
                     }
