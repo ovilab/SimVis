@@ -76,9 +76,9 @@ Technique {
                     value: StandardMaterial {
                         position: _fragmentBuilder.position
                         normal: _fragmentBuilder.normal
-                        lights: ShaderGroup {
+                        lights: [
                             Light {}
-                        }
+                        ]
                     }
                 }
             ]

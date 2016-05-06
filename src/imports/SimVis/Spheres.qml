@@ -105,9 +105,9 @@ Entity {
                                     position: _fragmentBuilder.position
                                     color: _fragmentBuilder.color
                                     normal: _fragmentBuilder.normal
-                                    lights: ShaderGroup {
+                                    lights: [
                                         Nodes.Light {}
-                                    }
+                                    ]
                                 }
                             }
                         ]

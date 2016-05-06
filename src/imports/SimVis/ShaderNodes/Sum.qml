@@ -1,13 +1,13 @@
 import SimVis 1.0
 
 ShaderNode {
-    property ShaderGroup inputs
+    property list<ShaderNode> inputs
 
     type: "float"
     source: {
         var output = "";
         output += "float $sumresult = 0.0;\n"
-        for(var i in inputs.nodes) {
+        for(var i in inputs) {
             output += "$sumresult += $(inputs[" + i + "], float);\n";
         }
         return output
