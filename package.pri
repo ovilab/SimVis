@@ -22,6 +22,7 @@ SOURCES += \
     $$PWD/src/shadernodes/shaderbuilderbinding.cpp \
     $$PWD/src/shadernodes/shaderutils.cpp \
     $$PWD/src/render/geometry/pointgeometry.cpp \
+    $$PWD/src/render/geometry/spherespointgeometry.cpp \
     $$PWD/src/render/geometry/spheredata.cpp \
     $$PWD/src/render/geometry/cylinderdata.cpp \
     $$PWD/src/render/geometry/uniformgridgeometry.cpp \
@@ -38,6 +39,7 @@ HEADERS += \
     $$PWD/src/shadernodes/shaderutils.h \
     $$PWD/src/shadernodes/shaderbuilderbinding.h \
     $$PWD/src/render/geometry/pointgeometry.h \
+    $$PWD/src/render/geometry/spherespointgeometry.h \
     $$PWD/src/render/geometry/spheredata.h \
     $$PWD/src/SimVis/SphereData \
     $$PWD/src/render/geometry/cylinderdata.h \

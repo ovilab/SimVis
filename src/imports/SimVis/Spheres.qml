@@ -28,20 +28,7 @@ Entity {
 
     Material {
         id: material
-        parameters: [
-            Parameter {
-                name: "viewVector"
-                value: camera ? camera.viewVector.normalized() : Qt.vector3d(1.0, 0.0, 0.0)
-            },
-            Parameter {
-                name: "upVector"
-                value: camera ? camera.upVector.normalized() : Qt.vector3d(0.0, 1.0, 0.0)
-            },
-            Parameter {
-                name: "rightVector"
-                value: camera ? camera.viewVector.normalized().crossProduct(camera.upVector.normalized()) : Qt.vector3d(0.0, 0.0, 1.0)
-            }
-        ]
+        parameters: [ ]
         effect: Effect {
             techniques: Technique {
                 renderPasses: RenderPass {
@@ -55,15 +42,16 @@ Entity {
                             parameterName: "vertexId"
                             shaderVariableName: "vertexId"
                             bindingType: ParameterMapping.Attribute
+                        },
+                        ParameterMapping {
+                            parameterName: "scale"
+                            shaderVariableName: "scale"
+                            bindingType: ParameterMapping.Attribute
                         }
                     ]
                     shaderProgram: ShaderProgram {
                         vertexShaderCode: loadSource(vertexShaderSourceFile)
                         fragmentShaderCode: _fragmentBuilder.finalShader
-
-                        onFragmentShaderCodeChanged: {
-                            // console.log(fragmentShaderCode)
-                        }
                     }
                     ShaderBuilder {
                         id: _fragmentBuilder
@@ -127,7 +115,7 @@ Entity {
         enabled: instanceCount != 0
         instanceCount: sphereData.count
 
-        geometry: PointGeometry {
+        geometry: SpheresPointGeometry {
             attributes: [
                 Attribute {
                     name: "pos"

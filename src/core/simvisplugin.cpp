@@ -6,6 +6,7 @@
 #include "../shadernodes/shadergroup.h"
 #include "../shadernodes/shaderbuilderbinding.h"
 #include "../render/geometry/pointgeometry.h"
+#include "../render/geometry/spherespointgeometry.h"
 #include "../render/geometry/spheredata.h"
 #include "../render/geometry/cylinderdata.h"
 #include "../render/geometry/uniformgridgeometry.h"
@@ -28,6 +29,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<ShaderGroup>("SimVis", 1, 0, "ShaderGroup");
     qmlRegisterType<ShaderBuilderBinding>("SimVis", 1, 0, "ShaderBuilderBinding");
     qmlRegisterType<PointGeometry>("SimVis", 1, 0, "PointGeometry");
+    qmlRegisterType<SpheresPointGeometry>("SimVis", 1, 0, "SpheresPointGeometry");
     qmlRegisterType<UniformGridGeometry>("SimVis", 1, 0, "UniformGridGeometry");
     qmlRegisterType<SphereData>("SimVis", 1, 0, "SphereData");
     qmlRegisterType<CylinderData>("SimVis", 1, 0, "CylinderData");
