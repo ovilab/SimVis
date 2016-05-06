@@ -1,4 +1,5 @@
 import SimVis 1.0
+import SimVis.ShaderNodes 1.0
 
 ShaderNode {
     property var color: "lightblue"
@@ -27,6 +28,7 @@ ShaderNode {
         Light {
             position: Qt.vector3d(-500, -500, -500)
             attenuation: 0.0
+            strength: 0.2
         }
     ]
 

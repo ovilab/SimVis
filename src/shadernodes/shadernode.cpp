@@ -161,7 +161,7 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
                 QQmlListProperty<QObject> *list = static_cast<QQmlListProperty<QObject>*>(value.data());
                 int count = list->count(list);
                 for(int i = 0; i < count; i++) {
-                    QObject *object = list->at(list, 0);
+                    QObject *object = list->at(list, i);
                     ShaderNode *node = qobject_cast<ShaderNode*>(object);
                     if(!node) {
                         qWarning() << "ERROR: Could not convert listed object to ShaderNode:" << object;
