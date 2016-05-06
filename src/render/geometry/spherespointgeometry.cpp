@@ -112,9 +112,9 @@ void SpheresPointGeometry::init()
 {
     m_positionAttribute = new QAttribute(this);
     m_texCoordAttribute = new QAttribute(this);
-    m_colorAttribute = new QAttribute(this);
     m_idAttribute = new QAttribute(this);
     m_indexAttribute = new QAttribute(this);
+
     m_vertexBuffer = new QBuffer(QBuffer::VertexBuffer, this);
     m_indexBuffer = new QBuffer(QBuffer::IndexBuffer, this);
 
@@ -146,7 +146,7 @@ void SpheresPointGeometry::init()
     m_idAttribute->setAttributeType(QAttribute::VertexAttribute);
     m_idAttribute->setBuffer(m_vertexBuffer);
     m_idAttribute->setByteStride(stride);
-    m_idAttribute->setByteOffset((3 + 2) * sizeof(float));
+    m_idAttribute->setByteOffset((3 + 2 + 1) * sizeof(float));
     m_idAttribute->setCount(vertexCount);
 
     m_indexAttribute->setAttributeType(QAttribute::IndexAttribute);

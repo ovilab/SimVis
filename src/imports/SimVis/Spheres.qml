@@ -34,13 +34,13 @@ Entity {
                 renderPasses: RenderPass {
                     bindings: [
                         ParameterMapping {
-                            parameterName: "pos"
-                            shaderVariableName: "pos"
+                            parameterName: "vertexId"
+                            shaderVariableName: "vertexId"
                             bindingType: ParameterMapping.Attribute
                         },
                         ParameterMapping {
-                            parameterName: "vertexId"
-                            shaderVariableName: "vertexId"
+                            parameterName: "pos"
+                            shaderVariableName: "pos"
                             bindingType: ParameterMapping.Attribute
                         },
                         ParameterMapping {
@@ -115,13 +115,25 @@ Entity {
         enabled: instanceCount != 0
         instanceCount: sphereData.count
 
-        geometry: SpheresPointGeometry {
+        geometry: PointGeometry {
             attributes: [
                 Attribute {
                     name: "pos"
                     attributeType: Attribute.VertexAttribute
                     dataType: Attribute.Float
                     dataSize: 3
+                    byteOffset: 0
+                    byteStride: (3 + 1) * 4
+                    divisor: 1
+                    buffer: sphereData.buffer
+                },
+                Attribute {
+                    name: "scale"
+                    attributeType: Attribute.VertexAttribute
+                    dataType: Attribute.Float
+                    dataSize: 1
+                    byteOffset: 3*4
+                    byteStride: (3 + 1) * 4
                     divisor: 1
                     buffer: sphereData.buffer
                 }
