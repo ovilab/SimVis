@@ -37,7 +37,7 @@ void SphereData::setPositions(QVector<QVector3D> positions, QVector3D color, flo
     for(int i=0; i<positions.size(); i++) {
         SphereVBOData &vbo = vboData[i];
         vbo.position = positions[i];
-        // vbo.color = color;
+        vbo.color = color;
         vbo.scale = scale;
     }
     m_buffer->setData(ba);

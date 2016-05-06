@@ -4,6 +4,7 @@ in vec3 vertexPosition;
 in vec2 vertexTexCoord;
 in float vertexId;
 in vec3 pos;
+in vec3 col;
 in float scale;
 
 uniform vec3 eyePosition = vec3(0.0, 0.0, 0.0);
@@ -11,6 +12,7 @@ uniform vec3 eyePosition = vec3(0.0, 0.0, 0.0);
 uniform mat4 mvp;
 
 out vec3 position;
+out vec3 color;
 out vec2 planePosition;
 
 out vec3 up;
@@ -28,8 +30,8 @@ vec3 makePerpendicular(vec3 v) {
 }
 
 void main() {
-    float a_scale = 0.6 + scale;
     position = vertexPosition + pos;
+    color = col;
 
     view = normalize(position - eyePosition);
     right = normalize(makePerpendicular(view));
@@ -39,10 +41,10 @@ void main() {
 
     // TODO should be moved 0.5 * view closer and use ray tracing
 
-    position += 0.5*(-up - right)*(a_scale*float(vertexId==0.0));
-    position += 0.5*(-up + right)*(a_scale*float(vertexId==1.0));
-    position += 0.5*(up - right)* (a_scale*float(vertexId==2.0));
-    position += 0.5*(up + right)* (a_scale*float(vertexId==3.0));
+    position += 0.5*(-up - right)*(scale*float(vertexId==0.0));
+    position += 0.5*(-up + right)*(scale*float(vertexId==1.0));
+    position += 0.5*(up - right)* (scale*float(vertexId==2.0));
+    position += 0.5*(up + right)* (scale*float(vertexId==3.0));
 
     gl_Position = mvp*vec4(position, 1.0);
 }

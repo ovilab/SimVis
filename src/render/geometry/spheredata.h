@@ -8,7 +8,7 @@
 struct SphereVBOData
 {
     QVector3D position;
-    // QVector3D color;
+    QVector3D color;
     float scale;
 };
 
@@ -22,7 +22,7 @@ public:
 
     Qt3DRender::QBuffer* buffer();
     void setData(QVector<SphereVBOData> data);
-    void setPositions(QVector<QVector3D> positions, QVector3D color = QVector3D(1.0, 1.0, 1.0), float scale = 0.1);
+    void setPositions(QVector<QVector3D> positions, QVector3D color = QVector3D(1.0, 1.0, 1.0), float scale = 1.0);
     int count() const;
 
 signals:

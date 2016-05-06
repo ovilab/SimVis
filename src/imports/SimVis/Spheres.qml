@@ -47,11 +47,19 @@ Entity {
                             parameterName: "scale"
                             shaderVariableName: "scale"
                             bindingType: ParameterMapping.Attribute
+                        },
+                        ParameterMapping {
+                            parameterName: "col"
+                            shaderVariableName: "col"
+                            bindingType: ParameterMapping.Attribute
                         }
                     ]
                     shaderProgram: ShaderProgram {
                         vertexShaderCode: loadSource(vertexShaderSourceFile)
                         fragmentShaderCode: _fragmentBuilder.finalShader
+                        onFragmentShaderCodeChanged: {
+                            console.log("Fragment shader code: ", fragmentShaderCode)
+                        }
                     }
                     ShaderBuilder {
                         id: _fragmentBuilder
@@ -87,9 +95,7 @@ Entity {
                             name: "sphereId"
                             result: "sphereId"
                         }
-
                         sourceFile: fragmentShaderSourceFile
-
                         outputs: [
                             ShaderOutput {
                                 id: _fragmentColor
@@ -97,6 +103,7 @@ Entity {
                                 name: "fragColor"
                                 value: StandardMaterial {
                                     position: _fragmentBuilder.position
+                                    color: _fragmentBuilder.color
                                     normal: _fragmentBuilder.normal
                                     lights: ShaderGroup {
                                         Nodes.Light {}
@@ -115,7 +122,7 @@ Entity {
         enabled: instanceCount != 0
         instanceCount: sphereData.count
 
-        geometry: PointGeometry {
+        geometry: SpheresPointGeometry {
             attributes: [
                 Attribute {
                     name: "pos"
@@ -123,7 +130,17 @@ Entity {
                     dataType: Attribute.Float
                     dataSize: 3
                     byteOffset: 0
-                    byteStride: (3 + 1) * 4
+                    byteStride: (3 + 3 + 1) * 4
+                    divisor: 1
+                    buffer: sphereData.buffer
+                },
+                Attribute {
+                    name: "col"
+                    attributeType: Attribute.VertexAttribute
+                    dataType: Attribute.Float
+                    dataSize: 3
+                    byteOffset: 3*4
+                    byteStride: (3 + 3 + 1) * 4
                     divisor: 1
                     buffer: sphereData.buffer
                 },
@@ -132,8 +149,8 @@ Entity {
                     attributeType: Attribute.VertexAttribute
                     dataType: Attribute.Float
                     dataSize: 1
-                    byteOffset: 3*4
-                    byteStride: (3 + 1) * 4
+                    byteOffset: (3+3)*4
+                    byteStride: (3 + 3 + 1) * 4
                     divisor: 1
                     buffer: sphereData.buffer
                 }
