@@ -30,7 +30,7 @@ SphereWorker::SphereWorker()
 {
     m_positions.resize(5000);
     m_velocities.resize(m_positions.size());
-    double size = 50;
+    double size = 10;
     for(int i=0; i<m_positions.size(); i++) {
         float x = ((2.0*rand() / double(RAND_MAX))-1.0)*size;
         float y = ((2.0*rand() / double(RAND_MAX))-1.0)*size;
@@ -54,11 +54,6 @@ void SphereWorker::synchronizeSimulator(Simulator *simulator)
 
         mySimulator->sphereData()->setPositions(m_positions);
     }
-}
-
-void SphereWorker::synchronizeRenderer(Renderable *renderableObject)
-{
-
 }
 
 void SphereWorker::work()

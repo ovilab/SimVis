@@ -2,8 +2,8 @@ TEMPLATE = subdirs
 SUBDIRS += \
     spheres \
     shadernodes \
-    functionsurface \
     neuron \
-    cylinders
+    cylinders \
+    bonds
 
 CONFIG += ordered

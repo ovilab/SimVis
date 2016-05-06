@@ -4,8 +4,6 @@
 #include <QFile>
 #include <QXmlStreamReader>
 #include <QQmlFile>
-#include "core/camera.h"
-
 
 NeuronWorker::NeuronWorker()
 {
@@ -14,11 +12,7 @@ NeuronWorker::NeuronWorker()
 
 void NeuronWorker::synchronizeSimulator(Simulator *simulator)
 {
-
-}
-
-void NeuronWorker::synchronizeRenderer(Renderable *renderable)
-{
+    Q_UNUSED(simulator)
 }
 
 void NeuronWorker::work()
@@ -101,7 +95,6 @@ void NeuronReader::readFile()
 
     m_segments.append(segment);
     for(Segment &segment : m_segments) {
-        Segment &s = segment;
         if(!segment.hasProximal && segment.hasParentID) {
             for(Segment &otherSegment : m_segments) {
                 if(otherSegment.id == segment.parentID) {
@@ -114,7 +107,6 @@ void NeuronReader::readFile()
         if(segment.proximalWidth == 0.0) {
             segment.proximalWidth = segment.distalWidth;
         }
-        //        qDebug() << s.id << s.parentID << s.proximal << s.distal << s.proximalWidth << s.distalWidth;
     }
 
     m_cylinders.clear();

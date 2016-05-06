@@ -3,25 +3,24 @@
 #include <QQuickView>
 #include <QtQml>
 
-#include "spheresimulator.h"
+#include "bondsimulator.h"
 
 #include <vendor.h>
 
 int main(int argc, char *argv[])
 {
-    qmlRegisterType<SphereSimulator>("SphereSimulator", 1, 0, "SphereSimulator");
+    qmlRegisterType<BondSimulator>("BondSimulator", 1, 0, "BondSimulator");
     QApplication app(argc, argv);
 
     QQuickView view;
     qpm::init(app, *view.engine());
     QSurfaceFormat format;
     format.setMajorVersion(4);
-    format.setMinorVersion(1);
+    format.setMinorVersion(3);
     format.setProfile(QSurfaceFormat::CoreProfile);
-#ifndef Q_OS_IOS
     view.setFormat(format);
-#endif
-    view.setSource(QUrl("qrc:/main_spheres.qml"));
+    view.setResizeMode(QQuickView::SizeRootObjectToView);
+    view.setSource(QUrl("qrc:/main_bond.qml"));
     view.show();
 
     return app.exec();

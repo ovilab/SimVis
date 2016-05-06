@@ -6,36 +6,42 @@
 #include <QElapsedTimer>
 #include <Qt3DRender/QBuffer>
 #include <SimVis/SphereData>
+#include <SimVis/CylinderData>
 
-class SphereWorker : public SimulatorWorker
+class BondWorker : public SimulatorWorker
 {
     Q_OBJECT
 public:
-    SphereWorker();
+    BondWorker();
 
 private:
     // SimulatorWorker interface
     virtual void synchronizeSimulator(Simulator *simulator);
     virtual void work();
     QVector<QVector3D> m_positions;
-    QVector<QVector3D> m_velocities;
+    QVector<CylinderVBOData> m_cylinders;
     float dt = 0.05;
     QElapsedTimer m_timer;
 };
 
-class SphereSimulator : public Simulator
+class BondSimulator : public Simulator
 {
     Q_OBJECT
     Q_PROPERTY(double dt READ dt WRITE setDt NOTIFY dtChanged)
     Q_PROPERTY(SphereData* sphereData READ sphereData CONSTANT)
+    Q_PROPERTY(CylinderData* cylinderData READ cylinderData CONSTANT)
 
 public:
-    SphereSimulator(QNode *parent = 0);
+    BondSimulator(QNode *parent = 0);
 
     double dt() const;
     SphereData* sphereData()
     {
         return m_sphereData.data();
+    }
+    CylinderData* cylinderData()
+    {
+        return m_cylinderData.data();
     }
 
 public slots:
@@ -50,8 +56,9 @@ protected:
 private:
     double m_dt = 0.05;
     QScopedPointer<SphereData> m_sphereData;
+    QScopedPointer<CylinderData> m_cylinderData;
 
-    QT3D_CLONEABLE(SphereSimulator)
+    QT3D_CLONEABLE(BondSimulator)
 };
 
 #endif // MYSIMULATOR_H

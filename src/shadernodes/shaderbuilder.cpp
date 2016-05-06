@@ -65,7 +65,7 @@ QString ShaderBuilder::finalShader()
     }
     header += "\n// ------          uniforms        ------\n\n";
     for(const UniformValue &uniform : m_uniforms) {
-        header += "uniform " + uniform.type + " " + uniform.identifier + ";\n";
+        header += "uniform highp " + uniform.type + " " + uniform.identifier + ";\n";
     }
     header += "\n// ------   end generated header   ------\n\n";
 
