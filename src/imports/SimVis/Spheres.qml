@@ -106,7 +106,9 @@ Entity {
                                     color: _fragmentBuilder.color
                                     normal: _fragmentBuilder.normal
                                     lights: ShaderGroup {
-                                        Nodes.Light {}
+                                        Nodes.Light {
+                                            position: spheresRoot.camera.position
+                                        }
                                     }
                                 }
                             }

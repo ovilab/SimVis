@@ -23,8 +23,8 @@ public:
     Qt3DRender::QBuffer* buffer();
     void setData(QVector<SphereVBOData> data);
     void setPositions(QVector<QVector3D> positions, QVector3D color = QVector3D(1.0, 1.0, 1.0), float scale = 1.0);
+    void setData(const QVector<QVector3D> &positions, const QVector<QVector3D> &colors, const QVector<float> &scales);
     int count() const;
-
 signals:
 
     void countChanged(int count);
