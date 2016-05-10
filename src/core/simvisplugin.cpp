@@ -18,6 +18,7 @@
 void SimVisPlugin::registerTypes(const char *uri)
 {
     Q_INIT_RESOURCE(simvis_shaders);
+    Q_INIT_RESOURCE(simvis_imports);
     // @uri SimVis
     Q_ASSERT(uri == QLatin1String("SimVis"));
     qmlRegisterUncreatableType<Simulator>("SimVis", 1, 0, "Simulator",
