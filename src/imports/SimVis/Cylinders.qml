@@ -39,6 +39,7 @@ Entity {
                 renderPasses: RenderPass {
                     shaderProgram: ShaderProgram {
                         vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/gl3/cylinders.vert")
+//                        fragmentShaderCode: loadSource("qrc:/SimVis/render/shaders/cylinders.frag")
                         fragmentShaderCode: _fragmentBuilder.finalShader
                     }
                     ShaderBuilder {
