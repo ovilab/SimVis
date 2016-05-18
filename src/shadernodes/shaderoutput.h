@@ -24,8 +24,6 @@ signals:
 
 private:
     QVariant m_value;
-
-    QT3D_CLONEABLE(ShaderOutputNode)
 };
 
 class ShaderOutput : public Qt3DCore::QNode
@@ -60,8 +58,6 @@ private:
     QString m_type;
     QVariant m_value;
     ShaderOutputNode m_node;
-
-    QT3D_CLONEABLE(ShaderOutput)
 };
 
 #endif // SHADEROUTPUT_H

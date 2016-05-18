@@ -1,4 +1,5 @@
 #include "simulator.h"
+#include <Qt3DCore/QTransform>
 
 Simulator::Simulator(QNode *parent)
     : QNode(parent)

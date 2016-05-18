@@ -46,24 +46,24 @@ Scene3D {
 
                 specularIntensity: 10.0
                 hardness: 0.2
-                lights: ShaderGroup {
+                lights: [
                     Nodes.Light {
                         position: Qt.vector3d(20.0, 0.0, -10.0)
                         attenuation: 0.1
-                    }
+                    },
                     Nodes.Light {
                         position: Qt.vector3d(-20.0, 0.0, 10.0)
                         attenuation: 0.1
-                    }
+                    },
                     Nodes.Light {
                         position: Qt.vector3d(-50.0, 10.0, 50.0)
                         attenuation: 0.1
-                    }
+                    },
                     Nodes.Light {
                         position: Qt.vector3d(50.0, -20.0, -50.0)
                         attenuation: 0.1
                     }
-                }
+                ]
             }
         }
     }

@@ -18,9 +18,9 @@ Entity {
         viewCenter: Qt.vector3d(0.0, 0.0, 0.0)
     }
 
-    OrbitController {
-        camera: visualizerRoot.camera
-    }
+//    OrbitController {
+//        camera: visualizerRoot.camera
+//    }
 
 //    FirstPersonCameraController {
 //        camera: visualizerRoot.camera
@@ -35,6 +35,6 @@ Entity {
             }
         },
         // Event Source will be set by the Qt3DQuickWindow
-        InputSettings { }
+        InputSettings {}
     ]
 }

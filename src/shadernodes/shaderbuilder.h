@@ -123,8 +123,6 @@ private:
     ShaderType m_shaderType = ShaderType::Vertex;
     QMaterial* m_material = nullptr;
     QList<QParameter*> m_parameters;
-
-    QT3D_CLONEABLE(ShaderBuilder)
 };
 
 #endif // SHADERBUILDER_H

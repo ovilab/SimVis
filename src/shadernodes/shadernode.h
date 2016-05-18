@@ -92,8 +92,6 @@ protected:
     QList<ShaderNode*> m_resolvedDependencies;
     QList<ShaderNode*> m_declaredDependencies;
     QString m_source;
-
-    QT3D_CLONEABLE(ShaderNode)
 };
 
 #endif // SHADERNODE_H

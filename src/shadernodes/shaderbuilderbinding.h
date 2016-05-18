@@ -33,8 +33,6 @@ public slots:
 private:
     QString m_property;
     QVariant m_defaultValue = 0.0;
-
-    QT3D_CLONEABLE(ShaderBuilderBinding)
 };
 
 #endif // SHADERBUILDERBINDING_H

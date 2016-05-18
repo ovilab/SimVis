@@ -2,7 +2,7 @@
 #include <QDebug>
 using namespace Qt3DRender;
 
-QTexImageDataPtr MCDataFunctor::operator ()()
+QTextureImageDataPtr MCDataFunctor::operator ()()
 {
     const int triangleTable[256][16] = {
         {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
@@ -270,7 +270,7 @@ QTexImageDataPtr MCDataFunctor::operator ()()
         }
     }
 
-    QTexImageDataPtr data(new QTexImageData());
+    QTextureImageDataPtr data(new QTextureImageData());
     data->setImage(img);
     return data;
 }

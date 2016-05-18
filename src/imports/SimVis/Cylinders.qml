@@ -138,6 +138,18 @@ Entity {
     components: [
         cylindersMeshInstanced,
         material,
-        transform
+        transform,
+        objectPicker
     ]
+
+    ObjectPicker {
+        id: objectPicker
+        dragEnabled: true
+        hoverEnabled: true
+        onClicked: console.log("clicked")
+//                    onPressed: root.pressed(pick)
+//                    onReleased: root.released(pick)
+        onEntered: console.log("entered")
+        onExited: console.log("exited")
+    }
 }

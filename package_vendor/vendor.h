@@ -10,6 +10,7 @@ namespace qpm {
 
 void init(const QCoreApplication &app, QQmlEngine &engine) {
     Q_UNUSED(app);
+
     // Add qml components
     engine.addImportPath(QStringLiteral("qrc:/"));
 
@@ -19,6 +20,7 @@ void init(const QCoreApplication &app, QQmlEngine &engine) {
     SimVisPlugin pluginInstance_SimVisPlugin;
     pluginInstance_SimVisPlugin.registerTypes("SimVis");
     pluginInstance_SimVisPlugin.initializeEngine(&engine, "SimVis");
+
 }
 
 }

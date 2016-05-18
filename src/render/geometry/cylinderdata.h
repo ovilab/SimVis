@@ -36,8 +36,6 @@ public slots:
 private:
     QScopedPointer<Qt3DRender::QBuffer> m_buffer;
     int m_count = 0;
-
-    QT3D_CLONEABLE(CylinderData)
 };
 
 #endif // CYLINDERDATA_H
