@@ -3,8 +3,6 @@
 
 in vec3 modelPosition;
 in vec3 modelSpherePosition;
-in vec3 modelViewPosition;
-in vec3 modelViewSpherePosition;
 in vec3 color;
 in vec2 planePosition;
 
@@ -17,18 +15,14 @@ uniform vec3 eyePosition;
 
 uniform vec3 viewVector;
 
-in vec3 up;
-in vec3 right;
-in vec3 view;
-
 float sphereRadius = 0.5;
 
 void main(void) {
     vec3 rayDirection = eyePosition - modelPosition;
     vec3 rayOrigin = modelPosition - modelSpherePosition;
 
-    vec3 sE = rayOrigin;
-    vec3 sD = rayDirection;
+    vec3 E = rayOrigin;
+    vec3 D = rayDirection;
 
     // Sphere equation
     //      x^2 + y^2 + z^2 = r^2
@@ -36,28 +30,28 @@ void main(void) {
     //     P(t) = E + t*D
     // We substitute ray into sphere equation to get
     //     (Ex + Dx * t)^2 + (Ey + Dy * t)^2 + (Ez + Dz * t)^2 = r^2
-    float sr2 = sphereRadius*sphereRadius;
-    float sa = sD.x*sD.x + sD.y*sD.y + sD.z*sD.z;
-    float sb = 2.0*sE.x*sD.x + 2.0*sE.y*sD.y + 2.0*sE.z*sD.z;
-    float sc = sE.x*sE.x + sE.y*sE.y + sE.z*sE.z - sr2;
+    float r2 = sphereRadius*sphereRadius;
+    float a = D.x*D.x + D.y*D.y + D.z*D.z;
+    float b = 2.0*E.x*D.x + 2.0*E.y*D.y + 2.0*E.z*D.z;
+    float c = E.x*E.x + E.y*E.y + E.z*E.z - r2;
 
     // discriminant of sphere equation
-    float sd = sb*sb - 4.0*sa*sc;
-    if(sd < 0.0) {
+    float d = b*b - 4.0*a*c;
+    if(d < 0.0) {
         discard;
     }
 
-    float distSphere = (-sb + sqrt(sd))/(2.0*sa);
-    vec3 spherePoint = rayOrigin + distSphere * rayDirection;
+    float t = (-b + sqrt(d))/(2.0*a);
+    vec3 sphereIntersection = rayOrigin + t * rayDirection;
 
-    float x = spherePoint.x;
-    float y = spherePoint.y;
-    float z = spherePoint.z; // Equation for sphere, x^2 + y^2 + z^2 = R^2
-    vec3 normal = normalize(spherePoint);
+    float x = sphereIntersection.x;
+    float y = sphereIntersection.y;
+    float z = sphereIntersection.z; // Equation for sphere, x^2 + y^2 + z^2 = R^2
+    vec3 normal = normalize(sphereIntersection);
     float pi = 3.1415926535897932384626433832795;
     vec2 texCoord = vec2(0.5 + atan(-normal.z, normal.x) / (2.0 * pi), 0.5 - asin(normal.y) / pi);
 
-    vec3 position = (inverseViewMatrix * vec4(spherePoint, 1.0)).xyz;
+    vec3 position = sphereIntersection;
 
 #pragma shadernodes body
 }

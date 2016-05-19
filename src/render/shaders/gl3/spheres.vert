@@ -9,20 +9,13 @@ in float scale;
 
 uniform vec3 eyePosition = vec3(0.0, 0.0, 0.0);
 
-uniform mat4 modelView;
 uniform mat4 modelMatrix;
 uniform mat4 mvp;
 
 out vec3 modelSpherePosition;
-out vec3 modelViewSpherePosition;
 out vec3 modelPosition;
-out vec3 modelViewPosition;
 out vec3 color;
 out vec2 planePosition;
-
-out vec3 up;
-out vec3 right;
-out vec3 view;
 
 vec3 makePerpendicular(vec3 v) {
     if(v.x == 0.0 && v.y == 0.0) {
@@ -38,11 +31,10 @@ void main() {
     vec3 position = vertexPosition + pos;
     color = col;
     modelSpherePosition = (modelMatrix * vec4(position, 1.0)).xyz;
-    modelViewSpherePosition = (modelView * vec4(position, 1.0)).xyz;
 
-    view = normalize(position - eyePosition);
-    right = normalize(makePerpendicular(view));
-    up = cross(right, view);
+    vec3 view = normalize(position - eyePosition);
+    vec3 right = normalize(makePerpendicular(view));
+    vec3 up = cross(right, view);
 
     planePosition = vertexTexCoord;
 
@@ -52,9 +44,6 @@ void main() {
     position += 0.6*(-up + right)*(scale*float(vertexId==1.0));
     position += 0.6*(up - right)*(scale*float(vertexId==2.0));
     position += 0.6*(up + right)*(scale*float(vertexId==3.0));
-
-    vec4 modelViewPositionTmp = modelView * vec4(position, 1.0);
-    modelViewPosition = modelViewPositionTmp.xyz;
 
     vec4 modelPositionTmp = modelMatrix * vec4(position, 1.0);
     modelPosition = modelPositionTmp.xyz;
