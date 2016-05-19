@@ -1,4 +1,5 @@
 import SimVis 1.0
+import SimVis.ShaderNodes 1.0
 
 ShaderNode {
     property var color: "lightblue"
@@ -19,23 +20,24 @@ ShaderNode {
         property: "position"
         defaultValue: Qt.vector3d(0.0, 0.0, 0.0)
     }
-    property ShaderGroup lights: ShaderGroup {
+    property list<Light> lights: [
         Light {
             position: Qt.vector3d(500, 500, 500)
             attenuation: 0.0
-        }
+        },
         Light {
             position: Qt.vector3d(-500, -500, -500)
             attenuation: 0.0
+            strength: 0.2
         }
-    }
+    ]
 
     name: "diffuse"
     type: "vec3"
     source: {
         var output = ""
         output += "$this = vec3(0.0, 0.0, 0.0);\n"
-        for(var i in lights.nodes) {
+        for(var i in lights) {
             output += "$this += standardMaterialLight($lights[" + i + "], $(normal, vec3), $(position, vec3), eyePosition,\n"
             output += "             $(ambientColor, vec3), $(diffuseColor, vec3), $(specularColor, vec3),\n"
             output += "             0.1 * $(ambientIntensity, float), $(diffuseIntensity, float), 0.01 * $(specularIntensity, float),\n"

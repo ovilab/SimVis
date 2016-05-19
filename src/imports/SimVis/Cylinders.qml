@@ -90,7 +90,7 @@ Entity {
                                 id: _fragmentColor
                                 type: "vec4"
                                 name: "fragColor"
-                                value: StandardMaterial {}
+                                value: StandardMaterial { }
                             }
                         ]
                     }
@@ -102,7 +102,7 @@ Entity {
         id: cylindersMeshInstanced
         primitiveType: GeometryRenderer.TriangleStrip
         enabled: instanceCount != 0
-        instanceCount: cylinderData.count
+        instanceCount: cylinderData ? cylinderData.count : 0
 
         geometry: PointGeometry {
             attributes: [
@@ -114,7 +114,7 @@ Entity {
                     byteOffset: 0
                     byteStride: (3 + 3 + 1 + 1) * 4
                     divisor: 1
-                    buffer: cylinderData.buffer
+                    buffer: cylinderData ? cylinderData.buffer : null
                 },
                 Attribute {
                     name: "vertex2Position"
@@ -124,7 +124,7 @@ Entity {
                     byteOffset: 3 * 4
                     byteStride: (3 + 3 + 1 + 1) * 4
                     divisor: 1
-                    buffer: cylinderData.buffer
+                    buffer: cylinderData ? cylinderData.buffer : null
                 },
                 Attribute {
                     name: "radius1"
@@ -134,7 +134,7 @@ Entity {
                     byteOffset: 6 * 4
                     byteStride: (3 + 3 + 1 + 1) * 4
                     divisor: 1
-                    buffer: cylinderData.buffer
+                    buffer: cylinderData ? cylinderData.buffer : null
                 },
                 Attribute {
                     name: "radius2"
@@ -144,7 +144,7 @@ Entity {
                     byteOffset: 7 * 4
                     byteStride: (3 + 3 + 1 + 1) * 4
                     divisor: 1
-                    buffer: cylinderData.buffer
+                    buffer: cylinderData ? cylinderData.buffer : null
                 }
             ]
         }

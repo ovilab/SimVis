@@ -15,14 +15,49 @@ Qt3DRender::QBuffer *SphereData::buffer()
     return m_buffer.data();
 }
 
-void SphereData::setPositions(QVector<QVector3D> positions)
+void SphereData::setData(QVector<SphereVBOData> data) {
+    QByteArray ba;
+    ba.resize(data.size() * sizeof(SphereVBOData));
+    SphereVBOData *posData = reinterpret_cast<SphereVBOData*>(ba.data());
+    // TODO can we just set the address here? Instead of copying.
+    for(const SphereVBOData &pos : data) {
+        *posData++ = pos;
+    }
+    m_buffer->setData(ba);
+    m_count = data.count();
+    emit countChanged(m_count);
+}
+
+void SphereData::setData(const QVector<QVector3D> &positions, const QVector<QVector3D> &colors, const QVector<float> &scales)
+{
+    if(positions.size() != colors.size() || positions.size() != scales.size()) {
+        qDebug() << "Error in SphereData::setData. Incoming arrays are not of equal size";
+        exit(1);
+    }
+    QByteArray ba;
+    ba.resize(positions.size() * sizeof(SphereVBOData));
+    SphereVBOData *vboData = reinterpret_cast<SphereVBOData *>(ba.data());
+    for(int i=0; i<positions.size(); i++) {
+        SphereVBOData &vbo = vboData[i];
+        vbo.position = positions[i];
+        vbo.color = colors[i];
+        vbo.scale = scales[i];
+    }
+    m_buffer->setData(ba);
+    m_count = positions.count();
+    emit countChanged(m_count);
+}
+
+void SphereData::setPositions(QVector<QVector3D> positions, QVector3D color, float scale)
 {
     QByteArray ba;
-    ba.resize(positions.size() * sizeof(QVector3D));
-    QVector3D *posData = reinterpret_cast<QVector3D *>(ba.data());
-    for(const QVector3D &pos : positions) {
-        *posData = pos;
-        ++posData;
+    ba.resize(positions.size() * sizeof(SphereVBOData));
+    SphereVBOData *vboData = reinterpret_cast<SphereVBOData *>(ba.data());
+    for(int i=0; i<positions.size(); i++) {
+        SphereVBOData &vbo = vboData[i];
+        vbo.position = positions[i];
+        vbo.color = color;
+        vbo.scale = scale;
     }
     m_buffer->setData(ba);
     m_count = positions.count();

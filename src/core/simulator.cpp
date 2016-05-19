@@ -16,6 +16,16 @@ Simulator::~Simulator()
     }
 }
 
+bool Simulator::running() const
+{
+    return m_timer.isActive();
+}
+
+double Simulator::interval() const
+{
+    return m_timer.interval();
+}
+
 void Simulator::step()
 {
     if(!m_worker) {
@@ -29,6 +39,28 @@ void Simulator::step()
                                   Qt::QueuedConnection,
                                   Q_ARG(Simulator*, this)); // call happens on worker's thread
     }
+}
+
+void Simulator::setRunning(bool running)
+{
+    if (m_timer.isActive() == running)
+        return;
+
+    if(running) {
+        m_timer.start();
+    } else {
+        m_timer.stop();
+    }
+    emit runningChanged(running);
+}
+
+void Simulator::setInterval(double interval)
+{
+    if (m_timer.interval() == interval)
+        return;
+
+    m_timer.setInterval(interval);
+    emit intervalChanged(interval);
 }
 
 void SimulatorWorker::workAndUnlock(Simulator* simulator)
