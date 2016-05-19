@@ -44,9 +44,6 @@ void main(void) {
     float t = (-b + sqrt(d))/(2.0*a);
     vec3 sphereIntersection = rayOrigin + t * rayDirection;
 
-    float x = sphereIntersection.x;
-    float y = sphereIntersection.y;
-    float z = sphereIntersection.z; // Equation for sphere, x^2 + y^2 + z^2 = R^2
     vec3 normal = normalize(sphereIntersection);
     float pi = 3.1415926535897932384626433832795;
     vec2 texCoord = vec2(0.5 + atan(-normal.z, normal.x) / (2.0 * pi), 0.5 - asin(normal.y) / pi);
