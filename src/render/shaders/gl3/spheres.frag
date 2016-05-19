@@ -1,7 +1,8 @@
 #version 410 core
 #pragma shadernodes header
 
-in vec3 position;
+in vec3 modelPosition;
+in vec3 modelSpherePosition;
 in vec3 modelViewPosition;
 in vec3 modelViewSpherePosition;
 in vec3 color;
@@ -11,6 +12,7 @@ out vec4 fragColor;
 
 uniform mat4 modelView;
 uniform mat4 inverseModelView;
+uniform mat4 inverseViewMatrix;
 uniform vec3 eyePosition;
 
 uniform vec3 viewVector;
@@ -22,9 +24,8 @@ in vec3 view;
 float sphereRadius = 0.5;
 
 void main(void) {
-
-    vec3 rayDirection = vec3(0.0, 0.0, 0.0) - modelViewPosition;
-    vec3 rayOrigin = modelViewPosition - modelViewSpherePosition;
+    vec3 rayDirection = eyePosition - modelPosition;
+    vec3 rayOrigin = modelPosition - modelSpherePosition;
 
     vec3 sE = rayOrigin;
     vec3 sD = rayDirection;
@@ -52,9 +53,11 @@ void main(void) {
     float x = spherePoint.x;
     float y = spherePoint.y;
     float z = spherePoint.z; // Equation for sphere, x^2 + y^2 + z^2 = R^2
-    vec3 normal = spherePoint; // TODO replace with proper normal, this is in modelView space (I think)
+    vec3 normal = normalize(spherePoint);
     float pi = 3.1415926535897932384626433832795;
     vec2 texCoord = vec2(0.5 + atan(-normal.z, normal.x) / (2.0 * pi), 0.5 - asin(normal.y) / pi);
+
+    vec3 position = (inverseViewMatrix * vec4(spherePoint, 1.0)).xyz;
 
 #pragma shadernodes body
 }

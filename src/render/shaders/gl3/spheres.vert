@@ -10,10 +10,12 @@ in float scale;
 uniform vec3 eyePosition = vec3(0.0, 0.0, 0.0);
 
 uniform mat4 modelView;
+uniform mat4 modelMatrix;
 uniform mat4 mvp;
 
+out vec3 modelSpherePosition;
 out vec3 modelViewSpherePosition;
-out vec3 position;
+out vec3 modelPosition;
 out vec3 modelViewPosition;
 out vec3 color;
 out vec2 planePosition;
@@ -33,8 +35,9 @@ vec3 makePerpendicular(vec3 v) {
 }
 
 void main() {
-    position = vertexPosition + pos;
+    vec3 position = vertexPosition + pos;
     color = col;
+    modelSpherePosition = (modelMatrix * vec4(position, 1.0)).xyz;
     modelViewSpherePosition = (modelView * vec4(position, 1.0)).xyz;
 
     view = normalize(position - eyePosition);
@@ -52,6 +55,9 @@ void main() {
 
     vec4 modelViewPositionTmp = modelView * vec4(position, 1.0);
     modelViewPosition = modelViewPositionTmp.xyz;
+
+    vec4 modelPositionTmp = modelMatrix * vec4(position, 1.0);
+    modelPosition = modelPositionTmp.xyz;
 
     gl_Position = mvp*vec4(position, 1.0);
 }

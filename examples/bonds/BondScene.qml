@@ -37,13 +37,6 @@ Scene3D {
 
         Cylinders {
             cylinderData: simulator.cylinderData
-            fragmentColor: StandardMaterial {
-                lights: [
-                    Light {
-                        position: Qt.vector3d(5, 5, 5)
-                    }
-                ]
-            }
         }
 
         SphereMesh {
