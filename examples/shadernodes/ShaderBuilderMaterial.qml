@@ -111,11 +111,11 @@ Material {
                 value: StandardMaterial {
                     position: shaderBuilder.position
                     normal: shaderBuilder.normal
-                    lights: ShaderGroup {
+                    lights: [
                         Nodes.Light {
                             position: Qt.vector3d(5.0, 5.0, -5.0)
                         }
-                    }
+                    ]
                 }
             }
         ]

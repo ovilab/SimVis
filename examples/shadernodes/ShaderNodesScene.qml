@@ -85,12 +85,12 @@ Scene3D {
                             source: "diffuse.webp"
                         }
                         specularColor: "white"
-                        lights: ShaderGroup {
+                        lights: [
                             Nodes.Light {
                                 position: Qt.vector3d(0, 10, 0)
                                 attenuation: 0.0
                             }
-                        }
+                        ]
                     }
                 },
                 Transform {
