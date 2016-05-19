@@ -39,6 +39,8 @@ BondWorker::BondWorker()
     cylinder.vertex2 = m_positions[1];
     cylinder.radius1 = 0.2;
     cylinder.radius2 = 0.2;
+    cylinder.sphereRadius1 = 0.5;
+    cylinder.sphereRadius2 = 0.5;
 
     m_cylinders.push_back(cylinder);
 }

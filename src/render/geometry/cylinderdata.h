@@ -10,6 +10,8 @@ struct CylinderVBOData
 {
     QVector3D vertex1;
     QVector3D vertex2;
+    float sphereRadius1;
+    float sphereRadius2;
     float radius1;
     float radius2;
 };
