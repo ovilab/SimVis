@@ -65,7 +65,7 @@ void main(void)
     // define a unique perpendicular to the axis that can be used by
     // the texture coordinate in the fragment shader
     perpendicular = normalize(makePerpendicular(deltaNormalized));
-    biperpendicular = normalize(cross(delta, perpendicular));
+    biperpendicular = normalize(cross(deltaNormalized, perpendicular));
 
     radiusA = vs_radius1;
     radiusB = vs_radius2;

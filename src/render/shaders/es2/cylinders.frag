@@ -137,6 +137,7 @@ void main(void) {
     float distEnd = dot(end - rayTarget, axis) / dot(rayDirection, axis);
 
     // produce the possible points of the solutions
+    // one for the sides of the cylinder and one for each end cap plane
     vec3 sidePoint = rayTarget + distSide * rayDirection;
     vec3 basePoint = rayTarget + distBase * rayDirection;
     vec3 endPoint = rayTarget + distEnd * rayDirection;
