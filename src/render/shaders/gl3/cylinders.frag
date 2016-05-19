@@ -4,6 +4,8 @@
 
 in vec3 vs_vertex1Position;
 in vec3 vs_vertex2Position;
+in float vs_sphereRadius1;
+in float vs_sphereRadius2;
 
 in vec3 modelPosition;
 in vec3 modelViewPosition;
@@ -28,9 +30,6 @@ out vec4 fragColor;
 uniform vec3 eyePosition;
 uniform mat3 modelNormalMatrix;
 uniform mat3 modelViewNormal;
-
-float sphere_r1 = 0.5;
-float sphere_r2 = 0.5;
 
 float square(vec3 a) {
     return dot(a, a);
@@ -121,10 +120,10 @@ void main(void) {
     float sphereRadius;
     if(square(rayTarget - base) < square(rayTarget - end)) {
         spherePosition = base;
-        sphereRadius = sphere_r1;
+        sphereRadius = vs_sphereRadius1;
     } else {
         spherePosition = end;
-        sphereRadius = sphere_r2;
+        sphereRadius = vs_sphereRadius2;
     }
 
     vec3 sE = rayTarget - spherePosition;
