@@ -35,8 +35,8 @@ Scene3D {
             sphereData: simulator.sphereData
         }
 
-        Cylinders {
-            cylinderData: simulator.cylinderData
+        Bonds {
+            bondData: simulator.bondData
         }
 
         SphereMesh {

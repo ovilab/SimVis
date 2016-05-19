@@ -1,11 +1,12 @@
 #include "bondsimulator.h"
 #include <QDebug>
 #include <SimVis/SphereData>
-#include <SimVis/CylinderData>
+#include <SimVis/BondData>
+
 BondSimulator::BondSimulator(QNode *parent)
     : Simulator(parent)
     , m_sphereData(new SphereData(this))
-    , m_cylinderData(new CylinderData(this))
+    , m_bondData(new BondData(this))
 {
 }
 
@@ -33,16 +34,16 @@ BondWorker::BondWorker()
     m_positions.push_back(QVector3D(4, 0, 0));
     m_positions.push_back(QVector3D(-4, -2, 0));
 
-    CylinderVBOData cylinder;
+    BondVBOData bond;
     QVector3D diff = m_positions[1] - m_positions[0];
-    cylinder.vertex1 = m_positions[0];
-    cylinder.vertex2 = m_positions[1];
-    cylinder.radius1 = 0.2;
-    cylinder.radius2 = 0.2;
-    cylinder.sphereRadius1 = 0.5;
-    cylinder.sphereRadius2 = 0.5;
+    bond.vertex1 = m_positions[0];
+    bond.vertex2 = m_positions[1];
+    bond.radius1 = 0.2;
+    bond.radius2 = 0.2;
+    bond.sphereRadius1 = 0.5;
+    bond.sphereRadius2 = 0.5;
 
-    m_cylinders.push_back(cylinder);
+    m_bonds.push_back(bond);
 }
 
 void BondWorker::synchronizeSimulator(Simulator *simulator)
@@ -54,7 +55,7 @@ void BondWorker::synchronizeSimulator(Simulator *simulator)
         dt = mySimulator->dt();
 
         mySimulator->sphereData()->setPositions(m_positions);
-        mySimulator->cylinderData()->setData(m_cylinders);
+        mySimulator->bondData()->setData(m_bonds);
     }
 }
 

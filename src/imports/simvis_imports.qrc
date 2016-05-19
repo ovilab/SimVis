@@ -32,5 +32,6 @@
         <file>SimVis/Visualizer.qml</file>
         <file>SimVis/ShaderNodes/shaders/standard_material.glsl</file>
         <file>SimVis/SpheresTechnique.qml</file>
+        <file>SimVis/Bonds.qml</file>
     </qresource>
 </RCC>

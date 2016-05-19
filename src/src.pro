@@ -19,6 +19,6 @@ uri = com.mycompany.qmlcomponents
 include(../package.pri)
 
 DISTFILES = qmldir \
-    core/simvisplugin.json
+    core/simvisplugin.json \
 
 

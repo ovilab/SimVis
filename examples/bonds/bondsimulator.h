@@ -6,7 +6,7 @@
 #include <QElapsedTimer>
 #include <Qt3DRender/QBuffer>
 #include <SimVis/SphereData>
-#include <SimVis/CylinderData>
+#include <SimVis/BondData>
 
 class BondWorker : public SimulatorWorker
 {
@@ -19,7 +19,7 @@ private:
     virtual void synchronizeSimulator(Simulator *simulator);
     virtual void work();
     QVector<QVector3D> m_positions;
-    QVector<CylinderVBOData> m_cylinders;
+    QVector<BondVBOData> m_bonds;
     float dt = 0.05;
     QElapsedTimer m_timer;
 };
@@ -29,7 +29,7 @@ class BondSimulator : public Simulator
     Q_OBJECT
     Q_PROPERTY(double dt READ dt WRITE setDt NOTIFY dtChanged)
     Q_PROPERTY(SphereData* sphereData READ sphereData CONSTANT)
-    Q_PROPERTY(CylinderData* cylinderData READ cylinderData CONSTANT)
+    Q_PROPERTY(BondData* bondData READ bondData CONSTANT)
 
 public:
     BondSimulator(QNode *parent = 0);
@@ -39,9 +39,9 @@ public:
     {
         return m_sphereData.data();
     }
-    CylinderData* cylinderData()
+    BondData* bondData()
     {
-        return m_cylinderData.data();
+        return m_bondData.data();
     }
 
 public slots:
@@ -56,7 +56,7 @@ protected:
 private:
     double m_dt = 0.05;
     QScopedPointer<SphereData> m_sphereData;
-    QScopedPointer<CylinderData> m_cylinderData;
+    QScopedPointer<BondData> m_bondData;
 
     QT3D_CLONEABLE(BondSimulator)
 };

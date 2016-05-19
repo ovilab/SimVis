@@ -29,9 +29,6 @@ uniform vec3 eyePosition;
 uniform mat3 modelNormalMatrix;
 uniform mat3 modelViewNormal;
 
-float sphere_r1 = 1.0;
-float sphere_r2 = 1.0;
-
 float square(vec3 a) {
     return dot(a, a);
 }
@@ -98,38 +95,6 @@ void main(void) {
 
     // solution t
     float distSide = (-b + sqrt(d))/(2.0*a);
-
-    // Need only to solve for closest sphere
-    vec3 spherePosition;
-    float sphereRadius;
-    if(square(rayTarget - base) < square(rayTarget - end)) {
-        spherePosition = base;
-        sphereRadius = sphere_r1;
-    } else {
-        spherePosition = end;
-        sphereRadius = sphere_r2;
-    }
-    // Sphere equation
-    //      x^2 + y^2 + z^2 = r^2
-    // Ray equation is
-    //     P(t) = E + t*D
-    // We substitute ray into sphere equation to get
-    //     (Ex + Dx * t)^2 + (Ey + Dy * t)^2 + (Ez + Dz * t)^2 = r^2
-    float r2 = sphereRadius*sphereRadius;
-    float sa = D.x*D.x + D.y*D.y + D.z*D.z;
-    float sb = 2.0*E.x*D.x + 2.0*E.y*D.y + 2.0*E.z*D.z;
-    float sc = E.x*E.x + E.y*E.y + E.z*E.z - r2;
-
-    // discriminant of sphere equation
-    float sd = sb*sb - 4.0*sa*sc;
-    if(sd > 0.0) {
-        // solution t for sphere
-        float distSphere = (-sb + sqrt(sd))/(2.0*sa);
-        // check if sphere is closer
-        if(distSphere < distSide) {
-            discard;
-        }
-    }
 
     // ray-plane intersection
     // d = ((p0 - E) . n) / (D . n)

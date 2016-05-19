@@ -4,6 +4,8 @@
 
 in vec3 vs_vertex1Position;
 in vec3 vs_vertex2Position;
+in float vs_sphereRadius1;
+in float vs_sphereRadius2;
 
 in vec3 modelPosition;
 in vec3 modelViewPosition;
@@ -113,6 +115,44 @@ void main(void) {
     float screenBaseDistance = square(basePoint);
     float screenEndDistance = square(endPoint);
 
+    // Need only to solve for closest sphere
+    vec3 spherePosition;
+    float sphereRadius;
+    if(square(rayTarget - base) < square(rayTarget - end)) {
+        spherePosition = base;
+        sphereRadius = vs_sphereRadius1;
+    } else {
+        spherePosition = end;
+        sphereRadius = vs_sphereRadius2;
+    }
+
+    vec3 sE = rayTarget - spherePosition;
+    vec3 sD = rayDirection;
+
+    // Sphere equation
+    //      x^2 + y^2 + z^2 = r^2
+    // Ray equation is
+    //     P(t) = E + t*D
+    // We substitute ray into sphere equation to get
+    //     (Ex + Dx * t)^2 + (Ey + Dy * t)^2 + (Ez + Dz * t)^2 = r^2
+    float sr2 = sphereRadius*sphereRadius;
+    float sa = sD.x*sD.x + sD.y*sD.y + sD.z*sD.z;
+    float sb = 2.0*sE.x*sD.x + 2.0*sE.y*sD.y + 2.0*sE.z*sD.z;
+    float sc = sE.x*sE.x + sE.y*sE.y + sE.z*sE.z - sr2;
+
+    // discriminant of sphere equation
+    float sd = sb*sb - 4.0*sa*sc;
+    if(sd > 0.0) {
+        // solution t for sphere
+        float distSphere = (-sb + sqrt(sd))/(2.0*sa);
+        vec3 spherePoint = rayTarget + distSphere * rayDirection;
+        float screenSphereDistance = square(spherePoint);
+        // check if sphere is closer
+        if(screenSphereDistance < screenSideDistance) {
+            discard;
+        }
+    }
+
     bool isSideSolution = true;
 
     vec3 normal;
@@ -124,14 +164,10 @@ void main(void) {
     // this is unlikely, but is necessary to ensure that we
     // don't get solutions beyond the cone epicenter ><
     if((screenBaseDistance <= screenSideDistance && screenBaseDistance <= screenEndDistance) && baseDistance < r1*r1) {
-        dist = distBase;
-        isSideSolution = false;
-        normal = -worldAxis;
+        discard;
     }
     if(screenEndDistance <= screenSideDistance && screenEndDistance <= screenBaseDistance && endDistance < r2*r2) {
-        dist = distEnd;
-        isSideSolution = false;
-        normal = worldAxis;
+        discard;
     }
 
     if(isSideSolution) {
@@ -143,20 +179,10 @@ void main(void) {
         // (which is the cylinder axis)
         // if cos angle < 0, the point is outside of cylinder
         if(dot(sidePoint - base, axis) < 0.0) {
-            dist = distBase;
-            isSideSolution = false;
-            normal = -worldAxis;
-            if(baseDistance > r1*r1) {
-                discard;
-            }
+            discard;
         }
         if(dot(sidePoint - end, -axis) < 0.0) {
-            dist = distEnd;
-            isSideSolution = false;
-            normal = worldAxis;
-            if(endDistance > r2*r2) {
-                discard;
-            }
+            discard;
         }
     }
 

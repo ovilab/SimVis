@@ -1,4 +1,5 @@
 module SimVis
+Bonds 1.0 Bonds.qml
 Cylinders 1.0 Cylinders.qml
 FunctionSurface 1.0 FunctionSurface.qml
 Mesh 1.0 Mesh.qml
