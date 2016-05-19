@@ -38,8 +38,7 @@ void main() {
 
     planePosition = vertexTexCoord;
 
-    // TODO should be moved 0.5 * view closer and use ray tracing
-
+    // TODO should find needed size or move closer to camera. NOTE: 0.6 is a hack, should be 0.5
     position += 0.6*(-up - right)*(scale*float(vertexId==0.0));
     position += 0.6*(-up + right)*(scale*float(vertexId==1.0));
     position += 0.6*(up - right)*(scale*float(vertexId==2.0));
