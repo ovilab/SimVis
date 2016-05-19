@@ -27,7 +27,7 @@ vec3 makePerpendicular(vec3 v) {
 }
 
 void main() {
-    float a_scale = 0.6;
+    float a_scale = 1.0;
 
     position = vertexPosition + pos;
 

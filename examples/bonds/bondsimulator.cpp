@@ -35,8 +35,8 @@ BondWorker::BondWorker()
 
     CylinderVBOData cylinder;
     QVector3D diff = m_positions[1] - m_positions[0];
-    cylinder.vertex1 = m_positions[0] + diff.normalized() * 0.4;
-    cylinder.vertex2 = m_positions[1] - diff.normalized() * 0.4;
+    cylinder.vertex1 = m_positions[0];
+    cylinder.vertex2 = m_positions[1];
     cylinder.radius1 = 0.2;
     cylinder.radius2 = 0.2;
 
