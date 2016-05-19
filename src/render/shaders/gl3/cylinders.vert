@@ -4,11 +4,14 @@ in vec3 vertex1Position;
 in vec3 vertex2Position;
 in float radius1;
 in float radius2;
-
+in float sphereRadius1;
+in float sphereRadius2;
 in float vertexId;
 
 out vec3 vs_vertex1Position;
 out vec3 vs_vertex2Position;
+out float vs_sphereRadius1;
+out float vs_sphereRadius2;
 out float vs_radius1;
 out float vs_radius2;
 
@@ -52,6 +55,8 @@ void main(void)
     vs_vertex2Position = vertex2Position;
     vs_radius1 = radius1;
     vs_radius2 = radius2;
+    vs_sphereRadius1 = sphereRadius1;
+    vs_sphereRadius2 = sphereRadius2;
 
     vec3 v1 = vs_vertex1Position;
     vec3 v2 = vs_vertex2Position;

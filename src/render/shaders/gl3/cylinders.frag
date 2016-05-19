@@ -4,6 +4,8 @@
 
 in vec3 vs_vertex1Position;
 in vec3 vs_vertex2Position;
+in float vs_sphereRadius1;
+in float vs_sphereRadius2;
 
 in vec3 modelPosition;
 in vec3 modelViewPosition;
@@ -93,7 +95,9 @@ void main(void) {
         discard;
     }
 
-    float distSide = (-b + sqrt(d))/(2.0*a); // solution t
+    // solution t
+    float distSide = (-b + sqrt(d))/(2.0*a);
+
     // ray-plane intersection
     // d = ((p0 - E) . n) / (D . n)
     float distBase = dot(base - rayTarget, axis) / dot(rayDirection, axis);
@@ -110,6 +114,44 @@ void main(void) {
     float screenSideDistance = square(sidePoint);
     float screenBaseDistance = square(basePoint);
     float screenEndDistance = square(endPoint);
+
+    // Need only to solve for closest sphere
+    vec3 spherePosition;
+    float sphereRadius;
+    if(square(rayTarget - base) < square(rayTarget - end)) {
+        spherePosition = base;
+        sphereRadius = vs_sphereRadius1;
+    } else {
+        spherePosition = end;
+        sphereRadius = vs_sphereRadius2;
+    }
+
+    vec3 sE = rayTarget - spherePosition;
+    vec3 sD = rayDirection;
+
+    // Sphere equation
+    //      x^2 + y^2 + z^2 = r^2
+    // Ray equation is
+    //     P(t) = E + t*D
+    // We substitute ray into sphere equation to get
+    //     (Ex + Dx * t)^2 + (Ey + Dy * t)^2 + (Ez + Dz * t)^2 = r^2
+    float sr2 = sphereRadius*sphereRadius;
+    float sa = sD.x*sD.x + sD.y*sD.y + sD.z*sD.z;
+    float sb = 2.0*sE.x*sD.x + 2.0*sE.y*sD.y + 2.0*sE.z*sD.z;
+    float sc = sE.x*sE.x + sE.y*sE.y + sE.z*sE.z - sr2;
+
+    // discriminant of sphere equation
+    float sd = sb*sb - 4.0*sa*sc;
+    if(sd > 0.0) {
+        // solution t for sphere
+        float distSphere = (-sb + sqrt(sd))/(2.0*sa);
+        vec3 spherePoint = rayTarget + distSphere * rayDirection;
+        float screenSphereDistance = square(spherePoint);
+        // check if sphere is closer
+        if(screenSphereDistance < screenSideDistance) {
+            discard;
+        }
+    }
 
     bool isSideSolution = true;
 
