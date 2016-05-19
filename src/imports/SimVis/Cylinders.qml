@@ -49,6 +49,16 @@ Entity {
                             bindingType: ParameterMapping.Attribute
                         },
                         ParameterMapping {
+                            parameterName: "sphereRadius1"
+                            shaderVariableName: "sphereRadius1"
+                            bindingType: ParameterMapping.Attribute
+                        },
+                        ParameterMapping {
+                            parameterName: "sphereRadius2"
+                            shaderVariableName: "sphereRadius2"
+                            bindingType: ParameterMapping.Attribute
+                        },
+                        ParameterMapping {
                             parameterName: "vertexId"
                             shaderVariableName: "vertexId"
                             bindingType: ParameterMapping.Attribute
@@ -90,7 +100,7 @@ Entity {
                                 id: _fragmentColor
                                 type: "vec4"
                                 name: "fragColor"
-                                value: StandardMaterial {}
+                                value: StandardMaterial { }
                             }
                         ]
                     }
@@ -102,7 +112,7 @@ Entity {
         id: cylindersMeshInstanced
         primitiveType: GeometryRenderer.TriangleStrip
         enabled: instanceCount != 0
-        instanceCount: cylinderData.count
+        instanceCount: cylinderData ? cylinderData.count : 0
 
         geometry: PointGeometry {
             attributes: [
@@ -112,9 +122,9 @@ Entity {
                     dataType: Attribute.Float
                     dataSize: 3
                     byteOffset: 0
-                    byteStride: (3 + 3 + 1 + 1) * 4
+                    byteStride: (3 + 3 + 1 + 1 + 1 + 1) * 4
                     divisor: 1
-                    buffer: cylinderData.buffer
+                    buffer: cylinderData ? cylinderData.buffer : null
                 },
                 Attribute {
                     name: "vertex2Position"
@@ -122,7 +132,27 @@ Entity {
                     dataType: Attribute.Float
                     dataSize: 3
                     byteOffset: 3 * 4
-                    byteStride: (3 + 3 + 1 + 1) * 4
+                    byteStride: (3 + 3 + 1 + 1 + 1 + 1) * 4
+                    divisor: 1
+                    buffer: cylinderData ? cylinderData.buffer : null
+                },
+                Attribute {
+                    name: "sphereRadius1"
+                    attributeType: Attribute.VertexAttribute
+                    dataType: Attribute.Float
+                    dataSize: 1
+                    byteOffset: 6 * 4
+                    byteStride: (3 + 3 + 1 + 1 + 1 + 1) * 4
+                    divisor: 1
+                    buffer: cylinderData ? cylinderData.buffer : null
+                },
+                Attribute {
+                    name: "sphereRadius2"
+                    attributeType: Attribute.VertexAttribute
+                    dataType: Attribute.Float
+                    dataSize: 1
+                    byteOffset: 7 * 4
+                    byteStride: (3 + 3 + 1 + 1 + 1 + 1) * 4
                     divisor: 1
                     buffer: cylinderData.buffer
                 },
@@ -131,8 +161,8 @@ Entity {
                     attributeType: Attribute.VertexAttribute
                     dataType: Attribute.Float
                     dataSize: 1
-                    byteOffset: 6 * 4
-                    byteStride: (3 + 3 + 1 + 1) * 4
+                    byteOffset: 8 * 4
+                    byteStride: (3 + 3 + 1 + 1 + 1 + 1) * 4
                     divisor: 1
                     buffer: cylinderData.buffer
                 },
@@ -141,10 +171,10 @@ Entity {
                     attributeType: Attribute.VertexAttribute
                     dataType: Attribute.Float
                     dataSize: 1
-                    byteOffset: 7 * 4
-                    byteStride: (3 + 3 + 1 + 1) * 4
+                    byteOffset: 9 * 4
+                    byteStride: (3 + 3 + 1 + 1 + 1 + 1) * 4
                     divisor: 1
-                    buffer: cylinderData.buffer
+                    buffer: cylinderData ? cylinderData.buffer : null
                 }
             ]
         }

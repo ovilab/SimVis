@@ -1,7 +1,6 @@
 #include "shadernode.h"
 #include "shaderbuilder.h"
 #include "shaderutils.h"
-#include "shadergroup.h"
 #include "shaderbuilderbinding.h"
 
 #include <QDebug>
@@ -157,20 +156,26 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
             }
             QVariant value = mappings[propertyName];
 
-            ShaderGroup *shaderGroup = qvariant_cast<ShaderGroup*>(value);
-            if(shaderGroup) {
-                int i = 0;
-                for(ShaderNode *groupNode : shaderGroup->m_nodes) {
-                    success = success && groupNode->setup(shaderBuilder);
-                    if(!m_resolvedDependencies.contains(groupNode)) {
-                        m_resolvedDependencies.append(groupNode);
+            QString typeName = value.typeName();
+            if(typeName.startsWith("QQmlListProperty")) {
+                QQmlListProperty<QObject> *list = static_cast<QQmlListProperty<QObject>*>(value.data());
+                int count = list->count(list);
+                for(int i = 0; i < count; i++) {
+                    QObject *object = list->at(list, i);
+                    ShaderNode *node = qobject_cast<ShaderNode*>(object);
+                    if(!node) {
+                        qWarning() << "ERROR: Could not convert listed object to ShaderNode:" << object;
+                        return false;
                     }
-                    QString targetIdentifier = groupNode->identifier();
-                    QString sourceType = groupNode->type();
+                    success = success && node->setup(shaderBuilder);
+                    if(!m_resolvedDependencies.contains(node)) {
+                        m_resolvedDependencies.append(node);
+                    }
+                    QString targetIdentifier = node->identifier();
+                    QString sourceType = node->type();
                     // replaces '$property' or '$(property, type)'
                     QRegularExpression indexedRegex("\\$(\\(\\s*)?" + propertyName + "\\[" + QString::number(i) +"\\](\\s*,\\s*[_a-zA-Z0-9]+\\s*\\))?");
                     sourceContent.replace(indexedRegex, ShaderUtils::convert(sourceType, targetType, targetIdentifier));
-                    i += 1;
                 }
                 continue;
             }

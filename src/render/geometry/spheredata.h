@@ -4,6 +4,13 @@
 #include <QObject>
 #include <Qt3DRender/QBuffer>
 #include <Qt3DCore/QNode>
+#include <QVector3D>
+struct SphereVBOData
+{
+    QVector3D position;
+    QVector3D color;
+    float scale;
+};
 
 class SphereData : public Qt3DCore::QNode
 {
@@ -14,9 +21,10 @@ public:
     explicit SphereData(QNode *parent = 0);
 
     Qt3DRender::QBuffer* buffer();
-    void setPositions(QVector<QVector3D> positions);
+    void setData(QVector<SphereVBOData> data);
+    void setPositions(QVector<QVector3D> positions, QVector3D color = QVector3D(1.0, 1.0, 1.0), float scale = 1.0);
+    void setData(const QVector<QVector3D> &positions, const QVector<QVector3D> &colors, const QVector<float> &scales);
     int count() const;
-
 signals:
 
     void countChanged(int count);

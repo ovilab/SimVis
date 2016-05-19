@@ -16,7 +16,7 @@ RESOURCES += \
 QML_IMPORT_PATH =
 
 # Default rules for deployment.
-include(../examples_vendor.pri)
+include(../../package_vendor.pri)
 
 HEADERS += \
     cylindersimulator.h \

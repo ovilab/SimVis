@@ -28,41 +28,37 @@ Entity {
 
     Material {
         id: material
-        parameters: [
-            Parameter {
-                name: "viewVector"
-                value: camera ? camera.viewVector.normalized() : Qt.vector3d(1.0, 0.0, 0.0)
-            },
-            Parameter {
-                name: "upVector"
-                value: camera ? camera.upVector.normalized() : Qt.vector3d(0.0, 1.0, 0.0)
-            },
-            Parameter {
-                name: "rightVector"
-                value: camera ? camera.viewVector.normalized().crossProduct(camera.upVector.normalized()) : Qt.vector3d(0.0, 0.0, 1.0)
-            }
-        ]
+        parameters: [ ]
         effect: Effect {
             techniques: Technique {
                 renderPasses: RenderPass {
                     bindings: [
+                        ParameterMapping {
+                            parameterName: "vertexId"
+                            shaderVariableName: "vertexId"
+                            bindingType: ParameterMapping.Attribute
+                        },
                         ParameterMapping {
                             parameterName: "pos"
                             shaderVariableName: "pos"
                             bindingType: ParameterMapping.Attribute
                         },
                         ParameterMapping {
-                            parameterName: "vertexId"
-                            shaderVariableName: "vertexId"
+                            parameterName: "scale"
+                            shaderVariableName: "scale"
+                            bindingType: ParameterMapping.Attribute
+                        },
+                        ParameterMapping {
+                            parameterName: "col"
+                            shaderVariableName: "col"
                             bindingType: ParameterMapping.Attribute
                         }
                     ]
                     shaderProgram: ShaderProgram {
                         vertexShaderCode: loadSource(vertexShaderSourceFile)
                         fragmentShaderCode: _fragmentBuilder.finalShader
-
                         onFragmentShaderCodeChanged: {
-                            // console.log(fragmentShaderCode)
+                            console.log("Fragment shader code: ", fragmentShaderCode)
                         }
                     }
                     ShaderBuilder {
@@ -99,21 +95,13 @@ Entity {
                             name: "sphereId"
                             result: "sphereId"
                         }
-
                         sourceFile: fragmentShaderSourceFile
-
                         outputs: [
                             ShaderOutput {
                                 id: _fragmentColor
                                 type: "vec4"
                                 name: "fragColor"
-                                value: StandardMaterial {
-                                    position: _fragmentBuilder.position
-                                    normal: _fragmentBuilder.normal
-                                    lights: ShaderGroup {
-                                        Nodes.Light {}
-                                    }
-                                }
+                                value: StandardMaterial {}
                             }
                         ]
                     }
@@ -127,13 +115,35 @@ Entity {
         enabled: instanceCount != 0
         instanceCount: sphereData.count
 
-        geometry: PointGeometry {
+        geometry: SpheresPointGeometry {
             attributes: [
                 Attribute {
                     name: "pos"
                     attributeType: Attribute.VertexAttribute
                     dataType: Attribute.Float
                     dataSize: 3
+                    byteOffset: 0
+                    byteStride: (3 + 3 + 1) * 4
+                    divisor: 1
+                    buffer: sphereData.buffer
+                },
+                Attribute {
+                    name: "col"
+                    attributeType: Attribute.VertexAttribute
+                    dataType: Attribute.Float
+                    dataSize: 3
+                    byteOffset: 3*4
+                    byteStride: (3 + 3 + 1) * 4
+                    divisor: 1
+                    buffer: sphereData.buffer
+                },
+                Attribute {
+                    name: "scale"
+                    attributeType: Attribute.VertexAttribute
+                    dataType: Attribute.Float
+                    dataSize: 1
+                    byteOffset: (3+3)*4
+                    byteStride: (3 + 3 + 1) * 4
                     divisor: 1
                     buffer: sphereData.buffer
                 }
