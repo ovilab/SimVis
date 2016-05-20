@@ -5,6 +5,7 @@ in vec3 modelPosition;
 in vec3 modelSpherePosition;
 in vec3 color;
 in vec2 planePosition;
+in float radius;
 
 out vec4 fragColor;
 
@@ -14,8 +15,6 @@ uniform mat4 inverseViewMatrix;
 uniform vec3 eyePosition;
 
 uniform vec3 viewVector;
-
-float sphereRadius = 0.5;
 
 void main(void) {
     vec3 rayDirection = eyePosition - modelPosition;
@@ -30,7 +29,7 @@ void main(void) {
     //     P(t) = E + t*D
     // We substitute ray into sphere equation to get
     //     (Ex + Dx * t)^2 + (Ey + Dy * t)^2 + (Ez + Dz * t)^2 = r^2
-    float r2 = sphereRadius*sphereRadius;
+    float r2 = radius*radius;
     float a = D.x*D.x + D.y*D.y + D.z*D.z;
     float b = 2.0*E.x*D.x + 2.0*E.y*D.y + 2.0*E.z*D.z;
     float c = E.x*E.x + E.y*E.y + E.z*E.z - r2;

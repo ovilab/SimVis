@@ -41,7 +41,7 @@ void SphereData::setData(const QVector<QVector3D> &positions, const QVector<QVec
         SphereVBOData &vbo = vboData[i];
         vbo.position = positions[i];
         vbo.color = colors[i];
-        vbo.scale = scales[i];
+        vbo.radius = scales[i];
     }
     m_buffer->setData(ba);
     m_count = positions.count();
@@ -57,7 +57,7 @@ void SphereData::setPositions(QVector<QVector3D> positions, QVector3D color, flo
         SphereVBOData &vbo = vboData[i];
         vbo.position = positions[i];
         vbo.color = color;
-        vbo.scale = scale;
+        vbo.radius = scale;
     }
     m_buffer->setData(ba);
     m_count = positions.count();

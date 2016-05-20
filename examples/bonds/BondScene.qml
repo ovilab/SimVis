@@ -12,6 +12,7 @@ import BondSimulator 1.0
 
 Scene3D {
     aspects: "input"
+    property alias simulator: simulator
 
     function doSomething() {
         if(transform.translation.x == 4.0) {
