@@ -22,14 +22,7 @@ Material {
             renderPasses: RenderPass {
                 shaderProgram: ShaderProgram {
                     vertexShaderCode: vertexShaderBuilder.finalShader
-                    onVertexShaderCodeChanged: {
-//                        console.log(vertexShaderCode)
-                    }
-
                     fragmentShaderCode: shaderBuilder.finalShader
-                    onFragmentShaderCodeChanged: {
-//                        console.log(fragmentShaderCode)
-                    }
                 }
             }
         }

@@ -16,7 +16,6 @@ Item {
     Shortcut {
         sequence: StandardKey.Copy
         onActivated: {
-            console.log("Woop")
             scene.doSomething()
         }
     }
