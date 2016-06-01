@@ -47,7 +47,7 @@ void main(void) {
     float pi = 3.1415926535897932384626433832795;
     vec2 texCoord = vec2(0.5 + atan(-normal.z, normal.x) / (2.0 * pi), 0.5 - asin(normal.y) / pi);
 
-    vec3 position = sphereIntersection;
+    vec3 position = modelSpherePosition + sphereIntersection;
 
 #pragma shadernodes body
 }

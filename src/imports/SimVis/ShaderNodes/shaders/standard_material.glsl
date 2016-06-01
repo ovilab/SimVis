@@ -21,6 +21,7 @@ highp vec3 standardMaterialLight(Light light, highp vec3 normal, highp vec3 vert
     highp vec3  reflectionVector = reflect(-surfaceToLight, normal);
     highp float cosAngle = dot(reflectionVector, surfaceToCamera);
     highp float normFactor = (hardness + 2.0) / 2.0;
+    // normFactor *= (cosAngle < 3.1415) ? 1.0 : 0.0;
     highp float specularCoefficient = pow(max(cosAngle, 0.0), hardness);
     lightVector += normFactor*light.color*light.strength*specularColor.rgb*specularCoefficient*specularIntensity*attenuationFactor;
 
