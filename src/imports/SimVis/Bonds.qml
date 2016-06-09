@@ -26,44 +26,17 @@ Entity {
         id: material
         effect: Effect {
             techniques: Technique {
+                graphicsApiFilter {
+                    api: GraphicsApiFilter.OpenGL
+                    profile: GraphicsApiFilter.CoreProfile
+                    minorVersion: 2
+                    majorVersion: 3
+                }
+                filterKeys: FilterKey {
+                    name: "renderingStyle"
+                    value: "forward"
+                }
                 renderPasses: RenderPass {
-                    bindings: [
-                        ParameterMapping {
-                            parameterName: "vertex1Position"
-                            shaderVariableName: "vertex1Position"
-                            bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "vertex2Position"
-                            shaderVariableName: "vertex2Position"
-                            bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "radius1"
-                            shaderVariableName: "radius1"
-                            bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "radius2"
-                            shaderVariableName: "radius2"
-                            bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "sphereRadius1"
-                            shaderVariableName: "sphereRadius1"
-                            bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "sphereRadius2"
-                            shaderVariableName: "sphereRadius2"
-                            bindingType: ParameterMapping.Attribute
-                        },
-                        ParameterMapping {
-                            parameterName: "vertexId"
-                            shaderVariableName: "vertexId"
-                            bindingType: ParameterMapping.Attribute
-                        }
-                    ]
                     shaderProgram: ShaderProgram {
                         vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/gl3/bonds.vert")
                         fragmentShaderCode: _fragmentBuilder.finalShader
@@ -119,8 +92,8 @@ Entity {
                 Attribute {
                     name: "vertex1Position"
                     attributeType: Attribute.VertexAttribute
-                    dataType: Attribute.Float
-                    dataSize: 3
+                    vertexBaseType: Attribute.Float
+                    vertexSize: 3
                     byteOffset: 0
                     byteStride: (3 + 3 + 1 + 1 + 1 + 1) * 4
                     divisor: 1
@@ -129,8 +102,8 @@ Entity {
                 Attribute {
                     name: "vertex2Position"
                     attributeType: Attribute.VertexAttribute
-                    dataType: Attribute.Float
-                    dataSize: 3
+                    vertexBaseType: Attribute.Float
+                    vertexSize: 3
                     byteOffset: 3 * 4
                     byteStride: (3 + 3 + 1 + 1 + 1 + 1) * 4
                     divisor: 1
@@ -139,8 +112,8 @@ Entity {
                 Attribute {
                     name: "sphereRadius1"
                     attributeType: Attribute.VertexAttribute
-                    dataType: Attribute.Float
-                    dataSize: 1
+                    vertexBaseType: Attribute.Float
+                    vertexSize: 1
                     byteOffset: 6 * 4
                     byteStride: (3 + 3 + 1 + 1 + 1 + 1) * 4
                     divisor: 1
@@ -149,8 +122,8 @@ Entity {
                 Attribute {
                     name: "sphereRadius2"
                     attributeType: Attribute.VertexAttribute
-                    dataType: Attribute.Float
-                    dataSize: 1
+                    vertexBaseType: Attribute.Float
+                    vertexSize: 1
                     byteOffset: 7 * 4
                     byteStride: (3 + 3 + 1 + 1 + 1 + 1) * 4
                     divisor: 1
@@ -159,8 +132,8 @@ Entity {
                 Attribute {
                     name: "radius1"
                     attributeType: Attribute.VertexAttribute
-                    dataType: Attribute.Float
-                    dataSize: 1
+                    vertexBaseType: Attribute.Float
+                    vertexSize: 1
                     byteOffset: 8 * 4
                     byteStride: (3 + 3 + 1 + 1 + 1 + 1) * 4
                     divisor: 1
@@ -169,8 +142,8 @@ Entity {
                 Attribute {
                     name: "radius2"
                     attributeType: Attribute.VertexAttribute
-                    dataType: Attribute.Float
-                    dataSize: 1
+                    vertexBaseType: Attribute.Float
+                    vertexSize: 1
                     byteOffset: 9 * 4
                     byteStride: (3 + 3 + 1 + 1 + 1 + 1) * 4
                     divisor: 1

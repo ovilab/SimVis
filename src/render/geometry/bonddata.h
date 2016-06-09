@@ -16,7 +16,7 @@ struct BondVBOData
     float radius2;
 };
 
-// TODO rename to CylinderBuffer
+// TODO rename to BondBuffer
 class BondData : public Qt3DCore::QNode
 {
     Q_OBJECT
@@ -38,8 +38,6 @@ public slots:
 private:
     QScopedPointer<Qt3DRender::QBuffer> m_buffer;
     int m_count = 0;
-
-    QT3D_CLONEABLE(BondData)
 };
 
 #endif // BONDDATA_H
