@@ -6,8 +6,7 @@ QT += qml quick widgets 3drender_private
 
 SOURCES += \
     cylindersimulator.cpp \
-    main_cylinders.cpp \
-    cullfacenone.cpp
+    main_cylinders.cpp
 
 RESOURCES += \
     cylinders_qml.qrc
@@ -19,8 +18,7 @@ QML_IMPORT_PATH =
 include(../../package_vendor.pri)
 
 HEADERS += \
-    cylindersimulator.h \
-    cullfacenone.h
+    cylindersimulator.h
 
 DISTFILES += \
     SimpleMorphology.nml

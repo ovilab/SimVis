@@ -7,7 +7,6 @@ QT += qml quick widgets
 SOURCES += \
     neuronreader.cpp \
     main_neuron.cpp \
-    window.cpp \
     instancebuffer.cpp
 
 RESOURCES += \
@@ -21,7 +20,6 @@ include(../../package_vendor.pri)
 
 HEADERS += \
     neuronreader.h \
-    window.h \
     instancebuffer.h
 
 DISTFILES += \

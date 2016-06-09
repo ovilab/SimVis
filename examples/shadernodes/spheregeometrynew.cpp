@@ -387,7 +387,6 @@ SphereGeometryNew::SphereGeometryNew(QNode *parent)
  */
 SphereGeometryNew::~SphereGeometryNew()
 {
-    QGeometry::cleanup();
 }
 
 /*!

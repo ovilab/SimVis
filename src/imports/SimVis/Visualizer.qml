@@ -3,6 +3,7 @@ import SimVis 1.0
 import Qt3D.Core 2.0
 import Qt3D.Render 2.0
 import Qt3D.Input 2.0
+import Qt3D.Extras 2.0
 
 Entity {
     id: visualizerRoot
@@ -29,7 +30,7 @@ Entity {
     components: [
         RenderSettings {
             // TODO replace with ForwardRenderer with no culling when this is available in Qt 5.7 or Qt 5.8
-            activeFrameGraph: NonCullingForwardRenderer {
+            activeFrameGraph: ForwardRenderer {
                 id: forwardRenderer
                 camera: visualizerRoot.camera
             }

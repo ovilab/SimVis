@@ -73,8 +73,6 @@ private:
     bool m_segmentsAreDirty = true;
 
     friend class NeuronWorker;
-
-    QT3D_CLONEABLE(NeuronReader)
 };
 
 #endif // NEURONREADER_H

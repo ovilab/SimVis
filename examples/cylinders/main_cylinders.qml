@@ -6,7 +6,17 @@ Item {
     visible: true
 
     CylinderScene {
+        id: scene
         anchors.fill: parent
         focus: true
+    }
+
+    MouseArea {
+        property real angle: 0
+        anchors.fill: parent
+        onPositionChanged: {
+            angle += 0.1
+            scene.rotate(angle)
+        }
     }
 }

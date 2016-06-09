@@ -35,8 +35,6 @@ protected:
 
 private:
     QScopedPointer<CylinderData> m_cylinderData;
-
-    QT3D_CLONEABLE(CylinderSimulator)
 };
 
 #endif // CYLINDERSIMULATOR_H

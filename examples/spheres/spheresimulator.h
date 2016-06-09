@@ -50,8 +50,6 @@ protected:
 private:
     double m_dt = 0.05;
     QScopedPointer<SphereData> m_sphereData;
-
-    QT3D_CLONEABLE(SphereSimulator)
 };
 
 #endif // MYSIMULATOR_H

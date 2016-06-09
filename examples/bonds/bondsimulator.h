@@ -57,8 +57,6 @@ private:
     double m_dt = 0.05;
     QScopedPointer<SphereData> m_sphereData;
     QScopedPointer<CylinderData> m_cylinderData;
-
-    QT3D_CLONEABLE(BondSimulator)
 };
 
 #endif // MYSIMULATOR_H

@@ -40,7 +40,6 @@ protected:
 
 private:
     Q_DECLARE_PRIVATE(CullFaceNone)
-    QT3D_CLONEABLE(CullFaceNone)
 };
 
 } // namespace Qt3DRender

@@ -11,10 +11,22 @@ import QtQuick.Scene3D 2.0
 import CylinderSimulator 1.0
 
 Scene3D {
+
+    function rotate(angle) {
+        cylinders.transform.rotation = dummy.fromEulerAngles(angle, angle * 2, angle * 3)
+        console.log(cylinders.transform.rotation)
+    }
+
     aspects: ["render", "logic", "input"]
     Visualizer {
+        id: visualizer
+
         CylinderSimulator {
             id: simulator
+        }
+
+        OrbitController {
+            camera: visualizer.camera
         }
 
         Cylinders {
@@ -31,6 +43,9 @@ Scene3D {
                 }
                 ambientIntensity: 10.0
                 hardness: 2.0
+            }
+            Transform {
+                id: dummy
             }
         }
     }
