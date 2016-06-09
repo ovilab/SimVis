@@ -33,6 +33,7 @@ uniform mat4 mvp;
 uniform mat4 modelMatrix;
 uniform mat4 modelView;
 uniform mat3 modelViewNormal;
+uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 uniform vec3 eyePosition;
 
@@ -59,7 +60,7 @@ void main(void)
     vec3 mv1 = (modelMatrix * vec4(v1, 1.0)).xyz;
     vec3 mv2 = (modelMatrix * vec4(v2, 1.0)).xyz;
 
-    vec3 delta = v2 - v1;
+    vec3 delta = mv2 - mv1;
     vec3 deltaNormalized = normalize(delta);
 
     // define a unique perpendicular to the axis that can be used by
@@ -94,8 +95,8 @@ void main(void)
                               normalize(right), // V
                               normalize(deltaNormalized)); // axis
 
-    vec4 mvv1 = modelView * vec4(v1, 1.0);
-    vec4 mvv2 = modelView * vec4(v2, 1.0);
+    vec4 mvv1 = viewMatrix * vec4(mv1, 1.0);
+    vec4 mvv2 = viewMatrix * vec4(mv2, 1.0);
     // NOTE: dividing by w here is typically not necessary
     // w is seldom modified by model view matrices
     base = mvv1.xyz / mvv1.w;
@@ -108,20 +109,20 @@ void main(void)
 
     float sign = 1.0;
     if(distanceToV1 > distanceToV2) {
-        vec3 vtmp = v1;
-        v1 = v2;
-        v2 = vtmp;
+        vec3 mvtmp = mv1;
+        mv1 = mv2;
+        mv2 = mvtmp;
         sign = -1.0; // keeps everything front face (in case of back face culling)
     }
 
     vec3 vertices[6];
-    vertices[ 0] = v1 + sign*right*rmax - outward*rmax; // cap top left
-    vertices[ 1] = v1 - sign*right*rmax - outward*rmax;
-    vertices[ 2] = v1 + sign*right*rmax + outward*rmax; // cap bottom left
-    vertices[ 3] = v1 - sign*right*rmax + outward*rmax;
+    vertices[ 0] = mv1 + sign*right*rmax - outward*rmax; // cap top left
+    vertices[ 1] = mv1 - sign*right*rmax - outward*rmax;
+    vertices[ 2] = mv1 + sign*right*rmax + outward*rmax; // cap bottom left
+    vertices[ 3] = mv1 - sign*right*rmax + outward*rmax;
 
-    vertices[ 4] = v2 + sign*right*rmax + outward*rmax; // main bottom left
-    vertices[ 5] = v2 - sign*right*rmax + outward*rmax;
+    vertices[ 4] = mv2 + sign*right*rmax + outward*rmax; // main bottom left
+    vertices[ 5] = mv2 - sign*right*rmax + outward*rmax;
 
     vec2 texCoords[6];
     texCoords[ 0] = vec2(-1.0, -1.0);
@@ -134,9 +135,9 @@ void main(void)
 
     int i = int(vertexId);
     color = vec3(1.0, 1.0, 1.0);
-    vec4 ppos = vec4(vertices[i], 1.0);
-    modelPosition = (modelMatrix * ppos).xyz;
-    modelViewPosition = (modelView * ppos).xyz;
-    worldPosition = vertices[i];
-    gl_Position = mvp*vec4(vertices[i], 1.0);
+    vec4 mv = vec4(vertices[i], 1.0);
+    modelPosition = mv.xyz;
+    modelViewPosition = (viewMatrix * mv).xyz;
+//    worldPosition = vertices[i];
+    gl_Position = projectionMatrix*viewMatrix*vec4(vertices[i], 1.0);
 }

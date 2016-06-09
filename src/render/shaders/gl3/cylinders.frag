@@ -7,7 +7,6 @@ in vec3 vs_vertex2Position;
 
 in vec3 modelPosition;
 in vec3 modelViewPosition;
-in vec3 worldPosition;
 in vec3 base;
 in vec3 end;
 in vec3 color;
