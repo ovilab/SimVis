@@ -31,6 +31,7 @@ out vec3 biperpendicular;
 
 uniform mat4 mvp;
 uniform mat4 modelMatrix;
+uniform mat4 inverseModelMatrix;
 uniform mat4 modelView;
 uniform mat3 modelViewNormal;
 uniform mat4 viewMatrix;
@@ -82,14 +83,20 @@ void main(void)
     vec3 outward = cross(deltaNormalized, right);
     outward = normalize(outward);
 
-    // multiplying with normal matrix is the same as multiplying
-    // with the upper 3x3 part of the modelview matrix,
+    // TODO: Currently we cannot support scaled transformations,
+    // likely because the below code is incorrect
+
+    // Multiplying with the modelViewNormal matrix is the
+    // same as multiplying with the upper 3x3 part of the
+    // modelview matrix,
     // except that it doesn't change vector lengths
     // and preserves normals when the modelview matrix has
-    // non-uniform scaling
-    cylinderBasis = mat3(modelViewNormal * outward, // U
-                         modelViewNormal * right, // V
-                         modelViewNormal * deltaNormalized); // axis
+    // non-uniform scaling.
+    // Before multiplying we need to rever the modelView
+    // because we don't have the viewNormal matrix available.
+    cylinderBasis = mat3(modelViewNormal*(inverseModelMatrix*vec4(outward, 0.0)).xyz, // U
+                         modelViewNormal*(inverseModelMatrix*vec4(right, 0.0)).xyz, // V
+                         modelViewNormal*(inverseModelMatrix*vec4(deltaNormalized, 0.0)).xyz); // axis
 
     cylinderWorldBasis = mat3(normalize(outward), // U
                               normalize(right), // V
@@ -132,6 +139,10 @@ void main(void)
 
     texCoords[ 4] = vec2(-1.0, 0.0);
     texCoords[ 5] = vec2(1.0, 0.0);
+
+    // TODO: The normals or positions are wrong when performing rotational
+    // transformations, causing textures based on these to be floating around
+    // the cylinder during the rotation
 
     int i = int(vertexId);
     color = vec3(1.0, 1.0, 1.0);
