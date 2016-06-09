@@ -14,6 +14,8 @@ Scene3D {
 
     function rotate(angle) {
         cylinders.transform.rotation = dummy.fromEulerAngles(angle, angle * 2, angle * 3)
+//        cylinders.transform.translation = Qt.vector3d(angle, angle, -angle)
+//        cylinders.transform.scale3D = Qt.vector3d(angle, 2*angle, 3*angle)
         console.log(cylinders.transform.rotation)
     }
 
@@ -44,6 +46,7 @@ Scene3D {
                 ambientIntensity: 10.0
                 hardness: 2.0
             }
+//            transform.scale3D: Qt.vector3d(1, 2, 3)
             Transform {
                 id: dummy
             }

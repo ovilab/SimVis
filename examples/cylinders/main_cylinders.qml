@@ -13,6 +13,7 @@ Item {
 
     MouseArea {
         property real angle: 0
+//        enabled: false
         anchors.fill: parent
         onPositionChanged: {
             angle += 0.1
