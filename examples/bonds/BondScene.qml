@@ -12,6 +12,7 @@ import BondSimulator 1.0
 
 Scene3D {
     aspects: "input"
+    property alias simulator: simulator
 
     function doSomething() {
         if(transform.translation.x == 4.0) {
@@ -35,15 +36,8 @@ Scene3D {
             sphereData: simulator.sphereData
         }
 
-        Cylinders {
-            cylinderData: simulator.cylinderData
-            fragmentColor: StandardMaterial {
-                lights: ShaderGroup {
-                    Light {
-                        position: Qt.vector3d(5, 5, 5)
-                    }
-                }
-            }
+        Bonds {
+            bondData: simulator.bondData
         }
 
         SphereMesh {

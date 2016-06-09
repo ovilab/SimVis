@@ -22,14 +22,7 @@ Material {
             renderPasses: RenderPass {
                 shaderProgram: ShaderProgram {
                     vertexShaderCode: vertexShaderBuilder.finalShader
-                    onVertexShaderCodeChanged: {
-//                        console.log(vertexShaderCode)
-                    }
-
                     fragmentShaderCode: shaderBuilder.finalShader
-                    onFragmentShaderCodeChanged: {
-//                        console.log(fragmentShaderCode)
-                    }
                 }
             }
         }
@@ -111,11 +104,11 @@ Material {
                 value: StandardMaterial {
                     position: shaderBuilder.position
                     normal: shaderBuilder.normal
-                    lights: ShaderGroup {
+                    lights: [
                         Nodes.Light {
                             position: Qt.vector3d(5.0, 5.0, -5.0)
                         }
-                    }
+                    ]
                 }
             }
         ]

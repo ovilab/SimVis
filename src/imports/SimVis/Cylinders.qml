@@ -119,7 +119,7 @@ Entity {
                     byteOffset: 6 * 4
                     byteStride: (3 + 3 + 1 + 1) * 4
                     divisor: 1
-                    buffer: cylinderData ? cylinderData.buffer : null
+                    buffer: cylinderData.buffer
                 },
                 Attribute {
                     name: "radius2"

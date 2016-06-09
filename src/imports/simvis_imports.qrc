@@ -34,5 +34,6 @@
         <file>SimVis/SpheresTechnique.qml</file>
         <file>SimVis/FirstPersonCameraController.qml</file>
         <file>SimVis/OrbitController.qml</file>
+        <file>SimVis/Bonds.qml</file>
     </qresource>
 </RCC>

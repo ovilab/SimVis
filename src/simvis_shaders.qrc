@@ -10,5 +10,7 @@
         <file>render/shaders/es2/cylinders.frag</file>
         <file>render/shaders/es2/cylinders.geom</file>
         <file>render/shaders/es2/cylinders.vert</file>
+        <file>render/shaders/gl3/bonds.frag</file>
+        <file>render/shaders/gl3/bonds.vert</file>
     </qresource>
 </RCC>

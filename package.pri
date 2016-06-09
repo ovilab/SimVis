@@ -25,7 +25,8 @@ SOURCES += \
     $$PWD/src/render/geometry/spheredata.cpp \
     $$PWD/src/render/geometry/cylinderdata.cpp \
     $$PWD/src/render/geometry/uniformgridgeometry.cpp \
-    $$PWD/src/utils/marchingcubestabletexture.cpp
+    $$PWD/src/utils/marchingcubestabletexture.cpp \
+    $$PWD/src/render/geometry/bonddata.cpp
 
 HEADERS += \
     $$PWD/src/core/simulator.h \
@@ -43,4 +44,7 @@ HEADERS += \
     $$PWD/src/render/geometry/cylinderdata.h \
     $$PWD/src/render/geometry/uniformgridgeometry.h \
     $$PWD/src/SimVis/CylinderData \
-    $$PWD/src/utils/marchingcubestabletexture.h
+    $$PWD/src/utils/marchingcubestabletexture.h \
+    $$PWD/src/render/geometry/bonddata.h \
+    $$PWD/src/SimVis/BondData
+

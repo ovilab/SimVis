@@ -7,6 +7,7 @@
 #include "../render/geometry/pointgeometry.h"
 #include "../render/geometry/spherespointgeometry.h"
 #include "../render/geometry/spheredata.h"
+#include "../render/geometry/bonddata.h"
 #include "../render/geometry/cylinderdata.h"
 #include "../render/geometry/uniformgridgeometry.h"
 #include "../utils/marchingcubestabletexture.h"
@@ -32,6 +33,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<UniformGridGeometry>("SimVis", 1, 0, "UniformGridGeometry");
     qmlRegisterType<SphereData>("SimVis", 1, 0, "SphereData");
     qmlRegisterType<CylinderData>("SimVis", 1, 0, "CylinderData");
+    qmlRegisterType<BondData>("SimVis", 1, 0, "BondData");
     qmlRegisterType<MarchingCubesTableTexture>("SimVis", 1, 0, "MarchingCubesTableTexture");
 }
 
