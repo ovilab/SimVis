@@ -23,11 +23,12 @@ ShaderNode {
     property list<Light> lights: [
         Light {
             position: Qt.vector3d(500, 500, 500)
-            attenuation: 1.0
+            attenuation: 0.0
         },
         Light {
             position: Qt.vector3d(-500, -500, -500)
-            attenuation: 1.0
+            attenuation: 0.0
+            strength: 0.2
         }
     ]
 
@@ -43,9 +44,6 @@ ShaderNode {
             output += "             150.0 * $(hardness, float));\n"
         }
         return output
-    }
-    onSourceChanged: {
-        console.log("New source: ", source)
     }
 
     headerFile: "qrc:/SimVis/ShaderNodes/shaders/standard_material.glsl"
