@@ -62,7 +62,7 @@ signals:
     void sourceChanged(QString source);
     void requirementChanged(bool requirement);
     void headerFileChanged(QUrl headerFile);
-    void propertyChanged();
+    void propertyTypeChanged();
 
 public slots:
     void setName(QString name);

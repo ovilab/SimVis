@@ -82,7 +82,7 @@ void ShaderNode::updateProperty(int index)
         if(oldTypeName != newTypeName) {
             qDebug() << "Property type of index" << index << "changed from" << oldTypeName << "to" << newTypeName;
             m_propertyTypeNames[index] = newTypeName;
-            emit propertyChanged();
+            emit propertyTypeChanged();
         }
     }
 }
@@ -126,21 +126,35 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
         m_resolvedDependencies.append(dependency);
     }
 
-//    for(QSignalMapper *mapper : m_signalMappers) {
-//        disconnect(this, 0, mapper, SLOT(map()));
-//        disconnect(mapper, SIGNAL(mapped(int)), this, SLOT(updateProperty(int)));
-//        delete mapper;
-//    }
-//    m_signalMappers.clear();
+    for(QSignalMapper *mapper : m_signalMappers) {
+        disconnect(this, 0, mapper, SLOT(map()));
+        disconnect(mapper, SIGNAL(mapped(int)), this, SLOT(updateProperty(int)));
+        mapper->deleteLater();
+    }
+    m_signalMappers.clear();
+
+    QStringList propertiesInSource;
+    // matches '$property' or '$(property, type)'
+    QRegularExpression propertyRegex("\\$(?:\\(\\s*)?([_a-zA-Z0-9]+)\\s*\\)?(?:\\s*,\\s*([_a-zA-Z0-9]+)\\s*\\))?");
+    if(!sourceContent.isEmpty()) {
+        QRegularExpressionMatchIterator matches = propertyRegex.globalMatch(sourceContent);
+        while(matches.hasNext()) {
+            QRegularExpressionMatch match = matches.next();
+            QString propertyName = match.captured(1);
+            propertiesInSource.append(propertyName);
+        }
+    }
 
     QVariantMap mappings = m_mappings;
-    const QMetaObject* theMetaObject = metaObject();
-    for(int i = 0; i < theMetaObject->propertyCount(); i++) {
+    for(int i = 0; i < metaObject()->propertyCount(); i++) {
         QString propertyName = metaObject()->property(i).name();
+        if(!propertiesInSource.contains(propertyName)) {
+            continue;
+        }
         if(mappings.contains(propertyName)) {
             continue;
         }
-        QMetaProperty metaProperty = theMetaObject->property(i);
+        QMetaProperty metaProperty = metaObject()->property(i);
         QVariant value = metaProperty.read(this);
 
         m_propertyTypeNames[i] = value.typeName();
@@ -163,7 +177,6 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
     bool success = true;
     if(!sourceContent.isEmpty()) {
         // matches '$property' or '$(property, type)'
-        QRegularExpression propertyRegex("\\$(?:\\(\\s*)?([_a-zA-Z0-9]+)\\s*\\)?(?:\\s*,\\s*([_a-zA-Z0-9]+)\\s*\\))?");
         QRegularExpressionMatchIterator matches = propertyRegex.globalMatch(sourceContent);
         QList<QString> alreadyReplaced;
         while(matches.hasNext()) {
@@ -396,7 +409,7 @@ void ShaderNode::setShaderBuilder(ShaderBuilder *shaderBuilder)
         disconnect(this, &ShaderNode::sourceChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
         disconnect(this, &ShaderNode::typeChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
         disconnect(this, &ShaderNode::identifierChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
-        disconnect(this, &ShaderNode::propertyChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
+        disconnect(this, &ShaderNode::propertyTypeChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
     }
     m_shaderBuilder = shaderBuilder;
     if(!m_shaderBuilder) {
@@ -407,7 +420,7 @@ void ShaderNode::setShaderBuilder(ShaderBuilder *shaderBuilder)
     connect(this, &ShaderNode::sourceChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
     connect(this, &ShaderNode::typeChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
     connect(this, &ShaderNode::identifierChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
-    connect(this, &ShaderNode::propertyChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
+    connect(this, &ShaderNode::propertyTypeChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
 }
 
 QString ShaderNode::glslType(QVariant value) const
