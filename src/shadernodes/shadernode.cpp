@@ -72,10 +72,18 @@ QString ShaderNode::convert(const QString &targetType, const QString &identifier
     return ShaderUtils::convert(type(), targetType, v);
 }
 
-void ShaderNode::updateProperty(const QString &propertyName)
+void ShaderNode::updateProperty(int index)
 {
-    if(propertyName == "position") {
-//        emit propertyChanged();
+    if(m_propertyTypeNames.contains(index) && metaObject()->propertyCount() > index) {
+        QMetaProperty metaProperty = metaObject()->property(index);
+        QVariant value = metaProperty.read(this);
+        QString oldTypeName = m_propertyTypeNames[index];
+        QString newTypeName = value.typeName();
+        if(oldTypeName != newTypeName) {
+            qDebug() << "Property type of index" << index << "changed from" << oldTypeName << "to" << newTypeName;
+            m_propertyTypeNames[index] = newTypeName;
+            emit propertyChanged();
+        }
     }
 }
 
@@ -118,6 +126,13 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
         m_resolvedDependencies.append(dependency);
     }
 
+//    for(QSignalMapper *mapper : m_signalMappers) {
+//        disconnect(this, 0, mapper, SLOT(map()));
+//        disconnect(mapper, SIGNAL(mapped(int)), this, SLOT(updateProperty(int)));
+//        delete mapper;
+//    }
+//    m_signalMappers.clear();
+
     QVariantMap mappings = m_mappings;
     const QMetaObject* theMetaObject = metaObject();
     for(int i = 0; i < theMetaObject->propertyCount(); i++) {
@@ -128,16 +143,16 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
         QMetaProperty metaProperty = theMetaObject->property(i);
         QVariant value = metaProperty.read(this);
 
-//        if(!metaProperty.hasNotifySignal()) {
-//            qWarning() << "Cannot listen to property changes.";
-//        } else {
-//            QSignalMapper *mapper = new QSignalMapper;
-//            mapper->setMapping(this, propertyName);
-//            const QByteArray signal = '2' + metaProperty.notifySignal().methodSignature();
-//            connect(this, signal, mapper, SLOT(map()));
-//            connect(mapper, SIGNAL(mapped(QString)), this, SLOT(updateProperty(QString)));
-//            m_mappers.append(mapper);
-//        }
+        m_propertyTypeNames[i] = value.typeName();
+
+        if(metaProperty.hasNotifySignal()) {
+            QSignalMapper *mapper = new QSignalMapper;
+            mapper->setMapping(this, i);
+            const QByteArray signal = '2' + metaProperty.notifySignal().methodSignature();
+            connect(this, signal, mapper, SLOT(map()));
+            connect(mapper, SIGNAL(mapped(int)), this, SLOT(updateProperty(int)));
+            m_signalMappers.append(mapper);
+        }
 
         if(!value.isValid()) {
             continue;
@@ -376,7 +391,12 @@ void ShaderNode::setShaderBuilder(ShaderBuilder *shaderBuilder)
     // this way we can use the same node for two shader builders
 
     if(m_shaderBuilder) {
-        disconnect(this, 0, m_shaderBuilder, SLOT(markDirty()));
+        disconnect(this, &ShaderNode::headerChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
+        disconnect(this, &ShaderNode::resultChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
+        disconnect(this, &ShaderNode::sourceChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
+        disconnect(this, &ShaderNode::typeChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
+        disconnect(this, &ShaderNode::identifierChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
+        disconnect(this, &ShaderNode::propertyChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
     }
     m_shaderBuilder = shaderBuilder;
     if(!m_shaderBuilder) {

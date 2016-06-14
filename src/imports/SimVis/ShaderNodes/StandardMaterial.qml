@@ -20,22 +20,26 @@ ShaderNode {
         property: "position"
         defaultValue: Qt.vector3d(0.0, 0.0, 0.0)
     }
-    property list<Light> lights: [
-        Light {
-            position: Qt.vector3d(500, 500, 500)
-            attenuation: 0.0
-        },
-        Light {
-            position: Qt.vector3d(-500, -500, -500)
-            attenuation: 0.0
-            strength: 0.2
-        }
-    ]
+    property list<Light> lights //: [
+//        Light {
+//            position: Qt.vector3d(500, 500, 500)
+//            attenuation: 0.0
+//        },
+//        Light {
+//            position: Qt.vector3d(-500, -500, -500)
+//            attenuation: 0.0
+//            strength: 0.2
+//        }
+//    ]
+    property var lightDummy: Light {
+//        position: Qt.vector3d(1, 1, 1)
+    }
 
     name: "diffuse"
     type: "vec3"
     source: {
         var output = ""
+        output += "$lightDummy;\n"
         output += "$this = vec3(0.0, 0.0, 0.0);\n"
         for(var i in lights) {
             output += "$this += standardMaterialLight($lights[" + i + "], $(normal, vec3), $(position, vec3), eyePosition,\n"
