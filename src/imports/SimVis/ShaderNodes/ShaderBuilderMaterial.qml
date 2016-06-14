@@ -19,6 +19,13 @@ Material {
 
     effect: Effect {
         techniques: Technique {
+            filterKeys: [
+                FilterKey {
+                    id: forward
+                    name: "renderingStyle"
+                    value: "forward"
+                }
+            ]
             renderPasses: RenderPass {
                 shaderProgram: ShaderProgram {
                     vertexShaderCode: vertexShaderBuilder.finalShader

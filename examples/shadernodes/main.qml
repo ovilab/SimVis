@@ -3,7 +3,6 @@ import QtQuick.Controls 1.1
 import QtQuick.Window 2.1
 import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.1
-import QtGraphicalEffects 1.0
 
 import SimVis 1.0
 import SimVis.ShaderNodes 1.0
