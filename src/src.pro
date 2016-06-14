@@ -20,5 +20,6 @@ include(../package.pri)
 
 DISTFILES = qmldir \
     core/simvisplugin.json \
+    imports/SimVis/ShaderNodes/shaders/light.glsl
 
 

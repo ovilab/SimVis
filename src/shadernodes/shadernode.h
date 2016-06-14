@@ -63,6 +63,7 @@ signals:
     void requirementChanged(bool requirement);
     void parentChanged(QObject* parent);
     void headerFileChanged(QUrl headerFile);
+    void propertyChanged();
 
 public slots:
     void setName(QString name);
@@ -92,6 +93,10 @@ protected:
     QList<ShaderNode*> m_resolvedDependencies;
     QList<ShaderNode*> m_declaredDependencies;
     QString m_source;
+
+    QList<QSignalMapper*> m_mappers;
+private slots:
+    void updateProperty(const QString &propertyName);
 };
 
 #endif // SHADERNODE_H

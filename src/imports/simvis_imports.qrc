@@ -37,5 +37,6 @@
         <file>SimVis/ShaderNodes/ShaderBuilderMaterial.qml</file>
         <file>SimVis/ShaderNodes/shaders/shader_builder_material.vert</file>
         <file>SimVis/ShaderNodes/shaders/shader_builder_material.frag</file>
+        <file>SimVis/ShaderNodes/shaders/light.glsl</file>
     </qresource>
 </RCC>

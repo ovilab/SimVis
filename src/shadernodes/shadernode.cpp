@@ -72,6 +72,13 @@ QString ShaderNode::convert(const QString &targetType, const QString &identifier
     return ShaderUtils::convert(type(), targetType, v);
 }
 
+void ShaderNode::updateProperty(const QString &propertyName)
+{
+    if(propertyName == "position") {
+//        emit propertyChanged();
+    }
+}
+
 bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
 {
     if(m_hasSetup && tempIdentifier.isEmpty()) {
@@ -112,12 +119,30 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
     }
 
     QVariantMap mappings = m_mappings;
-    for(int i = 0; i < metaObject()->propertyCount(); i++) {
+    const QMetaObject* theMetaObject = metaObject();
+    for(int i = 0; i < theMetaObject->propertyCount(); i++) {
         QString propertyName = metaObject()->property(i).name();
         if(mappings.contains(propertyName)) {
             continue;
         }
-        mappings.insert(propertyName, metaObject()->property(i).read(this));
+        QMetaProperty metaProperty = theMetaObject->property(i);
+        QVariant value = metaProperty.read(this);
+
+//        if(!metaProperty.hasNotifySignal()) {
+//            qWarning() << "Cannot listen to property changes.";
+//        } else {
+//            QSignalMapper *mapper = new QSignalMapper;
+//            mapper->setMapping(this, propertyName);
+//            const QByteArray signal = '2' + metaProperty.notifySignal().methodSignature();
+//            connect(this, signal, mapper, SLOT(map()));
+//            connect(mapper, SIGNAL(mapped(QString)), this, SLOT(updateProperty(QString)));
+//            m_mappers.append(mapper);
+//        }
+
+        if(!value.isValid()) {
+            continue;
+        }
+        mappings.insert(propertyName, value);
     }
 
     bool success = true;
@@ -347,18 +372,22 @@ ShaderBuilder *ShaderNode::shaderBuilder() const
 
 void ShaderNode::setShaderBuilder(ShaderBuilder *shaderBuilder)
 {
+    // TODO rewrite so that a shader builder lists the node as its dependency
+    // this way we can use the same node for two shader builders
+
     if(m_shaderBuilder) {
-        disconnect(this, 0, m_shaderBuilder, SLOT(triggerOutputChange()));
+        disconnect(this, 0, m_shaderBuilder, SLOT(markDirty()));
     }
     m_shaderBuilder = shaderBuilder;
     if(!m_shaderBuilder) {
         return;
     }
-    connect(this, &ShaderNode::headerChanged, m_shaderBuilder, &ShaderBuilder::triggerOutputChange);
-    connect(this, &ShaderNode::resultChanged, m_shaderBuilder, &ShaderBuilder::triggerOutputChange);
-    connect(this, &ShaderNode::sourceChanged, m_shaderBuilder, &ShaderBuilder::triggerOutputChange);
-    connect(this, &ShaderNode::typeChanged, m_shaderBuilder, &ShaderBuilder::triggerOutputChange);
-    connect(this, &ShaderNode::identifierChanged, m_shaderBuilder, &ShaderBuilder::triggerOutputChange);
+    connect(this, &ShaderNode::headerChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
+    connect(this, &ShaderNode::resultChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
+    connect(this, &ShaderNode::sourceChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
+    connect(this, &ShaderNode::typeChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
+    connect(this, &ShaderNode::identifierChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
+    connect(this, &ShaderNode::propertyChanged, m_shaderBuilder, &ShaderBuilder::markDirty);
 }
 
 QString ShaderNode::glslType(QVariant value) const
