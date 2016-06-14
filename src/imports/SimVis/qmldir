@@ -3,7 +3,6 @@ Bonds 1.0 Bonds.qml
 Cylinders 1.0 Cylinders.qml
 FirstPersonCameraController 1.0 FirstPersonCameraController.qml
 FunctionSurface 1.0 FunctionSurface.qml
-Mesh 1.0 Mesh.qml
 NonCullingForwardRenderer 1.0 NonCullingForwardRenderer.qml
 OrbitController 1.0 OrbitController.qml
 Spheres 1.0 Spheres.qml

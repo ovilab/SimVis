@@ -50,7 +50,7 @@ Material {
             result: "vertexTexCoord"
         }
 
-        sourceFile: "qrc:/shader.vert"
+        sourceFile: "qrc:/SimVis/ShaderNodes/shaders/shader_builder_material.vert"
 
         outputs: [
             ShaderOutput {
@@ -94,7 +94,7 @@ Material {
             result: "texCoord"
         }
 
-        sourceFile: "qrc:/shader.frag"
+        sourceFile: "qrc:/SimVis/ShaderNodes/shaders/shader_builder_material.frag"
 
         outputs: [
             ShaderOutput {

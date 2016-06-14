@@ -15,7 +15,6 @@
         <file>SimVis/ShaderNodes/Clamp.qml</file>
         <file>SimVis/Spheres.qml</file>
         <file>SimVis/Cylinders.qml</file>
-        <file>SimVis/Mesh.qml</file>
         <file>SimVis/FunctionSurface.qml</file>
         <file>SimVis/ShaderNodes/StandardMaterial.qml</file>
         <file>SimVis/ShaderNodes/Function.qml</file>
@@ -35,5 +34,8 @@
         <file>SimVis/FirstPersonCameraController.qml</file>
         <file>SimVis/OrbitController.qml</file>
         <file>SimVis/Bonds.qml</file>
+        <file>SimVis/ShaderNodes/ShaderBuilderMaterial.qml</file>
+        <file>SimVis/ShaderNodes/shaders/shader_builder_material.vert</file>
+        <file>SimVis/ShaderNodes/shaders/shader_builder_material.frag</file>
     </qresource>
 </RCC>
