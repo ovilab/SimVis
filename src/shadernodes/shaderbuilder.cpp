@@ -50,7 +50,6 @@ QString ShaderBuilder::source() const
 
 QString ShaderBuilder::finalShader()
 {
-    qDebug() << "Final shader requested";
     if(m_dirty) {
         rebuildShader();
     }
@@ -227,7 +226,11 @@ void ShaderBuilder::updateUniform(int i)
     QByteArray propertyNameArray = uniform.propertyName.toUtf8();
     QVariant value = uniform.node->property(propertyNameArray.constData());;
     uniform.value = value;
-    uniform.parameter->setValue(value);
+    if(value.type() == QVariant::String) {
+        uniform.parameter->setValue(QColor(value.toString()));
+    } else {
+        uniform.parameter->setValue(value);
+    }
     QString type = glslType(value);
     if(type != uniform.type) {
         uniform.type = type;

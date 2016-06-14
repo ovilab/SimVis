@@ -96,7 +96,7 @@ protected:
 
     QList<QSignalMapper*> m_signalMappers;
 private slots:
-    void updateProperty(int index);
+    void handlePropertyChange(int index);
 };
 
 #endif // SHADERNODE_H

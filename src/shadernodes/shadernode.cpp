@@ -72,7 +72,7 @@ QString ShaderNode::convert(const QString &targetType, const QString &identifier
     return ShaderUtils::convert(type(), targetType, v);
 }
 
-void ShaderNode::updateProperty(int index)
+void ShaderNode::handlePropertyChange(int index)
 {
     if(m_propertyTypeNames.contains(index) && metaObject()->propertyCount() > index) {
         QMetaProperty metaProperty = metaObject()->property(index);
@@ -80,7 +80,6 @@ void ShaderNode::updateProperty(int index)
         QString oldTypeName = m_propertyTypeNames[index];
         QString newTypeName = value.typeName();
         if(oldTypeName != newTypeName) {
-            qDebug() << "Property type of index" << index << "changed from" << oldTypeName << "to" << newTypeName;
             m_propertyTypeNames[index] = newTypeName;
             emit propertyTypeChanged();
         }
@@ -128,7 +127,7 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
 
     for(QSignalMapper *mapper : m_signalMappers) {
         disconnect(this, 0, mapper, SLOT(map()));
-        disconnect(mapper, SIGNAL(mapped(int)), this, SLOT(updateProperty(int)));
+        disconnect(mapper, SIGNAL(mapped(int)), this, SLOT(handlePropertyChange(int)));
         mapper->deleteLater();
     }
     m_signalMappers.clear();
@@ -164,7 +163,7 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
             mapper->setMapping(this, i);
             const QByteArray signal = '2' + metaProperty.notifySignal().methodSignature();
             connect(this, signal, mapper, SLOT(map()));
-            connect(mapper, SIGNAL(mapped(int)), this, SLOT(updateProperty(int)));
+            connect(mapper, SIGNAL(mapped(int)), this, SLOT(handlePropertyChange(int)));
             m_signalMappers.append(mapper);
         }
 
