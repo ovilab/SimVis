@@ -35,8 +35,12 @@
         <file>SimVis/OrbitController.qml</file>
         <file>SimVis/Bonds.qml</file>
         <file>SimVis/ShaderNodes/ShaderBuilderMaterial.qml</file>
-        <file>SimVis/ShaderNodes/shaders/shader_builder_material.vert</file>
-        <file>SimVis/ShaderNodes/shaders/shader_builder_material.frag</file>
         <file>SimVis/ShaderNodes/shaders/light.glsl</file>
+        <file>SimVis/ShaderNodes/shaders/es2/shader_builder_material.frag</file>
+        <file>SimVis/ShaderNodes/shaders/es2/shader_builder_material.vert</file>
+        <file>SimVis/ShaderNodes/shaders/gl3/shader_builder_material.frag</file>
+        <file>SimVis/ShaderNodes/shaders/gl3/shader_builder_material.vert</file>
+        <file>SimVis/ShaderNodes/VertexShaderBuilder.qml</file>
+        <file>SimVis/ShaderNodes/FragmentShaderBuilder.qml</file>
     </qresource>
 </RCC>

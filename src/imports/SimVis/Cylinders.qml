@@ -26,20 +26,19 @@ Entity {
         id: material
         effect: Effect {
             techniques: Technique {
-                graphicsApiFilter {
-                    api: GraphicsApiFilter.OpenGL
-                    profile: GraphicsApiFilter.CoreProfile
-                    minorVersion: 2
-                    majorVersion: 3
-                }
+//                graphicsApiFilter {
+//                    api: GraphicsApiFilter.OpenGL
+//                    profile: GraphicsApiFilter.CoreProfile
+//                    minorVersion: 2
+//                    majorVersion: 3
+//                }
                 filterKeys: FilterKey {
                     name: "renderingStyle"
                     value: "forward"
                 }
                 renderPasses: RenderPass {
                     shaderProgram: ShaderProgram {
-                        vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/gl3/cylinders.vert")
-//                        fragmentShaderCode: loadSource("qrc:/SimVis/render/shaders/cylinders.frag")
+                        vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/es2/cylinders.vert")
                         fragmentShaderCode: _fragmentBuilder.finalShader
                     }
                     ShaderBuilder {
@@ -67,7 +66,7 @@ Entity {
                             result: "texCoord"
                         }
 
-                        sourceFile: "qrc:/SimVis/render/shaders/gl3/cylinders.frag"
+                        sourceFile: "qrc:/SimVis/render/shaders/es2/cylinders.frag"
 
                         outputs: [
                             ShaderOutput {
