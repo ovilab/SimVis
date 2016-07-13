@@ -42,6 +42,7 @@ SOURCES += \
     shadereffects/periodiccopies.cpp \
     shadereffects/slice.cpp \
     renderables/cylinders/cylinders.cpp \
+    renderables/bonds/bonds.cpp \
     renderables/lines/lines.cpp \
     renderables/noiseviewer/noiseviewer.cpp \
     navigators/flymodenavigator.cpp
@@ -83,6 +84,7 @@ HEADERS += \
     shadereffects/periodiccopies.h \
     shadereffects/slice.h \
     renderables/cylinders/cylinders.h \
+    renderables/bonds/bonds.h \
     SimVis/Cylinders \
     renderables/lines/lines.h \
     SimVis/Lines \

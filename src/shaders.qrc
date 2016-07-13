@@ -37,5 +37,7 @@
         <file>renderables/noiseviewer/noiseviewer.fsh</file>
         <file>renderables/noiseviewer/noiseviewer.gsh</file>
         <file>renderables/noiseviewer/noiseviewer.vsh</file>
+        <file>renderables/bonds/bonds.fsh</file>
+        <file>renderables/bonds/bonds.vsh</file>
     </qresource>
 </RCC>
