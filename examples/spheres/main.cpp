@@ -3,6 +3,7 @@
 #include <QtQml>
 
 #include "mysimulator.h"
+#include <vendor.h>
 
 int main(int argc, char *argv[])
 {
@@ -10,6 +11,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+    qpm::init(app, engine);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     return app.exec();

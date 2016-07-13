@@ -90,12 +90,12 @@ ApplicationWindow {
 //                reflectivity: 0.2
 //            }
 
-            SimplexBump {
-                id: simplexBump
-                enabled: true
-                intensity: 0.1
-                scale: 1.0
-            }
+//            SimplexBump {
+//                id: simplexBump
+//                enabled: true
+//                intensity: 0.1
+//                scale: 1.0
+//            }
         }
     }
 
