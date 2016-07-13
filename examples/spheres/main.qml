@@ -33,11 +33,11 @@ ApplicationWindow {
             camera: camera
         }
 
-        SkyBox {
-            id: skybox
-            camera: camera
-            texture: ":/1024.png"
-        }
+//        SkyBox {
+//            id: skybox
+//            camera: camera
+//            texture: ":/1024.png"
+//        }
 
         Spheres {
             id: spheres
@@ -84,18 +84,18 @@ ApplicationWindow {
                 position: camera.position
             }
 
-            SkyBoxReflection {
-                id: reflection
-                skybox: skybox
-                reflectivity: 0.2
-            }
+//            SkyBoxReflection {
+//                id: reflection
+//                skybox: skybox
+//                reflectivity: 0.2
+//            }
 
-            SimplexBump {
-                id: simplexBump
-                enabled: true
-                intensity: 0.1
-                scale: 1.0
-            }
+//            SimplexBump {
+//                id: simplexBump
+//                enabled: true
+//                intensity: 0.1
+//                scale: 1.0
+//            }
         }
     }
 
