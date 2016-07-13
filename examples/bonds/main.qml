@@ -1,4 +1,4 @@
-import QtQuick 2.2
+import QtQuick 2.6
 import QtQuick.Controls 1.1
 import QtQuick.Window 2.1
 import QtQuick.Dialogs 1.1
@@ -24,7 +24,7 @@ ApplicationWindow {
         anchors.fill: parent
         simulator: simulator
         camera: camera
-        backgroundColor: "#aaa"
+        backgroundColor: "#fff"
         navigator: navigator
 
         TrackballNavigator {
@@ -38,6 +38,25 @@ ApplicationWindow {
 //            camera: camera
 //            texture: ":/1024.png"
 //        }
+
+        Bonds {
+            id: bonds
+            visible: true
+            color: "#ff17e6"
+
+            Light {
+                id: light1
+                ambientColor: bonds.color
+                specularColor: "white"
+                diffuseColor: bonds.color
+                ambientIntensity: 0.5
+                diffuseIntensity: 0.5
+                specularIntensity: 1.0
+                shininess: 40.0
+                attenuation: 0.01
+                position: Qt.vector3d(0.5, 0.5, 0.5)// Qt.vector3d(camera.position.x + 0.25, camera.position.y + 0.25, camera.position.z + 0.25)
+            }
+        }
 
         Spheres {
             id: spheres
@@ -147,5 +166,6 @@ ApplicationWindow {
     Camera {
         id: camera
         nearPlane: 0.1
+        position: Qt.vector3d(0.0, 0.0, 20)
     }
 }

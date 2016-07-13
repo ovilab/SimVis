@@ -3,5 +3,6 @@ SUBDIRS += spheres \
     simple \
     marchingcubes \
     qmatplotpp \
-    Triangles
+    Triangles \
+    bonds
 CONFIG += ordered

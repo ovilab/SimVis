@@ -21,11 +21,7 @@ varying highp vec3 v2;
 varying highp vec3 perpendicular;
 varying highp vec3 biperpendicular;
 
-uniform vec3 eyePosition;
-uniform mat3 modelNormalMatrix;
-uniform mat3 modelViewNormal;
-
-float square(vec3 a) {
+highp float square(highp vec3 a) {
     return dot(a, a);
 }
 
@@ -48,10 +44,10 @@ void main(void) {
     highp vec3 E = diff * basis;
 
     // radius and length of cone
-    float r1 = radiusA;
-    float r2 = radiusB;
-    float rd = r2 - r1;
-    float l = length(base - end);
+    highp float r1 = radiusA;
+    highp float r2 = radiusB;
+    highp float rd = r2 - r1;
+    highp float l = length(base - end);
 
     // Ray direction in cylinder basis
     highp vec3 D = rayDirection * basis;
@@ -72,14 +68,14 @@ void main(void) {
     //      a = Dx^2 + Dy^2 - (...)
     //      b = 2*Dx*Ex + 2*Dy*Ey - (...)
     //      c = Ex^2 + Ey^2 - (...)
-    float a = D.x*D.x + D.y*D.y - (rd*rd/(l*l)*D.z*D.z);
-    float b = 2.0*E.x*D.x + 2.0*E.y*D.y - (2.0*rd*rd/(l*l)*E.z*D.z + 2*r1*rd/l*D.z);
-    float c = E.x*E.x + E.y*E.y - (r1*r1 + rd*rd/(l*l)*E.z*E.z + 2*r1*rd/l*E.z);
+    highp float a = D.x*D.x + D.y*D.y - (rd*rd/(l*l)*D.z*D.z);
+    highp float b = 2.0*E.x*D.x + 2.0*E.y*D.y - (2.0*rd*rd/(l*l)*E.z*D.z + 2.0*r1*rd/l*D.z);
+    highp float c = E.x*E.x + E.y*E.y - (r1*r1 + rd*rd/(l*l)*E.z*E.z + 2.0*r1*rd/l*E.z);
     // the solutions are
     //      t = (-b +/- sqrt(b*b - 4*a*c)) / 2*a
     // the discriminant of the above equation is
     //      d = b*b - 4*a*c
-    float d = b*b - 4.0*a*c;
+    highp float d = b*b - 4.0*a*c;
     // if this is below zero, there is no solution
     // and we are outside cylinder
 
@@ -90,28 +86,28 @@ void main(void) {
     }
 
     // solution t
-    float distSide = (-b + sqrt(d))/(2.0*a);
+    highp float distSide = (-b + sqrt(d))/(2.0*a);
 
     // ray-plane intersection
     // d = ((p0 - E) . n) / (D . n)
-    float distBase = dot(base - rayTarget, axis) / dot(rayDirection, axis);
-    float distEnd = dot(end - rayTarget, axis) / dot(rayDirection, axis);
+    highp float distBase = dot(base - rayTarget, axis) / dot(rayDirection, axis);
+    highp float distEnd = dot(end - rayTarget, axis) / dot(rayDirection, axis);
 
     // produce the possible points of the solutions
     highp vec3 sidePoint = rayTarget + distSide * rayDirection;
     highp vec3 basePoint = rayTarget + distBase * rayDirection;
     highp vec3 endPoint = rayTarget + distEnd * rayDirection;
 
-    float baseDistance = square(basePoint - base);
-    float endDistance = square(endPoint - end);
+    highp float baseDistance = square(basePoint - base);
+    highp float endDistance = square(endPoint - end);
 
-    float screenSideDistance = square(sidePoint);
-    float screenBaseDistance = square(basePoint);
-    float screenEndDistance = square(endPoint);
+    highp float screenSideDistance = square(sidePoint);
+    highp float screenBaseDistance = square(basePoint);
+    highp float screenEndDistance = square(endPoint);
 
     // Need only to solve for closest sphere
     highp vec3 spherePosition;
-    float sphereRadius;
+    highp float sphereRadius;
     if(square(rayTarget - base) < square(rayTarget - end)) {
         spherePosition = base;
         sphereRadius = vs_sphereRadius1;
@@ -129,18 +125,18 @@ void main(void) {
     //     P(t) = E + t*D
     // We substitute ray into sphere equation to get
     //     (Ex + Dx * t)^2 + (Ey + Dy * t)^2 + (Ez + Dz * t)^2 = r^2
-    float sr2 = sphereRadius*sphereRadius;
-    float sa = sD.x*sD.x + sD.y*sD.y + sD.z*sD.z;
-    float sb = 2.0*sE.x*sD.x + 2.0*sE.y*sD.y + 2.0*sE.z*sD.z;
-    float sc = sE.x*sE.x + sE.y*sE.y + sE.z*sE.z - sr2;
+    highp float sr2 = sphereRadius*sphereRadius;
+    highp float sa = sD.x*sD.x + sD.y*sD.y + sD.z*sD.z;
+    highp float sb = 2.0*sE.x*sD.x + 2.0*sE.y*sD.y + 2.0*sE.z*sD.z;
+    highp float sc = sE.x*sE.x + sE.y*sE.y + sE.z*sE.z - sr2;
 
     // discriminant of sphere equation
-    float sd = sb*sb - 4.0*sa*sc;
+    highp float sd = sb*sb - 4.0*sa*sc;
     if(sd > 0.0) {
         // solution t for sphere
-        float distSphere = (-sb + sqrt(sd))/(2.0*sa);
+        highp float distSphere = (-sb + sqrt(sd))/(2.0*sa);
         highp vec3 spherePoint = rayTarget + distSphere * rayDirection;
-        float screenSphereDistance = square(spherePoint);
+        highp float screenSphereDistance = square(spherePoint);
         // check if sphere is closer
         if(screenSphereDistance < screenSideDistance) {
             discard;
@@ -150,7 +146,7 @@ void main(void) {
     bool isSideSolution = true;
 
     highp vec3 normal;
-    float dist = distSide;
+    highp float dist = distSide;
 
 
     // first, test if the end cap planes are closer to the
@@ -188,9 +184,9 @@ void main(void) {
     // use the perpendicular vector to define the texture coordinate
     highp vec3 xyPoint = vec3(cylPoint.x, cylPoint.y, 0.0);
     highp vec3 xyPointWorld = cylinderWorldBasis * xyPoint;
-    float x = dot(xyPointWorld, perpendicular);
-    float y = dot(xyPointWorld, biperpendicular);
-    float radius = r1 + rd * cylPoint.z / l; // interpolates from r1 to t2 by z
+    highp float x = dot(xyPointWorld, perpendicular);
+    highp float y = dot(xyPointWorld, biperpendicular);
+    highp float radius = r1 + rd * cylPoint.z / l; // interpolates from r1 to t2 by z
     highp vec2 texCoord = vec2(0.5 + x / (2.0*radius), 0.5 + y / (2.0*radius));
 
     if(isSideSolution) {
@@ -206,11 +202,19 @@ void main(void) {
         normal = cylinderWorldBasis * cylNormal;
         normal = normalize(normal);
 
-        float pi = 3.1415926535897932384626433832795;
-        float z = cylPoint.z / l;
+        highp float pi = 3.1415926535897932384626433832795;
+        highp float z = cylPoint.z / l;
         texCoord = vec2(z, 0.5 + atan(y, x) / (2.0 * pi));
     }
 
     // calculate texture coordinate
-    vec3 position = cylPointWorld;
+    highp vec3 position = cylPointWorld;
+
+    highp vec3 light = vec3(1.0, 1.0, 1.0);
+
+#ifdef DEFAULTLIGHT
+    light = defaultLight(normal, position, color);
+#endif
+
+    gl_FragColor = vec4(color*light, 1.0);
 }

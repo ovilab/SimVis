@@ -41,6 +41,7 @@ class Bonds : public Renderable
     Q_OBJECT
     Q_PROPERTY(bool dirty READ dirty WRITE setDirty NOTIFY dirtyChanged)
     Q_PROPERTY(float radius READ radius WRITE setRadius NOTIFY radiusChanged)
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 public:
     Bonds(QQuickItem *parent = 0);
     ~Bonds();
@@ -49,21 +50,24 @@ public:
     bool dirty() const;
     QVector<BondsVBOData> &vertices();
     float radius() const;
+    QColor color() const;
 
 public slots:
     void setDirty(bool dirty);
     void setRadius(float radius);
+    void setColor(QColor color);
 
 signals:
     void dirtyChanged(bool dirty);
     void radiusChanged(float radius);
+    void colorChanged(QColor color);
 
 private:
     QVector<BondsVBOData> m_vertices;
-
-    friend class BondsRenderer;
     bool m_dirty = false;
     float m_radius = 0.01f;
+    QColor m_color = "white";
+    friend class BondsRenderer;
 };
 
 

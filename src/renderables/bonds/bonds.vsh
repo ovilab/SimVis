@@ -1,5 +1,3 @@
-#version 410
-
 attribute highp vec3 vertex1Position;
 attribute highp vec3 vertex2Position;
 attribute highp float radius1;
@@ -61,8 +59,8 @@ void main(void)
     highp vec3 v1 = vs_vertex1Position;
     highp vec3 v2 = vs_vertex2Position;
 
-    highp vec3 mv1 = (modelMatrix * vec4(v1, 1.0)).xyz;
-    highp vec3 mv2 = (modelMatrix * vec4(v2, 1.0)).xyz;
+    highp vec3 mv1 = v1;
+    highp vec3 mv2 = v2;
 
     highp vec3 delta = v2 - v1;
     highp vec3 deltaNormalized = normalize(delta);
@@ -75,7 +73,7 @@ void main(void)
     radiusA = vs_radius1;
     radiusB = vs_radius2;
 
-    float rmax = max(radiusA, radiusB);
+    highp float rmax = max(radiusA, radiusB);
 
     highp vec3 center = (mv1 + mv2) * 0.5;
     highp vec3 cam_dir = (eyePosition - center);
@@ -91,27 +89,27 @@ void main(void)
     // except that it doesn't change vector lengths
     // and preserves normals when the modelview matrix has
     // non-uniform scaling
-    cylinderBasis = mat3(modelViewNormal * outward, // U
-                         modelViewNormal * right, // V
-                         modelViewNormal * deltaNormalized); // axis
+    cylinderBasis = mat3((cp_modelViewMatrix * vec4(outward, 0.0)).xyz, // U
+                         (cp_modelViewMatrix * vec4(right, 0.0)).xyz, // V
+                         (cp_modelViewMatrix * vec4(deltaNormalized, 0.0)).xyz); // axis
 
     cylinderWorldBasis = mat3(normalize(outward), // U
                               normalize(right), // V
                               normalize(deltaNormalized)); // axis
 
-    highp vec4 mvv1 = modelView * vec4(v1, 1.0);
-    highp vec4 mvv2 = modelView * vec4(v2, 1.0);
+    highp vec4 mvv1 = cp_modelViewMatrix * vec4(v1, 1.0);
+    highp vec4 mvv2 = cp_modelViewMatrix * vec4(v2, 1.0);
     // NOTE: dividing by w here is typically not necessary
     // w is seldom modified by model view matrices
     base = mvv1.xyz / mvv1.w;
     end = mvv2.xyz / mvv2.w;
 
-    highp vec3 cameraToV1 = eyePosition - mv1;
-    highp vec3 cameraToV2 = eyePosition - mv2;
-    float distanceToV1 = dot(cameraToV1, cameraToV1);
-    float distanceToV2 = dot(cameraToV2, cameraToV2);
+    highp vec3 cameraToV1 = cp_cameraPosition - mv1;
+    highp vec3 cameraToV2 = cp_cameraPosition - mv2;
+    highp float distanceToV1 = dot(cameraToV1, cameraToV1);
+    highp float distanceToV2 = dot(cameraToV2, cameraToV2);
 
-    float sign = 1.0;
+    highp float sign = 1.0;
     if(distanceToV1 > distanceToV2) {
         highp vec3 vtmp = v1;
         v1 = v2;
@@ -137,11 +135,24 @@ void main(void)
     texCoords[ 4] = vec2(-1.0, 0.0);
     texCoords[ 5] = vec2(1.0, 0.0);
 
+    /*
+    uniform highp mat4 cp_modelViewMatrix;
+    uniform highp mat4 cp_projectionMatrix;
+    uniform highp mat4 cp_modelViewMatrixInverse;
+    uniform highp mat4 cp_projectionMatrixInverse;
+    uniform highp mat4 cp_modelViewProjectionMatrix;
+    uniform highp vec3 cp_cameraPosition;
+    uniform highp vec3 cp_viewVector;
+    uniform highp vec3 cp_upVector;
+    uniform highp vec3 cp_rightVector;
+    uniform highp float cp_time;
+      */
+
     int i = int(vertexId);
-    color = vec3(1.0, 1.0, 1.0);
+    color = vec3(0.9, 0.7, 0.8);
     highp vec4 ppos = vec4(vertices[i], 1.0);
-    modelPosition = (modelMatrix * ppos).xyz;
-    modelViewPosition = (modelView * ppos).xyz;
+    modelPosition = ppos.xyz;
+    modelViewPosition = (cp_modelViewMatrix * ppos).xyz;
     worldPosition = vertices[i];
-    gl_Position = mvp*vec4(vertices[i], 1.0);
+    gl_Position = cp_modelViewProjectionMatrix*vec4(vertices[i], 1.0);
 }
