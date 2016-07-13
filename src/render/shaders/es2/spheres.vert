@@ -2,6 +2,7 @@ attribute highp vec3 vertexPosition;
 attribute highp vec2 vertexTexCoord;
 attribute highp float vertexId;
 attribute highp vec3 pos;
+attribute highp vec3 col;
 
 uniform highp vec3 viewVector;
 uniform highp vec3 upVector;
@@ -10,12 +11,14 @@ uniform highp vec3 rightVector;
 uniform highp mat4 mvp;
 
 varying highp vec3 position;
+varying highp vec3 color;
 varying highp vec2 planePosition;
 
 void main() {
     highp float a_scale = 1.0;
 
     position = vertexPosition + pos;
+    color = col;
 
     planePosition = vertexTexCoord;
 
