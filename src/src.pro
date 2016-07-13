@@ -16,91 +16,10 @@ uri = com.mycompany.qmlcomponents
 
 QT += qml quick widgets opengl openglextensions
 
-SOURCES += \
-    core/camera.cpp \
-    core/navigator.cpp \
-    core/quickworker.cpp \
-    core/renderable.cpp \
-    core/simulator.cpp \
-    core/simvisplugin.cpp \
-    navigators/trackballnavigator.cpp \
-    core/visualizer.cpp \
-    core/cameralens.cpp \
-    core/lookattransform.cpp \
-    renderables/billboards/billboards.cpp \
-    renderables/points/points.cpp \
-    renderables/marchingcubes/marchingcubes.cpp \
-    renderables/marchingcubes/marchingcubesgenerator.cpp \
-    core/shadereffect.cpp \
-    shadereffects/simplexbump.cpp \
-    shadereffects/simplextexture.cpp \
-    renderables/spheres/spheres.cpp \
-    shadereffects/light.cpp \
-    renderables/skybox/skybox.cpp \
-    shadereffects/skyboxreflection.cpp \
-    renderables/trianglecollection/trianglecollection.cpp \
-    shadereffects/periodiccopies.cpp \
-    shadereffects/slice.cpp \
-    renderables/cylinders/cylinders.cpp \
-    renderables/bonds/bonds.cpp \
-    renderables/lines/lines.cpp \
-    renderables/noiseviewer/noiseviewer.cpp \
-    navigators/flymodenavigator.cpp
-
-HEADERS += \
-    core/navigator.h \
-    core/quickworker.h \
-    core/renderable.h \
-    core/simulator.h \
-    core/camera.h \
-    core/simvisplugin.h \
-    navigators/trackballnavigator.h \
-    core/visualizer.h \
-    core/camera_p.h \
-    core/cameralens.h \
-    core/cameralens_p.h \
-    core/lookattransform.h \
-    core/lookattransform_p.h \
-    renderables/billboards/billboards.h \
-    renderables/points/points.h \
-    renderables/marchingcubes/marchingcubes.h \
-    renderables/marchingcubes/marchingcubesgenerator.h \
-    SimVis/Billboards \
-    SimVis/Points \
-    SimVis/MarchingCubes \
-    core/shadereffect.h \
-    shadereffects/simplexbump.h \
-    shadereffects/simplextexture.h \
-    renderables/spheres/spheres.h \
-    SimVis/Spheres \
-    shadereffects/light.h \
-    renderables/skybox/skybox.h \
-    shadereffects/skyboxreflection.h \
-    renderables/trianglecollection/trianglecollection.h \
-    SimVis/QuickWorker \
-    SimVis/Renderable \
-    SimVis/Simulator \
-    SimVis/TriangleCollection \
-    shadereffects/periodiccopies.h \
-    shadereffects/slice.h \
-    renderables/cylinders/cylinders.h \
-    renderables/bonds/bonds.h \
-    SimVis/Cylinders \
-    renderables/lines/lines.h \
-    SimVis/Lines \
-    renderables/noiseviewer/noiseviewer.h \
-    SimVis/NoiseViewer \
-    navigators/flymodenavigator.h
-
-DISTFILES = qmldir \
-    core/simvisplugin.json
+include(../package.pri)
 
 DESTDIR = $$simvis_builddir/dist/SimVis
 HEADERS_DESTDIR = $$simvis_builddir/dist/include
-
-RESOURCES += \
-    shaders.qrc \
-    qmldir.qrc
 
 # Used for dynamic builds
 

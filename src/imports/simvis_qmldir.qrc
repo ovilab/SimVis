@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>SimVis/qmldir</file>
+    </qresource>
+</RCC>
