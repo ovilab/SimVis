@@ -67,7 +67,7 @@ void Bonds::setColor(QColor color)
 
 BondsRenderer::BondsRenderer()
 {
-    m_numberOfVBOs = 1;
+    m_numberOfVBOs = 2;
 }
 
 void BondsRenderer::synchronize(Renderable* renderer)
@@ -86,8 +86,10 @@ void BondsRenderer::uploadVBOs(Bonds* bonds)
 {
     if(!bonds->dirty()) return;
     QVector<BondData> &dataVector = bonds->m_data;
+    QVector<GLuint> &indices = bonds->m_indices;
     QVector<BondsVBOData>& vertices = bonds->m_vertices;
     vertices.resize(dataVector.size()*6); // 6 vertices per bond
+    indices.resize(dataVector.size()*12); // 4 triangles per bond
 
     for(int i=0; i<dataVector.size(); i++) {
         BondData &data = dataVector[i];
@@ -101,6 +103,22 @@ void BondsRenderer::uploadVBOs(Bonds* bonds)
             vertices[6*i+k].sphereRadius2 = data.sphereRadius2;
             vertices[6*i+k].vertexId = k;
         }
+
+        indices [12*i + 0] = 6*i+1;
+        indices [12*i + 1] = 6*i+1;
+        indices [12*i + 2] = 6*i+0;
+
+        indices [12*i + 3] = 6*i+2;
+        indices [12*i + 4] = 6*i+3;
+        indices [12*i + 5] = 6*i+1;
+
+        indices [12*i + 6] = 6*i+4;
+        indices [12*i + 7] = 6*i+3;
+        indices [12*i + 8] = 6*i+2;
+
+        indices [12*i + 9] = 6*i+4;
+        indices [12*i + 10] = 6*i+5;
+        indices [12*i + 11] = 6*i+3;
     }
 
     if(vertices.size() < 1) {
@@ -114,6 +132,11 @@ void BondsRenderer::uploadVBOs(Bonds* bonds)
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
     glFunctions()->glBufferData(GL_ARRAY_BUFFER, numberOfVertices * sizeof(BondsVBOData), &vertices.front(), GL_STATIC_DRAW);
     m_vertexCount = vertices.size();
+
+    // Transfer index data to VBO 1
+    glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
+    glFunctions()->glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices.front(), GL_STATIC_DRAW);
+    m_indexCount = indices.size();
 }
 
 void BondsRenderer::beforeLinkProgram() {
@@ -125,10 +148,8 @@ void BondsRenderer::render()
 {
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
+    glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
     program().setUniformValue("color", m_color);
-
-    // Offset for position
-    quintptr offset = 0;
 
     // Tell OpenGL programmable pipeline how to locate vertex position data
     int vertex1Position = program().attributeLocation("vertex1Position");
@@ -139,13 +160,14 @@ void BondsRenderer::render()
     int sphereRadius2 = program().attributeLocation("sphereRadius2");
     int vertexId = program().attributeLocation("vertexId");
 
+    // Offset for position
+    quintptr offset = 0;
 
     program().enableAttributeArray(vertex1Position);
     glFunctions()->glVertexAttribPointer(vertex1Position, 3, GL_FLOAT, GL_FALSE, sizeof(BondsVBOData), (const void *)offset);
 
     offset += sizeof(QVector3D);
-
-    program().enableAttributeArray(vertex2Position);
+ program().enableAttributeArray(vertex2Position);
     glFunctions()->glVertexAttribPointer(vertex2Position, 3, GL_FLOAT, GL_FALSE, sizeof(BondsVBOData), (const void *)offset);
 
     offset += sizeof(QVector3D);
@@ -176,13 +198,15 @@ void BondsRenderer::render()
     offset += sizeof(GLfloat);
 
     glFunctions()->glEnable(GL_DEPTH_TEST);
-    glFunctions()->glEnable(GL_CULL_FACE);
-    glFunctions()->glEnable(GL_FRONT_AND_BACK);
-
     glFunctions()->glDepthMask(GL_TRUE);
-    glFunctions()->glDrawArrays(GL_TRIANGLE_STRIP, 0, m_vertexCount);
-    // glFunctions()->glDrawElements(GL_TRIANGLE_STRIP, m_indexCount, GL_UNSIGNED_INT, 0);
+    glFunctions()->glEnable(GL_CULL_FACE);
+    glFunctions()->glCullFace(GL_FRONT_AND_BACK);
+
+    // glFunctions()->glDrawArrays(GL_TRIANGLES, 0, m_vertexCount);
+
+    glFunctions()->glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
     glFunctions()->glDisable(GL_DEPTH_TEST);
+    glFunctions()->glDisable(GL_CULL_FACE);
 
     program().disableAttributeArray(vertex1Position);
     program().disableAttributeArray(vertex2Position);

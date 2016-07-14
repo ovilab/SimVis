@@ -81,9 +81,9 @@ void main(void)
     // except that it doesn't change vector lengths
     // and preserves normals when the modelview matrix has
     // non-uniform scaling
-    cylinderBasis = mat3((cp_modelViewMatrix * vec4(outward, 0.0)).xyz, // U
-                         (cp_modelViewMatrix * vec4(right, 0.0)).xyz, // V
-                         (cp_modelViewMatrix * vec4(deltaNormalized, 0.0)).xyz); // axis
+    cylinderBasis = mat3(cp_modelViewNormalMatrix * outward, // U
+                             cp_modelViewNormalMatrix * right, // V
+                             cp_modelViewNormalMatrix * deltaNormalized); // axis
 
     cylinderWorldBasis = mat3(normalize(outward), // U
                               normalize(right), // V

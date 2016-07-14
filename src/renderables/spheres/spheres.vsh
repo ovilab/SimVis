@@ -1,33 +1,40 @@
-// BEGIN spheres.vsh
-attribute highp vec3 a_position;
-attribute highp vec3 a_color;
-attribute highp vec2 a_texcoord;
-attribute highp float a_sphereId;
-attribute highp float a_scale;
-attribute highp float a_vertexId;
+attribute highp vec3 vertexPosition;
+attribute highp float vertexId;
+attribute highp vec3 col;
+attribute highp float scale;
 
-uniform highp vec3 cp_upPlusRightHalf;
-uniform highp vec3 cp_upMinusRightHalf;
-
-varying highp vec2 coords;
+varying highp vec3 modelSpherePosition;
+varying highp vec3 modelPosition;
 varying highp vec3 color;
-varying highp vec3 vertexPosition;
-varying highp float sphereId;
+varying highp float radius;
+uniform highp vec3 cp_upMinusRightHalf;
+uniform highp vec3 cp_upPlusRightHalf;
+highp vec3 makePerpendicular(vec3 v) {
+    if(v.x == 0.0 && v.y == 0.0) {
+        if(v.z == 0.0) {
+            return vec3(0.0, 0.0, 0.0);
+        }
+        return vec3(0.0, 1.0, 0.0);
+    }
+    return vec3(-v.y, v.x, 0.0);
+}
 
 void main() {
-    coords = 2.0*a_texcoord - 1.0;
-    // vertexPosition = a_position.xyz + 0.5*(cp_rightVector*coords.x + cp_upVector*coords.y);
+    highp vec3 position = vertexPosition;
+    color = col;
+    radius = scale;
+    modelSpherePosition = position;
 
-    vertexPosition = a_position.xyz;
-    vertexPosition -= cp_upPlusRightHalf*(a_scale*float(a_vertexId==0.0));
-    vertexPosition -= cp_upMinusRightHalf*(a_scale*float(a_vertexId==1.0));
-    vertexPosition += cp_upPlusRightHalf*(a_scale*float(a_vertexId==2.0));
-    vertexPosition += cp_upMinusRightHalf*(a_scale*float(a_vertexId==3.0));
+    vec3 view = normalize(position - cp_cameraPosition);
+    vec3 right = normalize(makePerpendicular(view));
+    vec3 up = cross(right, view);
 
-    gl_Position = cp_modelViewProjectionMatrix*vec4(vertexPosition, 1.0);
+    position += 2.0*(-up - right)*(scale*float(vertexId==0.0));
+    position += 2.0*(-up + right)*(scale*float(vertexId==1.0));
+    position += 2.0*(up - right)*(scale*float(vertexId==2.0));
+    position += 2.0*(up + right)*(scale*float(vertexId==3.0));
 
-    sphereId = a_sphereId;
+    modelPosition = position;
 
-    color = a_color;
+    gl_Position = cp_modelViewProjectionMatrix*vec4(position, 1.0);
 }
-// END spheres.vsh

@@ -80,8 +80,8 @@ void main(void) {
     // and we are outside cylinder
 
     if (d < 0.0) {
-        //        fragcolor = vec4(0.2, 1.0, 0.2, 1.0);
-        //        return;
+//        gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+//        return;
         discard;
     }
 
@@ -140,6 +140,8 @@ void main(void) {
         // check if sphere is closer
         if(screenSphereDistance < screenSideDistance) {
             discard;
+//            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+//            return;
         }
     }
 
@@ -155,9 +157,13 @@ void main(void) {
     // don't get solutions beyond the cone epicenter ><
     if((screenBaseDistance <= screenSideDistance && screenBaseDistance <= screenEndDistance) && baseDistance < r1*r1) {
         discard;
+//        gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+//        return;
     }
     if(screenEndDistance <= screenSideDistance && screenEndDistance <= screenBaseDistance && endDistance < r2*r2) {
         discard;
+//        gl_FragColor = vec4(0.0, 1.0, 1.0, 1.0);
+//        return;
     }
 
     if(isSideSolution) {
@@ -170,9 +176,13 @@ void main(void) {
         // if cos angle < 0, the point is outside of cylinder
         if(dot(sidePoint - base, axis) < 0.0) {
             discard;
+//            gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
+//            return;
         }
         if(dot(sidePoint - end, -axis) < 0.0) {
             discard;
+//            gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+//            return;
         }
     }
 

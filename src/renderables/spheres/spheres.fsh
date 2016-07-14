@@ -1,36 +1,42 @@
-// BEGIN spheres.fsh
-uniform sampler2D texture;
-varying highp vec2 coords;
+varying highp vec3 modelPosition;
+varying highp vec3 modelSpherePosition;
 varying highp vec3 color;
-varying highp vec3 vertexPosition;
-varying highp float sphereId;
+varying highp float radius;
 
-void main() {
-    highp float x = coords.s;
-    highp float y = coords.t;
-    highp float r2 = x*x + y*y;
-    if(r2 > 1.0) {
-        // 0.9 so we don't get this light circle on the back of the spheres
+void main(void) {
+    highp vec3 rayDirection = cp_cameraPosition - modelPosition;
+    highp vec3 rayOrigin = modelPosition - modelSpherePosition;
+
+    highp vec3 E = rayOrigin;
+    highp vec3 D = rayDirection;
+
+    // Sphere equation
+    //      x^2 + y^2 + z^2 = r^2
+    // Ray equation is
+    //     P(t) = E + t*D
+    // We substitute ray into sphere equation to get
+    //     (Ex + Dx * t)^2 + (Ey + Dy * t)^2 + (Ez + Dz * t)^2 = r^2
+    highp float r2 = radius*radius;
+    highp float a = D.x*D.x + D.y*D.y + D.z*D.z;
+    highp float b = 2.0*E.x*D.x + 2.0*E.y*D.y + 2.0*E.z*D.z;
+    highp float c = E.x*E.x + E.y*E.y + E.z*E.z - r2;
+
+    // discriminant of sphere equation
+    highp float d = b*b - 4.0*a*c;
+    if(d < 0.0) {
         discard;
-    } else {
-        highp float z = sqrt(1.0 - r2); // Equation for sphere, x^2 + y^2 + z^2 = R^2
-
-        highp vec3 light = vec3(1.0, 1.0, 1.0);
-        highp vec3 normal = x*cp_rightVector - y*cp_upVector - z*cp_viewVector;
-
-    #ifdef SIMPLEXBUMP
-        normal = simplexbump(normal, normal);
-    #endif
-
-    #ifdef DEFAULTLIGHT
-        light = defaultLight(normal, vertexPosition, color);
-    #endif
-
-    #ifdef SKYBOXREFLECTION
-        light += skyboxReflection(normal, vertexPosition);
-    #endif
-
-        gl_FragColor = vec4(color*light, 1.0);
     }
+    highp float t = (-b + sqrt(d))/(2.0*a);
+    highp vec3 sphereIntersection = rayOrigin + t * rayDirection;
+
+    highp vec3 normal = normalize(sphereIntersection);
+    highp float pi = 3.1415926535897932384626433832795;
+
+    highp vec3 position = modelSpherePosition + sphereIntersection;
+    highp vec3 light = vec3(1.0, 1.0, 1.0);
+    #ifdef DEFAULTLIGHT
+        light = defaultLight(normal, position, color);
+    #endif
+
+    gl_FragColor = vec4(color*light, 1.0);
 }
-// END spheres.fsh

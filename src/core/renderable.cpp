@@ -132,6 +132,7 @@ void RenderableRenderer::prepareAndRender()
     QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
     m_program.setUniformValue("cp_modelViewProjectionMatrix", modelViewProjectionMatrix);
     m_program.setUniformValue("cp_modelViewMatrix", m_modelViewMatrix);
+    m_program.setUniformValue("cp_modelViewNormalMatrix", m_modelViewMatrix.normalMatrix());
     m_program.setUniformValue("cp_projectionMatrix", m_projectionMatrix);
     m_program.setUniformValue("cp_modelViewMatrixInverse", m_modelViewMatrixInverse);
     m_program.setUniformValue("cp_projectionMatrixInverse", m_projectionMatrixInverse);

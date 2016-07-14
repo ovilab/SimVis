@@ -74,6 +74,7 @@ signals:
 private:
     QVector<BondsVBOData> m_vertices;
     QVector<BondData> m_data;
+    QVector<GLuint> m_indices;
     bool m_dirty = false;
     float m_radius = 0.01f;
     QColor m_color = "blue";

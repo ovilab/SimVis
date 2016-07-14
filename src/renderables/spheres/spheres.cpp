@@ -97,7 +97,6 @@ void SpheresRenderer::uploadVBONoGeometryShader(Spheres* spheres) {
     if(data.size() < 1 || !spheres->dirty()) {
         return;
     }
-    float scale = spheres->scale();
     QVector<SphereNoGeometryShaderVBOData>& vertices = spheres->m_verticesNoGeometryShader;
     QVector<GLuint>& indices = spheres->m_indices;
     int numberOfVertices = data.size()*4;
@@ -106,32 +105,23 @@ void SpheresRenderer::uploadVBONoGeometryShader(Spheres* spheres) {
 
     for(auto i=0; i<data.size(); i++) {
         QVector3D &position = data[i].position;
-        float additionalScale = scale;
-        additionalScale *= data[i].scale;
+        float scale = data[i].scale;
 
-        vertices[4*i + 0].sphereId = i;
-        vertices[4*i + 0].scale = additionalScale;
+        vertices[4*i + 0].scale = scale;
         vertices[4*i + 0].vertexId = 0;
         vertices[4*i + 0].position = position;
-        vertices[4*i + 0].textureCoord= QVector2D(0,1);
 
-        vertices[4*i + 1].sphereId = i;
-        vertices[4*i + 1].scale = additionalScale;
+        vertices[4*i + 1].scale = scale;
         vertices[4*i + 1].vertexId = 1;
         vertices[4*i + 1].position = position;
-        vertices[4*i + 1].textureCoord= QVector2D(1,1);
 
-        vertices[4*i + 2].sphereId = i;
-        vertices[4*i + 2].scale = additionalScale;
+        vertices[4*i + 2].scale = scale;
         vertices[4*i + 2].vertexId = 2;
         vertices[4*i + 2].position = position;
-        vertices[4*i + 2].textureCoord= QVector2D(1,0);
 
-        vertices[4*i + 3].sphereId = i;
-        vertices[4*i + 3].scale = additionalScale;
+        vertices[4*i + 3].scale = scale;
         vertices[4*i + 3].vertexId = 3;
         vertices[4*i + 3].position = position;
-        vertices[4*i + 3].textureCoord= QVector2D(0,0);
 
         vertices[4*i + 0].color = data[i].color;
         vertices[4*i + 1].color = data[i].color;
@@ -142,9 +132,9 @@ void SpheresRenderer::uploadVBONoGeometryShader(Spheres* spheres) {
         indices [6*i + 1] = 4*i+1;
         indices [6*i + 2] = 4*i+2;
 
-        indices [6*i + 3] = 4*i+2;
+        indices [6*i + 3] = 4*i+1;
         indices [6*i + 4] = 4*i+3;
-        indices [6*i + 5] = 4*i+0;
+        indices [6*i + 5] = 4*i+2;
     }
 
     spheres->setDirty(false);
@@ -218,35 +208,32 @@ void SpheresRenderer::renderNoGeometryShader() {
     // Offset for position
     quintptr offset = 0;
 
+    int vertexPositionLocation = program().attributeLocation("vertexPosition");
+    int scaleLocation = program().attributeLocation("scale");
+    int vertexIdLocation = program().attributeLocation("vertexId");
+    int colorLocation = program().attributeLocation("col");
+
     // Tell OpenGL programmable pipeline how to locate vertex position data
-    int sphereIdLocation = program().attributeLocation("a_sphereId");
-    program().enableAttributeArray(sphereIdLocation);
-    glFunctions()->glVertexAttribPointer(sphereIdLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
-
-    offset += sizeof(GLfloat);
-
-    int scaleLocation = program().attributeLocation("a_scale");
     program().enableAttributeArray(scaleLocation);
     glFunctions()->glVertexAttribPointer(scaleLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
 
     offset += sizeof(GLfloat);
 
-    int vertexIdLocation = program().attributeLocation("a_vertexId");
     program().enableAttributeArray(vertexIdLocation);
     glFunctions()->glVertexAttribPointer(vertexIdLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
 
     offset += sizeof(GLfloat);
 
     // Tell OpenGL programmable pipeline how to locate vertex position data
-    int vertexLocation = program().attributeLocation("a_position");
-    program().enableAttributeArray(vertexLocation);
-    glFunctions()->glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
+
+    program().enableAttributeArray(vertexPositionLocation);
+    glFunctions()->glVertexAttribPointer(vertexPositionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
 
     // Offset for texture coordinate
     offset += sizeof(QVector3D);
 
     // Tell OpenGL programmable pipeline how to locate vertex color data
-    int colorLocation = program().attributeLocation("a_color");
+
     program().enableAttributeArray(colorLocation);
     glFunctions()->glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
 
@@ -254,19 +241,16 @@ void SpheresRenderer::renderNoGeometryShader() {
     offset += sizeof(QVector3D);
 
     // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
-    int texcoordLocation = program().attributeLocation("a_texcoord");
-    program().enableAttributeArray(texcoordLocation);
-    glFunctions()->glVertexAttribPointer(texcoordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
-    // Draw cube geometry using indices from VBO 1
 
     glFunctions()->glEnable(GL_DEPTH_TEST);
     glFunctions()->glDepthMask(GL_TRUE);
     glFunctions()->glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
     glFunctions()->glDisable(GL_DEPTH_TEST);
 
-    program().disableAttributeArray(vertexLocation);
+    program().disableAttributeArray(vertexPositionLocation);
     program().disableAttributeArray(colorLocation);
-    program().disableAttributeArray(texcoordLocation);
+    program().disableAttributeArray(scaleLocation);
+    program().disableAttributeArray(vertexIdLocation);
 }
 
 void SpheresRenderer::renderGeometryShader() {
