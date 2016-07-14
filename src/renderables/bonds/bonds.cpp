@@ -199,14 +199,12 @@ void BondsRenderer::render()
 
     glFunctions()->glEnable(GL_DEPTH_TEST);
     glFunctions()->glDepthMask(GL_TRUE);
-    glFunctions()->glEnable(GL_CULL_FACE);
-    glFunctions()->glCullFace(GL_FRONT_AND_BACK);
+    glFunctions()->glDisable(GL_CULL_FACE);
 
     // glFunctions()->glDrawArrays(GL_TRIANGLES, 0, m_vertexCount);
 
     glFunctions()->glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
     glFunctions()->glDisable(GL_DEPTH_TEST);
-    glFunctions()->glDisable(GL_CULL_FACE);
 
     program().disableAttributeArray(vertex1Position);
     program().disableAttributeArray(vertex2Position);
