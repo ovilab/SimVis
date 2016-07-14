@@ -29,22 +29,26 @@ SimulatorWorker *MySimulator::createWorker()
 MyWorker::MyWorker()
 {
     using namespace SimVis;
-    m_positions.resize(5);
-    m_velocities.resize(m_positions.size());
-    double size = 10;
-    for(int i=0; i<m_positions.size(); i++) {
-        float x = ((2.0*rand() / double(RAND_MAX))-1.0)*size;
-        float y = ((2.0*rand() / double(RAND_MAX))-1.0)*size;
-        float z = ((2.0*rand() / double(RAND_MAX))-1.0)*size;
-        x = i*10;
-        y = 0;
-        z = 0;
-        float vx = ((2.0*rand() / double(RAND_MAX))-1.0)*0.01;
-        float vy = ((2.0*rand() / double(RAND_MAX))-1.0)*0.01;
-        float vz = ((2.0*rand() / double(RAND_MAX))-1.0)*0.01;
-        m_positions[i] = QVector3D(x,y,z);
-        m_velocities[i] = QVector3D(vx,vy,vz);
-    }
+//    m_positions.resize(5);
+//    m_velocities.resize(m_positions.size());
+//    double size = 10;
+//    for(int i=0; i<m_positions.size(); i++) {
+//        float x = ((2.0*rand() / double(RAND_MAX))-1.0)*size;
+//        float y = ((2.0*rand() / double(RAND_MAX))-1.0)*size;
+//        float z = ((2.0*rand() / double(RAND_MAX))-1.0)*size;
+//        x = i*10;
+//        y = 0;
+//        z = 0;
+//        float vx = ((2.0*rand() / double(RAND_MAX))-1.0)*0.01;
+//        float vy = ((2.0*rand() / double(RAND_MAX))-1.0)*0.01;
+//        float vz = ((2.0*rand() / double(RAND_MAX))-1.0)*0.01;
+//        m_positions[i] = QVector3D(x,y,z);
+//        m_velocities[i] = QVector3D(vx,vy,vz);
+//    }
+    m_positions.push_back(QVector3D(-5,3,0));
+    m_positions.push_back(QVector3D(5,0,0));
+    m_velocities.push_back(QVector3D(0,0,0));
+    m_velocities.push_back(QVector3D(0,0,0));
 
 }
 
@@ -84,29 +88,28 @@ void MyWorker::synchronizeRenderer(Renderable *renderableObject)
             for(int j=i+1; j<m_positions.size(); j++) {
                 QVector3D position_j = m_positions[j];
                 float dist = (position_i - position_j).length();
-                if(dist < 20) {
-                    for(int k=0; k<6; k++) {
-                        BondsVBOData data;
-                        data.radius1 = 0.2;
-                        data.radius2 = 0.2;
-                        data.sphereRadius1 = 1.0*0.9;
-                        data.sphereRadius2 = 1.0*0.9;
-                        data.vertex1Position = position_i;
-                        data.vertex2Position = position_j;
-                        data.vertexId = k;
-                        vbo.push_back(data);
-                    }
+                for(int k=0; k<6; k++) {
+                    BondsVBOData data;
+                    data.radius1 = 0.2;
+                    data.radius2 = 0.2;
+                    data.sphereRadius1 = 1.0;
+                    data.sphereRadius2 = 1.0;
+                    data.vertex1Position = position_i;
+                    data.vertex2Position = position_j;
+                    data.vertexId = k;
+                    vbo.push_back(data);
                 }
             }
         }
 
-        qDebug() << "We have " << vbo.size() / 6 << " bonds";
+        // qDebug() << "We have " << vbo.size() / 6 << " bonds";
         bonds->setDirty(true);
     }
 }
 
 void MyWorker::work()
 {
+    return;
     for(int i=0; i<m_positions.size(); i++) {
         float ax = ((2.0*rand() / double(RAND_MAX))-1.0);
         float ay = ((2.0*rand() / double(RAND_MAX))-1.0);

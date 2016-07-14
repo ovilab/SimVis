@@ -19,7 +19,6 @@ varying highp vec3 modelPosition;
 varying highp vec3 worldPosition;
 varying highp vec3 base;
 varying highp vec3 end;
-varying highp vec3 color;
 varying highp float radiusA;
 varying highp float radiusB;
 varying highp float da;
@@ -29,13 +28,6 @@ varying highp mat3 cylinderWorldBasis;
 
 varying highp vec3 perpendicular;
 varying highp vec3 biperpendicular;
-
-uniform mat4 mvp;
-uniform mat4 modelMatrix;
-uniform mat4 modelView;
-uniform mat3 modelViewNormal;
-uniform mat4 projectionMatrix;
-uniform vec3 eyePosition;
 
 vec3 makePerpendicular(vec3 v) {
     if(v.x == 0.0 && v.y == 0.0) {
@@ -76,7 +68,7 @@ void main(void)
     highp float rmax = max(radiusA, radiusB);
 
     highp vec3 center = (mv1 + mv2) * 0.5;
-    highp vec3 cam_dir = (eyePosition - center);
+    highp vec3 cam_dir = (cp_cameraPosition - center);
 
     highp vec3 right = cross(cam_dir, deltaNormalized);
     right = normalize(right);
@@ -135,21 +127,7 @@ void main(void)
     texCoords[ 4] = vec2(-1.0, 0.0);
     texCoords[ 5] = vec2(1.0, 0.0);
 
-    /*
-    uniform highp mat4 cp_modelViewMatrix;
-    uniform highp mat4 cp_projectionMatrix;
-    uniform highp mat4 cp_modelViewMatrixInverse;
-    uniform highp mat4 cp_projectionMatrixInverse;
-    uniform highp mat4 cp_modelViewProjectionMatrix;
-    uniform highp vec3 cp_cameraPosition;
-    uniform highp vec3 cp_viewVector;
-    uniform highp vec3 cp_upVector;
-    uniform highp vec3 cp_rightVector;
-    uniform highp float cp_time;
-      */
-
     int i = int(vertexId);
-    color = vec3(0.9, 0.7, 0.8);
     highp vec4 ppos = vec4(vertices[i], 1.0);
     modelPosition = ppos.xyz;
     modelViewPosition = (cp_modelViewMatrix * ppos).xyz;

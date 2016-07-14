@@ -8,7 +8,6 @@ varying highp vec3 modelViewPosition;
 varying highp vec3 worldPosition;
 varying highp vec3 base;
 varying highp vec3 end;
-varying highp vec3 color;
 varying highp float radiusA;
 varying highp float radiusB;
 varying highp float da;
@@ -20,6 +19,7 @@ varying highp vec3 v2;
 
 varying highp vec3 perpendicular;
 varying highp vec3 biperpendicular;
+uniform highp vec3 color;
 
 highp float square(highp vec3 a) {
     return dot(a, a);
@@ -217,4 +217,5 @@ void main(void) {
 #endif
 
     gl_FragColor = vec4(color*light, 1.0);
+    // gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
 }

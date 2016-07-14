@@ -34,6 +34,7 @@ private:
     bool m_isInitialized = false;
     int m_vertexCount = 0;
     int m_indexCount = 0;
+    QVector3D m_color;
 };
 
 class Bonds : public Renderable
@@ -66,7 +67,7 @@ private:
     QVector<BondsVBOData> m_vertices;
     bool m_dirty = false;
     float m_radius = 0.01f;
-    QColor m_color = "white";
+    QColor m_color = "blue";
     friend class BondsRenderer;
 };
 

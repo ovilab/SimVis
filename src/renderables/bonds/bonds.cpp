@@ -74,12 +74,12 @@ void BondsRenderer::synchronize(Renderable* renderer)
     }
     uploadVBOs(bonds);
     m_vertexCount = bonds->m_vertices.size();
+    m_color = QVector3D(bonds->color().redF(), bonds->color().greenF(), bonds->color().blueF());
 }
 
 void BondsRenderer::uploadVBOs(Bonds* bonds)
 {
     if(!bonds->dirty()) return;
-    qDebug() << "Uploading bonds VBO";
     QVector<BondsVBOData>& vertices = bonds->m_vertices;
     if(vertices.size() < 1) {
         return;
@@ -91,7 +91,6 @@ void BondsRenderer::uploadVBOs(Bonds* bonds)
     m_vao->bind();
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
     glFunctions()->glBufferData(GL_ARRAY_BUFFER, numberOfVertices * sizeof(BondsVBOData), &vertices.front(), GL_STATIC_DRAW);
-    qDebug() << "Number of vertices etc: " << numberOfVertices;
     m_vertexCount = vertices.size();
 }
 
@@ -105,6 +104,8 @@ void BondsRenderer::render()
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
     glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
+
+    program().setUniformValue("color", m_color);
 
     // Offset for position
     quintptr offset = 0;
