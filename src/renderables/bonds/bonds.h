@@ -6,8 +6,6 @@
 #include <QOpenGLTexture>
 #include <QColor>
 
-class Simulator;
-
 struct BondsVBOData
 {
     QVector3D vertex1Position;
@@ -17,6 +15,15 @@ struct BondsVBOData
     float sphereRadius1;
     float sphereRadius2;
     float vertexId;
+};
+
+struct BondData {
+    QVector3D vertex1Position;
+    QVector3D vertex2Position;
+    float radius1;
+    float radius2;
+    float sphereRadius1;
+    float sphereRadius2;
 };
 
 class BondsRenderer : public RenderableRenderer
@@ -52,6 +59,7 @@ public:
     QVector<BondsVBOData> &vertices();
     float radius() const;
     QColor color() const;
+    void setData(QVector<BondData> &data);
 
 public slots:
     void setDirty(bool dirty);
@@ -65,6 +73,7 @@ signals:
 
 private:
     QVector<BondsVBOData> m_vertices;
+    QVector<BondData> m_data;
     bool m_dirty = false;
     float m_radius = 0.01f;
     QColor m_color = "blue";

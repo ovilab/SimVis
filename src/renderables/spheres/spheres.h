@@ -25,6 +25,12 @@ struct SphereGeometryShaderVBOData
     float scale;
 };
 
+struct SphereData {
+    QVector3D position;
+    QVector3D color;
+    float scale;
+};
+
 class Spheres;
 class SpheresRenderer : public RenderableRenderer
 {
@@ -71,7 +77,7 @@ public:
     QVector<float> &scales();
     void setScales(const QVector<float> &scales);
     bool dirty() const;
-
+    void setData(const QVector<SphereData> &data);
 public slots:
     void setDirty(bool dirty);
 
@@ -86,9 +92,7 @@ private:
     QVector<SphereGeometryShaderVBOData> m_verticesGeometryShader;
 
     QVector<GLuint> m_indices;
-    QVector<QVector3D> m_positions;
-    QVector<QColor> m_colors;
-    QVector<float> m_scales;
+    QVector<SphereData> m_data;
     QColor m_color = QColor(0.8, 0.7, 0.5, 1.0);
     float m_scale = 1.0;
     bool m_dirty = false;

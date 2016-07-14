@@ -79,7 +79,8 @@ HEADERS += \
     $$PWD/src/SimVis/Lines \
     $$PWD/src/renderables/noiseviewer/noiseviewer.h \
     $$PWD/src/SimVis/NoiseViewer \
-    $$PWD/src/navigators/flymodenavigator.h
+    $$PWD/src/navigators/flymodenavigator.h \
+    $$PWD/src/SimVis/Bonds
 
 DISTFILES = $$PWD/src/qmldir \
     $$PWD/src/core/simvisplugin.json

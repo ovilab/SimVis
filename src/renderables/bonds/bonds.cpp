@@ -33,6 +33,11 @@ QColor Bonds::color() const
     return m_color;
 }
 
+void Bonds::setData(QVector<BondData> &data)
+{
+    m_data = data;
+}
+
 void Bonds::setDirty(bool dirty)
 {
     if (m_dirty == dirty)
