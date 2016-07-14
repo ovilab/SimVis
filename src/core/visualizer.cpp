@@ -71,12 +71,12 @@ void Visualizer::handleWindowChanged(QQuickWindow *win)
 {
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
     if(win) {
-        QSurfaceFormat format = win->format();
-        format.setProfile(QSurfaceFormat::CoreProfile);
-        format.setMajorVersion(4);
-        format.setMinorVersion(3);
-        win->setFormat(format);
-        win->setClearBeforeRendering(false);
+//        QSurfaceFormat format = win->format();
+//        format.setProfile(QSurfaceFormat::CoreProfile);
+//        format.setMajorVersion(4);
+//        format.setMinorVersion(3);
+//        win->setFormat(format);
+//        win->setClearBeforeRendering(false);
     }
 #else
     Q_UNUSED(win)
