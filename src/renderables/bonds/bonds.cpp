@@ -85,7 +85,24 @@ void BondsRenderer::synchronize(Renderable* renderer)
 void BondsRenderer::uploadVBOs(Bonds* bonds)
 {
     if(!bonds->dirty()) return;
+    QVector<BondData> &dataVector = bonds->m_data;
     QVector<BondsVBOData>& vertices = bonds->m_vertices;
+    vertices.resize(dataVector.size()*6); // 6 vertices per bond
+
+    for(int i=0; i<dataVector.size(); i++) {
+        BondData &data = dataVector[i];
+
+        for(int k=0; k<6; k++) {
+            vertices[6*i+k].vertex1Position = data.vertex1Position;
+            vertices[6*i+k].vertex2Position = data.vertex2Position;
+            vertices[6*i+k].radius1 = data.radius1;
+            vertices[6*i+k].radius2 = data.radius2;
+            vertices[6*i+k].sphereRadius1 = data.sphereRadius1;
+            vertices[6*i+k].sphereRadius2 = data.sphereRadius2;
+            vertices[6*i+k].vertexId = k;
+        }
+    }
+
     if(vertices.size() < 1) {
         return;
     }
@@ -108,7 +125,6 @@ void BondsRenderer::render()
 {
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
-    glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
 
     program().setUniformValue("color", m_color);
 
