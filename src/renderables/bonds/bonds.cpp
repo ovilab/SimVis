@@ -108,7 +108,7 @@ void BondsRenderer::render()
 {
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
-    glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
+//    glFunctions()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIds[1]);
 
     program().setUniformValue("color", m_color);
 
