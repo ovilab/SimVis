@@ -125,7 +125,6 @@ void BondsRenderer::render()
 {
     // Tell OpenGL which VBOs to use
     glFunctions()->glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[0]);
-
     program().setUniformValue("color", m_color);
 
     // Offset for position

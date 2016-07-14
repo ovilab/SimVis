@@ -231,7 +231,8 @@ void RenderableRenderer::setShaderFromSourceFile(QOpenGLShader::ShaderType type,
 
 bool RenderableRenderer::geometryShaderIsSupported()
 {
-    return QOpenGLShader::hasOpenGLShaders(QOpenGLShader::Geometry, QOpenGLContext::currentContext());
+//    return QOpenGLShader::hasOpenGLShaders(QOpenGLShader::Geometry, QOpenGLContext::currentContext());
+    return false;
 }
 
 QString RenderableRenderer::generateGLSLHeader()
@@ -243,12 +244,13 @@ QString RenderableRenderer::generateGLSLHeader()
     QPair<int,int> openGLVersion = QOpenGLContext::currentContext()->format().version();
 
     QString header;
-    if(openGLVersion==qMakePair(2,0)) header = "#version 110\n";
-    if(openGLVersion==qMakePair(2,1)) header = "#version 120\n";
-    if(openGLVersion==qMakePair(3,0)) header = "#version 130\n";
-    if(openGLVersion==qMakePair(3,1)) header = "#version 140\n";
-    if(openGLVersion==qMakePair(3,2)) header = "#version 150\n";
-    if(openGLVersion>=qMakePair(3,3)) header = QString("#version %1%2%3\n").arg(openGLVersion.first).arg(openGLVersion.second).arg(0);
+    header = "#version 110\n";
+//    if(openGLVersion==qMakePair(2,0)) header = "#version 110\n";
+//    if(openGLVersion==qMakePair(2,1)) header = "#version 120\n";
+//    if(openGLVersion==qMakePair(3,0)) header = "#version 130\n";
+//    if(openGLVersion==qMakePair(3,1)) header = "#version 140\n";
+//    if(openGLVersion==qMakePair(3,2)) header = "#version 150\n";
+//    if(openGLVersion>=qMakePair(3,3)) header = QString("#version %1%2%3\n").arg(openGLVersion.first).arg(openGLVersion.second).arg(0);
     return header;
 }
 
