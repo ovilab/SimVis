@@ -93,19 +93,11 @@ void SpheresRenderer::synchronize(Renderable* renderer)
 
 void SpheresRenderer::uploadVBONoGeometryShader(Spheres* spheres) {
     QVector<SphereData> &data = spheres->m_data;
-    qDebug() << "Data count: " << data.size();
 
     if(data.size() < 1 || !spheres->dirty()) {
         return;
     }
-//    if(!spheres->dirty() || spheres->m_positions.size() == 0) {
-//        return;
-//    }
-
     float scale = spheres->scale();
-//    QVector<QVector3D>& positions = spheres->m_positions;
-//    QVector<QColor>& colors = spheres->m_colors;
-//    QVector<float>& scales = spheres->m_scales;
     QVector<SphereNoGeometryShaderVBOData>& vertices = spheres->m_verticesNoGeometryShader;
     QVector<GLuint>& indices = spheres->m_indices;
     int numberOfVertices = data.size()*4;
