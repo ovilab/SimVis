@@ -93,8 +93,13 @@ void SpheresRenderer::synchronize(Renderable* renderer)
 
 void SpheresRenderer::uploadVBONoGeometryShader(Spheres* spheres) {
     QVector<SphereData> &data = spheres->m_data;
+    if(data.size() == 0) {
+        m_indexCount = 0;
+        m_vertexCount = 0;
+        return;
+    }
 
-    if(data.size() < 1 || !spheres->dirty()) {
+    if(!spheres->dirty()) {
         return;
     }
     QVector<SphereNoGeometryShaderVBOData>& vertices = spheres->m_verticesNoGeometryShader;
