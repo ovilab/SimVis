@@ -84,6 +84,8 @@ void BondsRenderer::synchronize(Renderable* renderer)
 
 void BondsRenderer::uploadVBOs(Bonds* bonds)
 {
+    m_indexCount = 0;
+    m_vertexCount = 0;
     if(!bonds->dirty()) return;
     QVector<BondData> &dataVector = bonds->m_data;
     QVector<GLuint> &indices = bonds->m_indices;
@@ -167,7 +169,7 @@ void BondsRenderer::render()
     glFunctions()->glVertexAttribPointer(vertex1Position, 3, GL_FLOAT, GL_FALSE, sizeof(BondsVBOData), (const void *)offset);
 
     offset += sizeof(QVector3D);
- program().enableAttributeArray(vertex2Position);
+    program().enableAttributeArray(vertex2Position);
     glFunctions()->glVertexAttribPointer(vertex2Position, 3, GL_FLOAT, GL_FALSE, sizeof(BondsVBOData), (const void *)offset);
 
     offset += sizeof(QVector3D);
