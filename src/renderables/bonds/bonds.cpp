@@ -77,6 +77,11 @@ void BondsRenderer::synchronize(Renderable* renderer)
         generateVBOs();
         m_isInitialized = true;
     }
+    if(m_vertexCount == 0) {
+        m_indexCount = 0;
+        m_vertexCount = 0;
+    }
+
     uploadVBOs(bonds);
     m_vertexCount = bonds->m_vertices.size();
     m_color = QVector3D(bonds->color().redF(), bonds->color().greenF(), bonds->color().blueF());
@@ -84,8 +89,6 @@ void BondsRenderer::synchronize(Renderable* renderer)
 
 void BondsRenderer::uploadVBOs(Bonds* bonds)
 {
-    m_indexCount = 0;
-    m_vertexCount = 0;
     if(!bonds->dirty()) return;
     QVector<BondData> &dataVector = bonds->m_data;
     QVector<GLuint> &indices = bonds->m_indices;
