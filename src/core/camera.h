@@ -41,6 +41,7 @@ class Camera : public QObject
 public:
     //    explicit Camera(QNode *parent = 0);
     explicit Camera(QObject *parent = 0);
+    ~Camera();
 
 
     enum CameraTranslationOption {

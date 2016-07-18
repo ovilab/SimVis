@@ -43,7 +43,12 @@ Camera::Camera(QObject *parent) :
 //    QObject::connect(d_func()->m_transform, SIGNAL(matrixChanged()), this, SIGNAL(matrixChanged()));
 //    d_func()->m_transform->addTransform(d_func()->m_lookAt);
 //    addComponent(d_func()->m_lens);
-//    addComponent(d_func()->m_transform);
+    //    addComponent(d_func()->m_transform);
+}
+
+Camera::~Camera()
+{
+    delete d_ptr;
 }
 
 //Camera::Camera(CameraPrivate &dd, QNode *parent)
