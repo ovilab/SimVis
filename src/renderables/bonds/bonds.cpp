@@ -200,7 +200,7 @@ void BondsRenderer::render()
     program().enableAttributeArray(vertexId);
     glFunctions()->glVertexAttribPointer(vertexId, 1, GL_FLOAT, GL_FALSE, sizeof(BondsVBOData), (const void *)offset);
 
-    offset += sizeof(GLfloat);
+//    offset += sizeof(GLfloat);
 
     glFunctions()->glEnable(GL_DEPTH_TEST);
     glFunctions()->glDepthMask(GL_TRUE);

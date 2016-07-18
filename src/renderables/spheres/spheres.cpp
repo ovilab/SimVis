@@ -243,7 +243,7 @@ void SpheresRenderer::renderNoGeometryShader() {
     glFunctions()->glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
 
     // Offset for texture coordinate
-    offset += sizeof(QVector3D);
+//    offset += sizeof(QVector3D);
 
     // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
 
