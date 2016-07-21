@@ -1,7 +1,11 @@
-highp vec3 standardMaterialLight(Light light, highp vec3 normal, highp vec3 vertexPosition, highp vec3 cameraPosition,
+highp vec3 standardMaterialLight(Light light, highp vec3 vnormal, highp vec3 vertexPosition, highp vec3 cameraPosition,
                         highp vec3 ambientColor, highp vec3 diffuseColor, highp vec3 specularColor,
                         highp float ambientIntensity, highp float diffuseIntensity, highp float specularIntensity,
                         highp float hardness) {
+    vec3 normal = normalize(vnormal); // IMPORTANT: Do not remove
+    // this because the normal is no longer normalized due to
+    // interpolation on fragment shader
+
     highp vec3 lightVector = vec3(0.0, 0.0, 0.0);
 
     highp vec3 surfaceToLight = normalize(light.position - vertexPosition);
@@ -9,13 +13,12 @@ highp vec3 standardMaterialLight(Light light, highp vec3 normal, highp vec3 vert
 
     highp vec3 surfaceToCamera = normalize(cameraPosition - vertexPosition);
 
+    /* AMBIENT */
+    lightVector += ambientColor.rgb*ambientIntensity;
+
     /* DIFFUSE */
     highp float diffuseCoefficient1 = max(0.0, dot(normal, surfaceToLight));
     lightVector += light.color*light.strength*diffuseColor.rgb*diffuseCoefficient1*diffuseIntensity*attenuationFactor;
-
-    /* AMBIENTDIFFUSE */
-    highp float diffuseCoefficient2 = max(0.0, dot(normal, surfaceToCamera));
-    lightVector += light.color*light.strength*ambientColor.rgb*ambientIntensity*(vec3(diffuseCoefficient2)*0.9 + 0.1*vec3(1.0));
 
     /* SPECULAR */
     highp vec3  reflectionVector = reflect(-surfaceToLight, normal);

@@ -1,8 +1,9 @@
+import QtQuick 2.5
 import SimVis 1.0
 import SimVis.ShaderNodes 1.0
 
 ShaderNode {
-    property var color: "lightblue"
+    property var color: "darkgrey"
 
     property var ambientColor: color
     property var diffuseColor: color
@@ -20,31 +21,32 @@ ShaderNode {
         property: "position"
         defaultValue: Qt.vector3d(0.0, 0.0, 0.0)
     }
-    property list<Light> lights //: [
-//        Light {
-//            position: Qt.vector3d(500, 500, 500)
-//            attenuation: 0.0
-//        },
-//        Light {
-//            position: Qt.vector3d(-500, -500, -500)
-//            attenuation: 0.0
-//            strength: 0.2
-//        }
-//    ]
-    property var lightDummy: Light {
-//        position: Qt.vector3d(1, 1, 1)
-    }
+    property list<Light> lights
+
+    property list<Light> _defaultLights: [
+        Light {
+            position: Qt.vector3d(46, 20, -10)
+            attenuation: 0.0
+            strength: 1.0
+        }
+    ]
 
     name: "diffuse"
     type: "vec3"
     source: {
         var output = ""
-        output += "$lightDummy;\n"
         output += "$this = vec3(0.0, 0.0, 0.0);\n"
-        for(var i in lights) {
-            output += "$this += standardMaterialLight($lights[" + i + "], $(normal, vec3), $(position, vec3), eyePosition,\n"
+        var lightList = lights
+        var lightVariable = "lights"
+        if (lightList.length < 1) {
+            lightList = _defaultLights
+            lightVariable = "_defaultLights"
+        }
+
+        for(var i in lightList) {
+            output += "$this += standardMaterialLight($" + lightVariable + "[" + i + "], $(normal, vec3), $(position, vec3), eyePosition,\n"
             output += "             $(ambientColor, vec3), $(diffuseColor, vec3), $(specularColor, vec3),\n"
-            output += "             0.1 * $(ambientIntensity, float), $(diffuseIntensity, float), 0.01 * $(specularIntensity, float),\n"
+            output += "             0.01 * $(ambientIntensity, float), $(diffuseIntensity, float), 0.01 * $(specularIntensity, float),\n"
             output += "             150.0 * $(hardness, float));\n"
         }
         return output

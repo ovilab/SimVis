@@ -59,6 +59,8 @@ Material {
 
         sourceFile: "qrc:/SimVis/ShaderNodes/shaders/es2/shader_builder_material.vert"
 
+//        onFinalShaderChanged: console.log(finalShader)
+
         outputs: [
             ShaderOutput {
                 id: _position
@@ -101,6 +103,8 @@ Material {
             result: "texCoord"
         }
 
+//        onFinalShaderChanged: console.log(finalShader)
+
         sourceFile: "qrc:/SimVis/ShaderNodes/shaders/es2/shader_builder_material.frag"
 
         outputs: [
@@ -108,15 +112,7 @@ Material {
                 id: _fragmentColor
                 type: "vec4"
                 name: "fragColor"
-                value: StandardMaterial {
-                    position: shaderBuilder.position
-                    normal: shaderBuilder.normal
-                    lights: [
-                        Nodes.Light {
-                            position: Qt.vector3d(5.0, 5.0, -5.0)
-                        }
-                    ]
-                }
+                value: StandardMaterial {}
             }
         ]
     }
