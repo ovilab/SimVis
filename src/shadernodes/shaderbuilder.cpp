@@ -200,8 +200,12 @@ void ShaderBuilder::rebuildShader()
     body.replace(QRegularExpression("\n"), "\n    ");
 
     QString contents = m_source;
-    contents.replace(QRegularExpression("#pragma shadernodes header"), header);
-    contents.replace(QRegularExpression("#pragma shadernodes body"), body);
+    contents.replace(QRegularExpression("^#pragma shadernodes header",
+                                        QRegularExpression::MultilineOption),
+                     header);
+    contents.replace(QRegularExpression("^#pragma shadernodes body",
+                                        QRegularExpression::MultilineOption),
+                     body);
 
     for(ShaderOutput *output : m_outputs) {
         ShaderNode *value = output->node();

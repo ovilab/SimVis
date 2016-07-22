@@ -57,7 +57,7 @@ Material {
             result: "vertexTexCoord"
         }
 
-        sourceFile: "qrc:/SimVis/ShaderNodes/shaders/es2/shader_builder_material.vert"
+        sourceFile: "qrc:/SimVis/ShaderNodes/shaders/gl3/shader_builder_material.vert"
 
 //        onFinalShaderChanged: console.log(finalShader)
 
@@ -105,7 +105,7 @@ Material {
 
 //        onFinalShaderChanged: console.log(finalShader)
 
-        sourceFile: "qrc:/SimVis/ShaderNodes/shaders/es2/shader_builder_material.frag"
+        sourceFile: "qrc:/SimVis/ShaderNodes/shaders/gl3/shader_builder_material.frag"
 
         outputs: [
             ShaderOutput {
