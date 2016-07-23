@@ -143,8 +143,6 @@ QString ShaderUtils::generateName()
 
 QString ShaderUtils::precisionQualifier(QString type)
 {
-    QList<QString> typesWithPrecisionQualifier = {"float", "vec2", "vec3", "vec4"};
-    if(typesWithPrecisionQualifier.contains(type)) {
-        return "highp";
-    } else return "";
+    Q_UNUSED(type);
+    return "highp";
 }
