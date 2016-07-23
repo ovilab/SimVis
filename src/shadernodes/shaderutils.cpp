@@ -46,6 +46,30 @@ QString ShaderUtils::glslType(const QVariant &value)
     }
 }
 
+QString ShaderUtils::preferredType(const QVariant &value1, const QVariant &value2)
+{
+    QStringList preferenceOrder = {
+        "bool",
+        "float",
+        "vec2",
+        "vec3",
+        "vec4"
+    };
+
+    QString type1 = glslType(value1);
+    QString type2 = glslType(value2);
+
+    int value1Preference = preferenceOrder.indexOf(type1);
+    int value2Preference = preferenceOrder.indexOf(type2);
+
+    if(value1Preference > value2Preference) {
+        return type1;
+    } else {
+        return type2;
+    }
+
+}
+
 QString ShaderUtils::convert(const QString &sourceType, const QString &targetType, const QString &identifier)
 {
     const QString &v = identifier;

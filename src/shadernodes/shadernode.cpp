@@ -428,6 +428,11 @@ QString ShaderNode::glslType(QVariant value) const
     return ShaderUtils::glslType(value);
 }
 
+QString ShaderNode::preferredType(QVariant value1, QVariant value2) const
+{
+    return ShaderUtils::preferredType(value1, value2);
+}
+
 QString ShaderNode::source() const
 {
     return m_source;

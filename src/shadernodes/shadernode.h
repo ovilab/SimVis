@@ -33,6 +33,7 @@ public:
     Q_INVOKABLE virtual QString generateBody() const;
     Q_INVOKABLE QString convert(const QString &targetType, const QString &identifier = QString()) const;
     Q_INVOKABLE QString glslType(QVariant value) const;
+    Q_INVOKABLE QString preferredType(QVariant value1, QVariant value2) const;
 
     QString name() const;
     QString type() const;
