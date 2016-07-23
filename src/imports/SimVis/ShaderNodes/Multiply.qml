@@ -27,6 +27,6 @@ ShaderNode {
         if(type1 === type2 || type1 === "float" || type2 === "float") {
             return "$value1 * $value2"
         }
-        return "$value1 * $(value2, " + type + ")"
+        return "$(value1, " + type + ") * $(value2, " + type + ")"
     }
 }

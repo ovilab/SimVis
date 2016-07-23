@@ -7,11 +7,13 @@ highp vec3 standardMaterialLight(Light light, highp vec3 vnormal, highp vec3 ver
     // interpolation on fragment shader
 
     highp vec3 lightVector = vec3(0.0, 0.0, 0.0);
+    vec3 lightPosition = light.position;
 
-    highp vec3 surfaceToLight = normalize(light.position - vertexPosition);
+    highp vec3 surfaceToLight = normalize(lightPosition - vertexPosition);
     highp float attenuationFactor = attenuation(light, vertexPosition);
 
     highp vec3 surfaceToCamera = normalize(cameraPosition - vertexPosition);
+
 
     /* AMBIENT */
     lightVector += ambientColor.rgb*ambientIntensity;

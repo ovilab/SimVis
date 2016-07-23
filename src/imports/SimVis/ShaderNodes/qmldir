@@ -1,5 +1,6 @@
 module SimVis.ShaderNodes
 Add 1.0 Add.qml
+AmbientOcclusion 1.0 AmbientOcclusion.qml
 Bump 1.0 Bump.qml
 Clamp 1.0 Clamp.qml
 Decolorize 1.0 Decolorize.qml

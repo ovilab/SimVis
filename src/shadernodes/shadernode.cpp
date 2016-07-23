@@ -97,7 +97,8 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
     }
     if(m_type.isEmpty()) {
         qWarning() << "ERROR: ShaderNode::setup(): " << name() << "is missing type.";
-        return false;
+        // TODO add this back, but it can sometimes be called too soon
+//        return false;
     }
     QString currentIdentifier;
     if(tempIdentifier.isEmpty()) {

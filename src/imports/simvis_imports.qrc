@@ -42,5 +42,7 @@
         <file>SimVis/ShaderNodes/shaders/gl3/shader_builder_material.vert</file>
         <file>SimVis/ShaderNodes/VertexShaderBuilder.qml</file>
         <file>SimVis/ShaderNodes/FragmentShaderBuilder.qml</file>
+        <file>SimVis/ShaderNodes/shaders/ambient-occlusion.glsl</file>
+        <file>SimVis/ShaderNodes/AmbientOcclusion.qml</file>
     </qresource>
 </RCC>
