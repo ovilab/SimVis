@@ -18,9 +18,10 @@ ShaderNode {
     property string mode: "hemisphere"
 
     property string sphereResult: "
-ambientOcclusion($(depthTexture, sampler2D),
+ambientOcclusion(
+    $(depthTexture, sampler2D), $(noiseTexture, sampler2D),
     $(position, vec3), $(normal, vec3),
-    $(samples, int), $(radius, float),
+    $(samples, int), $(radius, float), 10.0 * $(noiseScale, float),
     viewMatrix, projectionMatrix)
 "
 

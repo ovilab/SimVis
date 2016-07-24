@@ -221,16 +221,29 @@ highp vec2 texCoordFromPosition(highp vec3 position, highp mat4 viewMatrix, high
     return projectedPosition.xy;
 }
 
-highp float ambientOcclusion(highp sampler2D depthTexture,
-                             highp vec3 position, highp vec3 normal,
-                       highp int samples, highp float radius,
+highp float ambientOcclusion(highp sampler2D depthTexture, highp sampler2D noiseTexture,
+                             highp vec3 position, highp vec3 inNormal,
+                       highp int samples, highp float radius, highp float noiseScale,
                        highp mat4 viewMatrix, highp  mat4 projectionMatrix) {
     highp vec2 positionTexCoord = texCoordFromPosition(position, viewMatrix, projectionMatrix);
     highp float fragDepth = linearizeDepth(texture(depthTexture, positionTexCoord).r);
 
+    highp vec3 normal = normalize(inNormal);
+    highp vec3 randomVector = normalize(-1.0 + 2.0 * texture(noiseTexture, positionTexCoord * noiseScale).rgb);
+
+    highp vec3 tangent = normalize(randomVector - normal * dot(randomVector, normal));
+    highp vec3 bitangent = normalize(cross(normal, tangent));
+    highp mat3 basis = mat3(tangent, bitangent, normal);
+
     highp float occlusion = 0.0;
     for(int i = 0; i < samples; i++) {
-        highp vec3 samplePosition = position.xyz + radius * sphereVectors[i];
+        highp vec3 sampleRay = normalize(basis * sphereVectors[i]);
+//        highp vec3 sampleRay = normalize(basis * texture(noiseTexture, (positionTexCoord + vec2(float(i), float(i) * 0.1) * 0.1) * noiseScale).rgb);
+        if(abs(dot(sampleRay, normal)) < 0.15) {
+            continue;
+        }
+        sampleRay *= radius;
+        highp vec3 samplePosition = position.xyz + sampleRay;
 
         highp vec2 texCoord = texCoordFromPosition(samplePosition, viewMatrix, projectionMatrix);
         highp float sampleDepth = linearizeDepth(texture(depthTexture, texCoord).r);
@@ -242,43 +255,6 @@ highp float ambientOcclusion(highp sampler2D depthTexture,
     return 1.0 - occlusion / float(samples);
 }
 
-highp float hash( highp float n ) { return fract(sin(n)*753.5453123); }
-highp float noise( highp vec3 x)
-{
-    highp vec3 p = floor(x);
-    highp vec3 f = fract(x);
-    f = f*f*(3.0-2.0*f);
-
-    highp float n = p.x + p.y*157.0 + 113.0*p.z;
-    return mix(mix(mix( hash(n+  0.0), hash(n+  1.0),f.x),
-                   mix( hash(n+157.0), hash(n+158.0),f.x),f.y),
-               mix(mix( hash(n+113.0), hash(n+114.0),f.x),
-                   mix( hash(n+270.0), hash(n+271.0),f.x),f.y),f.z);
-}
-highp float noiseDetail(highp vec3 x, highp float detail) {
-    const highp mat3 m = mat3( 0.00,  0.80,  0.60,
-                        -0.80,  0.36, -0.48,
-                        -0.60, -0.48,  0.64 );
-    highp vec3 q = x;
-    highp float f = 0.0;
-    highp float factor = 1.0;
-    for(int i = 0; i < int(detail) + 1; i++) {
-        factor *= 0.5;
-        f += factor*noise( q );
-        q = m*q*(2.0 + 0.01 * float(i));
-    }
-    factor *= 0.5;
-    highp float remainder = detail - float(int(detail));
-    f += remainder*factor*noise( q );
-    return f;
-}
-highp vec3 noise3(highp vec3 v, highp float scale, highp float detail) {
-    highp float nx = noiseDetail(v.xyz * scale, detail);
-    highp float ny = noiseDetail(v.yzx * scale, detail);
-    highp float nz = noiseDetail(v.zyx * scale, detail);
-    return vec3(nx, ny, nz);
-}
-
 highp float hemisphereAmbientOcclusion(highp sampler2D depthTexture, highp sampler2D noiseTexture,
                              highp vec3 position, highp vec3 inNormal,
                        highp int samples, highp float radius, highp float noiseScale,
@@ -288,6 +264,7 @@ highp float hemisphereAmbientOcclusion(highp sampler2D depthTexture, highp sampl
 
     highp vec3 normal = normalize(inNormal);
     highp vec3 randomVector = normalize(-1.0 + 2.0 * texture(noiseTexture, positionTexCoord * noiseScale).rgb);
+
     highp vec3 tangent = normalize(randomVector - normal * dot(randomVector, normal));
     highp vec3 bitangent = normalize(cross(normal, tangent));
     highp mat3 basis = mat3(tangent, bitangent, normal);
@@ -295,7 +272,8 @@ highp float hemisphereAmbientOcclusion(highp sampler2D depthTexture, highp sampl
     highp float occlusion = 0.0;
     for(int i = 0; i < samples; i++) {
         highp vec3 sampleRay = normalize(basis * hemisphereVectors[i]);
-        if(dot(sampleRay, normal) < 0.15) {
+//        highp vec3 sampleRay = normalize(basis * texture(noiseTexture, (positionTexCoord + vec2(float(i), float(i) * 0.1) * 0.1) * noiseScale).rgb);
+        if(abs(dot(sampleRay, normal)) < 0.15) {
             continue;
         }
         sampleRay *= radius;
@@ -308,6 +286,6 @@ highp float hemisphereAmbientOcclusion(highp sampler2D depthTexture, highp sampl
         }
     }
 
-    return 1.0 - occlusion / float(samples);
+    return (1.0 - occlusion / float(samples));
 }
 
