@@ -245,13 +245,15 @@ highp float hemisphereAmbientOcclusion(highp sampler2D depthTexture, highp sampl
     highp float fragDepth = texture(depthTexture, positionTexCoord).r;
 
     highp vec3 normal = normalize(inNormal);
-    highp vec3 randomVector = normalize(-1.0 + 2.0 * texture(noiseTexture, positionTexCoord * noiseScale).rgb);
-    highp vec3 tangent = normalize(randomVector - normal * dot(randomVector, normal));
-    highp vec3 bitangent = normalize(cross(normal, tangent));
-    highp mat3 basis = mat3(tangent, bitangent, normal);
 
     highp float occlusion = 0.0;
     for(int i = 0; i < samples; i++) {
+        highp vec3 samplePosition1 = position.xyz + radius * sphereVectors[i];
+        highp vec2 texCoord1 = texCoordFromPosition(samplePosition1, viewMatrix, projectionMatrix);
+        highp vec3 randomVector = normalize(-1.0 + 2.0 * texture(noiseTexture, texCoord1 * noiseScale).rgb);
+        highp vec3 tangent = normalize(randomVector - normal * dot(randomVector, normal));
+        highp vec3 bitangent = normalize(cross(normal, tangent));
+        highp mat3 basis = mat3(tangent, bitangent, normal);
         highp vec3 samplePosition = position.xyz + radius * normalize(basis * hemisphereVectors[i]);
 
         highp vec2 texCoord = texCoordFromPosition(samplePosition, viewMatrix, projectionMatrix);
