@@ -48,3 +48,7 @@ HEADERS += \
     $$PWD/src/render/geometry/bonddata.h \
     $$PWD/src/SimVis/BondData
 
+DISTFILES += \
+    $$PWD/src/render/shaders/gl3/spheres-deferred.frag \
+    $$PWD/src/render/shaders/gl3/spheres-deferred.vert
+

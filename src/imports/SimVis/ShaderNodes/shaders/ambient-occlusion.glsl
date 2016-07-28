@@ -208,7 +208,7 @@ highp vec3 makePerpendicular(highp vec3 v) {
 }
 
 highp float linearizeDepth(highp float z) {
-    highp float f=1000.0;
+    highp float f=100.0; // TODO dynamically change this
     highp float n = 0.1;
 
     return (2.0 * n) / (f + n - z * (f - n));
@@ -237,7 +237,8 @@ highp float ambientOcclusion(highp sampler2D depthTexture, highp sampler2D noise
 
     highp float occlusion = 0.0;
     for(int i = 0; i < samples; i++) {
-        highp vec3 sampleRay = normalize(basis * sphereVectors[i]);
+//        highp vec3 sampleRay = sphereVectors[i];
+        highp vec3 sampleRay = basis * sphereVectors[i];
 //        highp vec3 sampleRay = normalize(basis * texture(noiseTexture, (positionTexCoord + vec2(float(i), float(i) * 0.1) * 0.1) * noiseScale).rgb);
         if(abs(dot(sampleRay, normal)) < 0.15) {
             continue;
@@ -255,6 +256,7 @@ highp float ambientOcclusion(highp sampler2D depthTexture, highp sampler2D noise
     return 1.0 - occlusion / float(samples);
 }
 
+// TODO something is wrong with this implementation, should be tested with simple objects like spheres and cubes
 highp float hemisphereAmbientOcclusion(highp sampler2D depthTexture, highp sampler2D noiseTexture,
                              highp vec3 position, highp vec3 inNormal,
                        highp int samples, highp float radius, highp float noiseScale,
@@ -271,6 +273,7 @@ highp float hemisphereAmbientOcclusion(highp sampler2D depthTexture, highp sampl
 
     highp float occlusion = 0.0;
     for(int i = 0; i < samples; i++) {
+//        highp vec3 sampleRay = normalize(hemisphereVectors[i]);
         highp vec3 sampleRay = normalize(basis * hemisphereVectors[i]);
 //        highp vec3 sampleRay = normalize(basis * texture(noiseTexture, (positionTexCoord + vec2(float(i), float(i) * 0.1) * 0.1) * noiseScale).rgb);
         if(abs(dot(sampleRay, normal)) < 0.15) {

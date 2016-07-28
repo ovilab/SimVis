@@ -12,8 +12,8 @@ Entity {
     property var variable: 0.0
     property string vertexShaderSourceFile: "qrc:/SimVis/render/shaders/gl3/spheres.vert"
     property string fragmentShaderSourceFile: "qrc:/SimVis/render/shaders/gl3/spheres.frag"
-//    property string vertexShaderSourceFile: "qrc:/SimVis/render/shaders/es2/spheres.vert"
-//    property string fragmentShaderSourceFile: "qrc:/SimVis/render/shaders/es2/spheres.frag"
+    //    property string vertexShaderSourceFile: "qrc:/SimVis/render/shaders/es2/spheres.vert"
+    //    property string fragmentShaderSourceFile: "qrc:/SimVis/render/shaders/es2/spheres.frag"
     property alias fragmentColor: _fragmentColor.value
     property alias fragmentBuilder: _fragmentBuilder
     property alias normal: _fragmentBuilder.normal
@@ -30,70 +30,88 @@ Entity {
         id: material
         parameters: [ ]
         effect: Effect {
-            techniques: Technique {
-                graphicsApiFilter {
-                    api: GraphicsApiFilter.OpenGL
-                    profile: GraphicsApiFilter.CoreProfile
-                    minorVersion: 2
-                    majorVersion: 3
-                }
-                filterKeys: FilterKey {
-                    name: "renderingStyle"
-                    value: "forward"
-                }
-                renderPasses: RenderPass {
-                    shaderProgram: ShaderProgram {
-                        vertexShaderCode: loadSource(vertexShaderSourceFile)
-                        fragmentShaderCode: _fragmentBuilder.finalShader
+            techniques: [
+                Technique {
+                    graphicsApiFilter {
+                        api: GraphicsApiFilter.OpenGL
+                        profile: GraphicsApiFilter.CoreProfile
+                        majorVersion: 3
+                        minorVersion: 2
                     }
-                    ShaderBuilder {
-                        id: _fragmentBuilder
+                    filterKeys: FilterKey {
+                        name: "renderingStyle"
+                        value: "forward"
+                    }
+                    renderPasses: RenderPass {
+                        shaderProgram: ShaderProgram {
+                            vertexShaderCode: loadSource(vertexShaderSourceFile)
+                            fragmentShaderCode: _fragmentBuilder.finalShader
+                        }
+                        ShaderBuilder {
+                            id: _fragmentBuilder
 
-                        material: material
+                            material: material
 
-                        // TODO add readonly or some other way to show that these are only for others to read
-                        shaderType: ShaderBuilder.Fragment
+                            // TODO add readonly or some other way to show that these are only for others to read
+                            shaderType: ShaderBuilder.Fragment
 
-                        // inputs
-                        property ShaderNode position: ShaderNode {
-                            type: "vec3"
-                            name: "position"
-                            result: "position"
-                        }
-                        property ShaderNode normal: ShaderNode {
-                            type: "vec3"
-                            name: "normal"
-                            result: "normal"
-                        }
-                        property ShaderNode textureCoordinate: ShaderNode {
-                            type: "vec2"
-                            name: "texCoord"
-                            result: "texCoord"
-                        }
-                        property ShaderNode color: ShaderNode {
-                            type: "vec3"
-                            name: "color"
-                            result: "color"
-                        }
-                        property ShaderNode sphereId: ShaderNode {
-                            type: "float"
-                            name: "sphereId"
-                            result: "sphereId"
-                        }
-                        sourceFile: fragmentShaderSourceFile
-                        outputs: [
-                            ShaderOutput {
-                                id: _fragmentColor
-                                type: "vec4"
-                                name: "fragColor"
-                                value: StandardMaterial {
-                                    color: _fragmentBuilder.color
-                                }
+                            // inputs
+                            property ShaderNode position: ShaderNode {
+                                type: "vec3"
+                                name: "position"
+                                result: "position"
                             }
-                        ]
+                            property ShaderNode normal: ShaderNode {
+                                type: "vec3"
+                                name: "normal"
+                                result: "normal"
+                            }
+                            property ShaderNode textureCoordinate: ShaderNode {
+                                type: "vec2"
+                                name: "texCoord"
+                                result: "texCoord"
+                            }
+                            property ShaderNode color: ShaderNode {
+                                type: "vec3"
+                                name: "color"
+                                result: "color"
+                            }
+                            property ShaderNode sphereId: ShaderNode {
+                                type: "float"
+                                name: "sphereId"
+                                result: "sphereId"
+                            }
+                            sourceFile: fragmentShaderSourceFile
+                            outputs: [
+                                ShaderOutput {
+                                    id: _fragmentColor
+                                    type: "vec4"
+                                    name: "fragColor"
+                                    value: StandardMaterial {
+                                        color: _fragmentBuilder.color
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                Technique {
+                    graphicsApiFilter {
+                        api: GraphicsApiFilter.OpenGL
+                        profile: GraphicsApiFilter.CoreProfile
+                        majorVersion: 3
+                        minorVersion: 2
+                    }
+                    filterKeys: FilterKey { name: "renderingStyle"; value: "deferred" }
+                    renderPasses: RenderPass {
+                        filterKeys: FilterKey { name: "pass"; value: "geometry" }
+                        shaderProgram: ShaderProgram {
+                            vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/gl3/spheres-deferred.vert")
+                            fragmentShaderCode: loadSource("qrc:/SimVis/render/shaders/gl3/spheres-deferred.frag")
+                        }
                     }
                 }
-            }
+            ]
         }
     }
     GeometryRenderer {
