@@ -39,6 +39,7 @@ highp float ambientOcclusion(highp sampler2D depthTexture, highp sampler2D noise
     highp float occlusion = 0.0;
     for(int i = 0; i < samples; i++) {
         highp vec3 sampleRay = basis*normalize(-1.0 + 2.0 * texelFetch(randomVectorTexture, ivec2(i,0), 0).rgb);
+        // highp vec3 sampleRay = normalize(-1.0 + 2.0 * texelFetch(randomVectorTexture, ivec2(i,0), 0).rgb);
         if(abs(dot(sampleRay, normal)) < 0.15) {
             continue;
         }
@@ -53,8 +54,6 @@ highp float ambientOcclusion(highp sampler2D depthTexture, highp sampler2D noise
     }
 
     return 1.0 - occlusion / float(samples);
-    // return -1.0 + 2.0*texture(randomVectorTexture, ivec2(0,0)).r;
-    // return texture(randomVectorTexture, ivec2(0,0)).r;
 }
 
 // TODO something is wrong with this implementation, should be tested with simple objects like spheres and cubes

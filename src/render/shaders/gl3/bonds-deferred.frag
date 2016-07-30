@@ -220,7 +220,7 @@ void main(void) {
     }
 
     // calculate texture coordinate
-    positionOut = vec4(cylPointWorld / 1000.0, 1.0); // TODO fix this factor
+    positionOut = vec4(cylPointWorld / 200.0, 1.0); // TODO fix this factor
     colorOut = vec4(1.0, 1.0, 1.0, 1.0);
     normalOut = vec4((normal + 1.0) / 2.0, 1.0);
 

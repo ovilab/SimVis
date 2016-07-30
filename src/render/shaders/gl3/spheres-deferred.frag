@@ -54,7 +54,7 @@ void main(void) {
 
     normalOut = vec4((normal + 1.0) / 2.0, 1.0);
     vec3 position = modelSpherePosition + sphereIntersection;
-    positionOut = vec4(position / 20.2, 1.0); // TODO fix with actual system size
+    positionOut = vec4(position / 200.0, 1.0); // TODO fix with actual system size
     colorOut = vec4(color, 1.0);
 //    vec4 lol = projectionMatrix * viewMatrix * vec4(position, 1.0);
 //    gl_FragDepth = lol.z / lol.w;
