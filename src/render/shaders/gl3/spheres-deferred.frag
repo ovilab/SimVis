@@ -9,7 +9,7 @@ in float radius;
 
 out vec4 normalOut;
 out vec4 positionOut;
-out vec4 colorOut;
+// out vec4 colorOut;
 
 uniform mat4 mvp;
 uniform mat4 viewMatrix;
@@ -55,7 +55,7 @@ void main(void) {
     normalOut = vec4((normal + 1.0) / 2.0, 1.0);
     vec3 position = modelSpherePosition + sphereIntersection;
     positionOut = vec4(position / 1000.0, 1.0); // TODO fix with actual system size
-    colorOut = vec4(color, 1.0);
-    vec4 lol = projectionMatrix * viewMatrix * vec4(position, 1.0);
-    gl_FragDepth = lol.z / lol.w;
+//    colorOut = vec4(color, 1.0);
+//    vec4 lol = projectionMatrix * viewMatrix * vec4(position, 1.0);
+//    gl_FragDepth = lol.z / lol.w;
 }
