@@ -25,60 +25,81 @@ Entity {
     Material {
         id: material
         effect: Effect {
-            techniques: Technique {
-                graphicsApiFilter {
-                    api: GraphicsApiFilter.OpenGL
-                    profile: GraphicsApiFilter.CoreProfile
-                    minorVersion: 2
-                    majorVersion: 3
-                }
-                filterKeys: FilterKey {
-                    name: "renderingStyle"
-                    value: "forward"
-                }
-                renderPasses: RenderPass {
-                    shaderProgram: ShaderProgram {
-                        vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/gl3/bonds.vert")
-                        fragmentShaderCode: _fragmentBuilder.finalShader
+            techniques: [
+                Technique {
+                    graphicsApiFilter {
+                        api: GraphicsApiFilter.OpenGL
+                        profile: GraphicsApiFilter.CoreProfile
+                        minorVersion: 2
+                        majorVersion: 3
                     }
-                    ShaderBuilder {
-                        id: _fragmentBuilder
-
-                        material: material
-
-                        // TODO add readonly or some other way to show that these are only for others to read
-                        shaderType: ShaderBuilder.Fragment
-
-                        // inputs
-                        property ShaderNode position: ShaderNode {
-                            type: "vec3"
-                            name: "position"
-                            result: "position"
+                    filterKeys: FilterKey {
+                        name: "renderingStyle"
+                        value: "forward"
+                    }
+                    renderPasses: RenderPass {
+                        shaderProgram: ShaderProgram {
+                            vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/gl3/bonds.vert")
+                            fragmentShaderCode: _fragmentBuilder.finalShader
                         }
-                        property ShaderNode normal: ShaderNode {
-                            type: "vec3"
-                            name: "normal"
-                            result: "normal"
-                        }
-                        property ShaderNode textureCoordinate: ShaderNode {
-                            type: "vec2"
-                            name: "texCoord"
-                            result: "texCoord"
-                        }
+                        ShaderBuilder {
+                            id: _fragmentBuilder
 
-                        sourceFile: "qrc:/SimVis/render/shaders/gl3/bonds.frag"
+                            material: material
 
-                        outputs: [
-                            ShaderOutput {
-                                id: _fragmentColor
-                                type: "vec4"
-                                name: "fragColor"
-                                value: StandardMaterial { }
+                            // TODO add readonly or some other way to show that these are only for others to read
+                            shaderType: ShaderBuilder.Fragment
+
+                            // inputs
+                            property ShaderNode position: ShaderNode {
+                                type: "vec3"
+                                name: "position"
+                                result: "position"
                             }
-                        ]
+                            property ShaderNode normal: ShaderNode {
+                                type: "vec3"
+                                name: "normal"
+                                result: "normal"
+                            }
+                            property ShaderNode textureCoordinate: ShaderNode {
+                                type: "vec2"
+                                name: "texCoord"
+                                result: "texCoord"
+                            }
+
+                            sourceFile: "qrc:/SimVis/render/shaders/gl3/bonds.frag"
+
+                            outputs: [
+                                ShaderOutput {
+                                    id: _fragmentColor
+                                    type: "vec4"
+                                    name: "fragColor"
+                                    value: StandardMaterial { }
+                                }
+                            ]
+                        }
+                    }
+                },
+                Technique {
+                    graphicsApiFilter {
+                        api: GraphicsApiFilter.OpenGL
+                        profile: GraphicsApiFilter.CoreProfile
+                        majorVersion: 3
+                        minorVersion: 2
+                    }
+                    filterKeys: FilterKey {
+                        name: "renderingStyle"
+                        value: "deferred"
+                    }
+                    renderPasses: RenderPass {
+                        filterKeys: FilterKey { name: "pass"; value: "geometry" }
+                        shaderProgram: ShaderProgram {
+                            vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/gl3/bonds.vert")
+                            fragmentShaderCode: loadSource("qrc:/SimVis/render/shaders/gl3/bonds-deferred.frag")
+                        }
                     }
                 }
-            }
+            ]
         }
     }
     GeometryRenderer {
