@@ -18,6 +18,8 @@ Entity {
     property alias fragmentBuilder: _fragmentBuilder
     property alias normal: _fragmentBuilder.normal
     property alias position: _fragmentBuilder.position
+    property alias posMin: posMin.value
+    property alias posMax: posMax.value
 
     property SphereData sphereData
     property Camera camera
@@ -28,7 +30,10 @@ Entity {
 
     Material {
         id: material
-        parameters: [ ]
+        parameters: [
+            Parameter { id:posMin; name: "posMin"; value: 0.0 },
+            Parameter { id:posMax; name: "posMax"; value: 200.0 }
+        ]
         effect: Effect {
             techniques: [
                 Technique {

@@ -18,8 +18,9 @@ uniform mat4 modelView;
 uniform mat4 inverseModelView;
 uniform mat4 inverseViewMatrix;
 uniform vec3 eyePosition;
-
 uniform vec3 viewVector;
+uniform float posMin;
+uniform float posMax;
 
 void main(void) {
     vec3 rayDirection = eyePosition - modelPosition;
@@ -50,12 +51,14 @@ void main(void) {
 
     vec3 normal = normalize(sphereIntersection);
     float pi = 3.1415926535897932384626433832795;
-    vec2 texCoord = vec2(0.5 + atan(-normal.z, normal.x) / (2.0 * pi), 0.5 - asin(normal.y) / pi);
 
     normalOut = vec4((normal + 1.0) / 2.0, 1.0);
     vec3 position = modelSpherePosition + sphereIntersection;
-    positionOut = vec4(position / 200.0, 1.0); // TODO fix with actual system size
+    float deltaMaxMin = posMax - posMin;
+
+//    vec4 pv_pos = projectionMatrix * viewMatrix * vec4(position, 1.0);
+//    float depthValue = pv_pos.z / pv_pos.w; // Maybe send this as alpha in position?
+
+    positionOut = vec4((position-eyePosition-posMin) / deltaMaxMin, 1.0); // TODO fix with actual system size
     colorOut = vec4(color, 1.0);
-//    vec4 lol = projectionMatrix * viewMatrix * vec4(position, 1.0);
-//    gl_FragDepth = lol.z / lol.w;
 }

@@ -9,7 +9,7 @@ highp vec3 makePerpendicular(highp vec3 v) {
 }
 
 highp float linearizeDepth(highp float z) {
-    highp float f=100.0; // TODO dynamically change this
+    highp float f=500.0; // TODO dynamically change this
     highp float n = 2.0;
 
     return (2.0 * n) / (f + n - z * (f - n));
@@ -49,7 +49,9 @@ highp float ambientOcclusion(highp sampler2D depthTexture, highp sampler2D noise
         highp vec2 texCoord = texCoordFromPosition(samplePosition, viewMatrix, projectionMatrix);
         highp float sampleDepth = linearizeDepth(texture(depthTexture, texCoord).r);
         if(abs(sampleDepth - fragDepth) < radius && sampleDepth < fragDepth) {
-            occlusion += 1.0;
+            float r = sampleDepth / fragDepth;
+            // occlusion += 1.0;
+            occlusion += 1.0 - 0.3*r*r;
         }
     }
 

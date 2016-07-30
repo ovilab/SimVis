@@ -32,6 +32,8 @@ out vec4 colorOut;
 uniform vec3 eyePosition;
 uniform mat3 modelNormalMatrix;
 uniform mat3 modelViewNormal;
+uniform float posMax;
+uniform float posMin;
 
 float square(vec3 a) {
     return dot(a, a);
@@ -220,7 +222,8 @@ void main(void) {
     }
 
     // calculate texture coordinate
-    positionOut = vec4(cylPointWorld / 200.0, 1.0); // TODO fix this factor
+    float deltaMaxMin = posMax - posMin;
+    positionOut = vec4((cylPointWorld - eyePosition - posMin) / deltaMaxMin, 1.0); // TODO fix with actual system size
     colorOut = vec4(1.0, 1.0, 1.0, 1.0);
     normalOut = vec4((normal + 1.0) / 2.0, 1.0);
 
