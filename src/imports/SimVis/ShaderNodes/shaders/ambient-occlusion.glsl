@@ -237,7 +237,7 @@ highp float ambientOcclusion(highp sampler2D depthTexture, highp sampler2D noise
 
     highp float occlusion = 0.0;
     for(int i = 0; i < samples; i++) {
-        highp vec3 sampleRay = normalize(basis * sphereVectors[i]);
+        highp vec3 sampleRay = basis * sphereVectors[i];
 //        highp vec3 sampleRay = normalize(basis * texture(noiseTexture, (positionTexCoord + vec2(float(i), float(i) * 0.1) * 0.1) * noiseScale).rgb);
         if(abs(dot(sampleRay, normal)) < 0.15) {
             continue;
@@ -271,9 +271,8 @@ highp float hemisphereAmbientOcclusion(highp sampler2D depthTexture, highp sampl
 
     highp float occlusion = 0.0;
     for(int i = 0; i < samples; i++) {
-        highp vec3 sampleRay = normalize(basis * hemisphereVectors[i]);
-//        highp vec3 sampleRay = normalize(basis * texture(noiseTexture, (positionTexCoord + vec2(float(i), float(i) * 0.1) * 0.1) * noiseScale).rgb);
-        if(abs(dot(sampleRay, normal)) < 0.15) {
+        highp vec3 sampleRay = basis * hemisphereVectors[i];
+        if(abs(dot(normalize(sampleRay), normal)) < 0.15) {
             continue;
         }
         sampleRay *= radius;
