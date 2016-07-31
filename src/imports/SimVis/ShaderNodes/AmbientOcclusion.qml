@@ -1,5 +1,7 @@
 import SimVis 1.0
 
+import Qt3D.Render 2.0
+
 ShaderNode {
     property var samples: 1
     property var radius: 0.5
