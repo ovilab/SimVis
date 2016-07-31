@@ -5,8 +5,34 @@ ShaderNode {
     property var radius: 0.5
     property var noiseScale: 1.0
     property var depthTexture
-    property var noiseTexture
-    property var randomVectorTexture
+    property var randomVectorTexture: Texture2D {
+        width : 128
+        height : 2
+        minificationFilter: Texture.Linear
+        magnificationFilter: Texture.Linear
+        wrapMode {
+            x: WrapMode.Repeat
+            y: WrapMode.Repeat
+        }
+        generateMipMaps: false
+        TextureImage {
+            source: "qrc:/SimVis/ShaderNodes/images/ambient.png"
+        }
+    }
+    property var noiseTexture: Texture2D {
+        width : 256
+        height : 256
+        minificationFilter: Texture.Linear
+        magnificationFilter: Texture.Linear
+        wrapMode {
+            x: WrapMode.Repeat
+            y: WrapMode.Repeat
+        }
+        generateMipMaps: false
+        TextureImage {
+            source: "qrc:/SimVis/ShaderNodes/images/noise.png"
+        }
+    }
     property var position: ShaderBuilderBinding {
         property: "position"
         defaultValue: Qt.vector3d(0.0, 0.0, 0.0)
