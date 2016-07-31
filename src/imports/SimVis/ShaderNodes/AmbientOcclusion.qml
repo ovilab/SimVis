@@ -5,6 +5,8 @@ import Qt3D.Render 2.0
 ShaderNode {
     property var samples: 1
     property var radius: 0.5
+    property var cutoff: 2.0
+    property var contrast: 0.0
     property var noiseScale: 1.0
     property var depthTexture
     property var randomVectorTexture: Texture2D {
@@ -43,28 +45,23 @@ ShaderNode {
         property: "normal"
         defaultValue: Qt.vector3d(0.0, 0.0, 0.0)
     }
+    property var noiseTextureCoordinate: ShaderNode {
+        name: "noiseTextureCoordinate"
+        type: "vec2"
+        result: "texCoordFromPosition(position, viewMatrix, projectionMatrix)"
+    }
 
     property string mode: "hemisphere"
-
-    property string sphereResult: "
-ambientOcclusion(
-    $(depthTexture, sampler2D), $(noiseTexture, sampler2D), $(randomVectorTexture, sampler2D),
-    $(position, vec3), $(normal, vec3),
-    $(samples, int), $(radius, float), 10.0 * $(noiseScale, float),
-    viewMatrix, projectionMatrix)
-"
-
-    property string hemisphereResult: "
-hemisphereAmbientOcclusion(
-    $(depthTexture, sampler2D), $(noiseTexture, sampler2D), $(randomVectorTexture, sampler2D),
-    $(position, vec3), $(normal, vec3),
-    $(samples, int), $(radius, float), 10.0 * $(noiseScale, float),
-    viewMatrix, projectionMatrix)
-"
+    property int modeNumber: mode === "hemisphere" ? 0 : 1
 
     name: "ambient_occlusion"
     type: "float"
-    result: mode === "hemisphere" ? hemisphereResult : sphereResult
+    result: "ambientOcclusion(
+    $(depthTexture, sampler2D), $(noiseTexture, sampler2D), $(randomVectorTexture, sampler2D),
+    $(position, vec3), $(normal, vec3), $(noiseTextureCoordinate, vec2),
+    $(samples, int), $(radius, float), 10.0 * $(noiseScale, float), $(modeNumber, int),
+    $(cutoff, float), $(contrast, float),
+    viewMatrix, projectionMatrix)"
 
     headerFile: "qrc:/SimVis/ShaderNodes/shaders/ambient-occlusion.glsl"
     // TODO make matrices explicit input
