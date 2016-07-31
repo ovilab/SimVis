@@ -44,5 +44,7 @@
         <file>SimVis/ShaderNodes/FragmentShaderBuilder.qml</file>
         <file>SimVis/ShaderNodes/shaders/ambient-occlusion.glsl</file>
         <file>SimVis/ShaderNodes/AmbientOcclusion.qml</file>
+        <file>SimVis/ShaderNodes/images/ambient.png</file>
+        <file>SimVis/ShaderNodes/images/noise.png</file>
     </qresource>
 </RCC>
