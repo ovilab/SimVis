@@ -38,8 +38,7 @@ highp float ambientOcclusion(highp sampler2D depthTexture, highp sampler2D noise
 
     highp float occlusion = 0.0;
     for(int i = 0; i < samples; i++) {
-        highp vec3 sampleRay = basis*normalize(-1.0 + 2.0 * texelFetch(randomVectorTexture, ivec2(i,0), 0).rgb);
-        // highp vec3 sampleRay = normalize(-1.0 + 2.0 * texelFetch(randomVectorTexture, ivec2(i,0), 0).rgb);
+        highp vec3 sampleRay = normalize(basis*normalize(-1.0 + 2.0 * texelFetch(randomVectorTexture, ivec2(i,1), 0).rgb));
         if(abs(dot(sampleRay, normal)) < 0.15) {
             continue;
         }
@@ -49,9 +48,7 @@ highp float ambientOcclusion(highp sampler2D depthTexture, highp sampler2D noise
         highp vec2 texCoord = texCoordFromPosition(samplePosition, viewMatrix, projectionMatrix);
         highp float sampleDepth = linearizeDepth(texture(depthTexture, texCoord).r);
         if(abs(sampleDepth - fragDepth) < radius && sampleDepth < fragDepth) {
-            highp float r = sampleDepth / fragDepth;
-            // occlusion += 1.0;
-            occlusion += 1.0 - 0.3*r*r;
+            occlusion += 1.0;
         }
     }
 
@@ -75,9 +72,7 @@ highp float hemisphereAmbientOcclusion(highp sampler2D depthTexture, highp sampl
 
     highp float occlusion = 0.0;
     for(int i = 0; i < samples; i++) {
-//        highp vec3 sampleRay = normalize(hemisphereVectors[i]);
-        highp vec3 sampleRay = basis*normalize(-1.0 + 2.0 * texelFetch(randomVectorTexture, ivec2(i,1), 0).rgb);
-//        highp vec3 sampleRay = normalize(basis * texture(noiseTexture, (positionTexCoord + vec2(float(i), float(i) * 0.1) * 0.1) * noiseScale).rgb);
+        highp vec3 sampleRay = normalize(basis*normalize(-1.0 + 2.0 * texelFetch(randomVectorTexture, ivec2(i,0), 0).rgb));
         if(abs(dot(sampleRay, normal)) < 0.15) {
             continue;
         }
