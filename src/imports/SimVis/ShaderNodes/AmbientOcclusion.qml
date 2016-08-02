@@ -48,7 +48,7 @@ ShaderNode {
     property var noiseTextureCoordinate: ShaderNode {
         name: "noiseTextureCoordinate"
         type: "vec2"
-        result: "texCoordFromPosition(position, viewMatrix, projectionMatrix)"
+        result: "texCoordFromPosition(position, viewMatrix, projectionMatrix) + viewMatrix[0][0] + viewMatrix[0][1] + viewMatrix[0][2]"
     }
 
     property string mode: "hemisphere"

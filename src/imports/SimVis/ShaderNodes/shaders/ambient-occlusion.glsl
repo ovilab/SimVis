@@ -39,7 +39,7 @@ highp float ambientOcclusion(highp sampler2D depthTexture, highp sampler2D noise
     highp float fragDepth = linearizeDepth(depthTexture, positionTexCoord);
 
     highp vec3 normal = normalize(inNormal);
-    highp vec3 randomVector = normalize(-1.0 + 2.0 * texture(noiseTexture, positionTexCoord * noiseScale).rgb);
+    highp vec3 randomVector = normalize(-1.0 + 2.0 * texture(noiseTexture, noiseTexCoord * noiseScale).rgb);
 
     highp vec3 tangent = normalize(randomVector - normal * dot(randomVector, normal));
     highp vec3 bitangent = normalize(cross(normal, tangent));
