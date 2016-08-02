@@ -52,7 +52,7 @@ ShaderNode {
     }
 
     property string mode: "hemisphere"
-    property int modeNumber: mode === "hemisphere" ? 0 : 1
+    property int modeNumber: mode === "hemisphere" ? 1 : 0
 
     name: "ambient_occlusion"
     type: "float"
