@@ -35,14 +35,14 @@ void main(void) {
     highp vec3 position = modelSpherePosition + sphereIntersection;
 
     highp vec3 light = vec3(1.0, 1.0, 1.0);
+    highp vec3 newColor = color;
+#ifdef CUSTOMCOLOR
+    newColor = applyCustomColor(position, normal, newColor);
+#endif
 
     #ifdef DEFAULTLIGHT
-        light = defaultLight(normal, position, color);
+        light = defaultLight(normal, position, newColor);
     #endif
 
-    #ifdef CUSTOMCOLOR
-        light = applyCustomColor(position, normal, light);
-    #endif
-
-    gl_FragColor = vec4(color*light, 1.0);
+    gl_FragColor = vec4(newColor*light, 1.0);
 }

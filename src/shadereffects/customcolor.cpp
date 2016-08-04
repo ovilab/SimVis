@@ -46,7 +46,8 @@ void CustomColor::copyState(ShaderEffect *source)
 {
     CustomColor *customColor = qobject_cast<CustomColor*>(source);
     if(customColor) {
-        setCode(customColor->code());
+        m_code = customColor->code();
+        m_shadersDirty = customColor->shadersDirty();
     }
 }
 
@@ -72,5 +73,6 @@ void CustomColor::setCode(QString code)
 
     m_code = code;
     emit codeChanged(code);
+    qDebug() << "We got new custom color code: " << code << " and will update shaders.";
     setShadersDirty(true);
 }

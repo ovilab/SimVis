@@ -97,6 +97,7 @@ void RenderableRenderer::prepareAndRender()
     }
 
     if(m_shadersDirty) {
+        qDebug() << "We got dirty shaders and need to build them again";
         m_fragmentShaderBase.clear();
         m_vertexShaderBase.clear();
         m_geometryShaderBase.clear();
@@ -122,6 +123,7 @@ void RenderableRenderer::prepareAndRender()
                 addShaderCodeToBase(QOpenGLShader::Geometry, shaderEffect->geometryShaderLibrary());
             }
         }
+        qDebug() << "New fragment shader: " << m_fragmentShaderBase;
 
         beforeLinkProgram();
         m_program.link();

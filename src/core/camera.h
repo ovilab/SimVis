@@ -69,6 +69,7 @@ public:
 
     void tiltAboutViewCenter( const float& angle );
     void panAboutViewCenter( const float& angle );
+    void panAboutViewCenter(const float &angle, QVector3D upVector);
     void rollAboutViewCenter( const float& angle );
 
     void rotate( const QQuaternion& q );
@@ -127,6 +128,7 @@ public:
     QVector3D rightVector() const;
     void pan(float angle, const QVector3D &axis);
     QQuaternion rotation(float angle, const QVector3D &axis) const;
+
 public slots:
     void setOrthographic(bool orthographic)
     {

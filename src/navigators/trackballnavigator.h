@@ -25,7 +25,7 @@ protected:
     QVector2D m_touch1Position;
     QVector2D m_touch2Position;
     QVector3D m_initialCameraPosition;
-    Qt::MouseButton m_button;
+    Qt::MouseButton m_button = Qt::NoButton;
     float m_zoomSensitivity = 1.0;
     void pressed(QVector2D position);
     void moved(QVector2D delta);

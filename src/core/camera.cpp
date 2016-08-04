@@ -207,6 +207,12 @@ void Camera::panAboutViewCenter( const float& angle )
     rotateAboutViewCenter( q );
 }
 
+void Camera::panAboutViewCenter( const float& angle, QVector3D upVector)
+{
+    QQuaternion q = QQuaternion::fromAxisAndAngle(upVector, angle);
+    rotateAboutViewCenter( q );
+}
+
 void Camera::rollAboutViewCenter( const float& angle )
 {
     QQuaternion q = rollRotation( angle );
