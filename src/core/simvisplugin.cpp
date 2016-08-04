@@ -20,6 +20,7 @@
 #include "../renderables/trianglecollection/trianglecollection.h"
 #include "../renderables/noiseviewer/noiseviewer.h"
 #include "../shadereffects/periodiccopies.h"
+#include "../shadereffects/customcolor.h"
 #include "../shadereffects/slice.h"
 #include <qqml.h>
 #include <QQmlEngine>
@@ -53,6 +54,7 @@ void SimVisPlugin::registerTypes(const char *uri)
     qmlRegisterType<Cylinders>("SimVis", 1, 0, "Cylinders");
     qmlRegisterType<Bonds>("SimVis", 1, 0, "Bonds");
     qmlRegisterType<Lines>("SimVis", 1, 0, "Lines");
+    qmlRegisterType<CustomColor>("SimVis", 1, 0, "CustomColor");
 }
 
 void SimVisPlugin::initializeEngine(QQmlEngine *engine, const char *uri)

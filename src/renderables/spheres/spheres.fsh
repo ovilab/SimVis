@@ -33,9 +33,15 @@ void main(void) {
     highp float pi = 3.1415926535897932384626433832795;
 
     highp vec3 position = modelSpherePosition + sphereIntersection;
+
     highp vec3 light = vec3(1.0, 1.0, 1.0);
+
     #ifdef DEFAULTLIGHT
         light = defaultLight(normal, position, color);
+    #endif
+
+    #ifdef CUSTOMCOLOR
+        light = applyCustomColor(position, normal, light);
     #endif
 
     gl_FragColor = vec4(color*light, 1.0);

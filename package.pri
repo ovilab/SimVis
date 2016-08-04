@@ -34,7 +34,8 @@ SOURCES += \
     $$PWD/src/renderables/cylinders/cylinders.cpp \
     $$PWD/src/renderables/lines/lines.cpp \
     $$PWD/src/renderables/noiseviewer/noiseviewer.cpp \
-    $$PWD/src/navigators/flymodenavigator.cpp
+    $$PWD/src/navigators/flymodenavigator.cpp \
+    $$PWD/src/shadereffects/customcolor.cpp
 
 HEADERS += \
     $$PWD/src/core/navigator.h \
@@ -80,7 +81,8 @@ HEADERS += \
     $$PWD/src/renderables/noiseviewer/noiseviewer.h \
     $$PWD/src/SimVis/NoiseViewer \
     $$PWD/src/navigators/flymodenavigator.h \
-    $$PWD/src/SimVis/Bonds
+    $$PWD/src/SimVis/Bonds \
+    $$PWD/src/shadereffects/customcolor.h
 
 DISTFILES = $$PWD/src/qmldir \
     $$PWD/src/core/simvisplugin.json

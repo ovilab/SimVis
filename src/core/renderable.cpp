@@ -128,6 +128,8 @@ void RenderableRenderer::prepareAndRender()
         m_shadersDirty = false;
     }
 
+    // qDebug() << "Fragment shader: " << m_fragmentShaderBase;
+
     m_program.bind();
     QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
     m_program.setUniformValue("cp_modelViewProjectionMatrix", modelViewProjectionMatrix);
