@@ -115,18 +115,22 @@ void SpheresRenderer::uploadVBONoGeometryShader(Spheres* spheres) {
         vertices[4*i + 0].scale = scale;
         vertices[4*i + 0].vertexId = 0;
         vertices[4*i + 0].position = position;
+        vertices[4*i + 0].occlusion = data[i].occlusion;
 
         vertices[4*i + 1].scale = scale;
         vertices[4*i + 1].vertexId = 1;
         vertices[4*i + 1].position = position;
+        vertices[4*i + 1].occlusion = data[i].occlusion;
 
         vertices[4*i + 2].scale = scale;
         vertices[4*i + 2].vertexId = 2;
         vertices[4*i + 2].position = position;
+        vertices[4*i + 2].occlusion = data[i].occlusion;
 
         vertices[4*i + 3].scale = scale;
         vertices[4*i + 3].vertexId = 3;
         vertices[4*i + 3].position = position;
+        vertices[4*i + 3].occlusion = data[i].occlusion;
 
         vertices[4*i + 0].color = data[i].color;
         vertices[4*i + 1].color = data[i].color;
@@ -216,6 +220,7 @@ void SpheresRenderer::renderNoGeometryShader() {
     int vertexPositionLocation = program().attributeLocation("vertexPosition");
     int scaleLocation = program().attributeLocation("scale");
     int vertexIdLocation = program().attributeLocation("vertexId");
+    int occlusionLocation = program().attributeLocation("occlusion");
     int colorLocation = program().attributeLocation("col");
 
     // Tell OpenGL programmable pipeline how to locate vertex position data
@@ -226,6 +231,10 @@ void SpheresRenderer::renderNoGeometryShader() {
 
     program().enableAttributeArray(vertexIdLocation);
     glFunctions()->glVertexAttribPointer(vertexIdLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
+    offset += sizeof(GLfloat);
+
+    program().enableAttributeArray(occlusionLocation);
+    glFunctions()->glVertexAttribPointer(occlusionLocation, 1, GL_FLOAT, GL_FALSE, sizeof(SphereNoGeometryShaderVBOData), (const void *)offset);
 
     offset += sizeof(GLfloat);
 
@@ -259,6 +268,8 @@ void SpheresRenderer::renderNoGeometryShader() {
 }
 
 void SpheresRenderer::renderGeometryShader() {
+    qDebug() << "We don't support geometry shader anymore. Disable in spheres.cpp";
+    exit(1);
     QOpenGLFunctions funcs(QOpenGLContext::currentContext());
 
     m_vao->bind();

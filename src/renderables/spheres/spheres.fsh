@@ -2,6 +2,7 @@ varying highp vec3 modelPosition;
 varying highp vec3 modelSpherePosition;
 varying highp vec3 color;
 varying highp float radius;
+varying highp float vs_occlusion;
 
 void main(void) {
     highp vec3 rayDirection = cp_cameraPosition - modelPosition;
@@ -43,6 +44,8 @@ void main(void) {
     #ifdef DEFAULTLIGHT
         light = defaultLight(normal, position, newColor);
     #endif
+
+    light *= 1.0 - vs_occlusion;
 
     gl_FragColor = vec4(newColor*light, 1.0);
 }

@@ -12,6 +12,7 @@ struct SphereNoGeometryShaderVBOData
 {
     float scale;
     float vertexId;
+    float occlusion;
     QVector3D position;
     QVector3D color;
 };
@@ -26,6 +27,7 @@ struct SphereGeometryShaderVBOData
 struct SphereData {
     QVector3D position;
     QVector3D color;
+    float occlusion;
     float scale;
 };
 
