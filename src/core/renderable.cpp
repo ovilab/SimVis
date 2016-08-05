@@ -123,14 +123,11 @@ void RenderableRenderer::prepareAndRender()
                 addShaderCodeToBase(QOpenGLShader::Geometry, shaderEffect->geometryShaderLibrary());
             }
         }
-        qDebug() << "New fragment shader: " << m_fragmentShaderBase;
 
         beforeLinkProgram();
         m_program.link();
         m_shadersDirty = false;
     }
-
-    // qDebug() << "Fragment shader: " << m_fragmentShaderBase;
 
     m_program.bind();
     QMatrix4x4 modelViewProjectionMatrix = m_projectionMatrix*m_modelViewMatrix;
