@@ -3,7 +3,7 @@ import SimVis 1.0
 import Qt3D.Render 2.0
 
 ShaderNode {
-    property var samples: 1
+    property var samples: 16
     property var radius: 0.5
     property var cutoff: 2.0
     property var contrast: 0.0
