@@ -157,6 +157,11 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
         QMetaProperty metaProperty = metaObject()->property(i);
         QVariant value = metaProperty.read(this);
 
+        if(!value.isValid()) {
+            qCritical() << "Warning:" << propertyName << "on node" << name() << "has invalid QVariant value. Assuming float(0.0).";
+            value = QVariant(0.0);
+        }
+
         m_propertyTypeNames[i] = value.typeName();
 
         if(metaProperty.hasNotifySignal()) {
@@ -191,10 +196,10 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
             if(match.lastCapturedIndex() > 1) {
                 targetType = match.captured(2);
             }
+            QRegularExpression namedRegex("\\$(\\(\\s*)?" + propertyName + "\\b(\\s*,\\s*[_a-zA-Z0-9]+\\s*\\))?");
             if(propertyName == "this") {
                 // $this is a special keyword that refers to the node itself, it cannot be used for a property name
                 QString thisIdentifier = identifier();
-                QRegularExpression namedRegex("\\$(\\(\\s*)?" + propertyName + "\\b(\\s*,\\s*[_a-zA-Z0-9]+\\s*\\))?");
                 sourceContent.replace(namedRegex, thisIdentifier);
                 alreadyReplaced.append(propertyName);
                 continue;
@@ -202,7 +207,6 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
             if(!mappings.contains(propertyName)) {
                 // No connected property, assume internal variable that just needs a unique name
                 QString propertylessIdentifier = propertyNameNoUnderscores + "_" + ShaderUtils::generateName();
-                QRegularExpression namedRegex("\\$(\\(\\s*)?" + propertyName + "\\b(\\s*,\\s*[_a-zA-Z0-9]+\\s*\\))?");
                 sourceContent.replace(namedRegex, propertylessIdentifier);
                 alreadyReplaced.append(propertyName);
                 continue;
@@ -275,8 +279,8 @@ bool ShaderNode::setup(ShaderBuilder* shaderBuilder, QString tempIdentifier)
                 shaderBuilder->addUniform(this, propertyName, targetIdentifier, value, metaProperty);
             }
             // replaces '$property' or '$(property, type)'
-            QRegularExpression namedRegex("\\$(\\(\\s*)?" + propertyName + "\\b(\\s*,\\s*" + targetType + "\\s*\\))?");
-            sourceContent.replace(namedRegex, ShaderUtils::convert(sourceType, targetType, targetIdentifier));
+            QRegularExpression namedTargetRegex("\\$(\\(\\s*)?" + propertyName + "\\b(\\s*,\\s*" + targetType + "\\s*\\))?");
+            sourceContent.replace(namedTargetRegex, ShaderUtils::convert(sourceType, targetType, targetIdentifier));
             alreadyReplaced.append(propertyName);
         }
     }

@@ -3,7 +3,7 @@ import SimVis 1.0
 import Qt3D.Render 2.0
 
 ShaderNode {
-    property var samples: 1
+    property var samples: 16
     property var radius: 0.5
     property var cutoff: 2.0
     property var contrast: 0.0
@@ -48,11 +48,11 @@ ShaderNode {
     property var noiseTextureCoordinate: ShaderNode {
         name: "noiseTextureCoordinate"
         type: "vec2"
-        result: "texCoordFromPosition(position, viewMatrix, projectionMatrix)"
+        result: "texCoordFromPosition(position, viewMatrix, projectionMatrix) + viewMatrix[0][0] + viewMatrix[0][1] + viewMatrix[0][2]"
     }
 
     property string mode: "hemisphere"
-    property int modeNumber: mode === "hemisphere" ? 0 : 1
+    property int modeNumber: mode === "hemisphere" ? 1 : 0
 
     name: "ambient_occlusion"
     type: "float"
