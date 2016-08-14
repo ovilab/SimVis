@@ -13,7 +13,6 @@ uniform mat4 modelView;
 uniform mat4 inverseModelView;
 uniform mat4 inverseViewMatrix;
 uniform vec3 eyePosition;
-
 uniform vec3 viewVector;
 
 void main(void) {
@@ -44,8 +43,9 @@ void main(void) {
     vec3 sphereIntersection = rayOrigin + t * rayDirection;
 
     vec3 normal = normalize(sphereIntersection);
+    vec3 normalDotCamera = color*dot(normal, normalize(rayDirection));
+
     float pi = 3.1415926535897932384626433832795;
-    vec2 texCoord = vec2(0.5 + atan(-normal.z, normal.x) / (2.0 * pi), 0.5 - asin(normal.y) / pi);
 
     vec3 position = modelSpherePosition + sphereIntersection;
 

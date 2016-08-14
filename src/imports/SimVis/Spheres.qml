@@ -51,6 +51,9 @@ Entity {
                         shaderProgram: ShaderProgram {
                             vertexShaderCode: loadSource(vertexShaderSourceFile)
                             fragmentShaderCode: _fragmentBuilder.finalShader
+                            onFragmentShaderCodeChanged: {
+                                console.log("Fragment shader: ", fragmentShaderCode)
+                            }
                         }
                         ShaderBuilder {
                             id: _fragmentBuilder
@@ -80,6 +83,11 @@ Entity {
                                 type: "vec3"
                                 name: "color"
                                 result: "color"
+                            }
+                            property ShaderNode normalDotCamera: ShaderNode {
+                                type: "vec3"
+                                name: "normalDotCamera"
+                                result: "normalDotCamera"
                             }
                             property ShaderNode sphereId: ShaderNode {
                                 type: "float"
