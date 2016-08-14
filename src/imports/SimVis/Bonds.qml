@@ -17,6 +17,7 @@ Entity {
     property alias transform: transform
     property alias posMin: posMin.value
     property alias posMax: posMax.value
+    property alias color: color
 
     property BondData bondData
 
@@ -28,7 +29,8 @@ Entity {
         id: material
         parameters: [
             Parameter { id:posMin; name: "posMin"; value: 0.0 },
-            Parameter { id:posMax; name: "posMax"; value: 200.0 }
+            Parameter { id:posMax; name: "posMax"; value: 200.0 },
+            Parameter { id:color; name: "color"; value: Qt.vector3d(0.7, 0.7, 0.7) }
         ]
         effect: Effect {
             techniques: [
@@ -61,6 +63,11 @@ Entity {
                                 type: "vec3"
                                 name: "position"
                                 result: "position"
+                            }
+                            property ShaderNode normalDotCamera: ShaderNode {
+                                type: "vec3"
+                                name: "normalDotCamera"
+                                result: "normalDotCamera"
                             }
                             property ShaderNode normal: ShaderNode {
                                 type: "vec3"

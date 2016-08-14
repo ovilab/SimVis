@@ -21,7 +21,6 @@ out vec3 modelPosition;
 out vec3 worldPosition;
 out vec3 base;
 out vec3 end;
-out vec3 color;
 out float radiusA;
 out float radiusB;
 out float da;
@@ -133,12 +132,10 @@ void main(void)
     texCoords[ 1] = vec2(1.0, -1.0);
     texCoords[ 2] = vec2(-1.0, 1.0);
     texCoords[ 3] = vec2(1.0, 1.0);
-
     texCoords[ 4] = vec2(-1.0, 0.0);
     texCoords[ 5] = vec2(1.0, 0.0);
 
     int i = int(vertexId);
-    color = vec3(1.0, 1.0, 1.0);
     vec4 ppos = vec4(vertices[i], 1.0);
     modelPosition = (modelMatrix * ppos).xyz;
     modelViewPosition = (modelView * ppos).xyz;

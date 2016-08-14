@@ -12,7 +12,6 @@ in vec3 modelViewPosition;
 in vec3 worldPosition;
 in vec3 base;
 in vec3 end;
-in vec3 color;
 in float radiusA;
 in float radiusB;
 in float da;
@@ -27,6 +26,8 @@ in vec3 biperpendicular;
 
 out vec4 fragColor;
 
+uniform vec3 color;
+uniform vec3 viewVector;
 uniform vec3 eyePosition;
 uniform mat3 modelNormalMatrix;
 uniform mat3 modelViewNormal;
@@ -39,6 +40,7 @@ void main(void) {
     vec3 rayOrigin = vec3(0.0, 0.0, 0.0); // in modelview space
     vec3 rayTarget = modelViewPosition; // in modelview space
     vec3 rayDirection = normalize(rayOrigin - rayTarget);
+    vec3 rayDirectionOriginal = rayDirection;
 
     mat3 basis = cylinderBasis; // cylinder space basis
     vec3 axis = cylinderBasis[2];
@@ -197,7 +199,6 @@ void main(void) {
     float x = dot(xyPointWorld, perpendicular);
     float y = dot(xyPointWorld, biperpendicular);
     float radius = r1 + rd * cylPoint.z / l; // interpolates from r1 to t2 by z
-    vec2 texCoord = vec2(0.5 + x / (2.0*radius), 0.5 + y / (2.0*radius));
 
     if(isSideSolution) {
         // we didn't find a solution that returned one of the caps
@@ -214,11 +215,12 @@ void main(void) {
 
         float pi = 3.1415926535897932384626433832795;
         float z = cylPoint.z / l;
-        texCoord = vec2(z, 0.5 + atan(y, x) / (2.0 * pi));
     }
 
     // calculate texture coordinate
     vec3 position = cylPointWorld;
+    vec3 cameraToTarget = eyePosition-worldPosition;
+    vec3 normalDotCamera = color*dot(normal, normalize(cameraToTarget));
 
 #pragma shadernodes body
 

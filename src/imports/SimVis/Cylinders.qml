@@ -65,7 +65,11 @@ Entity {
                             name: "texCoord"
                             result: "texCoord"
                         }
-
+                        property ShaderNode normalDotCamera: ShaderNode {
+                            type: "vec3"
+                            name: "normalDotCamera"
+                            result: "normalDotCamera"
+                        }
                         sourceFile: "qrc:/SimVis/render/shaders/es2/cylinders.frag"
 
                         outputs: [
