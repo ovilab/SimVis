@@ -1,4 +1,4 @@
-#version 410 core
+#version 330
 #pragma shadernodes header
 
 in vec3 modelPosition;

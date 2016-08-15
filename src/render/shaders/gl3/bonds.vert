@@ -1,4 +1,4 @@
-#version 410
+#version 330
 
 in vec3 vertex1Position;
 in vec3 vertex2Position;
