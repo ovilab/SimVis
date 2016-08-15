@@ -17,7 +17,7 @@ Entity {
     property alias transform: transform
     property alias posMin: posMin.value
     property alias posMax: posMax.value
-    property alias color: color
+    property alias color: color.value
 
     property BondData bondData
 
