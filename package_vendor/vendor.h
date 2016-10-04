@@ -5,6 +5,7 @@
 #include <QCoreApplication>
 
 #include "core/simvisplugin.h"
+#include "../libs/ShaderNodes/src/shadernodesplugin.h"
 
 namespace qpm {
 
@@ -20,6 +21,10 @@ void init(const QCoreApplication &app, QQmlEngine &engine) {
     SimVisPlugin pluginInstance_SimVisPlugin;
     pluginInstance_SimVisPlugin.registerTypes("SimVis");
     pluginInstance_SimVisPlugin.initializeEngine(&engine, "SimVis");
+
+    ShaderNodesPlugin pluginInstance_ShaderNodesPlugin;
+    pluginInstance_ShaderNodesPlugin.registerTypes("ShaderNodes");
+    pluginInstance_ShaderNodesPlugin.initializeEngine(&engine, "ShaderNodes");
 
 }
 

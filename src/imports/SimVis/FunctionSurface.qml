@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import SimVis 1.0
-import SimVis.ShaderNodes 1.0
+import ShaderNodes 1.0
 
 AbstractMarchingCubes {
     id: functionSurfaceRoot

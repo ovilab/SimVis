@@ -1,50 +1,14 @@
 <RCC>
     <qresource prefix="/">
         <file>SimVis/qmldir</file>
-        <file>SimVis/ShaderNodes/Add.qml</file>
-        <file>SimVis/ShaderNodes/Geometry.qml</file>
-        <file>SimVis/ShaderNodes/Mix.qml</file>
-        <file>SimVis/ShaderNodes/MainForm.ui.qml</file>
-        <file>SimVis/ShaderNodes/OutputValue.qml</file>
-        <file>SimVis/ShaderNodes/Perlin.qml</file>
-        <file>SimVis/ShaderNodes/Sine.qml</file>
-        <file>SimVis/ShaderNodes/qmldir</file>
-        <file>SimVis/ShaderNodes/Split.qml</file>
-        <file>SimVis/ShaderNodes/Sum.qml</file>
-        <file>SimVis/ShaderNodes/Light.qml</file>
-        <file>SimVis/ShaderNodes/Clamp.qml</file>
         <file>SimVis/Spheres.qml</file>
         <file>SimVis/Cylinders.qml</file>
         <file>SimVis/FunctionSurface.qml</file>
-        <file>SimVis/ShaderNodes/StandardMaterial.qml</file>
-        <file>SimVis/ShaderNodes/Function.qml</file>
-        <file>SimVis/ShaderNodes/Multiply.qml</file>
-        <file>SimVis/ShaderNodes/ImageTexture.qml</file>
-        <file>SimVis/ShaderNodes/Subtract.qml</file>
-        <file>SimVis/ShaderNodes/NormalMap.qml</file>
-        <file>SimVis/ShaderNodes/Displacement.qml</file>
-        <file>SimVis/ShaderNodes/Noise.qml</file>
-        <file>SimVis/ShaderNodes/Simplex.qml</file>
-        <file>SimVis/ShaderNodes/Decolorize.qml</file>
-        <file>SimVis/ShaderNodes/Bump.qml</file>
         <file>SimVis/NonCullingForwardRenderer.qml</file>
         <file>SimVis/Visualizer.qml</file>
-        <file>SimVis/ShaderNodes/shaders/standard_material.glsl</file>
         <file>SimVis/SpheresTechnique.qml</file>
         <file>SimVis/FirstPersonCameraController.qml</file>
         <file>SimVis/OrbitController.qml</file>
         <file>SimVis/Bonds.qml</file>
-        <file>SimVis/ShaderNodes/ShaderBuilderMaterial.qml</file>
-        <file>SimVis/ShaderNodes/shaders/light.glsl</file>
-        <file>SimVis/ShaderNodes/shaders/es2/shader_builder_material.frag</file>
-        <file>SimVis/ShaderNodes/shaders/es2/shader_builder_material.vert</file>
-        <file>SimVis/ShaderNodes/shaders/gl3/shader_builder_material.frag</file>
-        <file>SimVis/ShaderNodes/shaders/gl3/shader_builder_material.vert</file>
-        <file>SimVis/ShaderNodes/VertexShaderBuilder.qml</file>
-        <file>SimVis/ShaderNodes/FragmentShaderBuilder.qml</file>
-        <file>SimVis/ShaderNodes/shaders/ambient-occlusion.glsl</file>
-        <file>SimVis/ShaderNodes/AmbientOcclusion.qml</file>
-        <file>SimVis/ShaderNodes/images/ambient.png</file>
-        <file>SimVis/ShaderNodes/images/noise.png</file>
     </qresource>
 </RCC>

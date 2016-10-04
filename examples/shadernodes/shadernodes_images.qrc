@@ -1,9 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>diffuse.webp</file>
-        <file>earth-elevation-small.png</file>
-        <file>normal.jpg</file>
-        <file>earthnormal1k.jpg</file>
-        <file>normal.webp</file>
-    </qresource>
-</RCC>
