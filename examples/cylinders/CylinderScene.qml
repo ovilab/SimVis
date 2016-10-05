@@ -1,6 +1,6 @@
 import SimVis 1.0
-import SimVis.ShaderNodes 1.0
-import SimVis.ShaderNodes 1.0 as Nodes
+import ShaderNodes 1.0
+import ShaderNodes 1.0 as Nodes
 
 import Qt3D.Core 2.0
 import Qt3D.Render 2.0
@@ -17,7 +17,6 @@ Scene3D {
         cylinders.transform.rotation = dummy.fromEulerAngles(angle, angle * 2, angle * 3)
 //        cylinders.transform.translation = Qt.vector3d(angle, angle, -angle)
 //        cylinders.transform.scale3D = Qt.vector3d(angle, 2*angle, 3*angle)
-        console.log(cylinders.transform.rotation)
     }
 
     aspects: ["render", "logic", "input"]
@@ -37,11 +36,11 @@ Scene3D {
             cylinderData: simulator.cylinderData
             fragmentColor: StandardMaterial {
                 color: ImageTexture {
-                    source: "diffuse.webp"
+                    imageSource: "diffuse.webp"
                 }
                 normal: NormalMap {
                     color: ImageTexture {
-                        source: "normal.webp"
+                        imageSource: "normal.webp"
                     }
                 }
                 ambientIntensity: 10.0
