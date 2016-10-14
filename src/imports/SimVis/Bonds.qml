@@ -46,6 +46,7 @@ Entity {
                         value: "forward"
                     }
                     renderPasses: RenderPass {
+                        id: builderRenderPass
                         shaderProgram: ShaderProgram {
                             vertexShaderCode: loadSource("qrc:/SimVis/render/shaders/gl3/bonds.vert")
                             fragmentShaderCode: _fragmentBuilder.finalShader
@@ -53,7 +54,7 @@ Entity {
                         ShaderBuilder {
                             id: _fragmentBuilder
 
-                            material: material
+                            renderPass: builderRenderPass
 
                             // TODO add readonly or some other way to show that these are only for others to read
                             shaderType: ShaderBuilder.Fragment
