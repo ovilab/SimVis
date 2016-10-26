@@ -9,6 +9,7 @@ import QtQuick 2.0 as QQ2
 
 Entity {
     id: spheresRoot
+    property var layer
     property var variable: 0.0
     property string vertexShaderSourceFile: "qrc:/SimVis/render/shaders/gl3/spheres.vert"
     property string fragmentShaderSourceFile: "qrc:/SimVis/render/shaders/gl3/spheres.frag"
@@ -170,6 +171,7 @@ Entity {
 
     components: [
         spheresMeshInstanced,
-        material
+        material,
+        layer
     ]
 }

@@ -176,6 +176,7 @@ Entity {
                     fov = Math.max(10.0, Math.min(160.0, fov))
                     root.camera.fieldOfView = fov
                 }
+
                 root.camera.translate(Qt.vector3d(keyboardXAxis.value, 0.0, keyboardYAxis.value))
             }
         }

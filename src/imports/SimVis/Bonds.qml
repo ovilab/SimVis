@@ -9,6 +9,7 @@ import QtQuick 2.0 as QQ2
 
 Entity {
     id: bondsRoot
+    property var layer
     property var variable: 0.0
     property alias fragmentColor: _fragmentColor.value
     property alias fragmentBuilder: _fragmentBuilder
@@ -192,6 +193,7 @@ Entity {
     components: [
         bondsMeshInstanced,
         material,
-        transform
+        transform,
+        layer
     ]
 }
