@@ -44,10 +44,7 @@ Entity {
                         majorVersion: 3
                         minorVersion: 2
                     }
-                    filterKeys: FilterKey {
-                        name: "renderingStyle"
-                        value: "forward"
-                    }
+                    filterKeys: FilterKey { name: "renderingStyle"; value: "forward" }
                     renderPasses: RenderPass {
                         id: builderRenderPass
                         shaderProgram: ShaderProgram {
