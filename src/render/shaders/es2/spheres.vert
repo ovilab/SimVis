@@ -1,5 +1,4 @@
 attribute highp vec3 vertexPosition;
-attribute highp vec2 vertexTexCoord;
 attribute highp float vertexId;
 attribute highp vec3 pos;
 
@@ -17,7 +16,9 @@ void main() {
 
     position = vertexPosition + pos;
 
-    planePosition = vertexTexCoord;
+    float texCoordX = 1.0 - 2.0*(float(vertexId==0.0) + float(vertexId==2.0));
+    float texCoordY = 1.0 - 2.0*(float(vertexId==0.0) + float(vertexId==1.0));
+    planePosition = vec2(texCoordX, texCoordY);
 
     position += 0.5*(-upVector - rightVector)*(a_scale*float(vertexId==0.0));
     position += 0.5*(-upVector + rightVector)*(a_scale*float(vertexId==1.0));

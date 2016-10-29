@@ -1,7 +1,6 @@
 #version 330
 
 in vec3 vertexPosition;
-in vec2 vertexTexCoord;
 in float vertexId;
 in vec3 pos;
 in vec3 col;
@@ -37,7 +36,9 @@ void main() {
     vec3 right = normalize(makePerpendicular(view));
     vec3 up = cross(right, view);
 
-    planePosition = vertexTexCoord;
+    float texCoordX = 1.0 - 2.0*(float(vertexId==0.0) + float(vertexId==2.0));
+    float texCoordY = 1.0 - 2.0*(float(vertexId==0.0) + float(vertexId==1.0));
+    planePosition = vec2(texCoordX, texCoordY);
 
     // TODO should find needed size or move closer to camera. NOTE: 0.6 is a hack, should be 0.5
     // Another factor of 2 since the scale is somehow the diameter?
