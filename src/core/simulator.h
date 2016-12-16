@@ -23,6 +23,8 @@ private:
     Q_INVOKABLE void workAndUnlock(class Simulator *simulator);
 signals:
     void workDone();
+protected:
+    bool m_needsSynchronization = false;
 
 private:
     friend class Simulator;
