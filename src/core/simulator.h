@@ -60,6 +60,7 @@ private:
     QThread m_workerThread;
     QTimer  m_timer;
     QMutex m_workerMutex;
+    QMutex m_workerSynchronizeMutex;
 
     friend class SimulatorWorker;
 };

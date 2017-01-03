@@ -34,8 +34,9 @@ void Simulator::step()
         m_worker->moveToThread(&m_workerThread);
         m_workerThread.start(QThread::TimeCriticalPriority);
     }
-    if(m_worker->m_needsSynchronization) {
+    if(m_worker->m_needsSynchronization && m_workerSynchronizeMutex.tryLock()) {
         m_worker->synchronizeSimulator(this);
+        m_workerSynchronizeMutex.unlock();
     } else if(m_workerMutex.tryLock()) {
         m_worker->synchronizeSimulator(this);
         QMetaObject::invokeMethod(m_worker, "workAndUnlock",
