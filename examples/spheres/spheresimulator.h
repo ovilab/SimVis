@@ -7,11 +7,11 @@
 #include <Qt3DRender/QBuffer>
 #include <SimVis/SphereData>
 
-class NoiseWorker : public SimulatorWorker
+class SpheresWorker : public SimulatorWorker
 {
     Q_OBJECT
 public:
-    NoiseWorker();
+    SpheresWorker();
 
 private:
     // SimulatorWorker interface
@@ -23,20 +23,16 @@ private:
     QElapsedTimer m_timer;
 };
 
-class NoiseSimulator : public Simulator
+class SpheresSimulator : public Simulator
 {
     Q_OBJECT
     Q_PROPERTY(double dt READ dt WRITE setDt NOTIFY dtChanged)
     Q_PROPERTY(SphereData* sphereData READ sphereData CONSTANT)
 
 public:
-    NoiseSimulator(QNode *parent = 0);
-
+    SpheresSimulator(QNode *parent = 0);
     double dt() const;
-    SphereData* sphereData()
-    {
-        return m_sphereData.data();
-    }
+    SphereData* sphereData();
 
 public slots:
     void setDt(double dt);
